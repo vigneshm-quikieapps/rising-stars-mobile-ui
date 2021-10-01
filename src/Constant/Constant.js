@@ -33,6 +33,8 @@ export const colors = {
   cancelMembership: 'rgb( 204, 66, 66)',
 };
 
+export const Fontsize = wp('4%')
+
 export const Images = {
   Child: require('../assets/images/girl.jpg'),
   calendar: require('../assets/images/icon-date-line.png'),

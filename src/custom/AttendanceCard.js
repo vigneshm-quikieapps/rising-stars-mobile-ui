@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient';
-import { wp, hp, colors } from '../Constant/Constant';
+import { wp, hp, colors, Fontsize } from '../Constant/Constant';
 
 const radius = 15
 const AttendanceCard = (props) => {
@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
     },
     subContainer: {
         height: hp('8%'),
-        width: wp('38%'),
+        width: wp('36%'),
+        paddingRight:wp('4%'),
         borderTopRightRadius: radius,
         borderBottomRightRadius: radius,
         flexDirection: "row",
@@ -44,11 +45,11 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: radius
     },
     value: {
-        fontSize: 18,
+        fontSize:Fontsize,
         fontFamily: "Nunito-Regular"
     },
     label: {
-        fontSize: 16,
+        fontSize: Fontsize,
         color: "#555555",
         fontFamily: "Nunito-Regular"
     },

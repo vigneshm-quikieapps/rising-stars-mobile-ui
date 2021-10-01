@@ -1,11 +1,11 @@
-import React, {useState, useRef} from 'react';
-import {View, StyleSheet, Text, Alert, Modal, Pressable} from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, StyleSheet, Text, Alert, Modal, Pressable } from 'react-native';
 
 
 import CustomLayout from './../../custom/CustomLayout';
 import TextInputField from './../../custom/TextInputField';
 import AppButton from '../../custom/AppButton';
-import {colors,hp, wp} from './../../Constant/Constant';
+import { colors, hp, wp } from './../../Constant/Constant';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import InputOTPScreen from './InputOTPScreen';
 
@@ -32,13 +32,19 @@ function CreateNewPassword(props) {
     refRBSheet.current.open();
   };
   return (
-    <CustomLayout style={styles.container}>
+    <CustomLayout
+      style={styles.container}
+      backbutton={() => props.navigation.goBack()}
+      header
+      headerTextBigText
+      headertext={`Forgot Password`}
+    >
       <View>
-        <Text style={styles.title}>RESET PASSWORD</Text>
-        <Text style={styles.subTitle}>
+        {/* <Text style={styles.title}>Forget Password</Text> */}
+        {/* <Text style={styles.subTitle}>
           Enter the Email associated with your account we will send an OTP to
           that Email.
-        </Text>
+        </Text> */}
         <TextInputField
           keyboardType="email"
           placeholder="Email"
@@ -71,10 +77,10 @@ function CreateNewPassword(props) {
           }}
         /> */}
 
-        <Text style={styles.subTitle}>
+        {/* <Text style={styles.subTitle}>
           Enter the Contact Number associated with your account we will send an
           OTP to that Number.
-        </Text>
+        </Text> */}
         <TextInputField
           keyboardType="numeric"
           placeholder="Contact Number"
@@ -104,15 +110,16 @@ function CreateNewPassword(props) {
             }
           }}
         /> */}
-        <Text style={styles.subTitle}>
+        {/* <Text style={styles.subTitle}>
           Your new passowrd must be different from previous used password.
-        </Text>
-        <TextInputField placeholder="Password" style={{marginTop: hp('2%')}} />
-        <TextInputField placeholder="Confirm Password" />
+        </Text> */}
+        {/* <TextInputField placeholder="Password" style={{marginTop: hp('2%')}} />
+        <TextInputField placeholder="Confirm Password" /> */}
       </View>
+      <View style={{ height: hp('50%') }} />
       <AppButton
         title="Send OTP"
-        style={[styles.generateButton, {backgroundColor: colors.orange}]}
+        style={[styles.generateButton, { backgroundColor: colors.orange }]}
         onPress={gotoGeneratePassword}
       />
       {/* BOTTOMSHEET CODE START */}

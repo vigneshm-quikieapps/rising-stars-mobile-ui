@@ -1,19 +1,12 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
-import { colors, hp, wp } from '../../Constant/Constant';
+import {  View,  StyleSheet,  Text,  Image,  ScrollView,  TouchableOpacity, KeyboardAvoidingView} from 'react-native';
+import { colors, Fontsize, hp, wp } from '../../Constant/Constant';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import TextInputField from '../../custom/TextInputField';
 import ErrorMessage from '../../custom/ErrorMessage';
 import AppButton from '../../custom/AppButton';
-// import { Images } from '../../constant/Constant';
+// import { Images } from '../../Constant/Constant';
 // import { signin } from '../../auth/authentication';
 // import AsyncStorage from '@react-native-community/async-storage';
 // import ForgotPassword from './ForgotPassword';
@@ -25,7 +18,7 @@ const validationSchema = Yup.object().shape({
 
 function Login(props) {
   const onHandleSubmit = data => {
-    // const {email, password} = data;
+    const { email, password } = data;
     // signin({email, password})
     //   .then(async data => {
     //     console.log('DATA', data);
@@ -55,7 +48,7 @@ function Login(props) {
           fontWeight: 'bold',
           paddingTop: hp('2%'),
           // paddingLeft: 30,
-          fontFamily: 'Rubik-Medium',
+          fontFamily: 'Nunito-Regular',
         }}>
         Rising Stars
       </Text>
@@ -78,7 +71,7 @@ function Login(props) {
               style={styles.inputField}
               onChangeText={handleChange('mobileNumber')}
               autoCapitalize="none"
-              keyboardType="numeric"
+              keyboardType="phone-pad"
               autoCorrect={false}
               onBlur={() => setFieldTouched('mobileNumber')}
             />
@@ -87,7 +80,7 @@ function Login(props) {
               error={errors.mobileNumber}
               visible={touched.mobileNumber}
             />
-
+          
             <TextInputField
               placeholder="Password"
               autoCapitalize="none"
@@ -107,10 +100,10 @@ function Login(props) {
               onPress={handleSubmit}
               style={{
                 fontFamily: 'Nunito-SemiBold',
-                marginBottom: hp('0%'),
+                marginTop:touched.password === true ? hp('1%') : hp('3%'),
               }}
             />
-            <TouchableOpacity onPress={gotoForgotPassword} style={{alignItems:'center'}}>
+            <TouchableOpacity onPress={gotoForgotPassword} style={{ alignItems: 'center' }}>
               <Text style={styles.forgotPasswordText}>Forgot Password</Text>
             </TouchableOpacity>
           </>
@@ -118,11 +111,11 @@ function Login(props) {
       </Formik>
 
       <View style={styles.text}>
-        <Text style={{ marginVertical: 5, fontFamily: 'Nunito-Regular' }}>
+        <Text style={styles.forgotPasswordText, { color: "#7f7f7f" }}>
           Don't have account?
         </Text>
         <TouchableOpacity onPress={gotoRegister}>
-          <Text style={{ color: 'orange', fontFamily: 'Nunito-SemiBold' }}>
+          <Text style={styles.forgotPasswordText}>
             Register
           </Text>
         </TouchableOpacity>
@@ -135,7 +128,7 @@ export default Login;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: wp('4%'),
   },
@@ -143,7 +136,7 @@ const styles = StyleSheet.create({
     fontSize: wp('7%'),
     // marginLeft: wp('4%'),
     // marginRight: wp('25%'),
-    fontFamily: 'Rubik-Regular',
+    fontFamily: 'Nunito-Regular',
   },
   image: {
     resizeMode: 'center',
@@ -163,17 +156,20 @@ const styles = StyleSheet.create({
   star: {
     fontWeight: 'bold',
     fontSize: wp('8%'),
+    fontFamily: 'Nunito-Regular',
   },
   errorMessage: {
     alignSelf: 'flex-end',
-    paddingRight: wp('10%'),
+    paddingRight: wp('1%'),
     opacity: 0.5,
-    fontFamily: 'Rubik-Regular',
+    fontFamily: 'Nunito-Regular',
   },
   forgotPasswordText: {
-    color: colors.orange,
+    color: "#ff7e00",
     // marginHorizontal: wp('6%'),
+    fontSize:Fontsize,
     marginTop: hp('1%'),
     alignSelf: 'center',
+    fontFamily: 'Nunito-Regular',
   },
 });

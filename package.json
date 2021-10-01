@@ -33,6 +33,7 @@
     "react-native-screens": "^3.8.0",
     "react-native-slider": "^0.11.0",
     "react-native-snap-carousel": "^3.9.1",
+    "react-native-text-gradient": "^0.1.7",
     "react-native-timeline-flatlist": "^0.7.6",
     "react-native-vector-icons": "^8.1.0",
     "react-redux": "^7.2.5",

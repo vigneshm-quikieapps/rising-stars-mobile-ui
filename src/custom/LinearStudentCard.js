@@ -1,10 +1,11 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {wp, hp, colors,Fontsize} from '../Constant/Constant';
+import LinearGradient from 'react-native-linear-gradient';
 
-export default function Studentcard(props) {
+export default function LinearStudentcard(props) {
   return (
-    <View style={[styles.container, props.style]}>
+    <LinearGradient colors={props.colors} style={[styles.container, props.style]}>
       <View style={[styles.subcontainer, props.substyle]}>
         <View>
           <Text style={styles.head}>Child Name</Text>
@@ -44,7 +45,7 @@ export default function Studentcard(props) {
           </View>
         </View>
       )}
-    </View>
+    </LinearGradient>
   );
 }
 
@@ -52,7 +53,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: hp('2%'),
-    backgroundColor: colors.pumpkinorange,
     borderRadius: 16,
     paddingHorizontal: wp('8%'),
     paddingVertical: hp('2%'),
@@ -66,11 +66,13 @@ const styles = StyleSheet.create({
   head: {
     fontFamily: 'Nunito-Regular',
     fontSize:Fontsize,
-    color: 'grey',
+    color: 'white',
+    opacity:0.7
   },
   body: {
     fontFamily: 'Nunito-Regular',
     fontSize:Fontsize,
+    color: 'white',
   },
   subbody: {
     fontFamily: 'Nunito-Regular',

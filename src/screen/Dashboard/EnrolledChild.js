@@ -1,13 +1,16 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, Image, Modal} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, Modal, TouchableOpacity } from 'react-native';
 import CustomLayout from '../../custom/CustomLayout';
 import Studentcard from '../../custom/Studentcard';
+import LinearStudentcard from '../../custom/LinearStudentCard';
 import ClassCard from '../../custom/ClassCard';
-import {colors, hp, wp} from '../../Constant/Constant';
+import { colors, Fontsize, hp, wp } from '../../Constant/Constant';
 import AppButton from '../../custom/AppButton';
 import Buttons from '../../custom/Buttons';
+import { baseProps } from 'react-native-gesture-handler/lib/typescript/handlers/gestureHandlers';
 
-export default function EnrolledChild() {
+
+export default function EnrolledChild(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
@@ -26,17 +29,21 @@ export default function EnrolledChild() {
     <CustomLayout
       names={'Enrolled Classes'}
       Customchildren={
-        <Studentcard
-          name={'Ayman Mongal'}
-          style={{backgroundColor: colors.orange}}
+        <LinearStudentcard
+          colors={["#ffa300", "#ff7e00"]}
+          name={'Ayman Mogal'}
+          style={{ backgroundColor: colors.orange }}
           activityrequired
-          activity={`Pre-school gymnastics(Age1-3)`}
+          activity={`Zippy Totz Pre-school Gymnastics`}
           subactivity={'Childhood Joy Classes'}
           classname={'Childhood Joy Classes'}
           clubid={'PDPS4212'}
         />
-      }>
-      <View style={styles.centeredView}>
+
+      }
+      backbutton={() => props.navigation.goBack()}
+    >
+      {/* <View style={styles.centeredView}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -78,8 +85,8 @@ export default function EnrolledChild() {
             </View>
           </View>
         </Modal>
-      </View>
-      <View style={styles.centeredView}>
+      </View> */}
+      {/* <View style={styles.centeredView}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -113,11 +120,11 @@ export default function EnrolledChild() {
             </View>
           </View>
         </Modal>
-      </View>
+      </View> */}
 
-      <Text style={{fontFamily: 'Nunito-SemiBold'}}>Current Classes</Text>
+      <Text style={{ fontFamily: 'Nunito-Regular', fontSize: Fontsize }}>Current Classes</Text>
       <ClassCard
-        classname={'Pre-school gymnastics(Age 1-3)'}
+        classname={'Pre-school gymnastics (Age 1-3)'}
         title={'Change Session'}
         day={'Monday'}
         time="9:30 am - 11:30 am"
@@ -128,7 +135,7 @@ export default function EnrolledChild() {
         member
         memberbutton={() => setModalVisible(!modalVisible)}
       />
-      <View style={styles.centeredView}>
+      {/* <View style={styles.centeredView}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -170,8 +177,8 @@ export default function EnrolledChild() {
             </View>
           </View>
         </Modal>
-      </View>
-      <View style={styles.centeredView}>
+      </View> */}
+      {/* <View style={styles.centeredView}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -205,10 +212,10 @@ export default function EnrolledChild() {
             </View>
           </View>
         </Modal>
-      </View>
+      </View> */}
 
       <ClassCard
-        classname={'Pre-school gymnastics(Age 1-3)'}
+        classname={'Pre-school gymnastics (Age 1-3)'}
         title={'Change Session'}
         day={'Monday'}
         time="9:30 am - 11:30 am"
@@ -217,7 +224,7 @@ export default function EnrolledChild() {
         class
         member
       />
-      <AppButton title={'New Class'} onPress={() => {}} />
+      <AppButton title={'New Class'} onPress={() => props.navigation.navigate('AddPayment')} />
     </CustomLayout>
   );
 }

@@ -1,32 +1,27 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Modal,
-  TouchableOpacity,
-  Pressable,
-} from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, Pressable, } from 'react-native';
 import CustomLayout from '../../custom/CustomLayout';
 import Studentcard from '../../custom/Studentcard';
 import ProgressTracker from '../../custom/ProgressTracker';
-import {colors, hp, wp} from '../../Constant/Constant';
-import {RadioButton} from 'react-native-paper';
+import { colors, Fontsize, hp, wp } from '../../Constant/Constant';
+import { RadioButton } from 'react-native-paper';
 import Forwardbutton from '../../custom/Forwardbutton';
 import PopUp from '../../custom/PopUp';
 import PopUpCard from '../../custom/PopUpCard';
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 const Additional_Sections = props => {
+  const termref = useRef()
   const [modalVisible, setModalVisible] = useState(false);
   console.log(modalVisible);
   return (
     <CustomLayout
       Customchildren={
         <Studentcard
-          name={'Ayman Mongal'}
-          id={'KKBK1211'}
+          name={'Ayman Mogal'}
+          id={'4'}
           activityrequired
-          activity={`Pre-school gymnastics(Age1-3)`}
+          activity={`Zippy Totz Pre-school Gymnastics`}
           subactivity={'Childhood Joy Classes'}
           classname={'Childhood Joy Classes'}
         />
@@ -42,7 +37,7 @@ const Additional_Sections = props => {
       }}
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={5} />}>
-      <View style={styles.centeredView}>
+      {/* <View style={styles.centeredView}>
         <Modal
           animationType="fade"
           transparent={true}
@@ -54,7 +49,7 @@ const Additional_Sections = props => {
           <View style={styles.modalstyle}>
             <View style={styles.modalView}>
               <Text
-                style={{fontFamily: 'Nunito-SemiBold', marginTop: hp('1.5%')}}>
+                style={{ fontFamily: 'Nunito-SemiBold', marginTop: hp('1.5%'),fontSize:Fontsize }}>
                 Lorem Ipsum is simply dummy text of the printing and typesetting
                 industry. Lorem Ipsum has been the industry's standard dummy
                 text ever since.
@@ -75,14 +70,41 @@ const Additional_Sections = props => {
             </View>
           </View>
         </Modal>
-      </View>
+      </View> */}
+      <RBSheet
+        ref={termref}
+        closeOnDragDown={true}
+        closeOnPressMask={false}
+        customStyles={{
+          wrapper: {
+            backgroundColor: colors.blackOpacity,
+          },
+          // draggableIcon: {
+          //   backgroundColor: '#000',
+          // },
+          container: {
+            height: '25%',
+            borderTopRightRadius: 16,
+            borderTopLeftRadius: 16,
+          },
+        }}
+      >
+      <View style={{paddingHorizontal:wp('4%'),alignItems:'center'}}>
+        <Text style={{ fontFamily: 'Nunito-Regular',fontSize:Fontsize,color:"#ff7e00"}}>Club Rule</Text>
+        <Text style={{ fontFamily: 'Nunito-Regular', marginTop: hp('1.5%'), fontSize: Fontsize }}>
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry's standard dummy
+          text ever since.
+        </Text>
+        </View>
+      </RBSheet>
       <Text style={styles.newsheader}>News, communication and marketing</Text>
-      <Text style={{fontFamily: 'Nunito-SemiBold', marginVertical: hp('1.5%')}}>
+      <Text style={{ fontSize: Fontsize, fontFamily: 'Nunito-Regular', marginVertical: hp('1.5%') }}>
         I would like to receive{' '}
         <Text
           style={{
-            fontFamily: 'Nunito-Regular',
-            fontSize: wp('4%'),
+            // fontFamily: 'Nunito-Regular',
+            // fontSize: Fontsize,
             color: '#ff7e00',
           }}>
           Zippy’s
@@ -97,18 +119,18 @@ const Additional_Sections = props => {
         style={{
           fontFamily: 'Nunito-SemiBold',
           marginTop: hp('1.5%'),
-          fontSize: wp('4%'),
+          fontSize: Fontsize,
           paddingRight: wp('4%'),
         }}>
         Lorem Ipsum is simply dummy text of the printing and typesetting
         industry. Lorem Ipsum has been the industry's standard dummy text ever
         since.
       </Text>
-      <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+      <TouchableOpacity onPress={() => termref.current.open()}>
         <Text style={styles.bottom}>Read more about Club Rule</Text>
       </TouchableOpacity>
       <Forwardbutton
-        style={{alignSelf: 'flex-end'}}
+        style={{ alignSelf: 'flex-end' }}
         onPress={() => props.navigation.navigate('Pay')}
       />
     </CustomLayout>
@@ -131,17 +153,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   way: {
-    fontFamily: 'Nunito-SemiBold',
-    fontSize: wp('4%'),
+    fontFamily: 'Nunito-Regular',
+    fontSize: Fontsize,
     color: '#7f7f7f',
   },
   bottom: {
-    fontFamily: 'Nunito-SemiBold',
+    fontFamily: 'Nunito-Regular',
     flexDirection: 'row',
     justifyContent: 'space-between',
     color: '#ff7e00',
     textDecorationLine: 'underline',
     marginVertical: 5,
+
   },
   optional: {
     marginTop: hp('2.5%'),
@@ -152,6 +175,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-SemiBold',
     width: wp('80%'),
     fontSize: hp('2.8%'),
+    marginTop: hp('2%')
   },
   centeredView: {
     flex: 1,

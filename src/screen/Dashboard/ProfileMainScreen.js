@@ -9,16 +9,15 @@ import {
   StatusBar,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { colors, hp, Images, wp } from '../../Constant/Constant';
+import { colors, Fontsize, hp, Images, wp } from '../../Constant/Constant';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import AttendanceOverview from '../../custom/AttendanceOverview';
 import ProgressBarWithStar from '../../custom/progressBarWithStar';
 import TimeLines from '../../custom/Timelines';
 import BarIndicator from '../../custom/BarIndicator';
 import AttendanceCard from '../../custom/AttendanceCard';
 import ClassCard from '../../custom/ClassCard';
 
-const ProfileMainScreen = props => {
+const ProfileMainScreen = () => {
   const Datum = [1, 2, 3, 4]; // data.length for how many time we have scroll in Carousel
   const itemWidth = Dimensions.get('window').width;
   const [activeDotIndex, setActiveDotIndex] = React.useState(0);
@@ -27,22 +26,21 @@ const ProfileMainScreen = props => {
       <Pagination
         dotsLength={Datum.length}
         activeDotIndex={activeDotIndex}
-        containerStyle={{ width: itemWidth * 0.8, paddingVertical: 0 }}
+        containerStyle={{ paddingVertical: 0 }}
         dotStyle={{
           width: wp('2.5%'),
           height: wp('1.5%'),
           borderRadius: wp('5%'),
-          marginHorizontal: wp('-2%'),
+          marginHorizontal: -wp('2%'),
           backgroundColor: colors.white,
-          // justifyContent: 'center',
         }}
         inactiveDotStyle={{
           // Define styles for inactive dots here
           backgroundColor: colors.white,
           width: wp('3%'),
-          height: hp('2%'),
+          height: wp('3%'),
           borderRadius: wp('2%'),
-          // alignSelf: 'center',
+
         }}
         inactiveDotOpacity={0.5}
         inactiveDotScale={0.5}
@@ -53,123 +51,14 @@ const ProfileMainScreen = props => {
     return (
       <ClassCard
         id={'KKGY1'}
-        classname={'Pre-school gymnastics(Age 1-3)'}
-        subtitle={'Club name'}
+        classname={'Pre-school gymnastics (Age 1-3)'}
+        subtitle={'Zippy Totz Pre-school Gymnastics'}
         day={'Monday'}
         time="9:30 am - 11:30 am"
         facility={'Gym Hall'}
         coach={'Henry Itondo'}
         style={{ backgroundColor: 'white', borderRadius: 20 }}
       />
-      // <View
-      //   style={{
-      //     width: wp('80%'),
-      //     height: hp('28%'),
-      //     paddingLeft: wp('4%'),
-      //     justifyContent: 'center',
-      //     paddingTop: hp('5%'),
-      //     paddingBottom: hp('8%'),
-      //     backgroundColor: colors.white,
-      //     borderRadius: wp('5%'),
-      //   }}>
-      //   <Text
-      //     style={{
-      //       fontSize: wp('6%'),
-      //       color: colors.orange,
-      //       fontFamily: 'Nunito-SemiBold',
-      //     }}>
-      //     Pre-school gymnastics
-      //   </Text>
-      //   <Text
-      //     style={{
-      //       fontSize: wp('6%'),
-      //       color: colors.orange,
-      //       fontFamily: 'Nunito-SemiBold',
-      //     }}>
-      //     (Age 1-3)
-      //   </Text>
-      //   {/* <Text style={{fontSize: wp('4.2%'), fontFamily: 'Nunito-Regular'}}>
-      //     Childhood Joy Classes
-      //   </Text> */}
-      //   <View
-      //     style={{
-      //       flexDirection: 'row',
-      //       alignItems: 'center',
-      //     }}>
-      //     <View style={{}}>
-      //       <Image
-      //         style={{ height: hp('4%'), width: wp('5%') }}
-      //         source={Images.calendar}
-      //       />
-      //     </View>
-      //     <View style={{ marginTop: hp('2%'), marginLeft: wp('2%') }}>
-      //       <Text
-      //         style={{
-      //           fontSize: wp('4.5%'),
-      //           fontFamily: 'Nunito-SemiBold',
-      //         }}>
-      //         Monday
-      //       </Text>
-      //       <Text
-      //         style={{
-      //           color: '#cccccc',
-      //           fontSize: wp('4%'),
-      //           fontFamily: 'Nunito-Regular',
-      //         }}>
-      //         9:30 am - 11:30 am
-      //       </Text>
-      //     </View>
-      //   </View>
-      //   <View
-      //     style={{
-      //       flexDirection: 'row',
-      //       alignItems: 'center',
-      //     }}>
-      //     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-      //       <Image
-      //         style={{ height: hp('4%'), width: wp('5%') }}
-      //         source={Images.star_gray}
-      //       />
-      //     </View>
-      //     <View style={{ marginTop: hp('2%'), marginLeft: wp('2%') }}>
-      //       <Text
-      //         style={{
-      //           color: '#cccccc',
-      //           fontSize: wp('3.2%'),
-      //           fontFamily: 'Nunito-Regular',
-      //         }}>
-      //         Facility
-      //       </Text>
-      //       <Text style={{ fontSize: wp('4%'), fontFamily: 'Nunito-Regular' }}>
-      //         Gym Hall
-      //       </Text>
-      //     </View>
-      //     <View
-      //       style={{
-      //         marginLeft: wp('8%'),
-      //         justifyContent: 'center',
-      //         alignItems: 'center',
-      //       }}>
-      //       <Image
-      //         style={{ height: hp('4%'), width: wp('5%') }}
-      //         source={Images.user}
-      //       />
-      //     </View>
-      //     <View style={{ marginTop: hp('2%'), marginLeft: wp('2%') }}>
-      //       <Text
-      //         style={{
-      //           color: '#cccccc',
-      //           fontSize: wp('3.2%'),
-      //           fontFamily: 'Nunito-Regular',
-      //         }}>
-      //         Coach
-      //       </Text>
-      //       <Text style={{ fontSize: wp('4%'), fontFamily: 'Nunito-Regular' }}>
-      //         Henry Itondo
-      //       </Text>
-      //     </View>
-      //   </View>
-      // </View>
     );
   };
 
@@ -181,20 +70,12 @@ const ProfileMainScreen = props => {
       <View style={styles.container}>
         <LinearGradient
           colors={[colors.orangeYellow, colors.pumpkinOrange]}
-          angle={90}
+          // angle={90}
           style={styles.linearGradient}>
           <Text style={styles.welcome}>Hi Nizam, your child</Text>
           <View style={styles.containerMember}>
             <View
-              style={{
-                // backgroundColor: colors.white,
-                // height: hp('9%'),
-                // width: wp('15%'),
-                // borderRadius: wp('6%'),
-                marginTop: 7.5,
-                // justifyContent: 'center',
-                // alignItems: 'center',
-              }}>
+              style={{ marginTop: hp('1%') }}>
               <Image
                 style={{
                   height: 57,
@@ -236,8 +117,8 @@ const ProfileMainScreen = props => {
               // style={{ width: wp('0%') }}
               layout={'default'}
               data={Datum}
-              sliderWidth={itemWidth - 30}
-              itemWidth={itemWidth * 0.8}
+              sliderWidth={wp('95%')}
+              itemWidth={wp('90%')}
               renderItem={renderItem}
               onSnapToItem={index => {
                 setActiveDotIndex(index);
@@ -247,8 +128,8 @@ const ProfileMainScreen = props => {
             {Datum != '' && (
               <View
                 style={{
-                  paddingVertical: hp('0.5%'),
-                  width: itemWidth,
+                  paddingVertical: hp('0.8%'),
+                  width: wp('90%'),
                   alignItems: 'center',
                 }}>
                 {pagination()}
@@ -324,90 +205,9 @@ const ProfileMainScreen = props => {
             />
           </View>
         </View>
-        {/* <View style={styles.reports}>
-          <View style={{flexDirection: 'row'}}>
-            <View style={styles.containerTotalClasses}>
-              <LinearGradient
-                colors={['rgb(255,163,0)', 'rgb(255,126,0)']}
-                angle={90}
-                style={{
-                  height: '100%',
-                  width: wp('4%'),
-                  borderTopLeftRadius: wp('4%'),
-                  borderBottomLeftRadius: wp('4%'),
-                }}
-              />
-              <View
-                style={{
-                  flex: 1,
-                  padding: wp('1%'),
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                }}>
-                <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                  <Text
-                    style={{fontSize: wp('9%'), fontFamily: 'Nunito-SemiBold'}}>
-                    43
-                  </Text>
-                </View>
-                <View style={{marginLeft: wp('2%')}}>
-                  <Text
-                    style={{
-                      fontSize: wp('3.5%'),
-                      fontFamily: 'Nunito-Regular',
-                      alignSelf: 'center',
-                    }}>
-                    Total {'\n'} Classes
-                  </Text>
-                </View>
-              </View>
-            </View>
-            <View
-              style={{
-                width: '50%',
-                justifyContent: 'space-between',
-                marginBottom: 20,
-                transform: [{rotate: '180deg'}],
-              }}>
-              <LinearGradient
-                colors={['#EA5C5C', '#AB3333']}
-                style={{height: 7, borderRadius: wp('10%'), width: '12%'}}
-              />
-              <LinearGradient
-                colors={['#68D6AB', '#33AB96']}
-                style={{height: 7, borderRadius: wp('10%'), width: '20%'}}
-              />
-              <LinearGradient
-                colors={['#ffa300', '#ff7e00']}
-                angle={90}
-                style={{height: 7, borderRadius: wp('10%'), width: '50%'}}
-              />
-            </View>
-          </View>
-
-          <AttendanceOverview
-            linearGradient1={['#68D6AB', '#33AB96']}
-            linearGradient2={['#EA5C5C', '#AB3333']}
-            linearGradient3={['rgb(205,210,204)', 'rgb(205,210,204)']}
-            backgroundColor1="rgba(192,248,232,1)"
-            backgroundColor2="rgba(255,229,229,1)"
-            backgroundColor3="rgb(242,242,242)"
-            label1={'Attended'}
-            label2={'No Show'}
-            value1={14}
-            value2={2}
-          />
-        </View> */}
         <View style={styles.activityProgress}>
           <View style={styles.activityProgressTitle}>
             <Image
-              style={
-                {
-                  // height: hp('4%'),
-                  // width: hp('4%'),
-                  // borderRadius: wp('5%'),
-                }
-              }
               source={Images.medal}
             />
             <View style={{ marginLeft: wp('3.5%') }}>
@@ -419,8 +219,8 @@ const ProfileMainScreen = props => {
         </View>
 
         <View style={[styles.ProgressReports, styles.timeline]}>
-        <View style={{paddingRight:wp('4%')}}>
-          <ProgressBarWithStar />
+          <View style={{ paddingRight: wp('4%') }}>
+            <ProgressBarWithStar />
           </View>
           <View
             style={{
@@ -455,10 +255,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   welcome: {
-    fontSize: wp('4%'),
-    color: colors.white,
+    fontSize: Fontsize,
+    color: "white",
     fontFamily: 'Nunito-SemiBold',
-    opacity: 0.5,
+    opacity: 0.9,
   },
   memberName: {
     color: colors.white,
@@ -479,7 +279,7 @@ const styles = StyleSheet.create({
     marginHorizontal: wp('5%'),
     borderRadius: wp('5%'),
     backgroundColor: colors.white,
-    paddingVertical: hp('4%'),
+    padding: hp('2%'),
     elevation: 10,
     shadowColor: '#52006A',
   },
@@ -519,11 +319,5 @@ const styles = StyleSheet.create({
     elevation: 10,
     shadowColor: '#52006A',
   },
-  timeline: {
-    // marginHorizontal: 20,
-    // backgroundColor: colors.white,
-    // paddingVertical: hp('2%'),
-    // paddingLeft: 10,
-    // height: hp('40%'),
-  },
+
 });

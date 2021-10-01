@@ -1,26 +1,27 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import FeaIcons from 'react-native-vector-icons/Feather'
 import EntIcons from 'react-native-vector-icons/Entypo'
-import { colors, hp, wp } from '../Constant/Constant'
+import { colors, Fontsize, hp, wp } from '../Constant/Constant'
 import AppButton from './AppButton'
 import Buttons from './Buttons'
 
 
 export default function ClassCard(props) {
     return (
-        <View style={[styles.container,props.style]}>
+        <View style={[styles.container, props.style]}>
+            {props.subtitle && <Text style={styles.subtitle}>{props.subtitle}</Text>}
             {props.id && <Text style={{ color: colors.grey, fontFamily: "Nunito-SemiBold", }}> Child's Club ID <Text style={{ color: "black" }}>{props.id}</Text></Text>}
             {props.classname && <Text style={styles.classname}>{props.classname}</Text>}
-            {props.subtitle && <Text style={styles.subtitle}>{props.subtitle}</Text>}
+
             <Data calendar head={props.day} body={props.time} stylebody={{ color: colors.grey }} />
             <View style={{ flexDirection: 'row', marginTop: hp('1%') }}>
                 <Data star head={"Facility"} body={props.facility} stylehead={styles.head} />
                 <Data user head={"Coach"} body={props.coach} stylehead={styles.head} />
             </View>
-            {props.class && <AppButton title={props.title} onPress={props.classbutton} /> }
-           
-            {props.member && <Buttons onPress={props.memberbutton} style={styles.class}><Text style={{ color: colors.reddish }}>Drop Class</Text></Buttons> }
+            {props.class && <AppButton title={props.title} onPress={props.classbutton} />}
+
+            {props.member && <TouchableOpacity onPress={props.memberbutton} style={styles.class}><Text style={{ color: colors.reddish, fontFamily: "Nunito-Regular", }}>Drop Class</Text></TouchableOpacity>}
         </View>
     )
 }
@@ -54,13 +55,15 @@ const styles = StyleSheet.create({
         padding: wp('5%')
     },
     classname: {
-        fontFamily: "Nunito-SemiBold",
+        fontFamily: "Nunito-Regular",
         fontSize: hp('3%'),
-        color: colors.orange
+        color: "#ff7e00"
     },
     subtitle: {
-        fontFamily: "Nunito-SemiBold",
-        fontSize: hp('2%')
+        fontFamily: "Nunito-Regular",
+        fontSize: Fontsize - wp('0.4%'),
+        marginBottom: hp('1%'),
+        marginLeft: wp('1%')
     },
     smallcontainer: {
         flex: 1,
@@ -77,11 +80,11 @@ const styles = StyleSheet.create({
         color: colors.grey
     },
     time: {
-        fontFamily: "Nunito-SemiBold",
+        fontFamily: "Nunito-Regular",
         fontSize: hp('2%'),
     },
     class: {
-        fontFamily: "Nunito-SemiBold",
+        marginTop: hp('2%'),
         alignItems: 'center'
     }
 })

@@ -1,13 +1,13 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { hp, wp, colors } from '../Constant/Constant'
+import { hp, wp, colors, Fontsize } from '../Constant/Constant'
 import Input from "./Input";
 
 const PopUpCard = (props) => {
     return (
         <View style={styles.container}>
             {
-                props.headertext && <Text style={{ color: colors.grey }}>{props.headertext}</Text>
+                props.headertext && <Text style={{ color: colors.grey, fontFamily: 'Nunito-Regular',fontSize:Fontsize }}>{props.headertext}</Text>
             }
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Input
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginVertical: hp('1%'),
         borderRadius: 10,
-        borderColor: colors.orange,
+        borderColor: "#e3e3e3",
         padding: wp('1%'),
         paddingHorizontal: wp('3%'),
         backgroundColor: colors.white,

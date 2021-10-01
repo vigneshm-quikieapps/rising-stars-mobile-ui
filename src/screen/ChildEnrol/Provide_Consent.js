@@ -3,7 +3,8 @@ import {View, Text, StyleSheet, TextInput, Image, Switch} from 'react-native';
 import CustomLayout from '../../custom/CustomLayout';
 import Studentcard from '../../custom/Studentcard';
 import ProgressTracker from '../../custom/ProgressTracker';
-import {colors, hp, wp} from '../../Constant/Constant';
+import {colors, hp, wp, Fontsize} from '../../Constant/Constant';
+import Input from '../../custom/Input'
 
 import Forwardbutton from '../../custom/Forwardbutton';
 
@@ -17,10 +18,10 @@ const Provide_Consent = props => {
     <CustomLayout
       Customchildren={
         <Studentcard
-          name={'Ayman Mongal'}
-          id={'KKBK1211'}
+          name={'Ayman Mogal'}
+          id={'4'}
           activityrequired
-          activity={`Pre-school gymnastics(Age1-3)`}
+          activity={`Zippy Totz Pre-school Gymnastics`}
           subactivity={'Childhood Joy Classes'}
           classname={'Childhood Joy Classes'}
         />
@@ -43,7 +44,7 @@ const Provide_Consent = props => {
       />
       {isEnabled && (
         <View style={styles.textarea}>
-          <TextInput
+          <Input
             placeholder="Allergy details..."
             placeholderTextColor={colors.grey}
           />
@@ -57,7 +58,7 @@ const Provide_Consent = props => {
       />
       {isEnabled2 && (
         <View style={styles.textarea}>
-          <TextInput
+          <Input
             placeholder="Condition details..."
             placeholderTextColor={colors.grey}
           />
@@ -76,7 +77,7 @@ const Provide_Consent = props => {
       />
       {isEnabled3 && (
         <View style={styles.textarea}>
-          <TextInput
+          <Input
             placeholder="Allergy details..."
             placeholderTextColor={colors.grey}
           />
@@ -84,15 +85,15 @@ const Provide_Consent = props => {
       )}
       <Conset
         conset={
-          'I do consent to my child to be photographed for any purpose, Signed by Jube Bowman(Parent / Carer)'
+          'Signed by Jube Bowman(Parent / Carer)'
         }
         value={isEnabled4}
         onValueChange={() => setIsEnabled4(!isEnabled4)}
       />
       {isEnabled4 && (
         <View style={styles.textarea}>
-          <TextInput
-            placeholder="I do consent to my child to be photographed for any purpose"
+          <Input
+            placeholder="Signed by Jube Bowman(Parent / Carer)"
             placeholderTextColor={colors.grey}
             style={{width: wp('85%')}}
             multiline={true}
@@ -127,11 +128,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginVertical: hp('1.5%'),
+    fontSize:Fontsize,
     justifyContent: 'space-between',
   },
   consettext: {
-    fontFamily: 'Nunito-SemiBold',
-    fontSize: wp('3.5%'),
+    fontFamily: 'Nunito-Regular',
+    fontSize: Fontsize,
     width: wp('80%'),
   },
   textarea: {
@@ -163,7 +165,7 @@ const styles = StyleSheet.create({
     color: '#d26800',
     alignSelf: 'center',
     flex: 1,
-    fontSize: wp('3.5'),
+    fontSize: Fontsize,
     fontFamily: 'Nunito-Regular',
   },
 });

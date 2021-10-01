@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet, FlatList } from 'react-native'
 import CustomLayout from '../../custom/CustomLayout'
-import Studentcard from '../../custom/Studentcard'
+import LinearStudentcard from '../../custom/LinearStudentCard'
 import ClassCard from '../../custom/ClassCard'
 import { PaymentCard, Card } from '../../custom/paymentcard'
 import { colors, wp } from '../../Constant/Constant'
@@ -23,14 +23,15 @@ export default function EnrolledChild() {
                     keyExtractor={item => item.id}
                     renderItem={item => {
                         return (
-                            <Studentcard
-                                name={item.item.name}
-                                id={'KKBK1211'}
+                            <LinearStudentcard
+                                colors={["#ffa300", "#ff7e00"]}
+                                name={'Ayman Mogal'}
+                                style={{ backgroundColor: colors.orange }}
                                 activityrequired
-                                activity={`Pre-school gymnastics(Age1-3)`}
+                                activity={`Zippy Totz Pre-school Gymnastics`}
                                 subactivity={'Childhood Joy Classes'}
-                                clubid={"PDPS4212"}
-                                style={{ backgroundColor: colors.orange, marginHorizontal: wp('1%') }}
+                                classname={'Childhood Joy Classes'}
+                                clubid={'PDPS4212'}
                             />
                         )
                     }}
@@ -52,10 +53,10 @@ export default function EnrolledChild() {
             >
                 <Card
                     paystyle={{ backgroundColor: colors.reddish }}
-                    notify={"OverDues"}
+                    notify={"Overdue"}
                     amount={"25"}
-                    body={"September 2021 fee"}
-                    date={"Due Date 01/09/2021"}
+                    body={"August 2021 fee"}
+                    date={"Due Date 01/08/2021"}
                     button
                     title="Pay Now"
                     paybutton={() => { }}
@@ -81,13 +82,13 @@ export default function EnrolledChild() {
                     renderItem={item => {
                         return (
                             <Card
-                                notify={item.item.condition ? "Paid" : "Upcoming"}
+                                notify={item.item.condition ? "Paid" : "Future coming"}
                                 amount={item.item.amount}
                                 body={"Pre-school gym fee"}
                                 date={"Due Date 10/08/2021"}
                                 paidtext={"Paid on 12/08/2021"}
-                                substyle={{ backgroundColor: item.item.condition ? colors.veryLightGreen : "white", borderColor: item.item.condition ? "white" : colors.orange, borderWidth: item.item.condition ? 0 : 1, width: wp('81.7%') }}
-                                style={{ backgroundColor: item.item.condition ? colors.seafoamBlue : colors.reddish }}
+                                substyle={{ backgroundColor: item.item.condition ? colors.veryLightGreen : colors.lightgrey, borderColor: item.item.condition ? "white" : "white", width: wp('82%') }}
+                                style={{ backgroundColor: item.item.condition ? colors.seafoamBlue : colors.lightgrey,borderWidth: item.item.condition ? 0:1,borderColor:item.item.condition ?null:"white"}}
 
                             />
                         )

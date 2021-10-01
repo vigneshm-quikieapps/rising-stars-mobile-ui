@@ -1,15 +1,18 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
-import {hp, colors, wp} from '../Constant/Constant';
+import {TouchableOpacity, StyleSheet, Text,KeyboardAvoidingView} from 'react-native';
+import {hp, colors, wp, Fontsize} from '../Constant/Constant';
+import LinearGradient from 'react-native-linear-gradient';
+
 function AppButton({title, onPress, style}) {
   return (
-    <View>
-      <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
+    
+    <LinearGradient colors={['#ffa300', '#ff7e00']} style={[styles.container, style]}>
+      <TouchableOpacity  onPress={onPress}>
         <Text style={styles.button} onPress={onPress}>
           {title}
         </Text>
       </TouchableOpacity>
-    </View>
+    </LinearGradient>
   );
 }
 
@@ -19,16 +22,14 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    // width: '100%',
-    padding: wp('4%'),
-    borderRadius: wp(' 3%'),
-    // flexDirection: 'column',
+    padding: wp('5%'),
+    borderRadius:18,
     marginTop: hp('3%'),
     backgroundColor: colors.orange,
   },
   button: {
     color: colors.white,
-    fontSize: 15,
+    fontSize: Fontsize,
     fontFamily: 'Nunito-SemiBold',
   },
 });

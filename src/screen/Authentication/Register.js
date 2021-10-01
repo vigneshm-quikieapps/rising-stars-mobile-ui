@@ -1,23 +1,11 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  Modal,
-  Pressable,
-  FlatList,
-  Dimensions,
-} from 'react-native';
-import {Formik} from 'formik';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity, Alert, Modal, Pressable, FlatList, Dimensions } from 'react-native';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
-import {RadioButton, TextInput} from 'react-native-paper';
+import { RadioButton, TextInput } from 'react-native-paper';
 import ErrorMessage from '../../custom/ErrorMessage';
 import TextInputField from '../../custom/TextInputField';
-import {colors, hp, wp} from '../../Constant/Constant';
+import { colors, Fontsize, hp, wp } from '../../Constant/Constant';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import InputOTPScreen from './InputOTPScreen';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -29,8 +17,8 @@ const CELL_COUNT = 6;
 const validationSchema = Yup.object().shape({
   fullName: Yup.string().required().min(2).label('FullName'),
   email: Yup.string().required().min(4).email().label('Email'),
-  contactNumber: Yup.string().required().label('Contact Number'),
-  // postalCode: Yup.string().label('Postal Code'),
+  contactNumber: Yup.number().required().min(10).label('Contact Number'),
+  postalCode: Yup.string().label('Postal Code'),
   // AddressLine1: Yup.string().min(5).label('AddressLine1'),
   // AddressLine2: Yup.string().min(5).label('AddressLine2'),
   // cityTown: Yup.string().min(1).label('City/Town'),
@@ -107,7 +95,7 @@ function Register(props) {
       .catch(error => console.log('ERRORS', error));
   }, [APIPostCode]);
 
-  const Item = ({item, onPress, backgroundColor, textColor}) => (
+  const Item = ({ item, onPress, backgroundColor, textColor }) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
       <Text style={styles.APILabel}>AddressLine 1</Text>
       <Text style={styles.APIData}>{item.addressline1}</Text>
@@ -115,7 +103,7 @@ function Register(props) {
       <Text style={styles.APILabel}>AddressLine 2</Text>
       <Text style={styles.APIData}>{item.addressline2}</Text>
 
-      <Text style={[styles.APILabel, {marginLeft: -1}]}>Country</Text>
+      <Text style={[styles.APILabel, { marginLeft: -1 }]}>Country</Text>
       <Text style={styles.APIData}>{item.county}</Text>
 
       <Text style={styles.APILabel}>PostCode</Text>
@@ -126,7 +114,7 @@ function Register(props) {
     </TouchableOpacity>
   );
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     const backgroundColor =
       item.id === selectedId ? colors.lineColor : colors.orange;
     const color = item.id === selectedId ? 'white' : 'black';
@@ -141,8 +129,8 @@ function Register(props) {
           setPostCode(item.postcode);
           setCity(item.posttown);
         }}
-        backgroundColor={{backgroundColor}}
-        textColor={{color}}
+        backgroundColor={{ backgroundColor }}
+        textColor={{ color }}
       />
     );
   };
@@ -217,7 +205,7 @@ function Register(props) {
                     <View>
                       <Pressable
                         onPress={() => setModalVisible(!modalVisible)}
-                        style={{flexDirection: 'row'}}>
+                        style={{ flexDirection: 'row' }}>
                         <AppButton
                           title="Enter Manually"
                           style={{
@@ -265,7 +253,7 @@ function Register(props) {
               placeholder="Email*"
               autoCapitalize="none"
               autoCorrect={false}
-              keyboardType="Email"
+              keyboardType="email-address"
               onChangeText={handleChange('email')}
               onBlur={() => setFieldTouched('email')}
             />
@@ -279,11 +267,14 @@ function Register(props) {
               label={'+44-00000283'}
               autoCapitalize="none"
               maxLength={10}
-              keyboardType="number-pad"
+              keyboardType="phone-pad"
               autoCorrect={false}
               onChangeText={handleChange('contactNumber')}
               onBlur={() => setFieldTouched('contactNumber')}
             />
+            {
+              console.log(touched.contactNumber)
+            }
             <ErrorMessage
               style={styles.errorMessage}
               error={errors.contactNumber}
@@ -299,7 +290,7 @@ function Register(props) {
               booleanFlag={true}
               right={
                 <TextInput.Icon
-                  name={() => <EvilIcons name="search" size={30} />}
+                  name={() => <EvilIcons name="search" size={30} color={"#ff7e00"} />}
                   onPress={() => {
                     if (values.postCode.length <= 6) {
                       console.log(values.postCode.length);
@@ -326,7 +317,7 @@ function Register(props) {
                   autoCorrect={false}
                   onBlur={() => setFieldTouched('addressLine1')}
                   value={selectedId !== null ? address1 : values.addressLine1}
-                  // editable={false}
+                // editable={false}
                 />
                 <ErrorMessage
                   style={styles.errorMessage}
@@ -341,7 +332,7 @@ function Register(props) {
                   autoCorrect={false}
                   onBlur={() => setFieldTouched('addressLine2')}
                   value={selectedId !== null ? address2 : values.addressLine2}
-                  // editable={false}
+                // editable={false}
                 />
                 <ErrorMessage
                   style={styles.errorMessage}
@@ -356,7 +347,7 @@ function Register(props) {
                   autoCorrect={false}
                   onBlur={() => setFieldTouched('cityTown')}
                   value={selectedId !== null ? city : values.cityTown}
-                  // editable={false}
+                // editable={false}
                 />
                 <ErrorMessage
                   style={styles.errorMessage}
@@ -374,7 +365,7 @@ function Register(props) {
                 <Text
                   style={[
                     styles.bottomSubText,
-                    {alignSelf: 'center', marginBottom: hp('2%')},
+                    { alignSelf: 'center', marginBottom: hp('2%') },
                   ]}>
                   and other communications.
                 </Text>
@@ -384,40 +375,28 @@ function Register(props) {
                   flexDirection: 'row',
                   justifyContent: 'space-evenly',
                 }}>
-                <View style={{flexDirection: 'row', marginBottom: hp('2%')}}>
+                <View style={{ flexDirection: 'row', marginBottom: hp('2%') }}>
                   <RadioButton
                     value="first"
                     status={checked === 'first' ? 'checked' : 'unchecked'}
                     onPress={() => setChecked('first')}
-                    color={colors.orange}
+                    color={"#ff7e00"}
                   />
                   <Text
-                    style={{
-                      color:
-                        checked === 'first'
-                          ? colors.black
-                          : colors.blackOpacity,
-                      marginTop: 6,
-                    }}>
+                    style={[styles.radiotext, { color: checked === 'first' ? colors.black : colors.blackOpacity, }]}>
                     Yes, please
                   </Text>
                 </View>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   <RadioButton
                     value="second"
                     status={checked === 'second' ? 'checked' : 'unchecked'}
                     onPress={() => setChecked('second')}
-                    color={colors.orange}
+                    color={"#ff7e00"}
                   />
                   <Text
-                    style={{
-                      color:
-                        checked === 'second'
-                          ? colors.black
-                          : colors.blackOpacity,
-                      marginTop: 6,
-                    }}>
-                    No Thanks
+                    style={[styles.radiotext, { color: checked === 'second' ? colors.black : colors.blackOpacity }]}>
+                    No thanks
                   </Text>
                 </View>
               </View>
@@ -431,7 +410,7 @@ function Register(props) {
                 {/* <View style={{backgroundColor:"white",padding:wp('5%'),margin:wp('5%'),borderWidth:1,borderRadius:20}}> */}
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
-                    <Text style={{fontFamily: 'Nunito-Regular'}}>
+                    <Text style={{ fontFamily: 'Nunito-Regular' }}>
                       Lorem Ipsum is simply dummy text of the printing and
                       typesetting industry. Lorem Ipsum has been the industry's
                       standard dummy text ever since the 1500s, when an unknown
@@ -446,7 +425,7 @@ function Register(props) {
                     </Text>
                     <AppButton
                       title="close"
-                      style={{width: '30%'}}
+                      style={{ width: '30%' }}
                       onPress={() => setModalVisible1(!modalVisible1)}
                     />
                   </View>
@@ -459,7 +438,8 @@ function Register(props) {
                 style={{
                   marginVertical: hp('3%'),
                   fontFamily: 'Nunito-SemiBold',
-                  // marginTop: hp('5%'),
+                  marginTop: touched.email && touched.fullName === true ? hp("8%") :
+                    touched.fullName || touched.email || touched.contactNumber || touched.postCode === true ? hp('12%') : hp('13%'),
                 }}
               />
 
@@ -469,10 +449,11 @@ function Register(props) {
                   alignSelf: 'center',
                   justifyContent: 'center',
                   fontFamily: 'Nunito-Regular',
-                  fontSize: wp('3%'),
+                  fontSize: wp('2.6%'),
+                  color: "#7f7f7f"
                 }}>
-                By registering you are agreed to our{' '}
-                <Text style={{color: colors.orange}} onPress={callPopUp}>
+                By registering you are agreed to our {' '}
+                <Text style={{ color: colors.orange }} onPress={callPopUp}>
                   Terms and Conditions
                 </Text>
               </Text>
@@ -493,7 +474,7 @@ function Register(props) {
             backgroundColor: '#000',
           },
           container: {
-            height: '60%',
+            height: '45%',
             borderTopRightRadius: 16,
             borderTopLeftRadius: 16,
           },
@@ -553,12 +534,13 @@ const styles = StyleSheet.create({
     // marginTop:hp('0.8%'),
     fontSize: wp('3.7%'),
     fontFamily: 'Nunito-Regular',
-    color: colors.orange,
+    color: "#ff7e00",
   },
   errorMessage: {
     alignSelf: 'flex-end',
-    paddingRight: wp('10%'),
+    paddingRight: wp('1%'),
     opacity: 0.5,
+    fontFamily: 'Nunito-Regular'
   },
   centeredView: {
     flex: 1,
@@ -645,4 +627,9 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  radiotext: {
+    marginTop: 6,
+    fontFamily: 'Nunito-Regular',
+    fontSize: Fontsize,
+  }
 });

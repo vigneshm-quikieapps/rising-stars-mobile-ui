@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, Text, StyleSheet, Button} from 'react-native';
+import {SafeAreaView, Text, StyleSheet, Button,KeyboardAvoidingView,Platform} from 'react-native';
 import AppButton from './../../custom/AppButton';
 import {hp, wp} from '../../Constant/Constant';
 import {useNavigation} from '@react-navigation/native';
@@ -73,8 +73,13 @@ function InputOTPScreen(props) {
       }
     }
   };
+  console.log(props.twoInputField)
   return (
-    <SafeAreaView style={styles.root}>
+    <SafeAreaView style={{paddingHorizontal:wp('4%')}}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      // style={styles.root}
+    >
       <Text style={styles.title}>OTP Verificaton</Text>
       {props.twoInputField ? (
         <Text style={[styles.subtitle, {alignSelf: 'flex-start'}]}>
@@ -175,6 +180,7 @@ function InputOTPScreen(props) {
         onPress={OTPValidation}
         style={{marginVertical: 30}}
       />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

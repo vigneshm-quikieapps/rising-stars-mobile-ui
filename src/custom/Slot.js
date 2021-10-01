@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {RadioButton} from 'react-native-paper';
-import {hp, wp, colors} from '../Constant/Constant';
+import {hp, wp, colors, Fontsize} from '../Constant/Constant';
 
 const Slot = props => {
   return (
@@ -10,7 +10,7 @@ const Slot = props => {
         styles.container,
         props.style,
         {
-          borderColor: props.selected || props.white ? colors.orange : 'white',
+          borderColor: props.selected || props.white ? "#ff7e00" : 'white',
           backgroundColor: props.selected || props.white ? 'white' : '#f2f2f2',
         },
       ]}>
@@ -19,15 +19,15 @@ const Slot = props => {
           value={props.value}
           status={props.selected ? 'checked' : 'unchecked'}
           onPress={props.onPress}
-          color={colors.orange}
+          color={"#ff7e00"}
           uncheckedColor={props.uncheckedColor}
         />
       ) : null}
 
       <View style={styles.slotdetails}>
         {props.required && (
-          <View>
-            <Text style={styles.day}>{props.Class}</Text>
+          <View style={{marginBottom:hp('1%')}}>
+            <Text style={styles.day,{marginLeft:wp('0.5%')}}>{props.Class}</Text>
             <Text style={styles.time}>{props.sessions}</Text>
           </View>
         )}
@@ -63,12 +63,13 @@ const styles = StyleSheet.create({
   day: {
     fontFamily: 'Nunito-SemiBold',
     // fontWeight: 'bold',
-    fontSize: wp('4%'),
+    fontSize:Fontsize,
+    marginLeft:-wp('1%')
   },
   time: {
-    fontFamily: 'Nunito-SemiBold',
+    fontFamily: 'Nunito-Regular',
     color: colors.grey,
-    fontSize: wp('3.5%'),
+    fontSize: Fontsize,
   },
   subdetails: {
     flexDirection: 'row',
@@ -79,11 +80,12 @@ const styles = StyleSheet.create({
   },
   head: {
     fontFamily: 'Nunito-SemiBold',
-    fontSize: wp('3%'),
+    fontSize: wp('3.5%'),
     color: colors.grey,
   },
   body: {
     fontFamily: 'Nunito-SemiBold',
+    fontSize: Fontsize,
   },
 });
 

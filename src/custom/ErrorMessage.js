@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {colors} from '../Constant/Constant';
+import {colors,wp} from '../Constant/Constant';
 
 function ErrorMessage({error, visible, style}) {
   if (!visible || !error) return null;
@@ -12,6 +12,8 @@ export default ErrorMessage;
 
 const styles = StyleSheet.create({
   text: {
-    color: colors.errorColor,
+    color: colors.reddish,
+    fontFamily: 'Nunito-Regular',
+    fontSize:wp('3%')
   },
 });

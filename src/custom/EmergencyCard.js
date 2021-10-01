@@ -18,7 +18,7 @@ export default function EmergencyCard(props) {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <Text style={styles.emergency}>{`Add Emergency Contact`}</Text>
+          <Text style={styles.emergency}>{`Emergenct Contact (Secondary)`}</Text>
           <Buttons style={styles.cross} onPress={props.crossbutton}>
             <AntIcon name="minus" size={hp('2%')} color={colors.white} />
           </Buttons>
@@ -65,7 +65,7 @@ export default function EmergencyCard(props) {
         onPress={props.onPress}
       />
       {props.children}
-      {props.addbutton && (
+      {props.addbuttons && (
         <View style={styles.bottom}>
           <Buttons
             disabled={props.disabled}
@@ -73,7 +73,7 @@ export default function EmergencyCard(props) {
             onPress={props.addbutton}>
             <AntIcon name="plus" size={hp('3%')} color={colors.white} />
           </Buttons>
-          <Text style={styles.bottomtext}>Emergency Contact (Add more)</Text>
+          <Text style={styles.bottomtext}>Emergency Contact (Secondary)</Text>
         </View>
       )}
     </View>
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   countrycode: {
     borderWidth: 1,
-    borderColor: colors.orange,
+    borderColor: "#e3e3e3",
     borderRadius: 10,
     backgroundColor: colors.white,
     justifyContent: 'center',
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
   bottom: {
     flexDirection: 'row',
-    marginTop: hp('2%'),
+    marginTop: hp('0%'),
     alignItems: 'center',
 
     // justifyContent: 'flex-start',

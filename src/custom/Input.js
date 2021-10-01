@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, TextInput, StyleSheet } from 'react-native'
-import { wp, hp, colors } from '../Constant/Constant'
+import { wp, hp, colors, Fontsize } from '../Constant/Constant'
 
 const Input = (props) => {
     return (          
@@ -26,9 +26,10 @@ const Input = (props) => {
 
 const styles = StyleSheet.create({
     textarea: {
-        fontFamily: "Nunito-SemiBold",
+        fontFamily: 'Nunito-Regular',
         width: wp('70%'),
         fontSize:wp('4%'),
+        fontSize:Fontsize,
         color:colors.grey
     }
 })

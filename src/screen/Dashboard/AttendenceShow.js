@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import {
   View,
   Text,
-  SafeAreaView,
   StyleSheet,
   Dimensions,
   TouchableOpacity,
@@ -13,7 +12,6 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel from 'react-native-snap-carousel';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import AttendanceOverview from '../../custom/AttendanceOverview';
 import {colors, Images, wp} from '../../Constant/Constant';
 

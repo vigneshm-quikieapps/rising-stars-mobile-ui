@@ -11,7 +11,7 @@ import { colors, Images, wp } from '../../Constant/Constant';
 import Carousel from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
 import ProgressBarWithStar from '../../custom/progressBarWithStar';
-import TimeLine from '../../custom/Timeline';
+import TimeLines from '../../custom/Timelines';
 
 const ActivityProgress = () => {
   const Datum = [1, 2, 3, 4];
@@ -81,18 +81,13 @@ const ActivityProgress = () => {
 
       <View style={{ marginTop: 14 }}>
         <Carousel
-          // autoplay={true}
-          // loop={true}
           style={{ width: 350 }}
           layout={'default'}
           data={Datum}
           sliderWidth={itemWidth - 30}
           itemWidth={itemWidth * 0.88}
           renderItem={renderItem}
-        //    onSnapToItem = { index =>{
-
-        //      setActiveDotIndex(index)
-        //      }}
+        
         />
       </View>
       <View style={{ marginTop: 30, marginRight: 20 }}>
@@ -116,7 +111,7 @@ const ActivityProgress = () => {
       </View>
 
       <View style={{ marginTop: 10, paddingVertical: 20 }}>
-        <TimeLine />
+        <TimeLines />
       </View>
     </ScrollView>
   );

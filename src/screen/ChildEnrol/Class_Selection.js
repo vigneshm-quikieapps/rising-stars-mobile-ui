@@ -4,7 +4,7 @@ import CustomLayout from '../../custom/CustomLayout';
 import Studentcard from '../../custom/Studentcard';
 import ProgressTracker from '../../custom/ProgressTracker';
 import Forwardbutton from '../../custom/Forwardbutton';
-import {colors, hp, wp} from '../../Constant/Constant';
+import {colors, Fontsize, hp, wp} from '../../Constant/Constant';
 import PopUp from '../../custom/PopUp';
 import Input from '../../custom/Input';
 import PopUpCard from '../../custom/PopUpCard';
@@ -16,32 +16,32 @@ export default function Class_Selection(props) {
 
   return (
     <CustomLayout
-      Customchildren={<Studentcard name={'Ayman Mongal'} id={'KKBK1211'} />}
+      Customchildren={<Studentcard name={'Ayman Mogal'} id={'4'} />}
       steps
       start={2}
       end={7}
       header
       headerTextBigText={true}
-      headertext={'Activity Selection'}
+      headertext={'Class Selection'}
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={2} />}>
       <PopUpCard
         headertext={'Club Name*'}
-        text={'Select your Business name'}
+        text={'Select your Club'}
         textColor={'black'}
-        style={{fontSize: wp('4%'), marginLeft: -wp('1.2%')}}></PopUpCard>
+        style={{fontSize: Fontsize, marginLeft: -wp('1.2%')}}></PopUpCard>
       <PopUpCard
         headertext={'Class Name*'}
-        text={'Select your Session name'}
+        text={'Select your Class'}
         textColor={'black'}
-        style={{fontSize: wp('4.5%'), marginLeft: -wp('1.2%')}}></PopUpCard>
+        style={{fontSize: Fontsize, marginLeft: -wp('1.2%')}}></PopUpCard>
       <Text
         style={{
-          fontFamily: 'Nunito-SemiBold',
+          fontFamily: 'Nunito-Regular',
           marginVertical: hp('1%'),
-          fontSize: wp('4%'),
+          fontSize: Fontsize,
         }}>
-        Available Session
+        Available Sessions
       </Text>
       <Slot
         white
@@ -66,7 +66,7 @@ export default function Class_Selection(props) {
           marginVertical: hp('1%'),
           fontSize: wp('4%'),
         }}>
-        Waitlisted Session
+        Waitlisted Sessions
       </Text>
       <Slot
         radio

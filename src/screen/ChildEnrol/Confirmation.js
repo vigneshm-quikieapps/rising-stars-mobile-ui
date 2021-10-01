@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import CustomLayout from '../../custom/CustomLayout';
 import Studentcard from '../../custom/Studentcard';
 import ProgressTracker from '../../custom/ProgressTracker';
-import {colors, hp, wp} from '../../Constant/Constant';
+import { colors, Fontsize, hp, wp } from '../../Constant/Constant';
 import Forwardbutton from '../../custom/Forwardbutton';
 import Slot from '../../custom/Slot';
 import AppButton from '../../custom/AppButton';
@@ -22,10 +22,10 @@ const Confirmation = props => {
       Customchildren2={<ProgressTracker percent={7} />}
       Customchildren3={
         <Studentcard
-          name={'Ayman Mongal'}
-          id={'KKBK1211'}
+          name={'Ayman Mogal'}
+          id={'4'}
           activityrequired
-          activity={`Pre-school gymnastics(Age1-3)`}
+          activity={`Zippy Totz Pre-school Gymnastics`}
           subactivity={'Childhood Joy Classes'}
           classname={'Childhood Joy Classes'}
         />
@@ -54,7 +54,7 @@ const Confirmation = props => {
           waitlisted enrolments, pay charges offline
         </Text>
       </View>
-      <View style={{height: hp('0%')}} />
+      <View style={{ height: hp('0%') }} />
       <AppButton
         title={'Done'}
         onPress={() => props.navigation.navigate('HomeTab')}
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     marginRight: wp('2%'),
   },
   marktext: {
-    fontFamily: 'Nunito-SemiBold',
+    fontFamily: 'Nunito-Regular',
     color: '#d26800',
     alignSelf: 'center',
     width: wp('80%'),
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: hp('1%'),
     fontFamily: 'Nunito-Regular',
-    fontSize: wp('4%'),
+    fontSize: Fontsize,
   },
 });
 export default Confirmation;

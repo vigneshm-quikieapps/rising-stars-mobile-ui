@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import CustomLayout from '../../custom/CustomLayout';
 import Studentcard from '../../custom/Studentcard';
 import ProgressTracker from '../../custom/ProgressTracker';
-import {colors, hp, wp} from '../../Constant/Constant';
+import {colors, Fontsize, hp, wp} from '../../Constant/Constant';
 import {RadioButton} from 'react-native-paper';
 import Forwardbutton from '../../custom/Forwardbutton';
 import Atmcard from '../../custom/AtmCard';
@@ -13,11 +13,12 @@ const Pay = props => {
     <CustomLayout
       Customchildren={
         <Studentcard
-          name={'Ayman Mongal'}
-          id={'KKBK1211'}
+        name={'Ayman Mogal'}
+          id={'4'}
           activityrequired
-          activity={`Pre-school gymnastics(Age1-3)`}
+          activity={`Zippy Totz Pre-school Gymnastics`}
           subactivity={'Childhood Joy Classes'}
+          classname={'Childhood Joy Classes'}
         />
       }
       steps
@@ -27,7 +28,8 @@ const Pay = props => {
       headerTextBigText={true}
       headertext={'Pay'}
       backbutton={() => props.navigation.goBack()}
-      Customchildren2={<ProgressTracker percent={6} />}>
+      Customchildren2={<ProgressTracker percent={6} />}
+      >
       <Amount head={'Club Membership'} currency={'6'} />
       <Amount head={`Pre School Gym Class${'\n'}(Monthly)`} currency={'25'} />
       <Amount
@@ -36,9 +38,9 @@ const Pay = props => {
       />
       <Amount
         head={'Total Payable'}
-        stylehead={{fontSize: wp('4%')}}
+        stylehead={{fontSize: wp('5%')}}
         currency={'123'}
-        stylecurrency={{fontSize: wp('4%s')}}
+        stylecurrency={{fontSize: wp('7%s')}}
       />
       <View style={styles.breaks} />
       <Text style={styles.optional}>Payment Options</Text>
@@ -92,7 +94,7 @@ const styles = StyleSheet.create({
   },
   head: {
     fontFamily: 'Nunito-SemiBold',
-    fontSize: wp('3.5%'),
+    fontSize:Fontsize,
     width: wp('65%'),
   },
   body: {
@@ -101,12 +103,12 @@ const styles = StyleSheet.create({
   },
   currency: {
     fontFamily: 'Nunito-SemiBold',
-    fontSize: wp('3.5%'),
+    fontSize: Fontsize,
   },
   optional: {
     fontFamily: 'Nunito-SemiBold',
     marginTop: hp('1%'),
-    fontSize: wp('3.5%'),
+    fontSize:Fontsize,
     marginVertical: hp('1%'),
   },
   breaks: {

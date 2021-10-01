@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import CustomLayout from '../../custom/CustomLayout';
 import Studentcard from '../../custom/Studentcard';
 import ProgressTracker from '../../custom/ProgressTracker';
-import {colors, hp, wp} from '../../Constant/Constant';
+import {colors, Fontsize, hp, wp} from '../../Constant/Constant';
 import {RadioButton} from 'react-native-paper';
 import Forwardbutton from '../../custom/Forwardbutton';
 
@@ -12,10 +12,10 @@ const Fees_Overview = props => {
     <CustomLayout
       Customchildren={
         <Studentcard
-          name={'Ayman Mongal'}
-          id={'KKBK1211'}
+          name={'Ayman Mogal'}
+          id={'4'}
           activityrequired
-          activity={`Pre-school gymnastics(Age1-3)`}
+          activity={`Zippy Totz Pre-school Gymnastics`}
           subactivity={'Childhood Joy Classes'}
         />
       }
@@ -26,7 +26,8 @@ const Fees_Overview = props => {
       headerTextBigText={true}
       headertext={'Fees Overview'}
       backbutton={() => props.navigation.goBack()}
-      Customchildren2={<ProgressTracker percent={3} />}>
+      Customchildren2={<ProgressTracker percent={3} />}
+      >
       <Text style={{fontFamily: 'Nunito-SemiBold'}}>Fee Breakdown</Text>
       <Amount head={'Club Membership'} body={'Annual'} currency={'6'} />
       <View style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}} />
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
   },
   head: {
     fontFamily: 'Nunito-SemiBold',
-    fontSize: wp('4%'),
+    fontSize: Fontsize,
     // fontWeight: 'bold',
   },
   body: {

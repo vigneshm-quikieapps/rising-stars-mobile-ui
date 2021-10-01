@@ -24,10 +24,10 @@ function ForgotPassword(props) {
     <CustomLayout style={styles.container}>
       <View>
         <Text style={styles.title}>RESET PASSWORD</Text>
-        <Text style={styles.subTitle}>
+        {/* <Text style={styles.subTitle}>
           Enter the Email associated with your account we will send an OTP to
           that Email.
-        </Text>
+        </Text> */}
         <TextInputField
           keyboardType="email"
           placeholder="Email"
