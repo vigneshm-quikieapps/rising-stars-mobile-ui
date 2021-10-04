@@ -439,7 +439,7 @@ function Register(props) {
                   marginVertical: hp('3%'),
                   fontFamily: 'Nunito-SemiBold',
                   marginTop: touched.email && touched.fullName === true ? hp("8%") :
-                    touched.fullName || touched.email || touched.contactNumber || touched.postCode === true ? hp('12%') : hp('13%'),
+                    touched.fullName || touched.email || touched.contactNumber || touched.postCode === true ? hp('8%') : hp('8.9%'),
                 }}
               />
 
