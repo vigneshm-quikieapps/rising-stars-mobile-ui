@@ -14,14 +14,20 @@ import PopUp from '../../custom/PopUp';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import AppButton from '../../custom/AppButton';
+import { useSelector, useDispatch } from 'react-redux';
+import * as Action from '../../redux/actiontype'
 
-// import {  useNavigationParam } from 'react-navigation-hooks';
+
+
 
 const validationSchema = Yup.object().shape({
-  // fullName: Yup.string().required().min(3).label('FullName'),
+  fulltName: Yup.string().required().min(3).label('FullName'),
+ 
   // name: Yup.string().required().min(3).label('Name'),
   // contactNumber: Yup.number().required().min(10).label('Contact Number'),
 });
+
+
 
 const gender = [
   { id: 1, gender: 'Boy' },
@@ -33,6 +39,9 @@ const relation = [
   { id: 3, relation: 'Others' },
 ];
 const AddChild = props => {
+
+  // const dispact = useDispatch()
+
   const genderef = useRef()
   const relationref = useRef()
   const [count, setCount] = useState(1);
@@ -44,17 +53,22 @@ const AddChild = props => {
   const [modalvalue, setModalValue] = useState('');
 
 
-
-  // const route = useRoute()
-  // console.log(route)
-  // console.log(props.params.id)
-  // const {id} = props.navigation.getParam('id')
-  // console.log(id)
-  // const {steps} = props.route.params
-  // const id = useNavigationParam('id')
-
-  // console.log(relationdata);
-
+  const Api = (values) => {
+    console.log(values)
+    fetch('http://192.168.77.137:3000/api/member', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "firstName": values.firstName,
+        "lastName": values.lastName
+      })
+    }).then(response => response.json()
+    ).then(res => console.log(res)
+    ).catch(error => console.log(JSON.stringify(error)))
+  }
 
 
   const gendersubmit = item => {
@@ -95,12 +109,13 @@ const AddChild = props => {
       Customchildren2={<ProgressTracker percent={1} />}>
       <Formik
         initialValues={{
-          fullName: '',
+          fullName: '',        
           name: '',
           contactNumber: '',
         }}
         onSubmit={values => {
-          console.log('VALUES....', values);
+          console.log('VALUES....', values);  
+          console.log("hello")    
           props.navigation.navigate('Class_Selection');
         }}
         validationSchema={validationSchema}>
@@ -114,8 +129,8 @@ const AddChild = props => {
         }) => (
           <>
             <TextInputField
-              placeholder="Full Name"
-              onChangeText={handleChange('fullName')}
+              placeholder="Full Name *"
+              onChangeText={handleChange('fulltName')}
               value={values.fullName}
               onBlur={() => setFieldTouched('fullName')}
             />
@@ -123,12 +138,12 @@ const AddChild = props => {
             <ErrorMessage
               style={styles.errorMessage}
               error={errors.fullName}
-              visible={touched.fullName}
+              visible={touched.fulltName}
             />
 
-            <TextInputField placeholder="Date of Birth" label="DD-MM-YYYY" />
+            <TextInputField placeholder="Date of Birth *" label="DD-MM-YYYY" />
             <PopUpCard
-              text={'Gender'}
+              text={'Gender *'}
               textColor={colors.grey}
               value={modalvalue}
               onPress={() => genderef.current.open()}
@@ -138,12 +153,7 @@ const AddChild = props => {
               closeOnDragDown={true}
               closeOnPressMask={false}
               customStyles={{
-                // wrapper: {
-                //   backgroundColor: colors.blackOpacity,
-                // },
-                // draggableIcon: {
-                //   backgroundColor: '#000',
-                // },
+
                 container: {
                   height: '18%',
                   borderTopRightRadius: 16,
@@ -155,26 +165,7 @@ const AddChild = props => {
                 <AppButton title="Girl" style={{ width: wp('40%') }} onPress={() => gendersubmit('Girl')} />
               </View>
             </RBSheet>
-            {/* <PopUp
-              animationType="fade"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => {
-                setModalVisible(!modalVisible);
-              }}>
-              <View style={styles.modalView}>
-                {gender.map(item => {
-                  return (
-                    <TouchableOpacity
-                      key={item.id}
-                      style={styles.modalstyle}
-                      onPress={() => gendersubmit(item.gender)}>
-                      <Text style={styles.modaltext}>{item.gender}</Text>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-            </PopUp> */}
+
 
             <Text style={styles.emergency}>Emergency Contact (Primary)</Text>
             <EmergencyCard
@@ -194,56 +185,28 @@ const AddChild = props => {
               value={relationdata}
               onPress={() => relationref.current.open()}
 
-            // valuesrelationships={values.relationships}
-            // onChangeTextrelation={handleChange("relationships")}
-            // onBlurrelation={() => setFieldTouched('relationships')}
-            // errorsrelationships={errors.relationships}
-            // visiblerelationships={touched.relationships}
+
             >
               <RBSheet
                 ref={relationref}
                 closeOnDragDown={true}
                 closeOnPressMask={false}
                 customStyles={{
-                  // wrapper: {
-                  //   backgroundColor: colors.blackOpacity,
-                  // },
-                  // draggableIcon: {
-                  //   backgroundColor: '#000',
-                  // },
+
                   container: {
                     height: '18%',
                     borderTopRightRadius: 16,
                     borderTopLeftRadius: 16,
                   },
-                  
+
                 }}>
                 <View style={{ flexDirection: 'row', paddingHorizontal: wp('5%'), justifyContent: 'space-between' }}>
                   <AppButton title="Parents" style={{ width: wp('28%') }} onPress={() => relationsubmit("Parents")} />
-                  <AppButton title='Guardian' style={{ width: wp('30%') }} onPress={() =>relationsubmit('Guardian')} />
+                  <AppButton title='Guardian' style={{ width: wp('30%') }} onPress={() => relationsubmit('Guardian')} />
                   <AppButton title='Others' style={{ width: wp('28%') }} onPress={() => relationsubmit('Others')} />
                 </View>
               </RBSheet>
-              {/* <PopUp
-                animationType="fade"
-                transparent={true}
-                visible={relationmodal}
-                onRequestClose={() => {
-                  setRelationmodal(!relationmodal);
-                }}
-              >
-                <View style={styles.modalView}>
-                  {
-                    relation.map(item => {
-                      return (
-                        <TouchableOpacity key={item.id} style={styles.modalstyle} onPress={() => relationsubmit(item.relation)}>
-                          <Text style={styles.modaltext}>{item.relation}</Text>
-                        </TouchableOpacity>
-                      )
-                    })
-                  }
-                </View>
-              </PopUp> */}
+
             </EmergencyCard>
             {data &&
               data.map(item => {
@@ -265,11 +228,6 @@ const AddChild = props => {
                     value={relationdata}
                     onPress={() => setRelationmodal(!relationmodal)}
 
-                  // valuesrelationships={values.relationships}
-                  // onChangeTextrelation={handleChange("relationships")}
-                  // onBlurrelation={() => setFieldTouched('relationships')}
-                  // errorsrelationships={errors.relationships}
-                  // visiblerelationships={touched.relationships}
                   >
                     <PopUp
                       animationType="fade"
@@ -298,7 +256,7 @@ const AddChild = props => {
               })}
             <Forwardbutton
               style={{ alignSelf: 'flex-end', marginTop: hp('2%') }}
-              onPress={handleSubmit}
+              onPress={()=>props.navigation.navigate('Class_Selection')}
             />
           </>
         )}
@@ -315,7 +273,7 @@ const styles = StyleSheet.create({
   },
   errorMessage: {
     alignSelf: 'flex-end',
-    paddingRight: wp('10%'),
+    paddingRight: wp('1%'),
     opacity: 0.5,
   },
   modalView: {

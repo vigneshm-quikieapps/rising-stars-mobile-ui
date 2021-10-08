@@ -22,7 +22,7 @@ const windowHeight = Dimensions.get('window').height;
 const Datum = [1, 2, 3, 4];
 const DATA = [
   {
-    title: 'August,2021',
+    title: 'August 2021',
     data: [
       {
         date: '09',
@@ -30,13 +30,13 @@ const DATA = [
         status: 'Attended',
       },
       {
-        date: '12',
-        day: 'Thu',
+        date: '17',
+        day: 'Mon',
         status: 'No Show',
       },
 
       {
-        date: '16',
+        date: '',
         day: 'Mon',
         status: 'Attended',
       },
@@ -48,7 +48,7 @@ const DATA = [
     ],
   },
   {
-    title: 'September,2021',
+    title: 'September 2021',
     data: [
       {
         date: '09',
@@ -78,7 +78,7 @@ const DATA = [
     ],
   },
   {
-    title: 'October,2021',
+    title: 'October 2021',
     data: [
       {
         date: '09',
@@ -108,7 +108,7 @@ const DATA = [
     ],
   },
   {
-    title: 'November,2021',
+    title: 'November 2021',
     data: [
       {
         date: '09',

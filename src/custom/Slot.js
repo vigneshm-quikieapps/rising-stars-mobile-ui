@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   day: {
     fontFamily: 'Nunito-SemiBold',
     // fontWeight: 'bold',
-    fontSize:Fontsize,
+    fontSize:Fontsize ,
     marginLeft:-wp('1%')
   },
   time: {

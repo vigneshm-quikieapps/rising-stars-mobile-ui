@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Alert, Modal, Pressable, FlatList, Dimensions } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Alert, Modal, Pressable, FlatList, Dimensions, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { RadioButton, TextInput } from 'react-native-paper';
@@ -12,32 +12,30 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import AppButton from './../../custom/AppButton';
 import PopUp from './../../custom/PopUp';
 import CustomLayout from '../../custom/CustomLayout';
+import axios from 'axios'
+
+// import {connect} from 'react-redux';
+// import { bindActionCreators } from 'redux';
+// import * as Actions from '../../redux/actiontype'
 
 const CELL_COUNT = 6;
 const validationSchema = Yup.object().shape({
-  fullName: Yup.string().required().min(2).label('FullName'),
-  email: Yup.string().required().min(4).email().label('Email'),
-  contactNumber: Yup.number().required().min(10).label('Contact Number'),
-  postalCode: Yup.string().label('Postal Code'),
-  // AddressLine1: Yup.string().min(5).label('AddressLine1'),
-  // AddressLine2: Yup.string().min(5).label('AddressLine2'),
-  // cityTown: Yup.string().min(1).label('City/Town'),
+  // fullName: Yup.string().min(3, 'Too Short!').max(20, 'Too Long!').required('Required').label('Full Name')
 });
 
 function Register(props) {
-  const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
+
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible1, setModalVisible1] = useState(false);
-
   const [addressData, setAddressData] = useState();
   const [selectedId, setSelectedId] = useState(null);
   const [address1, setAddress1] = useState();
   const [address2, setAddress2] = useState();
   const [city, setCity] = useState();
+  const [name, setName] = useState("");
   const [postCode, setPostCode] = useState();
   const [APIPostCode, setAPIPostCode] = useState();
-
+  console.log(name)
   const [temp, setTemp] = useState(false);
   const refRBSheet = useRef();
   const star = <Text style={styles.star}>Rising Star</Text>;
@@ -47,6 +45,39 @@ function Register(props) {
       <Text style={styles.star}>Terms and Conditions</Text>
     </TouchableOpacity>
   );
+
+  const Api = ({ name, email, mobile, password, otp, postcode, add1, add2, city, country }) => {
+    // fetch('https://ismart-rising-star.herokuapp/api/',{
+    fetch('http://192.168.77.137:3000/api/get-otp/mobile-no', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "name": "name",
+        "email": "Tejfaster55@gmail.com",
+        "mobileNo": name,
+        "password": "1234567890",
+        "mobileNoOTP": "542503",
+        "postcode": "782486",
+        "addressLine1": "address line1",
+        "addressLine2": "address line2",
+        "city": "line2",
+        "country": "country"
+      })
+    }).then(response => response.json()
+    ).then(res => {
+      console.log(res)
+    }).catch(error => {
+      console.log("error ", JSON.stringify(error))
+    })
+
+  }
+
+  const handleSubmits = () => {
+    Api(name)
+  }
 
   const [checked, setChecked] = useState('first');
   let userNumber;
@@ -139,7 +170,7 @@ function Register(props) {
     props.navigation.goBack();
   };
   return (
-    // <ScrollView style={styles.container}>
+
     <CustomLayout
       header
       headertext={'Parent Registration'}
@@ -152,26 +183,24 @@ function Register(props) {
       subheadertextstyle={styles.subtitle}
       back
       backbutton={onHandleBackButton}>
-      {/* <View style={{ height: hp('2%') }} /> */}
-      {/* <View style={styles.container}> */}
-      {/* <View> */}
-      {/* <Text style={styles.title}>Parent Registration</Text> */}
-      {/* <Text style={styles.subtitle}>Enter your details to register</Text> */}
-      {/* </View> */}
       <Formik
         initialValues={{
           fullName: '',
           email: '',
-          contactNumber: '+44',
+          password: '',
+          passwordConfirmation: '',
+          contactNumber: '',
           postCode: '',
           addressLine1: '',
           addressLine2: '',
           cityTown: '',
         }}
         onSubmit={values => {
-          console.log('VALUES....', values);
+          // console.log('VALUES....', values);
+          console.log(name, values.email, values.contactNumber, values.password, "057013", values.postCode, values.addressLine1, values.addressLine2, values.cityTown)
+          Api(values.fullName, values.email, values.contactNumber, values.password, "057013", values.postCode, values.addressLine1, values.addressLine2, values.cityTown)
           // handleSubmit1(values.contactNumber);
-          refRBSheet.current.open();
+          // refRBSheet.current.open();
         }}
         validationSchema={validationSchema}>
         {({
@@ -231,24 +260,21 @@ function Register(props) {
                 </View>
               </Modal>
             </View>
-            {/* MODAL CODE END */}
-            {/* {selectedId !== null ? (initialValues.addressLine1 = address1) : ''} */}
-            {/* {selectedId !== null ? (initialValues.addressLine2 = address2) : ''} */}
-            {/* {selectedId !== null ? (initialValues.postCode = postCode) : ''}  */}
-            {/* {selectedId !== null ? (values.cityTown = city) : ''} */}
+
             <TextInputField
               placeholder="Your Full Name*"
-              style={styles.inputField}
+              style={[styles.inputField, { marginTop: hp('0.1%') }]}
               onChangeText={handleChange('fullName')}
               autoCapitalize="none"
               autoCorrect={false}
-              onBlur={() => setFieldTouched('fullName')}
+            // onBlur={() => setFieldTouched('fullName')}
             />
             <ErrorMessage
               style={styles.errorMessage}
               error={errors.fullName}
               visible={touched.fullName}
             />
+
             <TextInputField
               placeholder="Email*"
               autoCapitalize="none"
@@ -263,23 +289,45 @@ function Register(props) {
               visible={touched.email}
             />
             <TextInputField
-              placeholder="Contact Number*"
-              label={'+44-00000283'}
+              placeholder="Mobile Number*"
+              label={'+44-00000000'}
               autoCapitalize="none"
-              maxLength={10}
+              // maxLength={10}
               keyboardType="phone-pad"
               autoCorrect={false}
               onChangeText={handleChange('contactNumber')}
               onBlur={() => setFieldTouched('contactNumber')}
             />
-            {
-              console.log(touched.contactNumber)
-            }
             <ErrorMessage
               style={styles.errorMessage}
               error={errors.contactNumber}
               visible={touched.contactNumber}
             />
+            <TextInputField
+              placeholder="Password*"
+              autoCapitalize="none"
+              autoCorrect={false}
+              onChangeText={handleChange('password')}
+              onBlur={() => setFieldTouched('password')}
+            />
+            <ErrorMessage
+              style={styles.errorMessage}
+              error={errors.password}
+              visible={touched.password}
+            />
+            <TextInputField
+              placeholder="Confirm Password*"
+              autoCapitalize="none"
+              autoCorrect={false}
+              onChangeText={handleChange('passwordConfirmation')}
+              onBlur={() => setFieldTouched('passwordConfirmation')}
+            />
+            <ErrorMessage
+              style={styles.errorMessage}
+              error={errors.passwordConfirmation}
+              visible={touched.passwordConfirmation}
+            />
+
             <TextInputField
               placeholder="Postcode"
               onChangeText={handleChange('postCode')}
@@ -365,7 +413,7 @@ function Register(props) {
                 <Text
                   style={[
                     styles.bottomSubText,
-                    { alignSelf: 'center', marginBottom: hp('2%') },
+                    { alignSelf: 'center', marginBottom: hp('0%') },
                   ]}>
                   and other communications.
                 </Text>
@@ -374,8 +422,9 @@ function Register(props) {
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-evenly',
+                  marginBottom: hp('0%')
                 }}>
-                <View style={{ flexDirection: 'row', marginBottom: hp('2%') }}>
+                <View style={{ flexDirection: 'row' }}>
                   <RadioButton
                     value="first"
                     status={checked === 'first' ? 'checked' : 'unchecked'}
@@ -407,7 +456,7 @@ function Register(props) {
                 onRequestClose={() => {
                   setModalVisible1(!modalVisible1);
                 }}>
-                {/* <View style={{backgroundColor:"white",padding:wp('5%'),margin:wp('5%'),borderWidth:1,borderRadius:20}}> */}
+
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
                     <Text style={{ fontFamily: 'Nunito-Regular' }}>
@@ -434,12 +483,10 @@ function Register(props) {
 
               <AppButton
                 title="Register"
-                onPress={handleSubmit}
+                onPress={handleSubmits}
                 style={{
-                  marginVertical: hp('3%'),
+                  marginVertical: hp('0%'),
                   fontFamily: 'Nunito-SemiBold',
-                  marginTop: touched.email && touched.fullName === true ? hp("8%") :
-                    touched.fullName || touched.email || touched.contactNumber || touched.postCode === true ? hp('8%') : hp('8.9%'),
                 }}
               />
 
@@ -517,12 +564,12 @@ const styles = StyleSheet.create({
     width: wp('100%'),
   },
   bottomText: {
-    paddingTop: hp('2%'),
+    paddingTop: hp('1%'),
     justifyContent: 'center',
   },
   bottomSubText: {
     color: 'rgb(127, 127, 127)',
-    fontSize: wp('3.7%'),
+    fontSize: Fontsize,
     fontFamily: 'Nunito-Regular',
     alignSelf: 'center',
   },

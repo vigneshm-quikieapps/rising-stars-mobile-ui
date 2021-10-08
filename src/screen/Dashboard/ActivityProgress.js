@@ -53,7 +53,7 @@ const ActivityProgress = () => {
     <ScrollView style={styles.container}>
       <View style={{ marginTop: 30 }}>
         <Text style={{ fontSize: 34, fontFamily: 'Nunito-SemiBold' }}>
-          Class Progress
+         Progress
         </Text>
       </View>
 

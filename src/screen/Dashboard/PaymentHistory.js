@@ -38,7 +38,7 @@ export default function EnrolledChild() {
                 />
             }
         >
-            <Text style={{ fontFamily: "Nunito-SemiBold" }}>Current Classes Session</Text>
+            <Text style={{ fontFamily: "Nunito-SemiBold" }}>Current Classes </Text>
             <ClassCard
                 // id={"PDPS4212"}
                 classname={"Pre-school gymnastics(Age 1-3)"}

@@ -26,7 +26,7 @@ export default function EmergencyCard(props) {
       )}
 
       <TextInputField
-        placeholder="Name*"
+        placeholder="Name *"
         value={props.valuename}
         onChangeText={props.onChangeTextname}
         onBlur={props.onBlurname}
@@ -43,7 +43,7 @@ export default function EmergencyCard(props) {
           <Text style={{fontSize: wp('4%'), color: colors.grey}}>+44</Text>
         </View>
         <TextInputField
-          placeholder="Contact Number*"
+          placeholder="Mobile Number *"
           value={props.valuescontactNumber}
           onChangeText={props.onChangeTextcontact}
           maxLength={10}

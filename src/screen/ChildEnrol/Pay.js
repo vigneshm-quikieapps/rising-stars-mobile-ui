@@ -18,7 +18,7 @@ const Pay = props => {
           activityrequired
           activity={`Zippy Totz Pre-school Gymnastics`}
           subactivity={'Childhood Joy Classes'}
-          classname={'Childhood Joy Classes'}
+          // classname={'Childhood Joy Classes'}
         />
       }
       steps

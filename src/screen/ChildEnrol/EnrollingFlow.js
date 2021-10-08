@@ -59,7 +59,7 @@ function EnrollingFlow(props) {
   return (
     <CustomLayout
       backbutton={onHandleBackButton}
-      headertext={'Enter Child To a Club Activity'}
+      headertext={'Enrol Child To a Club Activity'}
       headertextStyle={{
         fontSize: wp('8%'),
         // backgroundColor: 'pink',

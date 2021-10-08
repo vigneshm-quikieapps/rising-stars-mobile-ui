@@ -1,34 +1,27 @@
-import React from 'react';
-import {  View,  StyleSheet,  Text,  Image,  ScrollView,  TouchableOpacity, KeyboardAvoidingView} from 'react-native';
+import React,{useState,useEffect} from 'react';
+import {  View,  StyleSheet,  Text,  Image,  ScrollView,  TouchableOpacity,ActivityIndicator} from 'react-native';
 import { colors, Fontsize, hp, wp } from '../../Constant/Constant';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import TextInputField from '../../custom/TextInputField';
 import ErrorMessage from '../../custom/ErrorMessage';
 import AppButton from '../../custom/AppButton';
-// import { Images } from '../../Constant/Constant';
-// import { signin } from '../../auth/authentication';
-// import AsyncStorage from '@react-native-community/async-storage';
-// import ForgotPassword from './ForgotPassword';
+
+// import * as Action from '../../redux/actiontype';
+// import {connect} from 'react-redux'
+// import {bindActionCreators} from 'redux'
+// import { login,loginError } from '../../redux/action/auth';
 
 const validationSchema = Yup.object().shape({
-  mobileNumber: Yup.string().required().label('Mobile Number'),
-  password: Yup.string().required().min(4).label('Password'),
+  // mobileNumber: Yup.number().required().min(10).label('Mobile Number'),
+  // password: Yup.string().required().min(6).label('Password'),
 });
 
 function Login(props) {
+
   const onHandleSubmit = data => {
-    const { email, password } = data;
-    // signin({email, password})
-    //   .then(async data => {
-    //     console.log('DATA', data);
-    //     try {
-    //       await AsyncStorage.setItem('Token', '12121212');
-    //     } catch (err) {
-    //       console.log('ERRORS', err);
-    //     }
-    //   })
-    //   .catch(console.log('Signin failed'));
+    const {mobileNumber, password } = data;
+    // props.actions.login({mobileNumber,password})
     props.navigation.navigate('HomeTab');
   };
 
@@ -39,6 +32,7 @@ function Login(props) {
   const gotoForgotPassword = () => {
     props.navigation.navigate('CreateNewPassword');
   };
+  
   const star = <Text style={styles.star}>Star</Text>;
   return (
     <ScrollView style={styles.container}>
@@ -72,6 +66,7 @@ function Login(props) {
               onChangeText={handleChange('mobileNumber')}
               autoCapitalize="none"
               keyboardType="phone-pad"
+              maxLength={10}
               autoCorrect={false}
               onBlur={() => setFieldTouched('mobileNumber')}
             />
@@ -112,7 +107,7 @@ function Login(props) {
 
       <View style={styles.text}>
         <Text style={styles.forgotPasswordText, { color: "#7f7f7f" }}>
-          Don't have account?
+          Don't have an account?
         </Text>
         <TouchableOpacity onPress={gotoRegister}>
           <Text style={styles.forgotPasswordText}>
@@ -124,7 +119,6 @@ function Login(props) {
   );
 }
 
-export default Login;
 
 const styles = StyleSheet.create({
   container: {
@@ -173,3 +167,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Regular',
   },
 });
+
+// const mapStateToProps = state => {
+//   return{
+//     auth:state.auth
+//   }
+// }
+
+// const mapDispatchToProps = dispactch =>({
+//   actions:bindActionCreators({login},dispactch)
+// })
+// export default connect(mapStateToProps,mapDispatchToProps)(Login);
+export default Login
