@@ -1,33 +1,29 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import EmergencyCard from '../../custom/EmergencyCard';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import { useSelector, useDispatch } from 'react-redux'
+
+
+import PopUpCard from '../../custom/PopUpCard';
+import PopUp from '../../custom/PopUp';
 import CustomLayout from '../../custom/CustomLayout';
 import TextInputField from '../../custom/TextInputField';
 import ProgressTracker from '../../custom/ProgressTracker';
 import { colors, hp, wp } from '../../Constant/Constant';
 import Forwardbutton from '../../custom/Forwardbutton';
 import ErrorMessage from '../../custom/ErrorMessage';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import EmergencyCard from '../../custom/EmergencyCard';
-import PopUpCard from '../../custom/PopUpCard';
-import PopUp from '../../custom/PopUp';
-import { useRoute, useNavigation } from '@react-navigation/native';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import AppButton from '../../custom/AppButton';
-import { useSelector, useDispatch } from 'react-redux';
-import * as Action from '../../redux/actiontype'
-
-
+import { getChildData } from '../../redux/action/enrol'
 
 
 const validationSchema = Yup.object().shape({
-  fulltName: Yup.string().required().min(3).label('FullName'),
- 
-  // name: Yup.string().required().min(3).label('Name'),
-  // contactNumber: Yup.number().required().min(10).label('Contact Number'),
+  fullName: Yup.string().required().min(3).label('FullName'),
+  name: Yup.string().required().min(3).label('Name'),
+  contactNumber: Yup.number().required().min(10).label('Contact Number'),
 });
-
-
 
 const gender = [
   { id: 1, gender: 'Boy' },
@@ -39,11 +35,12 @@ const relation = [
   { id: 3, relation: 'Others' },
 ];
 const AddChild = props => {
-
-  // const dispact = useDispatch()
-
   const genderef = useRef()
   const relationref = useRef()
+  const dispatch = useDispatch()
+  const name = useSelector(state => state.childData.payload)
+  console.log('name------>',name)
+
   const [count, setCount] = useState(1);
   const [data, setData] = useState([]);
 
@@ -51,25 +48,6 @@ const AddChild = props => {
   const [buttonVisible, setButtonVisible] = useState(true);
   const [relationdata, setRelationdata] = useState('');
   const [modalvalue, setModalValue] = useState('');
-
-
-  const Api = (values) => {
-    console.log(values)
-    fetch('http://192.168.77.137:3000/api/member', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        "firstName": values.firstName,
-        "lastName": values.lastName
-      })
-    }).then(response => response.json()
-    ).then(res => console.log(res)
-    ).catch(error => console.log(JSON.stringify(error)))
-  }
-
 
   const gendersubmit = item => {
     setModalValue(item)
@@ -109,13 +87,16 @@ const AddChild = props => {
       Customchildren2={<ProgressTracker percent={1} />}>
       <Formik
         initialValues={{
-          fullName: '',        
-          name: '',
+          fullName: '',
+          dob: '',
+          gender:'',
+          name:'',
           contactNumber: '',
+          relationship:'',
         }}
         onSubmit={values => {
-          console.log('VALUES....', values);  
-          console.log("hello")    
+          console.log('VALUES....', values);
+          dispatch(getChildData(values))
           props.navigation.navigate('Class_Selection');
         }}
         validationSchema={validationSchema}>
@@ -129,8 +110,8 @@ const AddChild = props => {
         }) => (
           <>
             <TextInputField
-              placeholder="Full Name *"
-              onChangeText={handleChange('fulltName')}
+              placeholder="Full Name"
+              onChangeText={handleChange('fullName')}
               value={values.fullName}
               onBlur={() => setFieldTouched('fullName')}
             />
@@ -138,12 +119,12 @@ const AddChild = props => {
             <ErrorMessage
               style={styles.errorMessage}
               error={errors.fullName}
-              visible={touched.fulltName}
+              visible={touched.fullName}
             />
 
-            <TextInputField placeholder="Date of Birth *" label="DD-MM-YYYY" />
+            <TextInputField placeholder="Date of Birth" label="DD-MM-YYYY" />
             <PopUpCard
-              text={'Gender *'}
+              text={'Gender'}
               textColor={colors.grey}
               value={modalvalue}
               onPress={() => genderef.current.open()}
@@ -228,6 +209,7 @@ const AddChild = props => {
                     value={relationdata}
                     onPress={() => setRelationmodal(!relationmodal)}
 
+
                   >
                     <PopUp
                       animationType="fade"
@@ -256,7 +238,7 @@ const AddChild = props => {
               })}
             <Forwardbutton
               style={{ alignSelf: 'flex-end', marginTop: hp('2%') }}
-              onPress={()=>props.navigation.navigate('Class_Selection')}
+              onPress={handleSubmit}
             />
           </>
         )}
@@ -307,3 +289,24 @@ const styles = StyleSheet.create({
   },
 });
 export default AddChild;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

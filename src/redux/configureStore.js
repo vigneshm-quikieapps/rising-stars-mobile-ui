@@ -6,9 +6,9 @@ import rootSaga from './rootSaga'
 const sagaMiddleware = createSagaMiddleware()
 
 export default () => {
-    const store = compose(applyMiddleware(sagaMiddleware))(createStore)(rootReducer)
+    const Store = compose(applyMiddleware(sagaMiddleware))(createStore)(rootReducer)
     sagaMiddleware.run(rootSaga);
-    return {store}
+    return {Store}
 }
 
 
