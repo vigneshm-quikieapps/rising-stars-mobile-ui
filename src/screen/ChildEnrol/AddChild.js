@@ -17,7 +17,8 @@ import Forwardbutton from '../../custom/Forwardbutton';
 import ErrorMessage from '../../custom/ErrorMessage';
 import AppButton from '../../custom/AppButton';
 import { getChildData } from '../../redux/action/enrol'
-
+import moment from 'moment';
+import DatePicker from 'react-native-date-picker';
 
 const validationSchema = Yup.object().shape({
   fullName: Yup.string().required().min(3).label('FullName'),
@@ -39,10 +40,14 @@ const AddChild = props => {
   const relationref = useRef()
   const dispatch = useDispatch()
   const name = useSelector(state => state.childData.payload)
-  console.log('name------>',name)
+  // console.log('name------>', name)
 
   const [count, setCount] = useState(1);
   const [data, setData] = useState([]);
+
+  const [birth, setBirth] = useState('')
+  const [age, setAge] = useState('')
+  const [open, setOpen] = useState(false)
 
   const [relationmodal, setRelationmodal] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(true);
@@ -89,13 +94,15 @@ const AddChild = props => {
         initialValues={{
           fullName: '',
           dob: '',
-          gender:'',
-          name:'',
+          gender: '',
+          name: '',
           contactNumber: '',
-          relationship:'',
+          relationship: '',
+          age:''
         }}
         onSubmit={values => {
-          console.log('VALUES....', values);
+          values.dob = birth
+          values.age = age
           dispatch(getChildData(values))
           props.navigation.navigate('Class_Selection');
         }}
@@ -122,7 +129,30 @@ const AddChild = props => {
               visible={touched.fullName}
             />
 
-            <TextInputField placeholder="Date of Birth" label="DD-MM-YYYY" />
+            {/* <TextInputField placeholder="Date of Birth" label="DD-MM-YYYY" /> */}
+            <PopUpCard
+              text={'Date of Birth'}
+              textColor={colors.grey}
+              value={birth}
+              onPress={() => setOpen(!open)}
+            />
+            <DatePicker
+              modal
+              mode="date"
+              open={open}
+              date={new Date()}
+              onConfirm={(date) => {
+                setOpen(false)
+                setBirth(moment(date).format('YYYY/MM/DD'))
+                let age = (new Date()).getFullYear() - date.getFullYear()
+                setAge(age)
+                console.log(age)
+              }}
+              onCancel={() => {
+                setOpen(!open)
+              }}
+            />
+
             <PopUpCard
               text={'Gender'}
               textColor={colors.grey}
