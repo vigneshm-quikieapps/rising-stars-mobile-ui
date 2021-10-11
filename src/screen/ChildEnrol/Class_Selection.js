@@ -9,14 +9,16 @@ import PopUp from '../../custom/PopUp';
 import Input from '../../custom/Input';
 import PopUpCard from '../../custom/PopUpCard';
 import Slot from '../../custom/Slot';
+import { useSelector, useDispatch } from 'react-redux'
 
 export default function Class_Selection(props) {
   const [business, setBusiness] = useState(false);
   const [club, setClub] = useState(false);
-
+  const user = useSelector(state => state.childData.payload)
+  console.log(user)
   return (
     <CustomLayout
-      Customchildren={<Studentcard name={'Ayman Mogal'} id={'4'} />}
+      Customchildren={<Studentcard name={user.fullName} id={user.age} />}
       steps
       start={2}
       end={7}

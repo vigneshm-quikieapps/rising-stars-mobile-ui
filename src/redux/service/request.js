@@ -1,9 +1,9 @@
 import axios from 'axios'
-import {mobile_url,api_url} from '../../Constant/config'
+import {mobile_url,api_url,heroku_url} from '../../Constant/config'
 
 
 function AddChild(){
-    return axios.post(`${mobile_url}${endpoint}`,{
+    return axios.post(`${heroku_url}${endpoint}`,{
        
     }).then
 }

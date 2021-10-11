@@ -2,6 +2,7 @@ import * as Action from "../actiontype"
 
 const initialState = {
     payload:'',
+    
 }
 export const childData = (state = initialState,action) =>{
     switch(action.type){

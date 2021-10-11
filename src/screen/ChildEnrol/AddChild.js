@@ -16,7 +16,7 @@ import { colors, hp, wp } from '../../Constant/Constant';
 import Forwardbutton from '../../custom/Forwardbutton';
 import ErrorMessage from '../../custom/ErrorMessage';
 import AppButton from '../../custom/AppButton';
-import { getChildData } from '../../redux/action/enrol'
+import { setChildData } from '../../redux/action/enrol'
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
 
@@ -52,10 +52,10 @@ const AddChild = props => {
   const [relationmodal, setRelationmodal] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(true);
   const [relationdata, setRelationdata] = useState('');
-  const [modalvalue, setModalValue] = useState('');
+  const [gender, setGender] = useState('');
 
   const gendersubmit = item => {
-    setModalValue(item)
+    setGender(item)
     genderef.current.close()
   };
 
@@ -103,7 +103,7 @@ const AddChild = props => {
         onSubmit={values => {
           values.dob = birth
           values.age = age
-          dispatch(getChildData(values))
+          dispatch(setChildData(values))
           props.navigation.navigate('Class_Selection');
         }}
         validationSchema={validationSchema}>
@@ -156,7 +156,7 @@ const AddChild = props => {
             <PopUpCard
               text={'Gender'}
               textColor={colors.grey}
-              value={modalvalue}
+              value={gender}
               onPress={() => genderef.current.open()}
             />
             <RBSheet

@@ -60,7 +60,7 @@ export default function EmergencyCard(props) {
       />
 
       <PopUpCard
-        text="Relationship"
+        text="Relationship *"
         value={props.value}
         onPress={props.onPress}
       />

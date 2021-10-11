@@ -10,9 +10,10 @@ import rootSaga from './src/redux/rootSaga';
 
 const sagaMiddleware = createSagaMiddleware()
 
-const Store = compose(applyMiddleware(sagaMiddleware))(createStore)(rootReducer)
+// const Store = compose(applyMiddleware(sagaMiddleware))(createStore)(rootReducer)
+const Store = createStore(rootReducer) 
 
-sagaMiddleware.run(rootSaga)
+// sagaMiddleware.run(rootSaga)
 
 export default function App() {
   return (
