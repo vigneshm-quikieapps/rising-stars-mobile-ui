@@ -35,6 +35,9 @@ export const colors = {
 
 export const Fontsize = wp('4%')
 
+export const UK_CODE = "+44"
+export const Today = new Date() 
+ 
 export const Images = {
   Child: require('../assets/images/girl.jpg'),
   calendar: require('../assets/images/icon-date-line.png'),

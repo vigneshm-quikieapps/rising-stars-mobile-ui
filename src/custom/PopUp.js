@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Modal, StyleSheet } from 'react-native';
+import {hp} from '../Constant/Constant'
 
 function PopUp(props) {
     return (
@@ -21,7 +22,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        // marginTop: hp('46%')
     }
 })
 

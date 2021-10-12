@@ -6,14 +6,14 @@ import {createStore , applyMiddleware, compose} from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { Provider } from 'react-redux';
 import rootReducer from './src/redux/rootReducer'; 
-import rootSaga from './src/redux/rootSaga'; 
+import rootSaga from './src/redux/rootsaga'; 
 
 const sagaMiddleware = createSagaMiddleware()
 
-// const Store = compose(applyMiddleware(sagaMiddleware))(createStore)(rootReducer)
-const Store = createStore(rootReducer) 
+//const Store = compose(applyMiddleware(sagaMiddleware))(createStore)(rootReducer)
+const Store = createStore(rootReducer,applyMiddleware(sagaMiddleware)) 
 
-// sagaMiddleware.run(rootSaga)
+sagaMiddleware.run(rootSaga)
 
 export default function App() {
   return (

@@ -7,21 +7,28 @@ const PopUpCard = (props) => {
     return (
         <View style={styles.container}>
             {
-                props.headertext && <Text style={{ color: colors.grey, fontFamily: 'Nunito-Regular',fontSize:Fontsize }}>{props.headertext}</Text>
+                props.headertext && <Text style={{ color: colors.grey, fontFamily: 'Nunito-Regular', fontSize: Fontsize,marginLeft:wp('4%') }}>{props.headertext}</Text>
             }
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Input
-                    placeholder={props.text}
-                    placeholderTextColor={props.textColor}
-                    style={[props.style]}
-                    editable={false}
-                    value={props.value}
-                /> 
-                <TouchableOpacity onPress={props.onPress}>
-                    <Image source={require("../assets/images/icon-forward2-line-black.png")} style={styles.image} />
-                </TouchableOpacity>
+                {
+                    props.picker ? (props.children) :
+                        <>
+                            <Input
+                                placeholder={props.text}
+                                placeholderTextColor={props.textColor}
+                                onChangeText={props.onChangeText}
+                                style={[props.style]}
+                                editable={false}
+                                value={props.value}
+                            />
+                            <TouchableOpacity onPress={props.onPress}>
+                                <Image source={require("../assets/images/icon-forward2-line-black.png")} style={styles.image} />
+                            </TouchableOpacity>
+                        </>
+                }
+
             </View>
-        </View>      
+        </View>
 
     )
 }
@@ -36,12 +43,12 @@ const styles = StyleSheet.create({
         padding: wp('1%'),
         paddingHorizontal: wp('3%'),
         backgroundColor: colors.white,
-        minHeight:hp('7%'),
-        justifyContent:'center'
+        minHeight: hp('7%'),
+        justifyContent: 'center'
     },
-    image:{
-        height:hp('3%'),
-        width:hp('3%')
+    image: {
+        height: hp('3%'),
+        width: hp('3%')
     }
 })
 

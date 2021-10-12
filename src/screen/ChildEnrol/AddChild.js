@@ -1,3 +1,4 @@
+  
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
@@ -70,9 +71,9 @@ const AddChild = props => {
     setButtonVisible(!buttonVisible)
   };
   const backsubmit = item => {
-    console.log(item);
+    // console.log(item);
     let datafilter = data.filter(items => items.id !== item.id);
-    console.log(datafilter);
+    // console.log(datafilter);
     let idrest = datafilter.forEach(item => (item.id = item.id - 1));
     setData(datafilter);
     setButtonVisible(!buttonVisible)
@@ -146,7 +147,7 @@ const AddChild = props => {
                 setBirth(moment(date).format('YYYY/MM/DD'))
                 let age = (new Date()).getFullYear() - date.getFullYear()
                 setAge(age)
-                console.log(age)
+                // console.log(age)
               }}
               onCancel={() => {
                 setOpen(!open)
@@ -319,7 +320,6 @@ const styles = StyleSheet.create({
   },
 });
 export default AddChild;
-
 
 
 

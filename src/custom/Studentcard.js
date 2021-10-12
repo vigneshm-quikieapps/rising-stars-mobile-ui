@@ -10,12 +10,12 @@ export default function Studentcard(props) {
           <Text style={styles.head}>Child Name</Text>
           <Text style={styles.body}>{props.name}</Text>
         </View>
-        {props.id && (
+        {props.id ? (
           <View style={{alignItems:'center'}}>
             <Text style={styles.head}>Child Age</Text>
             <Text style={styles.body}>{props.id}</Text>
           </View>
-        )}
+        ):null}
       </View>
       {props.activityrequired && (
         <View style={styles.subcontainer}>

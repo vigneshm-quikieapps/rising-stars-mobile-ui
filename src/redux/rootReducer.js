@@ -1,8 +1,11 @@
 import { combineReducers } from "redux";
-import { childData } from "./reducer/enrol";
+import { childData, clubname,classname,sessionlist } from "./reducer/enrol";
 
 const rootReducer = combineReducers({
-    childData
+    childData,
+    clubname,
+    classname,
+    sessionlist
 })
 
 export default rootReducer

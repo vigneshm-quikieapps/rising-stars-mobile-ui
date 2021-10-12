@@ -19,11 +19,11 @@ export const EnrollStack = props => {
         component={EnrollingFlow}
         options={{headerShown: false}}
       /> */}
-      <StackScreen.Screen
+      {/* <StackScreen.Screen
         name="AddChild"
         component={AddChild}
         options={{headerShown: false}}
-      />
+      /> */}
       <StackScreen.Screen
         name="Class_Selection"
         component={Class_Selection}
