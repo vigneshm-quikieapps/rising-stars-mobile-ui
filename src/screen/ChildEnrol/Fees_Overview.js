@@ -7,18 +7,22 @@ import ProgressTracker from '../../custom/ProgressTracker';
 import {colors, Fontsize, hp, wp} from '../../Constant/Constant';
 import Forwardbutton from '../../custom/Forwardbutton';
 
+import { useSelector, useDispatch } from 'react-redux'
+
 const Fees_Overview = props => {
 
-  
+  const fullName = useSelector(state => state.childData.fullName)
+  const age = useSelector(state => state.childData.age)
+
   return (
     <CustomLayout
       Customchildren={
         <Studentcard
-          name={'Ayman Mogal'}
-          id={'4'}
+          name={fullName}
+          id={age}
           activityrequired
           activity={`Zippy Totz Pre-school Gymnastics`}
-          subactivity={'Childhood Joy Classes'}
+          // subactivity={'Childhood Joy Classes'}
         />
       }
       steps
@@ -30,7 +34,7 @@ const Fees_Overview = props => {
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={3} />}
       >
-      <Text style={{fontFamily: 'Nunito-SemiBold'}}>Fee Breakdown</Text>
+      <Text style={{fontFamily: 'Nunito-SemiBold',fontSize:wp('6%')}}>Fee Breakdown</Text>
       <Amount head={'Club Membership'} body={'Annual'} currency={'6'} />
       <View style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}} />
       <Amount head={'Pre School Gym Class'} body={'Monthly'} currency={'25'} />

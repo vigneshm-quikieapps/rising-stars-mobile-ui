@@ -15,11 +15,11 @@ const HomeNavigation = () => {
   return (
     <NavigationContainer>
       <Stack>
-        {/* <StackScreen.Screen
+        <StackScreen.Screen
           name="AuthStack"
           component={AuthStack}
           options={{headerShown: false}}
-        /> */}
+        />
         <StackScreen.Screen
           name="EnrollStack"
           component={EnrollStack}

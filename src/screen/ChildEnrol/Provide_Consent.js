@@ -6,6 +6,7 @@ import ProgressTracker from '../../custom/ProgressTracker';
 import {colors, hp, wp, Fontsize} from '../../Constant/Constant';
 import Input from '../../custom/Input'
 
+import { useSelector, useDispatch } from 'react-redux'
 import Forwardbutton from '../../custom/Forwardbutton';
 
 const Provide_Consent = props => {
@@ -14,16 +15,17 @@ const Provide_Consent = props => {
   const [isEnabled3, setIsEnabled3] = useState(false);
   const [isEnabled4, setIsEnabled4] = useState(false);
 
+  const fullName = useSelector(state => state.childData.fullName)
+  const age = useSelector(state => state.childData.age)
+
   return (
     <CustomLayout
       Customchildren={
         <Studentcard
-          name={'Ayman Mogal'}
-          id={'4'}
+          name={fullName}
+          id={age}
           activityrequired
           activity={`Zippy Totz Pre-school Gymnastics`}
-          subactivity={'Childhood Joy Classes'}
-          // classname={'Childhood Joy Classes'}
         />
       }
       steps

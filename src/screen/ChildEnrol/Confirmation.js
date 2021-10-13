@@ -7,8 +7,11 @@ import { colors, Fontsize, hp, wp } from '../../Constant/Constant';
 import Forwardbutton from '../../custom/Forwardbutton';
 import Slot from '../../custom/Slot';
 import AppButton from '../../custom/AppButton';
+import { useSelector, useDispatch } from 'react-redux'
 
 const Confirmation = props => {
+  const fullName = useSelector(state => state.childData.fullName)
+  const age = useSelector(state => state.childData.age)
   return (
     <CustomLayout
       steps
@@ -22,8 +25,8 @@ const Confirmation = props => {
       Customchildren2={<ProgressTracker percent={7} />}
       Customchildren3={
         <Studentcard
-          name={'Ayman Mogal'}
-          id={'4'}
+          name={fullName}
+          id={age}
           activityrequired
           activity={`Zippy Totz Pre-school Gymnastics`}
           subactivity={'Childhood Joy Classes'}

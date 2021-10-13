@@ -30,7 +30,7 @@ export default function Class_Selection(props) {
   const classData = useSelector(state => state.classname.classtate)
   const sessionData = useSelector(state => state.sessionlist.sessionState)
   // clubData.unshift({_id:1,"name":"Select your Club"}) 
-   classData.unshift({_id:1,"name":"Select your Club"}) 
+  //  classData.unshift({_id:1,"name":"Select your Club"}) 
   //const error = useSelector(state => state.classname.error)
   const dispatch = useDispatch()
   console.log('sessionData --------------->', sessionData)

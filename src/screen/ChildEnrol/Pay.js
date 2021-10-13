@@ -7,14 +7,17 @@ import {colors, Fontsize, hp, wp} from '../../Constant/Constant';
 import {RadioButton} from 'react-native-paper';
 import Forwardbutton from '../../custom/Forwardbutton';
 import Atmcard from '../../custom/AtmCard';
+import { useSelector, useDispatch } from 'react-redux'
 
 const Pay = props => {
+  const fullName = useSelector(state => state.childData.fullName)
+  const age = useSelector(state => state.childData.age)
   return (
     <CustomLayout
       Customchildren={
         <Studentcard
-        name={'Ayman Mogal'}
-          id={'4'}
+        name={fullName}
+          id={age}
           activityrequired
           activity={`Zippy Totz Pre-school Gymnastics`}
           subactivity={'Childhood Joy Classes'}

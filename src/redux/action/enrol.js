@@ -34,7 +34,7 @@ export const getClassdata = (id) => {
 }
 
 export const getSessiondata = (id) => {
-     console.log('action------------>',id)
+   
     return{
         type:action.USER_GET_SESSION_LIST,
         payload:id

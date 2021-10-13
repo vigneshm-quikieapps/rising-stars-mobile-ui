@@ -14,16 +14,16 @@ import Provide_Consent from '../../screen/ChildEnrol/Provide_Consent';
 export const EnrollStack = props => {
   return (
     <Stack>
-      {/* <StackScreen.Screen
+      <StackScreen.Screen
         name="EnrollingFlow"
         component={EnrollingFlow}
         options={{headerShown: false}}
-      /> */}
-      {/* <StackScreen.Screen
+      />
+      <StackScreen.Screen
         name="AddChild"
         component={AddChild}
         options={{headerShown: false}}
-      /> */}
+      />
       <StackScreen.Screen
         name="Class_Selection"
         component={Class_Selection}

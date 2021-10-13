@@ -1,6 +1,23 @@
 import axios from 'axios'
 import { mobile_url, api_url, heroku_url } from '../../Constant/config'
 
+export function fetchLogin(payload) {
+    return fetch(`${mobile_url}/sign-in`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "mobileNo": `+91${payload.mobileNumber}`,
+            "password": payload.password
+        })
+    })
+        .then(response => response.json())
+        .catch(error => { throw error })
+}
+
+
 export function fetchclubName() {
     return fetch(`${heroku_url}/businesses`, {
         method: 'GET'

@@ -10,20 +10,26 @@ import PopUp from '../../custom/PopUp';
 import PopUpCard from '../../custom/PopUpCard';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
+import { useSelector, useDispatch } from 'react-redux'
+
 const Additional_Sections = props => {
   const termref = useRef()
   const [modalVisible, setModalVisible] = useState(false);
+
+  const fullName = useSelector(state => state.childData.fullName)
+  const age = useSelector(state => state.childData.age)
+
   console.log(modalVisible);
   return (
     <CustomLayout
       Customchildren={
         <Studentcard
-          name={'Ayman Mogal'}
-          id={'4'}
+          name={fullName}
+          id={age}
           activityrequired
           activity={`Zippy Totz Pre-school Gymnastics`}
           subactivity={'Childhood Joy Classes'}
-          // classname={'Childhood Joy Classes'}
+        // classname={'Childhood Joy Classes'}
         />
       }
       steps
@@ -89,13 +95,13 @@ const Additional_Sections = props => {
           },
         }}
       >
-      <View style={{paddingHorizontal:wp('4%'),alignItems:'center'}}>
-        <Text style={{ fontFamily: 'Nunito-Regular',fontSize:Fontsize,color:"#ff7e00"}}>Club Rule</Text>
-        <Text style={{ fontFamily: 'Nunito-Regular', marginTop: hp('1.5%'), fontSize: Fontsize }}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy
-          text ever since.
-        </Text>
+        <View style={{ paddingHorizontal: wp('4%'), alignItems: 'center' }}>
+          <Text style={{ fontFamily: 'Nunito-Regular', fontSize: Fontsize, color: "#ff7e00" }}>Club Rule</Text>
+          <Text style={{ fontFamily: 'Nunito-Regular', marginTop: hp('1.5%'), fontSize: Fontsize }}>
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem Ipsum has been the industry's standard dummy
+            text ever since.
+          </Text>
         </View>
       </RBSheet>
       <Text style={styles.newsheader}>News, communication and marketing</Text>

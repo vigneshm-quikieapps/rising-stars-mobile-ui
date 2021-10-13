@@ -75,7 +75,7 @@ const sessionState = {
 }
 
 export const sessionlist = (state = sessionState, action) => {
-    console.log('reducer ----->',action)
+  
     switch (action.type){
         case Action.USER_GET_SESSION_SUCCESS:
             return{
