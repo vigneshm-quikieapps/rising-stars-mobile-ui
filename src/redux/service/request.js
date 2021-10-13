@@ -1,6 +1,14 @@
 import axios from 'axios'
 import { mobile_url, api_url, heroku_url } from '../../Constant/config'
 
+export function fetchPostCode(payload){
+    return fetch(`https://ws.postcoder.com/pcw/PCW45-12345-12345-1234X/address/UK/${payload}?format=json&lines=2`,{
+        method: 'GET',
+    })
+    .then(response => response.json())
+    .catch(error =>{throw error})
+}
+
 export function fetchLogin(payload) {
     return fetch(`${mobile_url}/sign-in`, {
         method: 'POST',

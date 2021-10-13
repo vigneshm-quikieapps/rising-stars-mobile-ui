@@ -2,30 +2,37 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Alert, Modal, Pressable, FlatList, Dimensions, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import { useSelector, useDispatch } from 'react-redux'
+
 import { RadioButton, TextInput } from 'react-native-paper';
 import ErrorMessage from '../../custom/ErrorMessage';
 import TextInputField from '../../custom/TextInputField';
-import { colors, Fontsize, hp, wp } from '../../Constant/Constant';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import { colors, Fontsize, hp, wp, Term_Condition } from '../../Constant/Constant';
 import InputOTPScreen from './InputOTPScreen';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import AppButton from './../../custom/AppButton';
 import PopUp from './../../custom/PopUp';
 import CustomLayout from '../../custom/CustomLayout';
-import axios from 'axios'
-
-// import {connect} from 'react-redux';
-// import { bindActionCreators } from 'redux';
-// import * as Actions from '../../redux/actiontype'
+import { PostCode } from '../../redux/action/auth'
+import PostComponent from './components/Postcode'
 
 const CELL_COUNT = 6;
 const validationSchema = Yup.object().shape({
-  // fullName: Yup.string().min(3, 'Too Short!').max(20, 'Too Long!').required('Required').label('Full Name')
+  fullName: Yup.string().min(3, 'Too Short!').max(20, 'Too Long!').required().label('Full Name'),
+  email: Yup.string().required().min(4).email().label('Email'),
+  contactNumber: Yup.string().required().label('Mobile Number'),
+  password: Yup.string().required("Password is required").min(8).label("Password"),
+  passwordConfirmation: Yup.string().oneOf([Yup.ref('password'), null], 'Password must match'),
+  postalCode: Yup.string().label('Postal Code'),
+  AddressLine1: Yup.string().min(5).label('AddressLine1'),
+  AddressLine2: Yup.string().min(5).label('AddressLine2'),
+  cityTown: Yup.string().min(1).label('City/Town'),
 });
 
 function Register(props) {
-
-  const [modalVisible, setModalVisible] = useState(false);
+  const dispatch = useDispatch()
+  const [postcodeshow, setPostCodeshow] = useState(false);
   const [modalVisible1, setModalVisible1] = useState(false);
   const [addressData, setAddressData] = useState();
   const [selectedId, setSelectedId] = useState(null);
@@ -35,49 +42,11 @@ function Register(props) {
   const [name, setName] = useState("");
   const [postCode, setPostCode] = useState();
   const [APIPostCode, setAPIPostCode] = useState();
-  console.log(name)
+
   const [temp, setTemp] = useState(false);
   const refRBSheet = useRef();
   const star = <Text style={styles.star}>Rising Star</Text>;
   const callPopUp = () => setModalVisible1(!modalVisible1);
-  const terms = (
-    <TouchableOpacity onPress={callPopUp}>
-      <Text style={styles.star}>Terms and Conditions</Text>
-    </TouchableOpacity>
-  );
-
-  const Api = ({ name, email, mobile, password, otp, postcode, add1, add2, city, country }) => {
-    // fetch('https://ismart-rising-star.herokuapp/api/',{
-    fetch('http://192.168.77.137:3000/api/get-otp/mobile-no', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        "name": "name",
-        "email": "Tejfaster55@gmail.com",
-        "mobileNo": name,
-        "password": "1234567890",
-        "mobileNoOTP": "542503",
-        "postcode": "782486",
-        "addressLine1": "address line1",
-        "addressLine2": "address line2",
-        "city": "line2",
-        "country": "country"
-      })
-    }).then(response => response.json()
-    ).then(res => {
-      console.log(res)
-    }).catch(error => {
-      console.log("error ", JSON.stringify(error))
-    })
-
-  }
-
-  const handleSubmits = () => {
-    Api(name)
-  }
 
   const [checked, setChecked] = useState('first');
   let userNumber;
@@ -101,30 +70,30 @@ function Register(props) {
       }}
     />
   );
-  useEffect(() => {
-    let url = `https://ws.postcoder.com/pcw/PCW45-12345-12345-1234X/address/UK/${APIPostCode}?format=json&lines=2`;
-    // let url = `https://ws.postcoder.com/pcw/PCW45-12345-12345-1234X/address/UK/NR14%207PZ?format=json&lines=2`;
-    fetch(`${url}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        let index = 0;
-        data.map(item => {
-          item['id'] = index;
-          index++;
-        });
-        console.log('====================================');
-        console.log('ADDRESS DATA', data);
-        console.log('====================================');
-        setAddressData(data);
-      })
-      .catch(error => console.log('ERRORS', error));
-  }, [APIPostCode]);
+  // useEffect(() => {
+  //   let url = `https://ws.postcoder.com/pcw/PCW45-12345-12345-1234X/address/UK/${APIPostCode}?format=json&lines=2`;
+  //   // let url = `https://ws.postcoder.com/pcw/PCW45-12345-12345-1234X/address/UK/NR14%207PZ?format=json&lines=2`;
+  //   fetch(`${url}`, {
+  //     method: 'GET',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       let index = 0;
+  //       data.map(item => {
+  //         item['id'] = index;
+  //         index++;
+  //       });
+  //       // console.log('====================================');
+  //       // console.log('ADDRESS DATA', data);
+  //       // console.log('====================================');
+  //       setAddressData(data);
+  //     })
+  //     .catch(error => console.log('ERRORS', error));
+  // }, [APIPostCode]);
 
   const Item = ({ item, onPress, backgroundColor, textColor }) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
@@ -134,7 +103,7 @@ function Register(props) {
       <Text style={styles.APILabel}>AddressLine 2</Text>
       <Text style={styles.APIData}>{item.addressline2}</Text>
 
-      <Text style={[styles.APILabel, { marginLeft: -1 }]}>Country</Text>
+      <Text style={[styles.APILabel, { marginLeft: -1 }]}>County</Text>
       <Text style={styles.APIData}>{item.county}</Text>
 
       <Text style={styles.APILabel}>PostCode</Text>
@@ -170,7 +139,6 @@ function Register(props) {
     props.navigation.goBack();
   };
   return (
-
     <CustomLayout
       header
       headertext={'Parent Registration'}
@@ -196,11 +164,7 @@ function Register(props) {
           cityTown: '',
         }}
         onSubmit={values => {
-          // console.log('VALUES....', values);
-          console.log(name, values.email, values.contactNumber, values.password, "057013", values.postCode, values.addressLine1, values.addressLine2, values.cityTown)
-          Api(values.fullName, values.email, values.contactNumber, values.password, "057013", values.postCode, values.addressLine1, values.addressLine2, values.cityTown)
-          // handleSubmit1(values.contactNumber);
-          // refRBSheet.current.open();
+          console.log(values)
         }}
         validationSchema={validationSchema}>
         {({
@@ -214,7 +178,7 @@ function Register(props) {
         }) => (
           <>
             {/* {/* MODAL CODE START */}
-            <View style={styles.centeredView}>
+            {/* <View style={styles.centeredView}>
               <Modal
                 animationType="slide"
                 transparent={true}
@@ -259,7 +223,7 @@ function Register(props) {
                   </View>
                 </View>
               </Modal>
-            </View>
+            </View> */}
 
             <TextInputField
               placeholder="Your Full Name*"
@@ -288,16 +252,21 @@ function Register(props) {
               error={errors.email}
               visible={touched.email}
             />
-            <TextInputField
-              placeholder="Mobile Number*"
-              label={'+44-00000000'}
-              autoCapitalize="none"
-              // maxLength={10}
-              keyboardType="phone-pad"
-              autoCorrect={false}
-              onChangeText={handleChange('contactNumber')}
-              onBlur={() => setFieldTouched('contactNumber')}
-            />
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={styles.countrycode}>
+                <Text style={{ fontSize: wp('4%'), color: colors.grey }}>+44</Text>
+              </View>
+              <TextInputField
+                placeholder="Mobile Number *"
+                // value={values.contactNumber}
+                onChangeText={handleChange("contactNumber")}
+                maxLength={10}
+                keyboardType="number-pad"
+                style={{ width: wp('75%') }}
+                onBlur={() => setFieldTouched('contactNumber')}
+              />
+            </View>
             <ErrorMessage
               style={styles.errorMessage}
               error={errors.contactNumber}
@@ -344,13 +313,21 @@ function Register(props) {
                       console.log(values.postCode.length);
                       alert('Please Enter a Valid PostCode');
                     } else {
-                      setAPIPostCode(values.postCode);
-                      setModalVisible(true);
+                      console.log(values.postCode)
+                      setPostCodeshow(!postcodeshow)
+                      dispatch(PostCode(values.postCode))
                     }
+
                   }}
                 />
               }
             />
+            <PostComponent
+              visible={postcodeshow}
+              title={values.postCode}
+              ClosePopUp={() =>setPostCodeshow(!postcodeshow)}
+            />
+           
             <ErrorMessage
               style={styles.errorMessage}
               error={errors.postCode}
@@ -460,17 +437,7 @@ function Register(props) {
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
                     <Text style={{ fontFamily: 'Nunito-Regular' }}>
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s, when an unknown
-                      printer took a galley of type and scrambled it to make a
-                      type specimen book. It has survived not only five
-                      centuries, but also the leap into electronic typesetting,
-                      remaining essentially unchanged. It was popularised in the
-                      1960s with the release of Letraset sheets containing Lorem
-                      Ipsum passages, and more recently with desktop publishing
-                      software like Aldus PageMaker including versions of Lorem
-                      Ipsum.
+                      {Term_Condition}
                     </Text>
                     <AppButton
                       title="close"
@@ -483,7 +450,7 @@ function Register(props) {
 
               <AppButton
                 title="Register"
-                onPress={handleSubmits}
+                onPress={handleSubmit}
                 style={{
                   marginVertical: hp('0%'),
                   fontFamily: 'Nunito-SemiBold',
@@ -538,31 +505,31 @@ function Register(props) {
 export default Register;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    paddingHorizontal: hp('2%'),
-  },
-  title: {
-    fontSize: wp('8%'),
-    marginLeft: wp('4%'),
-    marginRight: wp('15%'),
-    color: colors.black,
-    marginTop: 15,
-    fontFamily: 'Nunito-SemiBold',
-  },
-  subtitle: {
-    color: colors.black,
-    opacity: 0.5,
-    fontSize: wp('4%'),
-    // marginLeft: wp('4%'),
-    fontFamily: 'Nunito-Regular',
-  },
-  image: {
-    resizeMode: 'cover',
-    height: hp('30%'),
-    width: wp('100%'),
-  },
+  // container: {
+  //   flex: 1,
+  //   backgroundColor: 'white',
+  //   paddingHorizontal: hp('2%'),
+  // },
+  // title: {
+  //   fontSize: wp('8%'),
+  //   marginLeft: wp('4%'),
+  //   marginRight: wp('15%'),
+  //   color: colors.black,
+  //   marginTop: 15,
+  //   fontFamily: 'Nunito-SemiBold',
+  // },
+  // subtitle: {
+  //   color: colors.black,
+  //   opacity: 0.5,
+  //   fontSize: wp('4%'),
+  //   // marginLeft: wp('4%'),
+  //   fontFamily: 'Nunito-Regular',
+  // },
+  // image: {
+  //   resizeMode: 'cover',
+  //   height: hp('30%'),
+  //   width: wp('100%'),
+  // },
   bottomText: {
     paddingTop: hp('1%'),
     justifyContent: 'center',
@@ -573,9 +540,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Regular',
     alignSelf: 'center',
   },
-  inputField: {
-    marginTop: hp('3%'),
-  },
+  // inputField: {
+  //   marginTop: hp('3%'),
+  // },
   star: {
     // fontWeight: 'bold',
     // marginTop:hp('0.8%'),
@@ -678,5 +645,17 @@ const styles = StyleSheet.create({
     marginTop: 6,
     fontFamily: 'Nunito-Regular',
     fontSize: Fontsize,
-  }
+  },
+  countrycode: {
+    borderWidth: 1,
+    borderColor: "#e3e3e3",
+    borderRadius: 10,
+    backgroundColor: colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 'auto',
+    marginTop: hp('1.2%'),
+    marginVertical: hp('0.59%'),
+    width: wp('15%'),
+  },
 });

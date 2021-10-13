@@ -89,7 +89,7 @@ function Login(props) {
               visible={touched.password}
             />
 
-            {isLoading ? <ActivityIndicator size="large" color={colors.orange} /> : <AppButton
+            {isLoading ? <ActivityIndicator size="large" color={colors.orange} style={{marginVertical:hp('2%')}} /> : <AppButton
 
               title="Login"
               onPress={handleSubmit}

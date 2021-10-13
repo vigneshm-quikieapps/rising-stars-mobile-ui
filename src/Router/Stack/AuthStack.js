@@ -9,11 +9,11 @@ import CreateNewPassword from './../../screen/Authentication/CreateNewPassword';
 export const AuthStack = props => {
   return (
     <Stack>
-      <StackScreen.Screen
+      {/* <StackScreen.Screen
         name="Login"
         component={Login}
         options={{headerShown: false}}
-      />
+      /> */}
       <StackScreen.Screen
         name="Register"
         component={Register}

@@ -7,6 +7,7 @@ import createSagaMiddleware from 'redux-saga'
 import { Provider } from 'react-redux';
 import rootReducer from './src/redux/rootReducer'; 
 import rootSaga from './src/redux/rootsaga'; 
+import Postcode from './src/screen/Authentication/components/Postcode';
 
 const sagaMiddleware = createSagaMiddleware()
 
@@ -19,6 +20,7 @@ export default function App() {
   return (
     <Provider store={Store}>
       <HomeNavigation />
+      {/* <Postcode/> */}
     </Provider>
   )
 }

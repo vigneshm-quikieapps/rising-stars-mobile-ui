@@ -1,5 +1,35 @@
 import * as Action from '../actiontype'
 
+const postcodeState = {
+    postcode: [],
+    isLoading: false
+}
+
+export const Postcode = (state = postcodeState, action) => {
+    
+    switch (action.type) {
+        case Action.USER_GET_POST_CODE_SUCCESS:
+            return {
+                ...state,
+                postcode: action.payload,
+                isloading: false
+            }
+        case Action.USER_GET_POST_CODE_FAILED:
+            return {
+                ...state,
+                postcode: action.payload,
+                isloading: false
+            }
+        case Action.USER_GET_POST_CODE:
+            return {
+                ...state,
+                isloading: true
+            }
+        default:
+            return state
+    }
+}
+
 const loginState = {
     mobile: '',
     password: '',
@@ -17,7 +47,7 @@ export const LoginData = (state = loginState, action) => {
                 ...state,
                 accessToken: action.payload.accessToken,
                 refreshToken: action.payload.refreshToken,
-                isloading:false
+                isloading: false
             }
         case Action.USER_LOGIN_ERROR:
             return {
