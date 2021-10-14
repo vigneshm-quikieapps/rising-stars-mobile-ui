@@ -8,11 +8,11 @@ function AppButton({ title, onPress, style, color, size }) {
   return (
     <TouchableOpacity onPress={onPress} >
       <LinearGradient colors={['#ffa300', '#ff7e00']} style={[styles.container, style]}>
-
-        <Text style={styles.button} onPress={onPress}>
-          {title}
-        </Text>
-
+        <TouchableOpacity onPress={onPress} >
+          <Text style={styles.button} onPress={onPress}>
+            {title}
+          </Text>
+        </TouchableOpacity>
       </LinearGradient>
     </TouchableOpacity>
   );

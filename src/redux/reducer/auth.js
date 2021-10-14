@@ -6,7 +6,7 @@ const postcodeState = {
 }
 
 export const Postcode = (state = postcodeState, action) => {
-    
+
     switch (action.type) {
         case Action.USER_GET_POST_CODE_SUCCESS:
             return {
@@ -29,6 +29,27 @@ export const Postcode = (state = postcodeState, action) => {
             return state
     }
 }
+
+const postPassState = {
+    postdata: {},
+    size:0
+   
+}
+
+export const Postcodedata = (state = postPassState, action) => {
+    
+    switch (action.type) {
+        case Action.USER_POST_CODE_DATA_PASS:
+            return {
+                ...state,
+                postdata: action.payload,
+                size:action.size
+            }
+        default:
+            return state
+    }
+}
+
 
 const loginState = {
     mobile: '',

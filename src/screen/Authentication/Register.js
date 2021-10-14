@@ -14,8 +14,10 @@ import InputOTPScreen from './InputOTPScreen';
 import AppButton from './../../custom/AppButton';
 import PopUp from './../../custom/PopUp';
 import CustomLayout from '../../custom/CustomLayout';
-import { PostCode } from '../../redux/action/auth'
+import { PostCode, PostDataPass } from '../../redux/action/auth'
 import PostComponent from './components/Postcode'
+import * as Action from '../../redux/actiontype'
+
 
 const CELL_COUNT = 6;
 const validationSchema = Yup.object().shape({
@@ -32,6 +34,9 @@ const validationSchema = Yup.object().shape({
 
 function Register(props) {
   const dispatch = useDispatch()
+  const postcodeData = useSelector(state => state.Postcode.postcode)
+  const postdata = useSelector(state => state.Postcodedata.postdata)
+  const postsize = useSelector(state => state.Postcodedata.size)
   const [postcodeshow, setPostCodeshow] = useState(false);
   const [modalVisible1, setModalVisible1] = useState(false);
   const [addressData, setAddressData] = useState();
@@ -42,6 +47,10 @@ function Register(props) {
   const [name, setName] = useState("");
   const [postCode, setPostCode] = useState();
   const [APIPostCode, setAPIPostCode] = useState();
+  // console.log('postdata ----------------->',postdata)
+  
+ 
+
 
   const [temp, setTemp] = useState(false);
   const refRBSheet = useRef();
@@ -95,49 +104,49 @@ function Register(props) {
   //     .catch(error => console.log('ERRORS', error));
   // }, [APIPostCode]);
 
-  const Item = ({ item, onPress, backgroundColor, textColor }) => (
-    <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-      <Text style={styles.APILabel}>AddressLine 1</Text>
-      <Text style={styles.APIData}>{item.addressline1}</Text>
+  // const Item = ({ item, onPress, backgroundColor, textColor }) => (
+  //   <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
+  //     <Text style={styles.APILabel}>AddressLine 1</Text>
+  //     <Text style={styles.APIData}>{item.addressline1}</Text>
 
-      <Text style={styles.APILabel}>AddressLine 2</Text>
-      <Text style={styles.APIData}>{item.addressline2}</Text>
+  //     <Text style={styles.APILabel}>AddressLine 2</Text>
+  //     <Text style={styles.APIData}>{item.addressline2}</Text>
 
-      <Text style={[styles.APILabel, { marginLeft: -1 }]}>County</Text>
-      <Text style={styles.APIData}>{item.county}</Text>
+  //     <Text style={[styles.APILabel, { marginLeft: -1 }]}>County</Text>
+  //     <Text style={styles.APIData}>{item.county}</Text>
 
-      <Text style={styles.APILabel}>PostCode</Text>
-      <Text style={styles.APIData}>{item.postcode}</Text>
+  //     <Text style={styles.APILabel}>PostCode</Text>
+  //     <Text style={styles.APIData}>{item.postcode}</Text>
 
-      <Text style={styles.APILabel}>Town / City</Text>
-      <Text style={styles.APIData}>{item.posttown}</Text>
-    </TouchableOpacity>
-  );
+  //     <Text style={styles.APILabel}>Town / City</Text>
+  //     <Text style={styles.APIData}>{item.posttown}</Text>
+  //   </TouchableOpacity>
+  // );
 
-  const renderItem = ({ item }) => {
-    const backgroundColor =
-      item.id === selectedId ? colors.lineColor : colors.orange;
-    const color = item.id === selectedId ? 'white' : 'black';
+  // const renderItem = ({ item }) => {
+  //   const backgroundColor =
+  //     item.id === selectedId ? colors.lineColor : colors.orange;
+  //   const color = item.id === selectedId ? 'white' : 'black';
 
-    return (
-      <Item
-        item={item}
-        onPress={() => {
-          setSelectedId(item.id);
-          setAddress1(item.addressline1);
-          setAddress2(item.addressline2);
-          setPostCode(item.postcode);
-          setCity(item.posttown);
-        }}
-        backgroundColor={{ backgroundColor }}
-        textColor={{ color }}
-      />
-    );
-  };
+  //   return (
+  //     <Item
+  //       item={item}
+  //       onPress={() => {
+  //         setSelectedId(item.id);
+  //         setAddress1(item.addressline1);
+  //         setAddress2(item.addressline2);
+  //         setPostCode(item.postcode);
+  //         setCity(item.posttown);
+  //       }}
+  //       backgroundColor={{ backgroundColor }}
+  //       textColor={{ color }}
+  //     />
+  //   );
+  // };
 
-  const onHandleBackButton = () => {
-    props.navigation.goBack();
-  };
+  // const onHandleBackButton = () => {
+  //   props.navigation.goBack();
+  // };
   return (
     <CustomLayout
       header
@@ -150,7 +159,8 @@ function Register(props) {
       subheadertext={'Enter your details to register'}
       subheadertextstyle={styles.subtitle}
       back
-      backbutton={onHandleBackButton}>
+      // backbutton={onHandleBackButton}>
+      backbutton={() => props.navigation.goBack()}>
       <Formik
         initialValues={{
           fullName: '',
@@ -255,7 +265,7 @@ function Register(props) {
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <View style={styles.countrycode}>
-                <Text style={{ fontSize: wp('4%'), color: colors.grey }}>+44</Text>
+                <Text style={{ fontSize: wp('4.1%'), color: colors.grey }}>+44</Text>
               </View>
               <TextInputField
                 placeholder="Mobile Number *"
@@ -313,8 +323,10 @@ function Register(props) {
                       console.log(values.postCode.length);
                       alert('Please Enter a Valid PostCode');
                     } else {
+                      const data = {}
                       console.log(values.postCode)
                       setPostCodeshow(!postcodeshow)
+                      dispatch(PostDataPass(data,0))
                       dispatch(PostCode(values.postCode))
                     }
 
@@ -322,26 +334,38 @@ function Register(props) {
                 />
               }
             />
+            {
+              console.log(postcodeshow)
+            }
             <PostComponent
-              visible={postcodeshow}
+              data={postcodeData}
+              visible={postsize !== 0 ? !postcodeshow : postcodeshow}
               title={values.postCode}
-              ClosePopUp={() =>setPostCodeshow(!postcodeshow)}
+              ClosePopUp={() => setPostCodeshow(!postcodeshow)}
+              ManuallyButton={() => {
+                setPostCodeshow(!postcodeshow)
+                setTemp(!temp)
+                }}
             />
-           
+
             <ErrorMessage
               style={styles.errorMessage}
               error={errors.postCode}
               visible={touched.postCode}
             />
-            {selectedId !== null || temp ? (
+            {
+              console.log(postdata)
+            }
+            {postsize !== 0 || temp ? (
               <>
                 <TextInputField
                   placeholder="Address Line 1"
                   onChangeText={handleChange('addressLine1')}
                   autoCapitalize="none"
+                  editable={postsize !== 0 ? false : true}
                   autoCorrect={false}
                   onBlur={() => setFieldTouched('addressLine1')}
-                  value={selectedId !== null ? address1 : values.addressLine1}
+                  value={postsize !== 0 ? postdata.addressline1 : values.addressLine1}
                 // editable={false}
                 />
                 <ErrorMessage
@@ -354,9 +378,10 @@ function Register(props) {
                   placeholder="Address Line 2"
                   onChangeText={handleChange('addressLine2')}
                   autoCapitalize="none"
+                  editable={postsize !== 0 ? false : true}
                   autoCorrect={false}
                   onBlur={() => setFieldTouched('addressLine2')}
-                  value={selectedId !== null ? address2 : values.addressLine2}
+                  value={postsize !== 0 ? postdata.addressline2 : values.addressLine2}
                 // editable={false}
                 />
                 <ErrorMessage
@@ -369,9 +394,10 @@ function Register(props) {
                   placeholder="Town / City"
                   onChangeText={handleChange('cityTown')}
                   autoCapitalize="none"
+                  editable={postsize !== 0 ? false : true}
                   autoCorrect={false}
                   onBlur={() => setFieldTouched('cityTown')}
-                  value={selectedId !== null ? city : values.cityTown}
+                  value={postsize !== 0 ? postdata.posttown : values.cityTown}
                 // editable={false}
                 />
                 <ErrorMessage
@@ -381,7 +407,7 @@ function Register(props) {
                 />
               </>
             ) : null}
-            {/* </ScrollView> */}
+           
             <View>
               <View style={styles.bottomText}>
                 <Text style={styles.bottomSubText}>
@@ -649,13 +675,13 @@ const styles = StyleSheet.create({
   countrycode: {
     borderWidth: 1,
     borderColor: "#e3e3e3",
-    borderRadius: 10,
+    borderRadius: 15,
     backgroundColor: colors.white,
     justifyContent: 'center',
     alignItems: 'center',
     height: 'auto',
     marginTop: hp('1.2%'),
-    marginVertical: hp('0.59%'),
+    marginVertical: hp('0.599%'),
     width: wp('15%'),
   },
 });

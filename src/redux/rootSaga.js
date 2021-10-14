@@ -1,5 +1,5 @@
 import { all } from "redux-saga/effects"
-import { watcherLoginSaga } from "./sagas/auth"
+import { watcherLoginSaga,watcherPostcode } from "./sagas/auth"
 import { watcherClubSaga, watcherClassSaga, watcherSessionSaga } from "./sagas/enrol"
 
 export default function* rootSaga() {
@@ -7,7 +7,8 @@ export default function* rootSaga() {
         watcherLoginSaga(),
         watcherClubSaga(),
         watcherClassSaga(),
-        watcherSessionSaga()
+        watcherSessionSaga(),
+        watcherPostcode()
     ])
 }
 
