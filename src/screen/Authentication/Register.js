@@ -39,17 +39,9 @@ function Register(props) {
   const postsize = useSelector(state => state.Postcodedata.size)
   const [postcodeshow, setPostCodeshow] = useState(false);
   const [modalVisible1, setModalVisible1] = useState(false);
-  const [addressData, setAddressData] = useState();
-  const [selectedId, setSelectedId] = useState(null);
-  const [address1, setAddress1] = useState();
-  const [address2, setAddress2] = useState();
-  const [city, setCity] = useState();
-  const [name, setName] = useState("");
-  const [postCode, setPostCode] = useState();
-  const [APIPostCode, setAPIPostCode] = useState();
-  // console.log('postdata ----------------->',postdata)
-  
- 
+
+
+
 
 
   const [temp, setTemp] = useState(false);
@@ -79,74 +71,6 @@ function Register(props) {
       }}
     />
   );
-  // useEffect(() => {
-  //   let url = `https://ws.postcoder.com/pcw/PCW45-12345-12345-1234X/address/UK/${APIPostCode}?format=json&lines=2`;
-  //   // let url = `https://ws.postcoder.com/pcw/PCW45-12345-12345-1234X/address/UK/NR14%207PZ?format=json&lines=2`;
-  //   fetch(`${url}`, {
-  //     method: 'GET',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       let index = 0;
-  //       data.map(item => {
-  //         item['id'] = index;
-  //         index++;
-  //       });
-  //       // console.log('====================================');
-  //       // console.log('ADDRESS DATA', data);
-  //       // console.log('====================================');
-  //       setAddressData(data);
-  //     })
-  //     .catch(error => console.log('ERRORS', error));
-  // }, [APIPostCode]);
-
-  // const Item = ({ item, onPress, backgroundColor, textColor }) => (
-  //   <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-  //     <Text style={styles.APILabel}>AddressLine 1</Text>
-  //     <Text style={styles.APIData}>{item.addressline1}</Text>
-
-  //     <Text style={styles.APILabel}>AddressLine 2</Text>
-  //     <Text style={styles.APIData}>{item.addressline2}</Text>
-
-  //     <Text style={[styles.APILabel, { marginLeft: -1 }]}>County</Text>
-  //     <Text style={styles.APIData}>{item.county}</Text>
-
-  //     <Text style={styles.APILabel}>PostCode</Text>
-  //     <Text style={styles.APIData}>{item.postcode}</Text>
-
-  //     <Text style={styles.APILabel}>Town / City</Text>
-  //     <Text style={styles.APIData}>{item.posttown}</Text>
-  //   </TouchableOpacity>
-  // );
-
-  // const renderItem = ({ item }) => {
-  //   const backgroundColor =
-  //     item.id === selectedId ? colors.lineColor : colors.orange;
-  //   const color = item.id === selectedId ? 'white' : 'black';
-
-  //   return (
-  //     <Item
-  //       item={item}
-  //       onPress={() => {
-  //         setSelectedId(item.id);
-  //         setAddress1(item.addressline1);
-  //         setAddress2(item.addressline2);
-  //         setPostCode(item.postcode);
-  //         setCity(item.posttown);
-  //       }}
-  //       backgroundColor={{ backgroundColor }}
-  //       textColor={{ color }}
-  //     />
-  //   );
-  // };
-
-  // const onHandleBackButton = () => {
-  //   props.navigation.goBack();
-  // };
   return (
     <CustomLayout
       header
@@ -174,6 +98,11 @@ function Register(props) {
           cityTown: '',
         }}
         onSubmit={values => {
+          if (postsize !== 0) {
+            values.addressLine1 = postdata.addressline1
+            values.addressLine2 = postdata.addressline2
+            values.cityTown = postdata.posttown
+          }
           console.log(values)
         }}
         validationSchema={validationSchema}>
@@ -187,54 +116,6 @@ function Register(props) {
           initialValues,
         }) => (
           <>
-            {/* {/* MODAL CODE START */}
-            {/* <View style={styles.centeredView}>
-              <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                  Alert.alert('Modal has been closed.');
-                  setModalVisible(!modalVisible);
-                }}>
-                <View style={styles.centeredView1}>
-                  <View style={styles.modalView1}>
-                    <FlatList
-                      data={addressData}
-                      renderItem={renderItem}
-                      keyExtractor={item => item.id}
-                      extraData={selectedId}
-                    />
-                    <View>
-                      <Pressable
-                        onPress={() => setModalVisible(!modalVisible)}
-                        style={{ flexDirection: 'row' }}>
-                        <AppButton
-                          title="Enter Manually"
-                          style={{
-                            fontFamily: 'Nunito-SemiBold',
-                            marginHorizontal: wp('2%'),
-                          }}
-                          onPress={() => {
-                            setModalVisible(!modalVisible);
-                            setTemp(!temp);
-                            setSelectedId(null);
-                          }}
-                        />
-                        <AppButton
-                          title="Close"
-                          style={{
-                            fontFamily: 'Nunito-SemiBold',
-                          }}
-                          onPress={() => setModalVisible(!modalVisible)}
-                        />
-                      </Pressable>
-                    </View>
-                  </View>
-                </View>
-              </Modal>
-            </View> */}
-
             <TextInputField
               placeholder="Your Full Name*"
               style={[styles.inputField, { marginTop: hp('0.1%') }]}
@@ -320,13 +201,11 @@ function Register(props) {
                   name={() => <EvilIcons name="search" size={30} color={"#ff7e00"} />}
                   onPress={() => {
                     if (values.postCode.length <= 6) {
-                      console.log(values.postCode.length);
                       alert('Please Enter a Valid PostCode');
                     } else {
                       const data = {}
-                      console.log(values.postCode)
                       setPostCodeshow(!postcodeshow)
-                      dispatch(PostDataPass(data,0))
+                      dispatch(PostDataPass(data, 0))
                       dispatch(PostCode(values.postCode))
                     }
 
@@ -334,9 +213,7 @@ function Register(props) {
                 />
               }
             />
-            {
-              console.log(postcodeshow)
-            }
+
             <PostComponent
               data={postcodeData}
               visible={postsize !== 0 ? !postcodeshow : postcodeshow}
@@ -344,8 +221,11 @@ function Register(props) {
               ClosePopUp={() => setPostCodeshow(!postcodeshow)}
               ManuallyButton={() => {
                 setPostCodeshow(!postcodeshow)
-                setTemp(!temp)
-                }}
+                { temp === true ? null : setTemp(!temp) }
+                values.addressLine1 = ''
+                values.addressLine2 = ''
+                values.cityTown = ''
+              }}
             />
 
             <ErrorMessage
@@ -353,14 +233,12 @@ function Register(props) {
               error={errors.postCode}
               visible={touched.postCode}
             />
-            {
-              console.log(postdata)
-            }
+
             {postsize !== 0 || temp ? (
               <>
                 <TextInputField
                   placeholder="Address Line 1"
-                  onChangeText={handleChange('addressLine1')}
+                  onChangeText={postsize !== 0 ? postdata.addressline1 : handleChange('addressLine1')}
                   autoCapitalize="none"
                   editable={postsize !== 0 ? false : true}
                   autoCorrect={false}
@@ -376,7 +254,7 @@ function Register(props) {
 
                 <TextInputField
                   placeholder="Address Line 2"
-                  onChangeText={handleChange('addressLine2')}
+                  onChangeText={postsize !== 0 ? postdata.addressline2 : handleChange('addressLine2')}
                   autoCapitalize="none"
                   editable={postsize !== 0 ? false : true}
                   autoCorrect={false}
@@ -392,7 +270,7 @@ function Register(props) {
 
                 <TextInputField
                   placeholder="Town / City"
-                  onChangeText={handleChange('cityTown')}
+                  onChangeText={postsize !== 0 ? postdata.posttown : handleChange('cityTown')}
                   autoCapitalize="none"
                   editable={postsize !== 0 ? false : true}
                   autoCorrect={false}
@@ -407,7 +285,7 @@ function Register(props) {
                 />
               </>
             ) : null}
-           
+
             <View>
               <View style={styles.bottomText}>
                 <Text style={styles.bottomSubText}>
@@ -531,31 +409,7 @@ function Register(props) {
 export default Register;
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   backgroundColor: 'white',
-  //   paddingHorizontal: hp('2%'),
-  // },
-  // title: {
-  //   fontSize: wp('8%'),
-  //   marginLeft: wp('4%'),
-  //   marginRight: wp('15%'),
-  //   color: colors.black,
-  //   marginTop: 15,
-  //   fontFamily: 'Nunito-SemiBold',
-  // },
-  // subtitle: {
-  //   color: colors.black,
-  //   opacity: 0.5,
-  //   fontSize: wp('4%'),
-  //   // marginLeft: wp('4%'),
-  //   fontFamily: 'Nunito-Regular',
-  // },
-  // image: {
-  //   resizeMode: 'cover',
-  //   height: hp('30%'),
-  //   width: wp('100%'),
-  // },
+
   bottomText: {
     paddingTop: hp('1%'),
     justifyContent: 'center',
@@ -566,12 +420,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Regular',
     alignSelf: 'center',
   },
-  // inputField: {
-  //   marginTop: hp('3%'),
-  // },
-  star: {
-    // fontWeight: 'bold',
-    // marginTop:hp('0.8%'),
+   star: {   
     fontSize: wp('3.7%'),
     fontFamily: 'Nunito-Regular',
     color: "#ff7e00",
