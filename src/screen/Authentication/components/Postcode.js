@@ -13,15 +13,12 @@ import { PostDataPass } from '../../../redux/action/auth'
 
 export default function PostComponent(props) {
     const dispatch = useDispatch()
-    const postcodeData = useSelector(state => state.Postcode.postcode)
     const isloading = useSelector(state => state.Postcode.isloading)
-    // console.log('post code----------->', postcodeData)
     const [show, setShow] = useState('')
     const [data, setData] = useState(false)
     const [selected, setSelected] = useState('')
-    // console.log(selected)
+
     const handlemore = (item) => {
-        console.log(item)
         setShow(item)
         setData(!data)
     }
@@ -38,7 +35,7 @@ export default function PostComponent(props) {
         const size = Object.size(selected)
         if (size !== 0) {
             dispatch(PostDataPass(selected, size))
-        }else{
+        } else {
             alert('Please Select Your Address or Tap on Manually for manual entry')
         }
 
@@ -80,7 +77,7 @@ export default function PostComponent(props) {
                                     keyExtractor={item => item.addressline1}
                                     initialNumToRender={10}
                                     renderItem={item => {
-                                        // console.log(item)
+
                                         return (
                                             <View style={styles.postcodeconatiner}>
                                                 <Radiobutton

@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { useSelector, useDispatch } from 'react-redux'
+import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 
 import { RadioButton, TextInput } from 'react-native-paper';
 import ErrorMessage from '../../custom/ErrorMessage';
@@ -14,8 +15,9 @@ import InputOTPScreen from './InputOTPScreen';
 import AppButton from './../../custom/AppButton';
 import PopUp from './../../custom/PopUp';
 import CustomLayout from '../../custom/CustomLayout';
-import { PostCode, PostDataPass } from '../../redux/action/auth'
+import { PostCode, PostDataPass, RegisterData } from '../../redux/action/auth'
 import PostComponent from './components/Postcode'
+import { fetchMobileOTP } from '../../redux/service/request';
 import * as Action from '../../redux/actiontype'
 
 
@@ -37,19 +39,40 @@ function Register(props) {
   const postcodeData = useSelector(state => state.Postcode.postcode)
   const postdata = useSelector(state => state.Postcodedata.postdata)
   const postsize = useSelector(state => state.Postcodedata.size)
-  const [postcodeshow, setPostCodeshow] = useState(false);
-  const [modalVisible1, setModalVisible1] = useState(false);
+  const isloading = useSelector(state => state.Postcodedata.isloading)
+  const error = useSelector(state => state.Postcodedata.error)
 
-
-
-
-
-  const [temp, setTemp] = useState(false);
-  const refRBSheet = useRef();
-  const star = <Text style={styles.star}>Rising Star</Text>;
-  const callPopUp = () => setModalVisible1(!modalVisible1);
-
+  const [value, setValue] = useState('');
+  const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
+  const [prop, getCellOnLayoutHandler] = useClearByFocusCell({
+    value,
+    setValue,
+  });
   const [checked, setChecked] = useState('first');
+  const [postcodeshow, setPostCodeshow] = useState(false);
+  const [term, setTerm] = useState(false);
+  const [temp, setTemp] = useState(false);
+  const [main, setMain] = useState(false);
+  const [seconds, setSeconds] = React.useState(10);
+  const refRBSheet = useRef();
+
+  const star = <Text style={styles.star}>Rising Star</Text>;
+
+  const callPopUp = () => setTerm(!term);
+
+  const timeout = () => {
+    if (seconds > 0) {
+      setTimeout(() => setSeconds(seconds - 1), 1000);
+    }
+  }
+
+  useEffect(() => {
+    timeout()
+  });
+
+
+
+
   let userNumber;
   const handleSubmit1 = no => {
     userNumber = no;
@@ -83,7 +106,6 @@ function Register(props) {
       subheadertext={'Enter your details to register'}
       subheadertextstyle={styles.subtitle}
       back
-      // backbutton={onHandleBackButton}>
       backbutton={() => props.navigation.goBack()}>
       <Formik
         initialValues={{
@@ -92,18 +114,30 @@ function Register(props) {
           password: '',
           passwordConfirmation: '',
           contactNumber: '',
+          mobileNoOTP: '',
           postCode: '',
           addressLine1: '',
           addressLine2: '',
           cityTown: '',
         }}
         onSubmit={values => {
-          if (postsize !== 0) {
+          // if (postsize !== 0) {
+          //   values.addressLine1 = postdata.addressline1
+          //   values.addressLine2 = postdata.addressline2
+          //   values.cityTown = postdata.posttown
+          // }
+          if (values.mobileNoOTP.length === 0) {
+            fetchMobileOTP(values.contactNumber)
+            console.log(values)
+            timeout()
+            refRBSheet.current.open()
+          } else if (postsize !== 0) {
             values.addressLine1 = postdata.addressline1
             values.addressLine2 = postdata.addressline2
             values.cityTown = postdata.posttown
+            console.log(values)
+            dispatch(RegisterData(values))
           }
-          console.log(values)
         }}
         validationSchema={validationSchema}>
         {({
@@ -244,7 +278,7 @@ function Register(props) {
                   autoCorrect={false}
                   onBlur={() => setFieldTouched('addressLine1')}
                   value={postsize !== 0 ? postdata.addressline1 : values.addressLine1}
-                // editable={false}
+
                 />
                 <ErrorMessage
                   style={styles.errorMessage}
@@ -260,7 +294,7 @@ function Register(props) {
                   autoCorrect={false}
                   onBlur={() => setFieldTouched('addressLine2')}
                   value={postsize !== 0 ? postdata.addressline2 : values.addressLine2}
-                // editable={false}
+
                 />
                 <ErrorMessage
                   style={styles.errorMessage}
@@ -276,7 +310,7 @@ function Register(props) {
                   autoCorrect={false}
                   onBlur={() => setFieldTouched('cityTown')}
                   value={postsize !== 0 ? postdata.posttown : values.cityTown}
-                // editable={false}
+
                 />
                 <ErrorMessage
                   style={styles.errorMessage}
@@ -333,9 +367,9 @@ function Register(props) {
               <PopUp
                 animationType="fade"
                 transparent={true}
-                visible={modalVisible1}
+                visible={term}
                 onRequestClose={() => {
-                  setModalVisible1(!modalVisible1);
+                  setTerm(!term);
                 }}>
 
                 <View style={styles.centeredView}>
@@ -346,20 +380,23 @@ function Register(props) {
                     <AppButton
                       title="close"
                       style={{ width: '30%' }}
-                      onPress={() => setModalVisible1(!modalVisible1)}
+                      onPress={() => setTerm(!term)}
                     />
                   </View>
                 </View>
               </PopUp>
 
-              <AppButton
-                title="Register"
-                onPress={handleSubmit}
-                style={{
-                  marginVertical: hp('0%'),
-                  fontFamily: 'Nunito-SemiBold',
-                }}
-              />
+              {error ?alert({error}):isloading ?
+                <ActivityIndicator size="large" color={colors.orange} />
+                :
+                <AppButton
+                  title={main ? "Register" : "Send OTP"}
+                  onPress={handleSubmit}
+                  style={{
+                    marginVertical: hp('0%'),
+                    fontFamily: 'Nunito-SemiBold',
+                  }}
+                />}
 
               <Text
                 style={{
@@ -376,32 +413,63 @@ function Register(props) {
                 </Text>
               </Text>
             </View>
+            <RBSheet
+              ref={refRBSheet}
+              closeOnDragDown={true}
+              closeOnPressMask={false}
+              customStyles={{
+                wrapper: {
+                  backgroundColor: colors.blackOpacity,
+                },
+                draggableIcon: {
+                  backgroundColor: colors.lightgrey,
+                },
+                container: {
+                  height: hp('40%'),
+                  borderTopRightRadius: 16,
+                  borderTopLeftRadius: 16,
+                },
+              }}>
+              <View style={{ paddingHorizontal: wp('5%') }}>
+                <Text style={styles.otptitle}>Enter Your OTP</Text>
+                <CodeField
+                  ref={ref}
+                  {...prop}
+                  value={value}
+                  onChangeText={setValue}
+                  cellCount={CELL_COUNT}
+                  rootStyle={styles.codeFieldRoot}
+                  keyboardType="number-pad"
+                  textContentType="oneTimeCode"
+                  renderCell={({ index, symbol, isFocused }) => (
+                    <Text
+                      key={index}
+                      style={[styles.cell, isFocused && styles.focusCell]}
+                      onLayout={getCellOnLayoutHandler(index)}>
+                      {symbol || (isFocused ? <Cursor /> : null)}
+                    </Text>
+                  )}
+                />
+
+                <AppButton title="Verification" style={{ margin: 0 }} onPress={() => {
+                  if (value.length < 6) {
+                    alert("Please Enter Valid OTP")
+                  } else {
+                    values.mobileNoOTP = value
+                    setMain(!main)
+                    refRBSheet.current.close()
+                  }
+                }} />
+                <Text style={{ fontFamily: 'Nunito-Regular', alignSelf: 'center', marginTop: hp('1%'), fontSize: Fontsize }}>
+                  Resend OTP {seconds === 0 ? <Text style={{ color: colors.orange }} onPress={() => fetchMobileOTP(values.contactNumber)}>Press</Text> : <Text>in {seconds} sec</Text>}
+                </Text>
+              </View>
+            </RBSheet>
           </>
         )}
       </Formik>
 
-      <RBSheet
-        ref={refRBSheet}
-        closeOnDragDown={true}
-        closeOnPressMask={false}
-        customStyles={{
-          wrapper: {
-            backgroundColor: colors.blackOpacity,
-          },
-          draggableIcon: {
-            backgroundColor: '#000',
-          },
-          container: {
-            height: '45%',
-            borderTopRightRadius: 16,
-            borderTopLeftRadius: 16,
-          },
-        }}>
-        <InputOTPScreen
-          contactNumber={userNumber}
-          navigation={props.navigation}
-        />
-      </RBSheet>
+
     </CustomLayout>
   );
 }
@@ -420,7 +488,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Regular',
     alignSelf: 'center',
   },
-   star: {   
+  star: {
     fontSize: wp('3.7%'),
     fontFamily: 'Nunito-Regular',
     color: "#ff7e00",
@@ -533,4 +601,39 @@ const styles = StyleSheet.create({
     marginVertical: hp('0.599%'),
     width: wp('15%'),
   },
+  root: {
+    flex: 1,
+    padding: 20
+  },
+  title: {
+    fontFamily: 'Nunito-Regular',
+    textAlign: 'center',
+    fontSize: 30
+  },
+  codeFieldRoot: {
+    marginTop: hp('2.5%'),
+    marginBottom: hp('7%')
+  },
+  cell: {
+    width: wp('12%'),
+    height: wp('12%'),
+    borderRadius: 50,
+    lineHeight: 38,
+    fontFamily: 'Nunito-Regular',
+    fontSize: Fontsize,
+    color: colors.orange,
+    borderWidth: 1,
+    borderColor: colors.lightgrey,
+    textAlign: 'center',
+  },
+  focusCell: {
+    //borderColor: '#000',
+    borderColor: colors.orange,
+  },
+  otptitle: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: Fontsize + wp('1.5%'),
+    alignSelf: 'center',
+    textDecorationLine: 'underline'
+  }
 });

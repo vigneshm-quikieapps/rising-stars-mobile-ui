@@ -16,29 +16,21 @@ const CELL_COUNT = 6;
 function InputOTPScreen(props) {
   const navigation = useNavigation();
   const [value1, setValue1] = useState('');
-  // const [value2, setValue2] = useState('');
-  // const [value3, setValue3] = useState('');
+  
 
   const ref = useBlurOnFulfill({value1, cellCount: CELL_COUNT});
   const [propss1, getCellOnLayoutHandler1] = useClearByFocusCell({
     value1,
     setValue1,
   });
-  // const [propss2, getCellOnLayoutHandler2] = useClearByFocusCell({
-  //   value2,
-  //   setValue2,
-  // });
-  // const [propss3, getCellOnLayoutHandle3] = useClearByFocusCell({
-  //   value3,
-  //   setValue3,
-  // });
+  
   const RESEND_OTP_TIME_LIMIT = 90;
   const [resendButtonDisabledTime, setResendButtonDisabledTime] = useState(
     RESEND_OTP_TIME_LIMIT,
   );
 
   let resendOtpTimerInterval;
-  //to start resent otp option
+
   const startResendOtpTimer = () => {
     if (resendOtpTimerInterval) {
       clearInterval(resendOtpTimerInterval);
@@ -52,15 +44,15 @@ function InputOTPScreen(props) {
     }, 1000);
   };
 
-  //start timer on screen on launch
-  useEffect(() => {
-    startResendOtpTimer();
-    return () => {
-      if (resendOtpTimerInterval) {
-        clearInterval(resendOtpTimerInterval);
-      }
-    };
-  }, [resendButtonDisabledTime]);
+ 
+  // useEffect(() => {
+  //   startResendOtpTimer();
+  //   return () => {
+  //     if (resendOtpTimerInterval) {
+  //       clearInterval(resendOtpTimerInterval);
+  //     }
+  //   };
+  // }, [resendButtonDisabledTime]);
 
   const OTPValidation = () => {
     if (value1 < 6) {
@@ -97,64 +89,11 @@ function InputOTPScreen(props) {
         </>
       )}
 
-      {/* {props.twoInputField ? (
-        <>
-          <Text style={[styles.subtitle, {alignSelf: 'flex-start'}]}>
-            Enter Mobile OTP
-          </Text>
-          <CodeField
-            ref={ref}
-            {...props}
-            // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
-            value={value1}
-            onChangeText={setValue1}
-            cellCount={CELL_COUNT}
-            rootStyle={styles.codeFieldRoot}
-            keyboardType="number-pad"
-            textContentType="oneTimeCode"
-            renderCell={({index, symbol, isFocused}) => (
-              <Text
-                key={index}
-                style={[styles.cell, isFocused && styles.focusCell]}
-                onLayout={getCellOnLayoutHandler1(index)}>
-                {symbol || (isFocused ? <Cursor /> : null)}
-              </Text>
-            )}
-          />
-          <Text style={[styles.subtitle, {alignSelf: 'flex-start'}]}>
-            Enter Email OTP
-          </Text>
-
-          <CodeField
-            ref={ref}
-            {...props}
-            // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
-            value={value2}
-            onChangeText={setValue2}
-            cellCount={CELL_COUNT}
-            rootStyle={styles.codeFieldRoot}
-            keyboardType="number-pad"
-            textContentType="oneTimeCode"
-            renderCell={({index, symbol, isFocused}) => (
-              <Text
-                key={index}
-                style={[styles.cell, isFocused && styles.focusCell]}
-                onLayout={getCellOnLayoutHandler2(index)}>
-                {symbol || (isFocused ? <Cursor /> : null)}
-              </Text>
-            )}
-          />
-        </>
-      ) : (
-       
-      )} */}
-      {/* <Text style={[styles.subtitle, {alignSelf: 'flex-start'}]}>
-        Enter Mobile OTP
-      </Text> */}
+     
       <CodeField
         ref={ref}
         {...props}
-        // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
+       
         value={value1}
         onChangeText={setValue1}
         cellCount={CELL_COUNT}
@@ -171,9 +110,6 @@ function InputOTPScreen(props) {
         )}
       />
 
-      {/* <Text style={{alignSelf: 'center', paddingVertical: 10}}>
-        Resend OTP in 50
-      </Text> */}
 
       <AppButton
         title={props.twoInputField ? 'Verify' : 'Verify Account'}
@@ -204,7 +140,6 @@ const styles = StyleSheet.create({
     fontSize: wp('4%'),
     maxWidth: '85%',
     alignSelf: 'center',
-    // paddingVertical: 10,
   },
 });
 

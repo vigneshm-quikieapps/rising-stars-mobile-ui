@@ -2,7 +2,8 @@ import * as Action from '../actiontype'
 
 const postcodeState = {
     postcode: [],
-    isLoading: false
+    isLoading: false,
+    error: ''
 }
 
 export const Postcode = (state = postcodeState, action) => {
@@ -17,7 +18,7 @@ export const Postcode = (state = postcodeState, action) => {
         case Action.USER_GET_POST_CODE_FAILED:
             return {
                 ...state,
-                postcode: action.payload,
+                error: action.error,
                 isloading: false
             }
         case Action.USER_GET_POST_CODE:
@@ -32,28 +33,56 @@ export const Postcode = (state = postcodeState, action) => {
 
 const postPassState = {
     postdata: {},
-    size:0
-   
+    size: 0
+
 }
 
 export const Postcodedata = (state = postPassState, action) => {
-    
+
     switch (action.type) {
         case Action.USER_POST_CODE_DATA_PASS:
             return {
                 ...state,
                 postdata: action.payload,
-                size:action.size
+                size: action.size
             }
         default:
             return state
     }
 }
 
+const RegisterState = {
+    isloading: false,
+    error: '',
+    status: ''
+}
+
+export const RegisterData = (state = RegisterState, action) => {
+    console.log('reducer ------>', action)
+    switch (action.type) {
+        case Action.USER_REGISTER_SUCCESS:
+            return {
+                ...state,
+                status: action.payload,
+                isloading: false
+            }
+        case Action.USER_REGISTER_ERROR:
+            return {
+                ...state,
+                error: action.error,
+                isloading: false
+            }
+        case Action.USER_REGISTER:
+            return {
+                ...state,
+                isloading: true
+            }
+        default:
+            return state
+    }
+}
 
 const loginState = {
-    mobile: '',
-    password: '',
     accessToken: '',
     refreshToken: '',
     isloading: false,
@@ -73,7 +102,7 @@ export const LoginData = (state = loginState, action) => {
         case Action.USER_LOGIN_ERROR:
             return {
                 ...state,
-                error: action.payload,
+                error: action.error,
                 isloading: false
             }
         case Action.USER_LOGIN:
