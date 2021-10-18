@@ -2,6 +2,7 @@ import { Country_Code } from '../../Constant/Constant'
 import { mobile_url, api_url, heroku_url } from '../../Constant/config'
 
 export function fetchMobileOTP(payload) {
+    console.log(payload)
     return fetch(`${heroku_url}/get-otp/mobile-no`, {
         method: 'POST',
         headers: {
@@ -27,7 +28,7 @@ export function fetchPostCode(payload) {
 }
 
 export function fetchRegister(payload) {
-    console.log('fetch-------->', payload)
+    // console.log('fetch-------->', payload)
     return fetch(`${mobile_url}/sign-up`, {
         method: 'POST',
         headers: {
@@ -48,7 +49,7 @@ export function fetchRegister(payload) {
         })
     })
         .then(response => response.json())
-        .then(response => console.log(response))
+        // .then(response => console.log(response))
         .catch(error => { throw error })
 
 }

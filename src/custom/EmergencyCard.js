@@ -85,7 +85,7 @@ export default function EmergencyCard(props) {
 const styles = StyleSheet.create({
   errorMessage: {
     alignSelf: 'flex-end',
-    paddingRight: wp('10%'),
+    paddingRight: wp('1%'),
     opacity: 0.5,
   },
   countrycode: {

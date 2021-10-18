@@ -13,6 +13,7 @@ import { PostDataPass } from '../../../redux/action/auth'
 
 export default function PostComponent(props) {
     const dispatch = useDispatch()
+    const postcodeData = useSelector(state => state.Postcode.postcode)
     const isloading = useSelector(state => state.Postcode.isloading)
     const [show, setShow] = useState('')
     const [data, setData] = useState(false)
@@ -43,66 +44,69 @@ export default function PostComponent(props) {
 
 
     return (
-        <PopUp
-            animationType="slide"
-            transparent={true}
-            visible={props.visible}
-            onRequestClose={() => { }}
-        >
-            <View style={[styles.container, { borderColor: isloading ? "white" : colors.orange, backgroundColor: isloading ? null : "white" }]}>
+        <>
+            {
+                isloading ?
+                    <ActivityIndicator size="large" color={colors.orange} /> :
+                    <PopUp
+                        animationType="slide"
+                        transparent={true}
+                        visible={props.visible}
+                        onRequestClose={() => { }}
+                    >
+                        <View style={[styles.container, { borderColor: isloading ? "white" : colors.orange, backgroundColor: isloading ? null : "white", borderWidth: isloading ? 0 : 1 }]}>
 
-                {
-                    isloading ? <ActivityIndicator size="large" color={colors.orange} />
-                        :
-                        <View >
-                            <View>
-                                <TouchableOpacity onPress={props.ClosePopUp}>
-                                    <LinearGradient style={styles.closePopUp} colors={['#ffa300', '#ff7e00']}>
-                                        <EntIcon name="cross" size={15} color="white" />
-                                    </LinearGradient>
-                                </TouchableOpacity>
-                                <View style={styles.titlestyle}>
-                                    <Text style={styles.herderstyle}>Search Your address</Text>
-                                    <Text style={styles.title}>Your PostCode <Text style={{ fontWeight: 'bold' }}>{props.title}</Text></Text>
+
+                            <View >
+                                <View>
+                                    <TouchableOpacity onPress={props.ClosePopUp}>
+                                        <LinearGradient style={styles.closePopUp} colors={['#ffa300', '#ff7e00']}>
+                                            <EntIcon name="cross" size={15} color="white" />
+                                        </LinearGradient>
+                                    </TouchableOpacity>
+                                    <View style={styles.titlestyle}>
+                                        <Text style={styles.herderstyle}>Search Your address</Text>
+                                        <Text style={styles.title}>Your PostCode <Text style={{ fontWeight: 'bold' }}>{props.title}</Text></Text>
+                                    </View>
+                                    <View style={{
+                                        borderBottomWidth: 1,
+                                        borderColor: colors.lightgrey, marginBottom: hp('0.1%')
+                                    }} />
                                 </View>
-                                <View style={{
-                                    borderBottomWidth: 1,
-                                    borderColor: colors.lightgrey, marginBottom: hp('0.1%')
-                                }} />
-                            </View>
-                            {
-                                props.data && props.data.length > 0 &&
-                                <FlatList
-                                    data={props.data}
-                                    keyExtractor={item => item.addressline1}
-                                    initialNumToRender={10}
-                                    renderItem={item => {
+                                {
+                                    props.data && postcodeData.length > 0 &&
+                                    <FlatList
+                                        data={postcodeData}
+                                        keyExtractor={item => item.addressline1}
+                                        initialNumToRender={10}
+                                        renderItem={item => {
 
-                                        return (
-                                            <View style={styles.postcodeconatiner}>
-                                                <Radiobutton
-                                                    status={selected.addressline1 === item.item.addressline1 && 'checked'}
-                                                    onPress={() => setSelected(item.item)}
-                                                />
-                                                <View style={{ width: wp('65%') }}>
-                                                    <Text style={styles.head} ellipsizeMode='head'>{item.item.organisation}</Text>
-                                                    <Text style={styles.body} numberOfLines={show === item.item.addressline1 && data ? 0 : 1} ellipsizeMode='tail'>{item.item.addressline1}<Text>{item.item.addressline2}</Text></Text>
-                                                    <Text onPress={() => handlemore(item.item.addressline1)} style={{ alignSelf: 'flex-end', fontSize: wp('2.5%'), color: colors.orange, textDecorationLine: 'underline', }}>{show === item.item.addressline1 && data ? 'Less info' : 'More info'}</Text>
+                                            return (
+                                                <View style={styles.postcodeconatiner}>
+                                                    <Radiobutton
+                                                        status={selected.addressline1 === item.item.addressline1 && 'checked'}
+                                                        onPress={() => setSelected(item.item)}
+                                                    />
+                                                    <View style={{ width: wp('65%') }}>
+                                                        <Text style={styles.head} ellipsizeMode='head'>{item.item.organisation}</Text>
+                                                        <Text style={styles.body} numberOfLines={show === item.item.addressline1 && data ? 0 : 1} ellipsizeMode='tail'>{item.item.addressline1}<Text>{item.item.addressline2}</Text></Text>
+                                                        <Text onPress={() => handlemore(item.item.addressline1)} style={{ alignSelf: 'flex-end', fontSize: wp('2.5%'), color: colors.orange, textDecorationLine: 'underline', }}>{show === item.item.addressline1 && data ? 'Less info' : 'More info'}</Text>
+                                                    </View>
                                                 </View>
-                                            </View>
-                                        )
-                                    }}
-                                />
-                            }
-                            <View style={{ borderBottomWidth: 1, borderBottomColor: colors.lightgrey }} />
-                            <View style={styles.bottomView}>
-                                <AppButton title="Enter Manually" style={{ paddingVertical: 12 }} onPress={props.ManuallyButton} />
-                                <AppButton title="OK" style={{ paddingVertical: 12, marginVertical: 0 }} onPress={handledone} />
+                                            )
+                                        }}
+                                    />
+                                }
+                                <View style={{ borderBottomWidth: 1, borderBottomColor: colors.lightgrey }} />
+                                <View style={styles.bottomView}>
+                                    <AppButton title="Enter Manually" style={{ paddingVertical: 12 }} onPress={props.ManuallyButton} />
+                                    <AppButton title="OK" style={{ paddingVertical: 12, marginVertical: 0 }} onPress={handledone} />
+                                </View>
                             </View>
                         </View>
-                }
-            </View>
-        </PopUp>
+                    </PopUp>
+            }
+        </>
     )
 }
 
@@ -155,11 +159,6 @@ const styles = StyleSheet.create({
         marginTop: -hp('1%')
     },
     bottomView: {
-        // position:'absolute',
-        // height:hp('8%'),
-        // width:wp('80%'),
-        //backgroundColor:'pink',
-        // bottom:0.1,
         margin: 0,
         flexDirection: 'row',
         justifyContent: 'space-between'

@@ -36,12 +36,17 @@ const validationSchema = Yup.object().shape({
 
 function Register(props) {
   const dispatch = useDispatch()
+
   const postcodeData = useSelector(state => state.Postcode.postcode)
   const postdata = useSelector(state => state.Postcodedata.postdata)
   const postsize = useSelector(state => state.Postcodedata.size)
   const isloading = useSelector(state => state.Postcodedata.isloading)
   const error = useSelector(state => state.Postcodedata.error)
+  const status = useSelector(state => state.RegisterData.status)
+  const Reerror = useSelector(state => state.RegisterData.error)
+  const isRegloading = useSelector(state => state.RegisterData.isLoading)
 
+  console.log('error ----------->',Reerror.errors)
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [prop, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -121,11 +126,7 @@ function Register(props) {
           cityTown: '',
         }}
         onSubmit={values => {
-          // if (postsize !== 0) {
-          //   values.addressLine1 = postdata.addressline1
-          //   values.addressLine2 = postdata.addressline2
-          //   values.cityTown = postdata.posttown
-          // }
+
           if (values.mobileNoOTP.length === 0) {
             fetchMobileOTP(values.contactNumber)
             console.log(values)
@@ -137,6 +138,12 @@ function Register(props) {
             values.cityTown = postdata.posttown
             console.log(values)
             dispatch(RegisterData(values))
+            if (status.message === "created successfully") {
+              props.navigation.navigate('Login')
+            }
+            if (Reerror != '') {
+              alert(`${Reerror}`)
+            }
           }
         }}
         validationSchema={validationSchema}>
@@ -197,6 +204,7 @@ function Register(props) {
               error={errors.contactNumber}
               visible={touched.contactNumber}
             />
+           
             <TextInputField
               placeholder="Password*"
               autoCapitalize="none"
@@ -321,49 +329,8 @@ function Register(props) {
             ) : null}
 
             <View>
-              <View style={styles.bottomText}>
-                <Text style={styles.bottomSubText}>
-                  I would like to receive {star} newsletter
-                </Text>
-                <Text
-                  style={[
-                    styles.bottomSubText,
-                    { alignSelf: 'center', marginBottom: hp('0%') },
-                  ]}>
-                  and other communications.
-                </Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                  marginBottom: hp('0%')
-                }}>
-                <View style={{ flexDirection: 'row' }}>
-                  <RadioButton
-                    value="first"
-                    status={checked === 'first' ? 'checked' : 'unchecked'}
-                    onPress={() => setChecked('first')}
-                    color={"#ff7e00"}
-                  />
-                  <Text
-                    style={[styles.radiotext, { color: checked === 'first' ? colors.black : colors.blackOpacity, }]}>
-                    Yes, please
-                  </Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                  <RadioButton
-                    value="second"
-                    status={checked === 'second' ? 'checked' : 'unchecked'}
-                    onPress={() => setChecked('second')}
-                    color={"#ff7e00"}
-                  />
-                  <Text
-                    style={[styles.radiotext, { color: checked === 'second' ? colors.black : colors.blackOpacity }]}>
-                    No thanks
-                  </Text>
-                </View>
-              </View>
+
+
               <PopUp
                 animationType="fade"
                 transparent={true}
@@ -386,15 +353,16 @@ function Register(props) {
                 </View>
               </PopUp>
 
-              {error ?alert({error}):isloading ?
+              {error ? alert({ error }) : isloading ?
                 <ActivityIndicator size="large" color={colors.orange} />
                 :
                 <AppButton
-                  title={main ? "Register" : "Send OTP"}
+                  title={main ? isRegloading ? <ActivityIndicator size="large" color="white" /> : "Register" : "Send OTP"}
                   onPress={handleSubmit}
                   style={{
                     marginVertical: hp('0%'),
                     fontFamily: 'Nunito-SemiBold',
+                    marginTop: hp('12%')
                   }}
                 />}
 
@@ -468,8 +436,6 @@ function Register(props) {
           </>
         )}
       </Formik>
-
-
     </CustomLayout>
   );
 }
@@ -571,7 +537,6 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: 'white',
     justifyContent: 'flex-end',
-    // height: 450,
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
@@ -627,7 +592,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   focusCell: {
-    //borderColor: '#000',
     borderColor: colors.orange,
   },
   otptitle: {

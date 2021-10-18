@@ -13,6 +13,7 @@ export const Postcode = (state = postcodeState, action) => {
             return {
                 ...state,
                 postcode: action.payload,
+                error:action.payload,
                 isloading: false
             }
         case Action.USER_GET_POST_CODE_FAILED:
@@ -64,6 +65,7 @@ export const RegisterData = (state = RegisterState, action) => {
             return {
                 ...state,
                 status: action.payload,
+                error:action.payload,
                 isloading: false
             }
         case Action.USER_REGISTER_ERROR:
@@ -97,6 +99,7 @@ export const LoginData = (state = loginState, action) => {
                 ...state,
                 accessToken: action.payload.accessToken,
                 refreshToken: action.payload.refreshToken,
+                error:action.payload,
                 isloading: false
             }
         case Action.USER_LOGIN_ERROR:

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, Pressable, } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import CustomLayout from '../../custom/CustomLayout';
 import Studentcard from '../../custom/Studentcard';
 import ProgressTracker from '../../custom/ProgressTracker';
@@ -9,6 +10,7 @@ import Forwardbutton from '../../custom/Forwardbutton';
 import PopUp from '../../custom/PopUp';
 import PopUpCard from '../../custom/PopUpCard';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import EntIcon from 'react-native-vector-icons/Entypo'
 
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -29,7 +31,6 @@ const Additional_Sections = props => {
           activityrequired
           activity={`Zippy Totz Pre-school Gymnastics`}
           subactivity={'Childhood Joy Classes'}
-        // classname={'Childhood Joy Classes'}
         />
       }
       steps
@@ -85,9 +86,6 @@ const Additional_Sections = props => {
           wrapper: {
             backgroundColor: colors.blackOpacity,
           },
-          // draggableIcon: {
-          //   backgroundColor: '#000',
-          // },
           container: {
             height: '25%',
             borderTopRightRadius: 16,
@@ -95,9 +93,16 @@ const Additional_Sections = props => {
           },
         }}
       >
-        <View style={{ paddingHorizontal: wp('4%'), alignItems: 'center' }}>
-          <Text style={{ fontFamily: 'Nunito-Regular', fontSize: Fontsize, color: "#ff7e00" }}>Club Rule</Text>
-          <Text style={{ fontFamily: 'Nunito-Regular', marginTop: hp('1.5%'), fontSize: Fontsize }}>
+        <View style={{ paddingHorizontal: wp('5%') }}>
+          <View style={{ flexDirection: 'row',justifyContent:'space-between'  }}>
+            <Text style={{ fontFamily: 'Nunito-Regular', fontSize: Fontsize, color: "#ff7e00" }}>Club Rule</Text>
+            <TouchableOpacity onPress={() => termref.current.close()}>
+              <LinearGradient style={styles.closePopUp} colors={['#ffa300', '#ff7e00']}>
+                <EntIcon name="cross" size={15} color="white" />
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+          <Text style={{ fontFamily: 'Nunito-Regular', marginTop: hp('1.5%'), fontSize: Fontsize,alignSelf:'center' }}>
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry. Lorem Ipsum has been the industry's standard dummy
             text ever since.
@@ -186,7 +191,6 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     height: hp('5%'),
-    // borderWidth:1,
     width: wp('30%'),
     alignItems: 'center',
     justifyContent: 'center',
@@ -196,16 +200,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // marginTop: 22
   },
-  // modalstyle: {
-  //     flex: 1,
-  //     height: hp('5%'),
-  //     // borderWidth:1,
-  //     width: wp('30%'),
-  //     alignItems: 'center',
-  //     justifyContent: 'center',
-  // },
   modalView: {
     margin: 20,
     backgroundColor: 'white',
@@ -221,26 +216,16 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  // button: {
-  //     borderRadius: 20,
-  //     padding: 10,
-  //     elevation: 2
-  // },
-  // buttonOpen: {
-  //     backgroundColor: "#F194FF",
-  // },
-  // buttonClose: {
-  //     backgroundColor: "#2196F3",
-  // },
-  // textStyle: {
-  //     color: "white",
-  //     fontWeight: "bold",
-  //     textAlign: "center"
-  // },
-  // modalText: {
-  //     marginBottom: 15,
-  //     textAlign: "center"
-  // }
+  closePopUp: {
+    height: hp('3%'),
+    width: hp('3%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 50,
+    alignSelf: 'flex-end',
+    marginTop: -hp('1%')
+  },
+
 });
 
 export default Additional_Sections;

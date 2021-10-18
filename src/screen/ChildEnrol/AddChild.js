@@ -1,4 +1,4 @@
-  
+
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
@@ -22,9 +22,11 @@ import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
 
 const validationSchema = Yup.object().shape({
-  fullName: Yup.string().required().min(3).label('FullName'),
-  name: Yup.string().required().min(3).label('Name'),
-  contactNumber: Yup.number().required().min(10).label('Contact Number'),
+  // fullName: Yup.string().required().min(3).label('Full Name'),
+  // name: Yup.string().required().min(3).label('Name'),
+  // dob: Yup.string().required().label("D.O.B."),
+  // gender: Yup.string().required().label("Gender"),
+  // contactNumber: Yup.number().required().min(10).label('Mobile Number'),
 });
 
 const gender = [
@@ -41,7 +43,7 @@ const AddChild = props => {
   const relationref = useRef()
   const dispatch = useDispatch()
   const name = useSelector(state => state.childData.payload)
-  // console.log('name------>', name)
+
 
   const [count, setCount] = useState(1);
   const [data, setData] = useState([]);
@@ -71,9 +73,7 @@ const AddChild = props => {
     setButtonVisible(!buttonVisible)
   };
   const backsubmit = item => {
-    // console.log(item);
     let datafilter = data.filter(items => items.id !== item.id);
-    // console.log(datafilter);
     let idrest = datafilter.forEach(item => (item.id = item.id - 1));
     setData(datafilter);
     setButtonVisible(!buttonVisible)
@@ -99,7 +99,7 @@ const AddChild = props => {
           name: '',
           contactNumber: '',
           relationship: '',
-          age:''
+          age: ''
         }}
         onSubmit={values => {
           values.dob = birth
@@ -130,7 +130,7 @@ const AddChild = props => {
               visible={touched.fullName}
             />
 
-            {/* <TextInputField placeholder="Date of Birth" label="DD-MM-YYYY" /> */}
+         
             <PopUpCard
               text={'Date of Birth'}
               textColor={colors.grey}
@@ -145,6 +145,7 @@ const AddChild = props => {
               onConfirm={(date) => {
                 setOpen(false)
                 setBirth(moment(date).format('YYYY/MM/DD'))
+                handleChange('dob',birth)
                 let age = (new Date()).getFullYear() - date.getFullYear()
                 setAge(age)
                 // console.log(age)
@@ -152,6 +153,11 @@ const AddChild = props => {
               onCancel={() => {
                 setOpen(!open)
               }}
+            />
+            <ErrorMessage
+              style={styles.errorMessage}
+              error={errors.dob}
+              visible={touched.dob}
             />
 
             <PopUpCard
@@ -177,6 +183,12 @@ const AddChild = props => {
                 <AppButton title="Girl" style={{ width: wp('40%') }} onPress={() => gendersubmit('Girl')} />
               </View>
             </RBSheet>
+
+            <ErrorMessage
+              style={styles.errorMessage}
+              error={errors.gender}
+              visible={touched.gender}
+            />
 
 
             <Text style={styles.emergency}>Emergency Contact (Primary)</Text>
