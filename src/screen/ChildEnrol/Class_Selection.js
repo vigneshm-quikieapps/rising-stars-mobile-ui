@@ -6,7 +6,7 @@ import CustomLayout from '../../custom/CustomLayout';
 import Studentcard from '../../custom/Studentcard';
 import ProgressTracker from '../../custom/ProgressTracker';
 import Forwardbutton from '../../custom/Forwardbutton';
-import { colors, Fontsize, hp, wp } from '../../Constant/Constant';
+import { colors, Fontsize, hp, wp,Stepend } from '../../Constant/Constant';
 import PopUp from '../../custom/PopUp';
 import Input from '../../custom/Input';
 import PopUpCard from '../../custom/PopUpCard';
@@ -57,7 +57,7 @@ export default function Class_Selection(props) {
       Customchildren={<Studentcard name={fullName} id={age}  />}
       steps
       start={2}
-      end={7}
+      end={Stepend}
       header
       headerTextBigText={true}
       headertext={'Class Selection'}

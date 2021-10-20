@@ -13,7 +13,7 @@ import PopUp from '../../custom/PopUp';
 import CustomLayout from '../../custom/CustomLayout';
 import TextInputField from '../../custom/TextInputField';
 import ProgressTracker from '../../custom/ProgressTracker';
-import { colors, hp, wp } from '../../Constant/Constant';
+import { colors, hp, wp ,Stepend} from '../../Constant/Constant';
 import Forwardbutton from '../../custom/Forwardbutton';
 import ErrorMessage from '../../custom/ErrorMessage';
 import AppButton from '../../custom/AppButton';
@@ -83,7 +83,7 @@ const AddChild = props => {
     <CustomLayout
       steps
       start={1}
-      end={7}
+      end={Stepend}
       header
       headerTextBigText={true}
       headertext={`Add Child and ${'\n'}Emergency${'\n'}Contact `}

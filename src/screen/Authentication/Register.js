@@ -46,7 +46,7 @@ function Register(props) {
   const Reerror = useSelector(state => state.RegisterData.error)
   const isRegloading = useSelector(state => state.RegisterData.isLoading)
 
-  console.log('error ----------->',Reerror.errors)
+  // console.log('error ----------->',Reerror.errors)
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [prop, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -75,30 +75,6 @@ function Register(props) {
     timeout()
   });
 
-
-
-
-  let userNumber;
-  const handleSubmit1 = no => {
-    userNumber = no;
-    refRBSheet.current.open();
-  };
-
-  const icon = (
-    <EvilIcons
-      name="search"
-      size={40}
-      color={colors.grey}
-      onPress={() => {
-        console.log('Pressed');
-      }}
-      style={{
-        backgroundColor: 'green',
-        padding: 120,
-        zIndex: 0.5,
-      }}
-    />
-  );
   return (
     <CustomLayout
       header
@@ -138,11 +114,8 @@ function Register(props) {
             values.cityTown = postdata.posttown
             console.log(values)
             dispatch(RegisterData(values))
-            if (status.message === "created successfully") {
-              props.navigation.navigate('Login')
-            }
-            if (Reerror != '') {
-              alert(`${Reerror}`)
+            if (status.message !== null) {
+              props.navigation.navigate('EnrollStack')
             }
           }
         }}
@@ -357,7 +330,7 @@ function Register(props) {
                 <ActivityIndicator size="large" color={colors.orange} />
                 :
                 <AppButton
-                  title={main ? isRegloading ? <ActivityIndicator size="large" color="white" /> : "Register" : "Send OTP"}
+                  title="Register"
                   onPress={handleSubmit}
                   style={{
                     marginVertical: hp('0%'),

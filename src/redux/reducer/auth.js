@@ -88,7 +88,8 @@ const loginState = {
     accessToken: '',
     refreshToken: '',
     isloading: false,
-    error: ''
+    sagaerror: '',
+    networkerror:''
 }
 
 export const LoginData = (state = loginState, action) => {
@@ -99,8 +100,8 @@ export const LoginData = (state = loginState, action) => {
                 ...state,
                 accessToken: action.payload.accessToken,
                 refreshToken: action.payload.refreshToken,
-                error:action.payload,
-                isloading: false
+                networkerror:action.payload.message,
+                isloading: false,      
             }
         case Action.USER_LOGIN_ERROR:
             return {

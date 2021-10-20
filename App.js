@@ -6,7 +6,7 @@ import {createStore , applyMiddleware, compose} from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { Provider } from 'react-redux';
 import rootReducer from './src/redux/rootReducer'; 
-import rootSaga from './src/redux/rootsaga'; 
+import rootSaga from './src/redux/rootSaga'
 import Postcode from './src/screen/Authentication/components/Postcode';
 
 const sagaMiddleware = createSagaMiddleware()

@@ -1,122 +1,71 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, Text, Dimensions} from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, Dimensions, FlatList } from 'react-native';
 import Timeline from 'react-native-timeline-flatlist';
 import AppButton from './../../custom/AppButton';
-import {colors, wp,hp} from './../../Constant/Constant';
+import { colors, wp, hp, Fontsize, EnrollData } from './../../Constant/Constant';
 import CustomLayout from './../../custom/CustomLayout';
+import LinearGradient from 'react-native-linear-gradient';
 
-const width = Dimensions.get('window').width;
+
 function EnrollingFlow(props) {
-  const [data, setData] = useState([
-    {no: 1, title: 'Step 1', description: 'Add Child and Emergency Contact'},
-    {no: 2, title: 'Step 2', description: 'Class Selection'},
-    {no: 3, title: 'Step 3', description: 'Fees Overview'},
-    {no: 4, title: 'Step 4', description: 'Provide Consent'},
-    {no: 5, title: 'Step 5', description: 'Additional Sections'},
-    {no: 6, title: 'Step 6', description: 'Pay'},
-    {no: 7, title: 'Step 7', description: 'Confirmation'},
-  ]);
-  renderCircle = (rowData, sectionID, rowID) => {
-    let title = (
-      <Text style={{alignSelf: 'center', color: colors.white}}>
-        {rowData.no}
-      </Text>
-    );
 
-    return <View style={styles.timelineCircle}>{title}</View>;
-  };
-
-  const renderDetail = (rowData, sectionID, rowID) => {
-    let title = <Text style={styles.renderDetailTitle}>{rowData.title}</Text>;
-    var desc = null;
-    if (rowData.description) {
-      desc = (
-        <View>
-          <Text style={{fontSize: wp('4.8%'), fontFamily: ' Nunito-SemiBold'}}>
-            {rowData.description}
-          </Text>
-        </View>
-      );
-    }
-
-    return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: rowData.color,
-          padding: wp('2%'),
-          borderRadius: 15,
-          // marginVertical: hp('10%'),
-        }}>
-        {title}
-        {desc}
-      </View>
-    );
-  };
-  const onHandleBackButton = () => {
-    props.navigation.goBack();
-  };
   return (
     <CustomLayout
-      backbutton={onHandleBackButton}
-      headertext={'Enrol Child To a Club Activity'}
+      backbutton={() => props.navigation.goBack()}
+      headertext={'Enter Child To a Club Activity'}
       headertextStyle={{
         fontSize: wp('8%'),
-        // backgroundColor: 'pink',
+
       }}>
-      {/* <Text style={styles.heading}>
-        Enter Child To a {'\n'}
-        Club Activity
-      </Text> */}
-
-      <Timeline
-        data={data}
-        renderCircle={renderCircle}
-        renderDetail={renderDetail}
-        lineColor={colors.lineColor}
-        separator={false}
-        circleSize={10}
+      <View style={{ height: hp('5%') }} />
+      <FlatList
+        data={EnrollData}
+        keyExtractor={item => item.id}
+        renderItem={item => {
+          return (
+            <View style={styles.container}>
+              <View>
+                <LinearGradient colors={['#ffa300', '#ff7e00']} style={styles.circle}><Text style={styles.circlecontainer}>{item.item.id}</Text></LinearGradient>
+                {item.item.id < 6 ? <View style={styles.line} /> : null}
+              </View>
+              <View style={{ marginLeft: wp('2%') }}>
+                <Text style={{ color: colors.grey, fontFamily: 'Nunito-Regular' }}>{item.item.title}</Text>
+                <Text style={{ fontFamily: 'Nunito-SemiBold', fontSize: Fontsize }}>{item.item.description}</Text>
+              </View>
+            </View>
+          )
+        }}
       />
-
       <AppButton
         title="Let's Start"
         onPress={() => props.navigation.navigate('AddChild')}
-        style={{fontFamily: 'Nunito-SemiBold'}}
+        style={{ fontFamily: 'Nunito-SemiBold', marginTop: hp('10%') }}
       />
     </CustomLayout>
   );
 }
 export default EnrollingFlow;
+
 const styles = StyleSheet.create({
-  container: {},
-  title: {
-    fontSize: wp('10%'),
+  container: {
+    flexDirection: 'row',
   },
-  timelineCircle: {
-    position: 'absolute',
-    left: width * 0.5,
-    transform: [
-      {
-        translateX: wp('-38%'),
-      },
-    ],
-    height: wp('10%'),
-    width: wp('10%'),
-    borderRadius: wp('10%'),
-    backgroundColor: colors.orange,
+  circle: {
+    height: hp('5%'),
+    width: hp('5%'),
+    borderRadius: 50,
     justifyContent: 'center',
-    alignContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-  // heading: {
-  //   fontSize: wp('9%'),
-  //   marginTop: -10,
-  //   marginBottom: 10,
-  //   fontFamily: 'Nunito-SemiBold',
-  // },
-  renderDetailTitle: {
-    color: colors.blackOpacity,
-    fontSize: wp('3.8%'),
-    fontFamily: 'Nunito-Regular',
+  circlecontainer: {
+    fontFamily: "Nunito-SemiBold",
+    color: "white",
+    fontSize: Fontsize
   },
+  line: {
+    height: hp('5%'),
+    width: wp('0.3%'),
+    backgroundColor: colors.orange,
+    alignSelf: 'center'
+  }
 });

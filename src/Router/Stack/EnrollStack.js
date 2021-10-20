@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {Stack, StackScreen} from '../Utils/Utils';
+import { useDispatch, useSelector } from 'react-redux';
 
-import EnrollingFlow from '../../screen/Authentication/EnrollingFlow';
+import EnrollingFlow from '../../screen/ChildEnrol/EnrollingFlow';
 import AddChild from '../../screen/ChildEnrol/AddChild';
 import Additional_Sections from '../../screen/ChildEnrol/Additional_Sections';
 import Class_Selection from '../../screen/ChildEnrol/Class_Selection';

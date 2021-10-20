@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Text, View, Image} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import ProfileMainScreen from '../../screen/Dashboard/ProfileMainScreen';
+import Home from '../../screen/Dashboard/Home';
 import ActivityProgress from '../../screen/Dashboard/ActivityProgress';
 import AttendenceShow from '../../screen/Dashboard/AttendenceShow';
 import Profile from '../../screen/Dashboard/Profile';
@@ -44,7 +44,7 @@ function HomeTab() {
       })}>
       <Tab.Screen
         name="Home"
-        component={ProfileMainScreen}
+        component={Home}
         options={{headerShown: false}}
       />
       <Tab.Screen

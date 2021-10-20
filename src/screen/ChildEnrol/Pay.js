@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import CustomLayout from '../../custom/CustomLayout';
 import Studentcard from '../../custom/Studentcard';
 import ProgressTracker from '../../custom/ProgressTracker';
-import {colors, Fontsize, hp, wp} from '../../Constant/Constant';
+import {colors, Fontsize, hp, Stepend, wp} from '../../Constant/Constant';
 import {RadioButton} from 'react-native-paper';
 import Forwardbutton from '../../custom/Forwardbutton';
 import Atmcard from '../../custom/AtmCard';
@@ -25,8 +25,8 @@ const Pay = props => {
         />
       }
       steps
-      start={6}
-      end={7}
+      start={5}
+      end={Stepend}
       header
       headerTextBigText={true}
       headertext={'Pay'}

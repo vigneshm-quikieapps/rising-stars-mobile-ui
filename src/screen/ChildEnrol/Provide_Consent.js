@@ -1,15 +1,19 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, TextInput, Image, Switch} from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, TextInput, Image, Switch, TouchableOpacity } from 'react-native';
 import CustomLayout from '../../custom/CustomLayout';
 import Studentcard from '../../custom/Studentcard';
 import ProgressTracker from '../../custom/ProgressTracker';
-import {colors, hp, wp, Fontsize} from '../../Constant/Constant';
+import { colors, hp, wp, Fontsize, Stepend } from '../../Constant/Constant';
 import Input from '../../custom/Input'
+import RBSheet from 'react-native-raw-bottom-sheet';
+import LinearGradient from 'react-native-linear-gradient';
+import EntIcon from 'react-native-vector-icons/Entypo'
 
 import { useSelector, useDispatch } from 'react-redux'
 import Forwardbutton from '../../custom/Forwardbutton';
 
 const Provide_Consent = props => {
+  const termref = useRef()
   const [isEnabled, setIsEnabled] = useState(false);
   const [isEnabled2, setIsEnabled2] = useState(false);
   const [isEnabled3, setIsEnabled3] = useState(false);
@@ -30,7 +34,7 @@ const Provide_Consent = props => {
       }
       steps
       start={4}
-      end={7}
+      end={Stepend}
       header
       headertext={`Provide ${'\n'}Consent`}
       headertextStyle={{
@@ -72,6 +76,40 @@ const Provide_Consent = props => {
         </View>
         <Text style={styles.marktext}>Zippy’s is the Business Trade Name</Text>
       </View>
+      <TouchableOpacity onPress={() => termref.current.open()}>
+        <Text style={styles.bottom}>Read more about Club Rule</Text>
+      </TouchableOpacity>
+      <RBSheet
+        ref={termref}
+        closeOnDragDown={true}
+        closeOnPressMask={false}
+        customStyles={{
+          wrapper: {
+            backgroundColor: colors.blackOpacity,
+          },
+          container: {
+            height: '25%',
+            borderTopRightRadius: 16,
+            borderTopLeftRadius: 16,
+          },
+        }}
+      >
+        <View style={{ paddingHorizontal: wp('5%') }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={{ fontFamily: 'Nunito-Regular', fontSize: Fontsize, color: "#ff7e00" }}>Club Rule</Text>
+            <TouchableOpacity onPress={() => termref.current.close()}>
+              <LinearGradient style={styles.closePopUp} colors={['#ffa300', '#ff7e00']}>
+                <EntIcon name="cross" size={15} color="white" />
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+          <Text style={{ fontFamily: 'Nunito-Regular', marginTop: hp('1.5%'), fontSize: Fontsize, alignSelf: 'center' }}>
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem Ipsum has been the industry's standard dummy
+            text ever since.
+          </Text>
+        </View>
+      </RBSheet>
       <Conset
         conset={'Does your child have any allergies we should be aware of'}
         value={isEnabled3}
@@ -97,14 +135,14 @@ const Provide_Consent = props => {
           <Input
             placeholder="Signed by Jube Bowman(Parent / Carer)"
             placeholderTextColor={colors.grey}
-            style={{width: wp('85%')}}
+            style={{ width: wp('85%') }}
             multiline={true}
           />
         </View>
       )}
       <Forwardbutton
-        style={{alignSelf: 'flex-end', marginTop: hp('1%')}}
-        onPress={() => props.navigation.navigate('Additional_Sections')}
+        style={{ alignSelf: 'flex-end', marginTop: hp('1%') }}
+        onPress={() => props.navigation.navigate('Pay')}
       />
     </CustomLayout>
   );
@@ -115,7 +153,7 @@ const Conset = props => {
     <View style={styles.container}>
       <Text style={styles.consettext}>{props.conset}</Text>
       <Switch
-        trackColor={{false: '#767577', true: colors.pumpkinorange}}
+        trackColor={{ false: '#767577', true: colors.pumpkinorange }}
         thumbColor={props.value ? colors.orange : '#f4f3f4'}
         ios_backgroundColor="#3e3e3e"
         onValueChange={props.onValueChange}
@@ -130,7 +168,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginVertical: hp('1.5%'),
-    fontSize:Fontsize,
+    fontSize: Fontsize,
     justifyContent: 'space-between',
   },
   consettext: {
@@ -169,6 +207,23 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: Fontsize,
     fontFamily: 'Nunito-Regular',
+  },
+  bottom: {
+    fontFamily: 'Nunito-Regular',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    color: '#ff7e00',
+    textDecorationLine: 'underline',
+    marginVertical: 5,
+  },
+  closePopUp: {
+    height: hp('3%'),
+    width: hp('3%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 50,
+    alignSelf: 'flex-end',
+    marginTop: -hp('1%')
   },
 });
 

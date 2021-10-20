@@ -17,7 +17,7 @@ import BarIndicator from '../../custom/BarIndicator';
 import AttendanceCard from '../../custom/AttendanceCard';
 import ClassCard from '../../custom/ClassCard';
 
-const ProfileMainScreen = () => {
+const Home = () => {
   const Datum = [1, 2, 3, 4]; // data.length for how many time we have scroll in Carousel
   const itemWidth = Dimensions.get('window').width;
   const [activeDotIndex, setActiveDotIndex] = React.useState(0);
@@ -236,7 +236,7 @@ const ProfileMainScreen = () => {
     </ScrollView>
   );
 };
-export default ProfileMainScreen;
+export default Home;
 
 const styles = StyleSheet.create({
   container: {

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import CustomLayout from '../../custom/CustomLayout';
 import Studentcard from '../../custom/Studentcard';
 import ProgressTracker from '../../custom/ProgressTracker';
-import { colors, Fontsize, hp, wp } from '../../Constant/Constant';
+import { colors, Fontsize, hp, wp,Stepend } from '../../Constant/Constant';
 import Forwardbutton from '../../custom/Forwardbutton';
 import Slot from '../../custom/Slot';
 import AppButton from '../../custom/AppButton';
@@ -15,8 +15,8 @@ const Confirmation = props => {
   return (
     <CustomLayout
       steps
-      start={7}
-      end={7}
+      start={Stepend}
+      end={Stepend}
       header
       headerTextBigText={true}
       headertext={'Confirmation'}

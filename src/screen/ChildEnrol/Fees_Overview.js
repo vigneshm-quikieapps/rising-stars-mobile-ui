@@ -4,7 +4,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import CustomLayout from '../../custom/CustomLayout';
 import Studentcard from '../../custom/Studentcard';
 import ProgressTracker from '../../custom/ProgressTracker';
-import {colors, Fontsize, hp, wp} from '../../Constant/Constant';
+import {colors, Fontsize, hp, wp,Stepend} from '../../Constant/Constant';
 import Forwardbutton from '../../custom/Forwardbutton';
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -27,7 +27,7 @@ const Fees_Overview = props => {
       }
       steps
       start={3}
-      end={7}
+      end={Stepend}
       header
       headerTextBigText={true}
       headertext={'Fees Overview'}
