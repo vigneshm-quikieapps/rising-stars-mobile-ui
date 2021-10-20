@@ -17,7 +17,7 @@ function EnrollingFlow(props) {
         fontSize: wp('8%'),
 
       }}>
-      <View style={{ height: hp('5%') }} />
+      <View style={{ height: hp('3%') }} />
       <FlatList
         data={EnrollData}
         keyExtractor={item => item.id}
@@ -39,7 +39,7 @@ function EnrollingFlow(props) {
       <AppButton
         title="Let's Start"
         onPress={() => props.navigation.navigate('AddChild')}
-        style={{ fontFamily: 'Nunito-SemiBold', marginTop: hp('10%') }}
+        style={{ fontFamily: 'Nunito-SemiBold', marginTop: hp('6%') }}
       />
     </CustomLayout>
   );
@@ -51,8 +51,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   circle: {
-    height: hp('5%'),
-    width: hp('5%'),
+    height: hp('6%'),
+    width: hp('6%'),
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center'

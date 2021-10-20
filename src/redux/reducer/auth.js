@@ -1,4 +1,7 @@
 import * as Action from '../actiontype'
+import { storeLocalData, getLocalData } from '../../utils/LocalStorage'
+import { setLocale } from 'yup'
+
 
 const postcodeState = {
     postcode: [],
@@ -13,7 +16,7 @@ export const Postcode = (state = postcodeState, action) => {
             return {
                 ...state,
                 postcode: action.payload,
-                error:action.payload,
+                error: action.payload,
                 isloading: false
             }
         case Action.USER_GET_POST_CODE_FAILED:
@@ -59,13 +62,13 @@ const RegisterState = {
 }
 
 export const RegisterData = (state = RegisterState, action) => {
-    console.log('reducer ------>', action)
+    // console.log('reducer ------>', action)
     switch (action.type) {
         case Action.USER_REGISTER_SUCCESS:
             return {
                 ...state,
                 status: action.payload,
-                error:action.payload,
+                error: action.payload,
                 isloading: false
             }
         case Action.USER_REGISTER_ERROR:
@@ -89,19 +92,21 @@ const loginState = {
     refreshToken: '',
     isloading: false,
     sagaerror: '',
-    networkerror:''
+    networkerror: ''
 }
 
 export const LoginData = (state = loginState, action) => {
 
     switch (action.type) {
         case Action.USER_LOGIN_SUCCESS:
+            storeLocalData('refreshToken', action.payload.refreshToken)
+            // console.log('action.payload.refreshToken :', action.payload.refreshToken);
             return {
                 ...state,
                 accessToken: action.payload.accessToken,
                 refreshToken: action.payload.refreshToken,
-                networkerror:action.payload.message,
-                isloading: false,      
+                networkerror: action.payload.message,
+                isloading: false,
             }
         case Action.USER_LOGIN_ERROR:
             return {
