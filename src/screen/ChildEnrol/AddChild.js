@@ -13,21 +13,15 @@ import PopUp from '../../custom/PopUp';
 import CustomLayout from '../../custom/CustomLayout';
 import TextInputField from '../../custom/TextInputField';
 import ProgressTracker from '../../custom/ProgressTracker';
-import { colors, hp, wp ,Stepend} from '../../Constant/Constant';
+import { colors, hp, wp, Stepend } from '../../Constant/Constant';
 import Forwardbutton from '../../custom/Forwardbutton';
 import ErrorMessage from '../../custom/ErrorMessage';
 import AppButton from '../../custom/AppButton';
-import { setChildData } from '../../redux/action/enrol'
+import { setChildData,getClubdata } from '../../redux/action/enrol'
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
 
-const validationSchema = Yup.object().shape({
-  // fullName: Yup.string().required().min(3).label('Full Name'),
-  // name: Yup.string().required().min(3).label('Name'),
-  // dob: Yup.string().required().label("D.O.B."),
-  // gender: Yup.string().required().label("Gender"),
-  // contactNumber: Yup.number().required().min(10).label('Mobile Number'),
-});
+
 
 const gender = [
   { id: 1, gender: 'Boy' },
@@ -49,13 +43,25 @@ const AddChild = props => {
   const [data, setData] = useState([]);
 
   const [birth, setBirth] = useState('')
+  const [birtherror, setBirthError] = useState(false)
+
+
   const [age, setAge] = useState('')
   const [open, setOpen] = useState(false)
 
   const [relationmodal, setRelationmodal] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(true);
+
   const [relationdata, setRelationdata] = useState('');
+
   const [gender, setGender] = useState('');
+  const [gendererror, setGenderError] = useState(false);
+
+  const validationSchema = Yup.object().shape({
+    fullName: Yup.string().required().min(3).label('Full Name'),
+    name: Yup.string().required().min(3).label('Name'),
+    contactNumber: Yup.number().required().min(10).label('Mobile Number'),
+  });
 
   const gendersubmit = item => {
     setGender(item)
@@ -99,13 +105,25 @@ const AddChild = props => {
           name: '',
           contactNumber: '',
           relationship: '',
-          age: ''
+          age: '',
         }}
         onSubmit={values => {
           values.dob = birth
+          values.gender = gender
           values.age = age
-          dispatch(setChildData(values))
-          props.navigation.navigate('Class_Selection');
+          values.relationship = relationdata
+          if (values.dob === "") {
+            setBirthError(true)
+          } else if (values.gender === "") {
+            setGenderError(true)
+          } else if (values.age <= 2) {
+            alert('2 year children not allowed ')
+          } else {
+            console.log('values.age :', values.age);
+            dispatch(setChildData(values))
+            dispatch(getClubdata())
+            props.navigation.navigate('Class_Selection');
+          }
         }}
         validationSchema={validationSchema}>
         {({
@@ -130,12 +148,13 @@ const AddChild = props => {
               visible={touched.fullName}
             />
 
-         
+
             <PopUpCard
               text={'Date of Birth'}
               textColor={colors.grey}
               value={birth}
               onPress={() => setOpen(!open)}
+              onBlur={() => setBirthError(true)}
             />
             <DatePicker
               modal
@@ -145,25 +164,30 @@ const AddChild = props => {
               onConfirm={(date) => {
                 setOpen(false)
                 setBirth(moment(date).format('YYYY/MM/DD'))
-                handleChange('dob',birth)
+                handleChange('dob')
                 let age = (new Date()).getFullYear() - date.getFullYear()
                 setAge(age)
+                setBirthError(false)
                 // console.log(age)
               }}
               onCancel={() => {
                 setOpen(!open)
               }}
             />
-            <ErrorMessage
+            {
+              birtherror && <Text style={styles.errors}>D.O.B. is a required</Text>
+            }
+            {/* <ErrorMessage
               style={styles.errorMessage}
               error={errors.dob}
               visible={touched.dob}
-            />
+            /> */}
 
             <PopUpCard
               text={'Gender'}
               textColor={colors.grey}
               value={gender}
+              onBlur={() => setFieldTouched('gender')}
               onPress={() => genderef.current.open()}
             />
             <RBSheet
@@ -179,16 +203,25 @@ const AddChild = props => {
                 },
               }}>
               <View style={{ flexDirection: 'row', paddingHorizontal: wp('5%'), justifyContent: 'space-between' }}>
-                <AppButton title="Boy" style={{ width: wp('40%') }} onPress={() => gendersubmit('Boy')} />
-                <AppButton title="Girl" style={{ width: wp('40%') }} onPress={() => gendersubmit('Girl')} />
+                <AppButton title="Boy" style={{ width: wp('40%') }} onPress={() => {
+                  setGenderError(false)
+                  gendersubmit('Boy')
+                }} />
+                <AppButton title="Girl" style={{ width: wp('40%') }} onPress={() => {
+                  setGenderError(false)
+                  gendersubmit('Girl')
+                }} />
               </View>
             </RBSheet>
+            {
+              gendererror && <Text style={styles.errors}>Gender is a required</Text>
+            }
 
-            <ErrorMessage
+            {/* <ErrorMessage
               style={styles.errorMessage}
               error={errors.gender}
               visible={touched.gender}
-            />
+            /> */}
 
 
             <Text style={styles.emergency}>Emergency Contact (Primary)</Text>
@@ -330,6 +363,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-SemiBold',
     fontSize: hp('2.5%'),
   },
+  errors: {
+    color: colors.reddish,
+    fontFamily: 'Nunito-Regular',
+    fontSize: wp('3%'),
+    alignSelf: 'flex-end'
+  }
 });
 export default AddChild;
 

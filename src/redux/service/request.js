@@ -1,6 +1,7 @@
 import { Country_Code } from '../../Constant/Constant'
 import { mobile_url, api_url, heroku_url } from '../../Constant/config'
 
+// --------------------------------------------------------Auth
 export function fetchMobileOTP(payload) {
     console.log(payload)
     return fetch(`${heroku_url}/get-otp/mobile-no`, {
@@ -29,7 +30,7 @@ export function fetchPostCode(payload) {
 
 export function fetchRegister(payload) {
     // console.log('fetch-------->', payload)
-    return fetch(`${mobile_url}/sign-up`, {
+    return fetch(`${heroku_url}/sign-up`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -55,7 +56,7 @@ export function fetchRegister(payload) {
 }
 
 export function fetchLogin(payload) {
-    return fetch(`${mobile_url}/sign-in`, {
+    return fetch(`${heroku_url}/sign-in`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -70,6 +71,7 @@ export function fetchLogin(payload) {
         .catch(error => { throw error })
 }
 
+// --------------------------------------------------------Enroll
 
 export function fetchclubName() {
     return fetch(`${heroku_url}/businesses`, {
@@ -80,7 +82,6 @@ export function fetchclubName() {
 }
 
 export function fetchclassName(id) {
-
     return fetch(`${heroku_url}/businesses/${id}/classes`, {
         method: 'GET'
     })
@@ -89,7 +90,6 @@ export function fetchclassName(id) {
 }
 
 export function fetchSessionList(id) {
-
     return fetch(`${heroku_url}/classes/${id}/sessions`, {
         method: 'GET'
     })
@@ -104,4 +104,27 @@ export function fetchGetUserProgress(id) {
     })
         .then(response => response.json())
         .catch(error => { throw error })
+}
+export function fetchClubFinanc(id) {
+
+    return fetch(`${heroku_url}/businesses/${id}/finance`, {
+        method: 'GET'
+    })
+        .then(response => response.json())
+        .catch(error => { throw error })
+}
+
+// --------------------------------------------------------Home
+
+export function fetchMemberData(token) {
+console.log('id fetch :',token);
+    return fetch(`${heroku_url}/members/members/of-a-logged-in-parent`, {
+        method: 'GET',
+        headers:{
+            Authorization : `Bearer     ${token}`
+        }
+    })
+        .then(response => response.json())
+        .then(res =>console.log(res))
+        .catch(error => { console.log(error) })
 }

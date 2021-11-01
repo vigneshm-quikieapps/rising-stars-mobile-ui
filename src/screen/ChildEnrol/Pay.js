@@ -10,16 +10,16 @@ import Atmcard from '../../custom/AtmCard';
 import { useSelector, useDispatch } from 'react-redux'
 
 const Pay = props => {
-  const fullName = useSelector(state => state.childData.fullName)
-  const age = useSelector(state => state.childData.age)
+  const child = useSelector(state => state.childData.addchild)
+  const club = useSelector(state => state.childData.clubdata)
   return (
     <CustomLayout
       Customchildren={
         <Studentcard
-        name={fullName}
-          id={age}
+        name={child.fullName}
+          id={child.age}
           activityrequired
-          activity={`Zippy Totz Pre-school Gymnastics`}
+          activity={club.name}
           subactivity={'Childhood Joy Classes'}
           // classname={'Childhood Joy Classes'}
         />

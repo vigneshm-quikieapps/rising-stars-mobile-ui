@@ -15,7 +15,7 @@ export default function CustomLayout(props) {
     <ScrollView
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{
-        backgroundColor: '#fff',
+        backgroundColor: 'white',
       }}>
       <View style={styles.container}>
         <View style={{flexDirection: 'row'}}>

@@ -1,60 +1,66 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, ActivityIndicator, TouchableOpacity, Modal, FlatList } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, Image, ActivityIndicator, Pressable, TouchableOpacity, Modal, FlatList } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import moment from 'moment';
 
 import CustomLayout from '../../custom/CustomLayout';
 import Studentcard from '../../custom/Studentcard';
 import ProgressTracker from '../../custom/ProgressTracker';
 import Forwardbutton from '../../custom/Forwardbutton';
-import { colors, Fontsize, hp, wp,Stepend } from '../../Constant/Constant';
-import PopUp from '../../custom/PopUp';
-import Input from '../../custom/Input';
+import { colors, Fontsize, hp, wp, Stepend } from '../../Constant/Constant';
 import PopUpCard from '../../custom/PopUpCard';
 import Slot from '../../custom/Slot';
-import { getClubdata, getClassdata,getSessiondata } from '../../redux/action/enrol';
-import * as Action from '../../redux/actiontype'
+import { getClassdata, getSessiondata, setClubData,setClassData,setSlotData, clubfinance } from '../../redux/action/enrol';
+
 
 import { useSelector, useDispatch } from 'react-redux'
 
 export default function Class_Selection(props) {
-
-  const [business, setBusiness] = useState("hello");
+  const [business, setBusiness] = useState();
   const [classes, setClasses] = useState();
+
+  const [clubmodal, setClubModal] = useState(false)
+  const [classmodal, setClassModal] = useState(false)
+
   const [showclass, setShowClass] = useState(false)
   const [showsession, setShowsession] = useState(false)
 
-  // console.log(business)
-  const fullName = useSelector(state => state.childData.fullName)
-  const age = useSelector(state => state.childData.age)
-  const clubData = useSelector(state => state.clubname.clubData)
-  const classData = useSelector(state => state.classname.classtate)
-  const sessionData = useSelector(state => state.sessionlist.sessionState)
-  // clubData.unshift({_id:1,"name":"Select your Club"}) 
-  //  classData.unshift({_id:1,"name":"Select your Club"}) 
-  //const error = useSelector(state => state.classname.error)
-  const dispatch = useDispatch()
-  console.log('sessionData --------------->', sessionData)
-  // console.log('classesData --------------->', classData)
-  // console.log('error------------>', error)
-  const handleBusiness = (itemValue, itemIndex) => {
-    setBusiness(itemValue)
-    setShowClass(true)
-    dispatch(getClassdata(business))
-  }
-  const handleClasses = (itemValue, itemIndex) => {
-    setClasses(itemValue)
-    setShowsession(true)
-    dispatch(getSessiondata(classes))   
-  }
-  // console.log(classes)
-  useEffect(() => {
-    dispatch(getClubdata())
+  const [selectdata, setSelectdata] = useState()
 
-  }, [])
+  const child = useSelector(state => state.childData.addchild)  
+
+  const clubData = useSelector(state => state.clubname.clubData)
+
+  const classData = useSelector(state => state.classname.classtate)
+
+  const sessionData = useSelector(state => state.sessionlist.sessiondata)
+
+  const dispatch = useDispatch()
+
+  const handleBusiness = (item) => {
+    setBusiness(item.name)
+    setShowClass(true)
+    setClubModal(!clubmodal)
+    dispatch(setClubData(item))
+    dispatch(getClassdata(item._id))
+  }
+  const handleClasses = (item) => {
+    setClasses(item.name)
+    setShowsession(true)
+    setClassModal(!classmodal)
+    dispatch(setClassData(item))
+    dispatch(clubfinance(item._id))
+    dispatch(getSessiondata(item._id))
+  }
+
+  const handleforward = () => {
+    dispatch(setSlotData(selectdata))
+    props.navigation.navigate('Fees_Overview')
+  }
 
   return (
     <CustomLayout
-      Customchildren={<Studentcard name={fullName} id={age}  />}
+      Customchildren={<Studentcard name={child.fullName} id={child.age} />}
       steps
       start={2}
       end={Stepend}
@@ -65,92 +71,76 @@ export default function Class_Selection(props) {
       Customchildren2={<ProgressTracker percent={2} />}>
       <PopUpCard
         headertext={'Club Name*'}
-        picker={true}
-      >
-        <Picker
-          selectedValue={business}
-          style={{ height: 45, width: wp('88%') }}
-          onValueChange={(itemValue, itemIndex) => handleBusiness(itemValue, itemIndex)}
-        >
-          {
-            clubData && clubData.length > 0 && clubData.map(item => {
-              return (
-                <Picker.Item label={item.name} value={item._id} key={item._id} />
-              )
-            })
-          }
-        </Picker>
-      </PopUpCard>
-
+        text="Select Your Club Name"
+        value={business}
+        onPress={() => setClubModal(!clubmodal)}
+      />
+      {
+        clubmodal && clubData.map(item => {
+          return (
+            <TouchableOpacity key={item._id} onPress={() => handleBusiness(item)} style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <Text style={{ fontFamily: "Nunito-Regular", fontSize: Fontsize }}>{item.name}</Text>
+            </TouchableOpacity>
+          )
+        })
+      }
       {
         showclass ? classData && classData.length > 0 ?
-          <PopUpCard
-            headertext={'Class Name*'}
-            picker={true}
+          <>
+            <PopUpCard
+              headertext={'Class Name*'}
 
-          >
-            <Picker
-              selectedValue={classes}
-              style={{ height: 45, width: wp('88%') }}
-              onValueChange={(itemValue, itemIndex) => handleClasses(itemValue, itemIndex)}
-            >
-              {
-                classData && classData.length > 0 && classData.map(item => {
-                  return (               
-                    <Picker.Item label={item.name} value={item._id} key={item._id} />                    
-                  )
-                })
-              }
-            </Picker>
-          </PopUpCard> :
+              text="Select Your Class Name"
+              value={classes}
+              onPress={() => setClassModal(!classmodal)}
+            />
+            {
+              classmodal && classData.map(item => {
+                return (
+                  <TouchableOpacity key={item._id} onPress={() => handleClasses(item)} style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ fontFamily: "Nunito-Regular", fontSize: Fontsize }}>{item.name}</Text>
+                  </TouchableOpacity>
+                )
+              })
+            }
+          </>
+          :
           <ActivityIndicator size="large" color={colors.orange} /> : null
       }
-
-      <Text
-        style={{
-          fontFamily: 'Nunito-Regular',
-          marginVertical: hp('1%'),
-          fontSize: Fontsize,
-        }}>
-        Available Sessions
-      </Text>
-      <Slot
-        white
-        radio
-        selected
-        day={'Monday'}
-        time={'9:30 am - 11:30 am'}
-        facility={'Gym Hall'}
-        coach={'Henry Itondo'}
-      />
-      <View style={{ marginVertical: hp('0.5%') }} />
-      <Slot
-        radio
-        day={'Wednesday'}
-        time={'9:30 am - 11:30 am'}
-        facility={'Gym Hall'}
-        coach={'Tua Manera'}
-      />
-      <Text
-        style={{
-          fontFamily: 'Nunito-SemiBold',
-          marginVertical: hp('1%'),
-          fontSize: wp('4%'),
-        }}>
-        Waitlisted Sessions
-      </Text>
-      <Slot
-        radio
-        day={'Friday'}
-        time={'9:30 am - 11:30 am'}
-        facility={'Gym Hall'}
-        coach={'Sampson Totton'}
-      />
-      {/* <View style={{ height: hp('28%') }} /> */}
-      <Forwardbutton
+      {
+        showsession ? sessionData && sessionData.length > 0 ?
+          <>
+            <Text
+              style={{
+                fontFamily: 'Nunito-Regular',
+                marginVertical: hp('1%'),
+                fontSize: Fontsize,
+              }}>
+              Available Sessions
+            </Text>
+            {
+              sessionData.map(item => {
+                return (
+                  <Slot
+                    white
+                    radio
+                    onPress={() => setSelectdata(item)}
+                    status={selectdata === item && 'checked'}
+                    day={item.pattern[0].day}
+                    time={`${moment(item.pattern[0].startTime).format('HH:mm')} - ${moment(item.pattern[0].endTime).format('HH:mm')}`}
+                    facility={item.name}
+                    coach={item.coach[0].name}
+                    key={item._id}
+                    style={{ marginVertical: wp('1%') }}
+                  />)
+              })}
+          </>
+          : <ActivityIndicator size="large" color={colors.orange} /> : null
+      }
+      {selectdata && <Forwardbutton
         style={{ alignSelf: 'flex-end', marginTop: hp('1%') }}
-        onPress={() => props.navigation.navigate('Fees_Overview')}
-      />
+        onPress={handleforward}
+      />}
     </CustomLayout>
   );
 }
@@ -195,4 +185,5 @@ const styles = StyleSheet.create({
     // shadowRadius: 4,
     // elevation: 5
   },
+
 });

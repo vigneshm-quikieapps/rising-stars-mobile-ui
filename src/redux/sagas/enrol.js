@@ -2,7 +2,7 @@ import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
 
 import * as Action from '../actiontype'
 
-import { fetchclubName, fetchclassName,fetchSessionList } from '../service/request'
+import { fetchclubName, fetchclassName, fetchSessionList, fetchClubFinanc } from '../service/request'
 
 function* handleGetClub() {
     try {
@@ -19,31 +19,45 @@ export function* watcherClubSaga() {
 }
 
 function* handleGetClass(action) {
-    
+
     try {
-        const classes = yield call(fetchclassName,action.payload)
+        const classes = yield call(fetchclassName, action.payload)
         yield put({ type: Action.USER_GET_CLASS_SUCCESS, payload: classes })
-        
+
     } catch (error) {
         yield put({ type: Action.USER_GET_CLASS_FAILED, payload: error.message })
     }
-   
+
 }
 
-export function* watcherClassSaga(){
-    yield takeEvery(Action.USER_GET_CLASS_NAME,handleGetClass)
+export function* watcherClassSaga() {
+    yield takeEvery(Action.USER_GET_CLASS_NAME, handleGetClass)
 }
 
-function* handleGetSession(action){
-    console.log("saga------------------->",action)
-    try{
-        const session = yield call(fetchSessionList,action.payload)
-        yield put({type:Action.USER_GET_SESSION_SUCCESS,payload:session})
-    }catch(error){
-        yield put({type:Action.USER_GET_SESSION_FAILED,payload:error.message})
+function* handleGetSession(action) {
+
+    try {
+        const session = yield call(fetchSessionList, action.payload)
+        yield put({ type: Action.USER_GET_SESSION_SUCCESS, payload: session })
+    } catch (error) {
+        yield put({ type: Action.USER_GET_SESSION_FAILED, error: error.message })
     }
 }
 
-export function* watcherSessionSaga(){
-    yield takeEvery(Action.USER_GET_SESSION_LIST,handleGetSession)
+export function* watcherSessionSaga() {
+    yield takeEvery(Action.USER_GET_SESSION_LIST, handleGetSession)
 }
+
+function* handleClubfinance(action) {
+    try {
+        const finance = yield call(fetchClubFinanc, action.payload)
+        yield put({ type: Action.USER_GET_CLUB_FINANCE_SUCCESS, payload: finance })
+    } catch (error) {
+        yield put({ type: Action.USER_GET_CLUB_FINANCE_FAILED, error: error.message })
+    }
+}
+
+export function* watcherClubfinance(){
+    yield takeEvery(Action.USER_GET_CLUB_FINANCE,handleClubfinance)
+}
+

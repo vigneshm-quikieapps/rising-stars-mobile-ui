@@ -40,11 +40,11 @@ export const EnrollStack = props => {
         component={Provide_Consent}
         options={{headerShown: false}}
       />
-      <StackScreen.Screen
+      {/* <StackScreen.Screen
         name="Additional_Sections"
         component={Additional_Sections}
         options={{headerShown: false}}
-      />
+      /> */}
       <StackScreen.Screen
         name="Pay"
         component={Pay}

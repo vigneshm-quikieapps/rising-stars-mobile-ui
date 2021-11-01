@@ -8,28 +8,34 @@ import Input from '../../custom/Input'
 import RBSheet from 'react-native-raw-bottom-sheet';
 import LinearGradient from 'react-native-linear-gradient';
 import EntIcon from 'react-native-vector-icons/Entypo'
+import { setProvide } from '../../redux/action/enrol'
 
 import { useSelector, useDispatch } from 'react-redux'
 import Forwardbutton from '../../custom/Forwardbutton';
 
 const Provide_Consent = props => {
   const termref = useRef()
+  const dispatch = useDispatch()
   const [isEnabled, setIsEnabled] = useState(false);
+  const [allergies, setAllergies] = useState('');
   const [isEnabled2, setIsEnabled2] = useState(false);
+  const [condition, setCondition] = useState('');
   const [isEnabled3, setIsEnabled3] = useState(false);
+  const [photo, setPhoto] = useState('');
   const [isEnabled4, setIsEnabled4] = useState(false);
+  const [sign, setSign] = useState('');
 
-  const fullName = useSelector(state => state.childData.fullName)
-  const age = useSelector(state => state.childData.age)
+  const child = useSelector(state => state.childData.addchild)
+  const club = useSelector(state => state.childData.clubdata)
 
   return (
     <CustomLayout
       Customchildren={
         <Studentcard
-          name={fullName}
-          id={age}
+          name={child.fullName}
+          id={child.age}
           activityrequired
-          activity={`Zippy Totz Pre-school Gymnastics`}
+          activity={club.name}
         />
       }
       steps
@@ -53,6 +59,7 @@ const Provide_Consent = props => {
           <Input
             placeholder="Allergy details..."
             placeholderTextColor={colors.grey}
+            onChangeText={text => setAllergies(text)}
           />
         </View>
       )}
@@ -67,6 +74,7 @@ const Provide_Consent = props => {
           <Input
             placeholder="Condition details..."
             placeholderTextColor={colors.grey}
+            onChangeText={text => setCondition(text)}
           />
         </View>
       )}
@@ -120,6 +128,7 @@ const Provide_Consent = props => {
           <Input
             placeholder="Allergy details..."
             placeholderTextColor={colors.grey}
+            onChangeText={text => setPhoto(text)}
           />
         </View>
       )}
@@ -136,13 +145,17 @@ const Provide_Consent = props => {
             placeholder="Signed by Jube Bowman(Parent / Carer)"
             placeholderTextColor={colors.grey}
             style={{ width: wp('85%') }}
-            multiline={true}
+            onChangeText={text => setSign(text)}
+          // multiline={true}
           />
         </View>
       )}
       <Forwardbutton
         style={{ alignSelf: 'flex-end', marginTop: hp('1%') }}
-        onPress={() => props.navigation.navigate('Pay')}
+        onPress={() => {
+          dispatch(setProvide(allergies,condition,photo,sign))
+          props.navigation.navigate('Pay')
+        }}
       />
     </CustomLayout>
   );

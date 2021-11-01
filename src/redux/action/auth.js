@@ -28,7 +28,7 @@ export const loginUserData = (data) => {
 }
 
 export const RegisterData = (data) =>{
-    // console.log('action---------->',data)
+    
     return{
         type:Action.USER_REGISTER,
         payload:data

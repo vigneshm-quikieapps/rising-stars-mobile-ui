@@ -1,17 +1,24 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import CustomLayout from '../../custom/CustomLayout';
+import { useSelector, useDispatch } from 'react-redux'
+import moment from 'moment';
+
 import Studentcard from '../../custom/Studentcard';
 import ProgressTracker from '../../custom/ProgressTracker';
 import { colors, Fontsize, hp, wp,Stepend } from '../../Constant/Constant';
-import Forwardbutton from '../../custom/Forwardbutton';
 import Slot from '../../custom/Slot';
 import AppButton from '../../custom/AppButton';
-import { useSelector, useDispatch } from 'react-redux'
+
 
 const Confirmation = props => {
-  const fullName = useSelector(state => state.childData.fullName)
-  const age = useSelector(state => state.childData.age)
+  const child = useSelector(state => state.childData.addchild)
+  const club = useSelector(state => state.childData.clubdata)
+  const slot = useSelector(state => state.childData.slotdata)
+  const classes = useSelector(state => state.childData.classdata)
+
+  console.log('classes :', slot);
+
   return (
     <CustomLayout
       steps
@@ -25,12 +32,11 @@ const Confirmation = props => {
       Customchildren2={<ProgressTracker percent={7} />}
       Customchildren3={
         <Studentcard
-          name={fullName}
-          id={age}
+          name={child.fullName}
+          id={child.age}
           activityrequired
-          activity={`Zippy Totz Pre-school Gymnastics`}
-          subactivity={'Childhood Joy Classes'}
-          // classname={'Childhood Joy Classes'}
+          activity={club.name}
+          subactivity={classes.name}
         />
       }
       backbutton={() => props.navigation.goBack()}>
@@ -42,11 +48,11 @@ const Confirmation = props => {
           white
           required
           Class={'Pre-school gymnastics (Age 1-3)'}
-          sessions={'Childhood Joy Classes'}
-          day={'Monday'}
-          time={'9:30 am - 11:30 am'}
-          facility={'Gym Hall'}
-          coach={'Henry Itondo'}
+          sessions={classes.name}
+          day={slot.pattern[0].day}
+          time={`${moment(slot.pattern[0].startTime).format('HH:mm')} - ${moment(slot.pattern[0].endTime).format('HH:mm')}`}
+          facility={slot.name}
+          coach={slot.coach[0].name}
         />
       </View>
       <View style={styles.remark}>
