@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {RadioButton} from 'react-native-paper';
 import {hp, wp, colors, Fontsize} from '../Constant/Constant';
+import Radiobutton from '../custom/Radiobutton'
 
 const Slot = props => {
   return (
@@ -15,12 +16,9 @@ const Slot = props => {
         },
       ]}>
       {props.radio ? (
-        <RadioButton
-          value={props.value}
-          status={props.selected ? 'checked' : 'unchecked'}
-          onPress={props.onPress}
-          color={"#ff7e00"}
-          uncheckedColor={props.uncheckedColor}
+        <Radiobutton
+        onPress={props.onPress}
+        status={props.status}
         />
       ) : null}
 

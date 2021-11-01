@@ -1,26 +1,31 @@
-import React from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Image,
-  Dimensions,
-  ScrollView,
-  StatusBar,
-} from 'react-native';
+import React,{useEffect,useState} from 'react';
+import { View, StyleSheet, Text, Image, ScrollView, StatusBar, } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { colors, Fontsize, hp, Images, wp } from '../../Constant/Constant';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { colors, Fontsize, hp, Images, wp } from '../../Constant/Constant';
 import ProgressBarWithStar from '../../custom/progressBarWithStar';
 import TimeLines from '../../custom/Timelines';
 import BarIndicator from '../../custom/BarIndicator';
 import AttendanceCard from '../../custom/AttendanceCard';
 import ClassCard from '../../custom/ClassCard';
+import { getLocalData } from '../../utils/LocalStorage';
+import { getmemberData } from '../../redux/action/home';
 
 const Home = () => {
   const Datum = [1, 2, 3, 4]; // data.length for how many time we have scroll in Carousel
-  const itemWidth = Dimensions.get('window').width;
+  const dispatch = useDispatch()
+  const [user,setUser] = useState('')
   const [activeDotIndex, setActiveDotIndex] = React.useState(0);
+
+  useEffect(async () => {
+    const user = await getLocalData('user',true)
+    setUser(user)
+    const accesstoken = await getLocalData('accessToken')   
+    dispatch(getmemberData(accesstoken))
+  },[])
+
   const pagination = () => {
     return (
       <Pagination
@@ -72,7 +77,7 @@ const Home = () => {
           colors={[colors.orangeYellow, colors.pumpkinOrange]}
           // angle={90}
           style={styles.linearGradient}>
-          <Text style={styles.welcome}>Hi Nizam, your child</Text>
+          <Text style={styles.welcome}>{`Hi ${user.name}, your child`}</Text>
           <View style={styles.containerMember}>
             <View
               style={{ marginTop: hp('1%') }}>
@@ -312,7 +317,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: wp('5%'),
     borderTopRightRadius: wp('5%'),
     backgroundColor: colors.white,
-    // paddingVertical: hp('2%'),
     paddingLeft: wp('5%'),
     borderBottomColor: 'rgb(227,227,227)',
     borderBottomWidth: wp('1%'),

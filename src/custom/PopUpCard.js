@@ -7,7 +7,7 @@ const PopUpCard = (props) => {
     return (
         <View style={styles.container}>
             {
-                props.headertext && <Text style={{ color: colors.grey, fontFamily: 'Nunito-Regular', fontSize: Fontsize,marginLeft:wp('4%') }}>{props.headertext}</Text>
+                props.headertext && <Text style={{ color: colors.grey, fontFamily: 'Nunito-Regular', fontSize: Fontsize,marginLeft:wp('1%') }}>{props.headertext}</Text>
             }
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 {
@@ -19,6 +19,7 @@ const PopUpCard = (props) => {
                                 onChangeText={props.onChangeText}
                                 style={[props.style]}
                                 editable={false}
+                                onBlur={props.onBlur}
                                 value={props.value}
                             />
                             <TouchableOpacity onPress={props.onPress}>

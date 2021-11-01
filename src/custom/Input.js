@@ -19,6 +19,7 @@ const Input = (props) => {
                 placeholderTextColor={props.placeholderTextColor}
                 returnKeyType={props.returnKeyType}
                 editable={props.editable}
+                onBlur={props.onBlur}
                 style={[styles.textarea, props.style]}
             />
     )
@@ -28,7 +29,6 @@ const styles = StyleSheet.create({
     textarea: {
         fontFamily: 'Nunito-Regular',
         width: wp('70%'),
-        fontSize:wp('4%'),
         fontSize:Fontsize,
         color:colors.grey
     }

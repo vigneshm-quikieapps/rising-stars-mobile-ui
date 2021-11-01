@@ -19,7 +19,7 @@ export function* watcherPostcode(){
 }
 
 function* handleRegister(action){
-    // console.log("saga---------------->",action)
+  
     try{
         const register = yield call(fetchRegister,action.payload)
         yield put({type:Action.USER_REGISTER_SUCCESS,payload:register})

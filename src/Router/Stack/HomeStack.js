@@ -1,7 +1,8 @@
-import React,{useEffect,useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Stack, StackScreen } from '../Utils/Utils';
 import { NavigationContainer } from '@react-navigation/native';
-import { useSelector } from 'react-redux'
+import jwt_decode from "jwt-decode";
+import { useSelector, useDispatch } from 'react-redux'
 
 import { AuthStack } from './AuthStack';
 import { EnrollStack, Addchildren, AddPayment } from './EnrollStack';
@@ -13,14 +14,30 @@ import { getLocalData } from '../../utils/LocalStorage';
 
 
 const HomeNavigation = () => {
-  
-  const [token,setToken] = useState('')
-  useEffect(async()=>{
-    const token = await getLocalData('refreshToken') 
+  const [token, setToken] = useState('')
+  // console.log('token :', token);
+
+  const validation = () => {
+    const Today = new Date().getTime()
+    const extract = jwt_decode(token)
+    console.log(extract)
+  }
+
+  useEffect(async () => {
+    const token = await getLocalData('refreshToken')
+    // console.log('token ---------> :', token);
     setToken(token)
+
+    // const Today = new Date().getTime()/1000
+    // const {exp} = jwt_decode(token)
+    // const validity = (exp - Today) / (60 * 60 * 24)
+    // if(validity > 0){
+    //   setToken(token)
+    // }
+    // console.log(validity)
   },[])
- 
- 
+
+
   return (
     <NavigationContainer>
       <Stack>
@@ -69,9 +86,6 @@ const HomeNavigation = () => {
               options={{ headerShown: false }}
             />
         }
-
-
-
       </Stack>
     </NavigationContainer>
   );

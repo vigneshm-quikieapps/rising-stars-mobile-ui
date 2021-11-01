@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
-import { childData, clubname, classname, sessionlist } from "./reducer/enrol";
+import { childData, clubname, classname, sessionlist, clubfinance, addProvidedata } from "./reducer/enrol";
 import { LoginData, Postcode, Postcodedata, RegisterData } from './reducer/auth'
-
+import { memberData } from './reducer/home'
 const rootReducer = combineReducers({
     LoginData,
     childData,
@@ -10,7 +10,10 @@ const rootReducer = combineReducers({
     sessionlist,
     Postcode,
     Postcodedata,
-    RegisterData
+    RegisterData,
+    clubfinance,
+    addProvidedata,
+    memberData
 })
 
 export default rootReducer
