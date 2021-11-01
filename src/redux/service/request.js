@@ -96,3 +96,12 @@ export function fetchSessionList(id) {
         .then(response => response.json())
         .catch(error => { throw error })
 }
+
+export function fetchGetUserProgress(id) {
+
+    return fetch(`${heroku_url}/members/${id}/progress`, {
+        method: 'GET'
+    })
+        .then(response => response.json())
+        .catch(error => { throw error })
+}

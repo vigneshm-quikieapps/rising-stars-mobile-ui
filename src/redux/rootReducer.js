@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import { childData, clubname, classname, sessionlist } from "./reducer/enrol";
-import { LoginData, Postcode, Postcodedata, RegisterData } from './reducer/auth'
+import { LoginData, Postcode, Postcodedata, RegisterData } from './reducer/auth';
+import { ProgReducer } from './reducer/progReducer'
 
 const rootReducer = combineReducers({
     LoginData,
@@ -10,7 +11,8 @@ const rootReducer = combineReducers({
     sessionlist,
     Postcode,
     Postcodedata,
-    RegisterData
+    RegisterData,
+    ProgReducer
 })
 
 export default rootReducer
