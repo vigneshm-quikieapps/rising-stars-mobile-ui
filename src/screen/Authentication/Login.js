@@ -28,6 +28,7 @@ function Login(props) {
   const dispatch = useDispatch();
   const isLoading = useSelector(state => state.LoginData.isloading);
   const accessToken = useSelector(state => state.LoginData.accessToken);
+  const [render, setRender] = useState(0);
   const {signIn} = useContext(AuthContext);
   console.log(isLoading);
 
@@ -40,6 +41,9 @@ function Login(props) {
   };
 
   const star = <Text style={styles.star}>Star</Text>;
+  useEffect(() => {
+    setRender(render + 1);
+  }, [dispatch]);
   return (
     <ScrollView style={styles.container}>
       <Text
