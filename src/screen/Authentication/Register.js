@@ -7,7 +7,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { useSelector, useDispatch } from 'react-redux'
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 
-import { RadioButton, TextInput } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import ErrorMessage from '../../custom/ErrorMessage';
 import TextInputField from '../../custom/TextInputField';
 import { colors, Fontsize, hp, wp, Term_Condition } from '../../Constant/Constant';

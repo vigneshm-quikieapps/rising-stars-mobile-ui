@@ -1,26 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text } from 'react-native'
 import HomeNavigation from './src/Router/Stack/HomeStack';
-// import { Store } from './src/redux/configureStore';
-import {createStore , applyMiddleware, compose} from 'redux'
-import createSagaMiddleware from 'redux-saga'
-import { Provider } from 'react-redux';
-import rootReducer from './src/redux/rootReducer'; 
-import rootSaga from './src/redux/rootSaga'
+
+import { useDispatch, useSelector } from 'react-redux';
 import Postcode from './src/screen/Authentication/components/Postcode';
-
-const sagaMiddleware = createSagaMiddleware()
-
-//const Store = compose(applyMiddleware(sagaMiddleware))(createStore)(rootReducer)
-const Store = createStore(rootReducer,applyMiddleware(sagaMiddleware)) 
-
-sagaMiddleware.run(rootSaga)
+import { getLocalData } from './src/utils/LocalStorage';
+import { getmemberData } from './src/redux/action/home';
 
 export default function App() {
+
+  const dispatch = useDispatch()
+  useEffect(async () => {
+    const accesstoken = await getLocalData('accessToken')
+    dispatch(getmemberData(accesstoken))
+  }, [])
+
   return (
-    <Provider store={Store}>
-      <HomeNavigation />
-      {/* <Postcode/> */}
-    </Provider>
+    <HomeNavigation />
   )
 }

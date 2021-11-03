@@ -5,13 +5,13 @@ import LinearGradient from 'react-native-linear-gradient'
 
 const Btn = (props) => {
     return (
-        <LinearGradient colors={['#ffa300', '#ff7e00']} style={[props.style,{marginTop:hp('3%')}]}>
+       
             <TouchableOpacity onPress={props.onPress}  disabled={props.disabled}>
                 {
                     props.children
                 }
             </TouchableOpacity>
-        </LinearGradient>
+ 
     )
 }
 

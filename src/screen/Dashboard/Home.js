@@ -1,9 +1,12 @@
-import React,{useEffect,useState} from 'react';
-import { View, StyleSheet, Text, Image, ScrollView, StatusBar, } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, StyleSheet, Text, Image, ScrollView, StatusBar, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
+import { WheelPicker } from "react-native-wheel-picker-android";
 
+import Wheeldropdown from '../../custom/Wheeldropdown';
 import { colors, Fontsize, hp, Images, wp } from '../../Constant/Constant';
 import ProgressBarWithStar from '../../custom/progressBarWithStar';
 import TimeLines from '../../custom/Timelines';
@@ -11,20 +14,37 @@ import BarIndicator from '../../custom/BarIndicator';
 import AttendanceCard from '../../custom/AttendanceCard';
 import ClassCard from '../../custom/ClassCard';
 import { getLocalData } from '../../utils/LocalStorage';
-import { getmemberData } from '../../redux/action/home';
+import { getmemberData,getmemberClass } from '../../redux/action/home';
+import PopUp from '../../custom/PopUp';
 
 const Home = () => {
   const Datum = [1, 2, 3, 4]; // data.length for how many time we have scroll in Carousel
   const dispatch = useDispatch()
-  const [user,setUser] = useState('')
+  const [user, setUser] = useState('')
+
+  const [membername, setMemberName] = useState(0)
+  const [memberid, setMemberId] = useState('')
+  const [memberModal, setMemberModal] = useState(false)
+  const members = []
+
+
+
   const [activeDotIndex, setActiveDotIndex] = React.useState(0);
+  const membersdata = useSelector(state => state.memberData.memberData)
+ 
+
+  membersdata && membersdata.forEach((item, index) => item.index = index)
+  console.log('membersdata forEach  :', membersdata);  
+  membersdata && membersdata.map(item => members.push(item.name))
+  // console.log('members :', members);
 
   useEffect(async () => {
-    const user = await getLocalData('user',true)
+    const user = await getLocalData('user', true)
     setUser(user)
-    const accesstoken = await getLocalData('accessToken')   
-    dispatch(getmemberData(accesstoken))
-  },[])
+    dispatch(getmemberClass(membersdata[0]._id))
+    console.log('membersdata[0]._id :', membersdata[0]._id);
+  }, [])
+
 
   const pagination = () => {
     return (
@@ -98,23 +118,51 @@ const Home = () => {
             </View>
 
             <View style={{ flex: 1 }} />
-            <LinearGradient
-              colors={['#ffa300', '#ff7e00']}
-              style={{
-                marginRight: 20,
-                height: 32,
-                width: 32,
-                borderRadius: 8,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Image
-                style={{ height: 14, width: 18 }}
-                source={Images.dropDown_white}
-              />
-            </LinearGradient>
+            {membersdata && membersdata.length > 1 &&
+              <TouchableOpacity onPress={() => setMemberModal(!memberModal)}>
+                <LinearGradient
+                  colors={['#fcb12b', '#e6780e']}
+                  style={{
+                    marginRight: 20,
+                    height: 32,
+                    width: 32,
+                    borderRadius: 8,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Image
+                    style={{ height: 14, width: 18 }}
+                    source={Images.dropDown_white}
+                  />
+                </LinearGradient>
+              </TouchableOpacity>}
           </View>
 
+          <Wheeldropdown
+            title="child"
+            visible={memberModal}
+            cancel={() => setMemberModal(!memberModal)}
+            confirm={() => {
+              const member = membersdata.filter(item => item.index === membername)
+              console.log('member :', member);
+            }}
+          >
+
+
+            <WheelPicker
+              isCyclic={true}
+              selectedItem={membername}
+              onItemSelected={item => setMemberName(item)}
+              selectedItemTextColor={"black"}
+              selectedItemTextSize={Fontsize}
+              hideIndicator={true}
+              itemTextFontFamily="Nunito-Regular"
+              selectedItemTextFontFamily="Nunito-Regular"
+              data={members}
+            />
+
+
+          </Wheeldropdown>
           <View style={styles.courosoul}>
             <Carousel
               // autoplay={true}
@@ -146,13 +194,6 @@ const Home = () => {
         <View style={styles.attendance}>
           <View>
             <Image
-              style={
-                {
-                  // height: hp('4%'),
-                  // width: hp('4%'),
-                  // borderRadius: wp('5%'),
-                }
-              }
               source={Images.calendarOrange}
             />
           </View>

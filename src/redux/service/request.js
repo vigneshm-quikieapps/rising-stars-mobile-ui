@@ -109,14 +109,22 @@ export function fetchClubFinanc(id) {
 // --------------------------------------------------------Home
 
 export function fetchMemberData(token) {
-console.log('id fetch :',token);
-    return fetch(`${heroku_url}/members/members/of-a-logged-in-parent`, {
+
+    return fetch(`${heroku_url}/members/of-a-logged-in-parent`, {
         method: 'GET',
-        headers:{
-            Authorization : `Bearer     ${token}`
+        headers: {
+            Authorization: `Bearer ${token}`
         }
     })
         .then(response => response.json())
-        .then(res =>console.log(res))
+        .catch(error => { console.log(error) })
+}
+
+export function fetchMemberClassData(id) {
+console.log('id :', id);
+    return fetch(`${heroku_url}/members/${id}/enrolments`, {
+        method: 'GET',
+    })
+        .then(response => response.json())
         .catch(error => { console.log(error) })
 }
