@@ -4,7 +4,8 @@ import {Stack, StackScreen} from '../Utils/Utils';
 import Login from '../../screen/Authentication/Login';
 import Register from '../../screen/Authentication/Register';
 import CreateNewPassword from './../../screen/Authentication/CreateNewPassword';
-
+import Profile from '../../screen/Dashboard/Profile';
+import HomeTab from '../Tab/HomeTab';
 
 export const AuthStack = props => {
   return (

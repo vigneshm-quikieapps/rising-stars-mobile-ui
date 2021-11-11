@@ -8,7 +8,6 @@ export const getmemberData = (token) =>{
 } 
 
 export const getmemberClass = (id) => {
-console.log('id :', id);
     return{
         type:action.USER_GET_MEMBER_CLASS_DATA,
         payload:id

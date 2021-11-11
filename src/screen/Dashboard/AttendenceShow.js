@@ -1,23 +1,11 @@
 import React, {useEffect} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-  FlatList,
-  ScrollView,
-  Image,
-  SectionList,
-} from 'react-native';
+import {  View,  Text,  StyleSheet,  Dimensions,  TouchableOpacity,  FlatList,  ScrollView,  Image,  SectionList,} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel from 'react-native-snap-carousel';
 import AttendanceOverview from '../../custom/AttendanceOverview';
 import {colors, Images, wp} from '../../Constant/Constant';
 
 const itemWidth = Dimensions.get('window').width;
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
 
 const Datum = [1, 2, 3, 4];
 const DATA = [
@@ -165,7 +153,7 @@ const AttendenceShow = () => {
             opacity: 0.8,
             fontFamily: 'Nunito-Regular',
           }}>
-          Class Name
+          Class Names
         </Text>
         <Text
           style={{

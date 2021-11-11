@@ -22,7 +22,8 @@ function Profile(props) {
   const SignOut = async () => {
     console.log('hello')
     await removeLocalData('refreshToken')
-
+    await removeLocalData("accesstoken")
+    props.navigation.navigate('AuthStack') 
   }
 
   useEffect(() => {

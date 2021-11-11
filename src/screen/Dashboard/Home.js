@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, Text, Image, ScrollView, StatusBar, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, Image, ScrollView, StatusBar, TouchableOpacity, ActivityIndicator } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,7 +14,7 @@ import BarIndicator from '../../custom/BarIndicator';
 import AttendanceCard from '../../custom/AttendanceCard';
 import ClassCard from '../../custom/ClassCard';
 import { getLocalData } from '../../utils/LocalStorage';
-import { getmemberData,getmemberClass } from '../../redux/action/home';
+import { getmemberData, getmemberClass } from '../../redux/action/home';
 import PopUp from '../../custom/PopUp';
 
 const Home = () => {
@@ -23,7 +23,9 @@ const Home = () => {
   const [user, setUser] = useState('')
 
   const [membername, setMemberName] = useState(0)
+  const [initdata,setInitdata] = useState(false)
   const [memberid, setMemberId] = useState('')
+  console.log('memberid :');
   const [memberModal, setMemberModal] = useState(false)
   const members = []
 
@@ -31,25 +33,31 @@ const Home = () => {
 
   const [activeDotIndex, setActiveDotIndex] = React.useState(0);
   const membersdata = useSelector(state => state.memberData.memberData)
- 
+  // console.log('membersdata :', membersdata);
+  const memberclassdata = useSelector(state => state.memberClassData.classData)
+
+  console.log(' memberclassdata :', memberclassdata);
 
   membersdata && membersdata.forEach((item, index) => item.index = index)
-  console.log('membersdata forEach  :', membersdata);  
+  // console.log('membersdata forEach  :', membersdata);  
   membersdata && membersdata.map(item => members.push(item.name))
-  // console.log('members :', members);
+  // console.log('members :', membersdata);
 
   useEffect(async () => {
     const user = await getLocalData('user', true)
     setUser(user)
+    // const accesstoken = await getLocalData('accessToken')
+    // dispatch(getmemberData(accesstoken))
     dispatch(getmemberClass(membersdata[0]._id))
-    console.log('membersdata[0]._id :', membersdata[0]._id);
+    // console.log('membersdata[0]._id :', membersdata[0]);
   }, [])
+
 
 
   const pagination = () => {
     return (
       <Pagination
-        dotsLength={Datum.length}
+        dotsLength={memberclassdata && memberclassdata.length}
         activeDotIndex={activeDotIndex}
         containerStyle={{ paddingVertical: 0 }}
         dotStyle={{
@@ -73,15 +81,16 @@ const Home = () => {
     );
   };
   const renderItem = ({ item, index }) => {
+    console.log(memberclassdata.length)
     return (
       <ClassCard
-        id={'KKGY1'}
-        classname={'Pre-school gymnastics (Age 1-3)'}
-        subtitle={'Zippy Totz Pre-school Gymnastics'}
-        day={'Monday'}
-        time="9:30 am - 11:30 am"
-        facility={'Gym Hall'}
-        coach={'Henry Itondo'}
+        id={item.businessId}
+        classname={item.class.name}
+        subtitle={item.business.name}
+        day={item.session.pattern[0].day}
+        time={`${moment(item.session.pattern[0].startTime).format('HH:SS')} -${moment(item.session.pattern[0].endTime).format('HH:SS')} `}
+        facility={item.session.facility}
+        coach={item.session.coach}
         style={{ backgroundColor: 'white', borderRadius: 20 }}
       />
     );
@@ -114,7 +123,7 @@ const Home = () => {
             </View>
 
             <View style={{ marginLeft: 10, justifyContent: 'center' }}>
-              <Text style={styles.memberName}>Ayman Mogal</Text>
+              <Text style={styles.memberName}>{initdata ?"hello":"hello"}</Text>
             </View>
 
             <View style={{ flex: 1 }} />
@@ -144,11 +153,13 @@ const Home = () => {
             cancel={() => setMemberModal(!memberModal)}
             confirm={() => {
               const member = membersdata.filter(item => item.index === membername)
-              console.log('member :', member);
+              setMemberId(member)
+              dispatch(getmemberClass(member[0]._id))
+              console.log('memberid :', memberid);
+              setInitdata(true)
+              // console.log('member :', member);
             }}
           >
-
-
             <WheelPicker
               isCyclic={true}
               selectedItem={membername}
@@ -164,19 +175,24 @@ const Home = () => {
 
           </Wheeldropdown>
           <View style={styles.courosoul}>
-            <Carousel
-              // autoplay={true}
-              // loop={true}
-              // style={{ width: wp('0%') }}
-              layout={'default'}
-              data={Datum}
-              sliderWidth={wp('95%')}
-              itemWidth={wp('90%')}
-              renderItem={renderItem}
-              onSnapToItem={index => {
-                setActiveDotIndex(index);
-              }}
-            />
+            {
+              memberclassdata && memberclassdata.length ?
+                <Carousel
+                  // autoplay={true}
+                  // loop={true}
+                  // style={{ width: wp('0%') }}
+                  layout={'default'}
+                  data={memberclassdata}
+                  sliderWidth={wp('95%')}
+                  itemWidth={wp('90%')}
+                  renderItem={renderItem}
+                  onSnapToItem={index => {
+                    setActiveDotIndex(index);
+                  }}
+                />
+                : <ActivityIndicator size="large" color={'white'} />
+            }
+
 
             {Datum != '' && (
               <View

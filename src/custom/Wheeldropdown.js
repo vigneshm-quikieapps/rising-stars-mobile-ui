@@ -13,21 +13,7 @@ export default function Wheeldropdown(props) {
             visible={props.visible}
         >
             <View style={styles.container}>
-                <View style={{
-                    backgroundColor: "white",
-                    borderTopEndRadius: 30,
-                    borderTopStartRadius: 30,
-                    height: hp('24%'),
-                    width: wp('100%'),
-                    shadowColor: "#000",
-                    shadowOffset: {
-                        width: 0,
-                        height: 2
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 4,
-                    elevation: 5
-                }}>
+                <View style={styles.subcontainer}>
 
                     <View style={{ borderRadius: 20, height: 6, width: 60, backgroundColor: '#E8E8E8', alignSelf: 'center', marginTop: hp('0.8%') }} />
                     <View style={{ margin: wp('5%') }}>
@@ -36,15 +22,22 @@ export default function Wheeldropdown(props) {
 
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <Text style={styles.cancel} onPress={props.cancel}>Cancel</Text>
+                            {
+                                props.cancelbutton ? null :
+                                    <Text style={styles.cancel} onPress={props.cancel}>Cancel</Text>
+                            }
                             {
                                 props.children
                             }
-                            <TouchableOpacity onPress={props.confirm} >
-                                <LinearGradient colors={['#ffa300', '#ff7e00']} style={styles.confirm}>
-                                    <Text style={{ color: 'white', fontFamily: 'Nunito-Regular' }}>Confirm</Text>
-                                </LinearGradient>
-                            </TouchableOpacity>
+                            {
+                                props.confirmbutton ? null :
+                                    <TouchableOpacity onPress={props.confirm} >
+                                        <LinearGradient colors={['#ffa300', '#ff7e00']} style={styles.confirm}>
+                                            <Text style={{ color: 'white', fontFamily: 'Nunito-Regular' }}>Confirm</Text>
+                                        </LinearGradient>
+                                    </TouchableOpacity>
+                            }
+
                         </View>
                     </View>
                 </View>
@@ -59,6 +52,21 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginTop: hp('76%')
+    },
+    subcontainer: {
+        backgroundColor: "white",
+        borderTopEndRadius: 30,
+        borderTopStartRadius: 30,
+        height: hp('50%'),
+        width: wp('100%'),
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
     },
     cancel: {
         fontFamily: 'Nunito-SemiBold',

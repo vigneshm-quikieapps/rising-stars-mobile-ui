@@ -52,7 +52,6 @@ function Login(props) {
       <Formik
         initialValues={{ mobileNumber: '', password: '' }}
         onSubmit={values => {
-
           console.log(values)
           dispatch(loginUserData(values))
         }}
@@ -89,7 +88,7 @@ function Login(props) {
               visible={touched.password}
             />
 
-            {isLoading ? <ActivityIndicator size="large" color={colors.orange} style={{marginVertical:hp('2%')}} /> : <AppButton
+            {isLoading ? <ActivityIndicator size="large" color={colors.orange} style={{ marginVertical: hp('2%') }} /> : <AppButton
 
               title="Login"
               onPress={handleSubmit}
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
   image: {
     resizeMode: 'center',
     height: hp('30%'),
-    width: hp('44'), 
+    width: hp('44'),
   },
   text: {
     justifyContent: 'center',

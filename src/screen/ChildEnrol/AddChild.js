@@ -17,9 +17,10 @@ import { colors, hp, wp, Stepend } from '../../Constant/Constant';
 import Forwardbutton from '../../custom/Forwardbutton';
 import ErrorMessage from '../../custom/ErrorMessage';
 import AppButton from '../../custom/AppButton';
-import { setChildData,getClubdata } from '../../redux/action/enrol'
+import { setChildData, getClubdata } from '../../redux/action/enrol'
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
+import Wheeldropdown from '../../custom/Wheeldropdown';
 
 
 
@@ -42,6 +43,7 @@ const AddChild = props => {
   const [count, setCount] = useState(1);
   const [data, setData] = useState([]);
 
+  const [birthModal, setBirthModal] = useState(false)
   const [birth, setBirth] = useState('')
   const [birtherror, setBirthError] = useState(false)
 
@@ -153,10 +155,36 @@ const AddChild = props => {
               text={'Date of Birth'}
               textColor={colors.grey}
               value={birth}
-              onPress={() => setOpen(!open)}
+              onPress={() => setBirthModal(!birthModal)}
               onBlur={() => setBirthError(true)}
             />
-            <DatePicker
+            <Wheeldropdown
+              title=" Date of Birth"
+              visible={birthModal}
+              confirmbutton={true}
+              cancelbutton={true}
+              cancel={() => setBirthModal(!birthModal)}
+            >
+              <DatePicker
+                inlined
+                mode="date"
+                open={birthModal}
+                date={new Date()}
+                onConfirm={(date) => {
+                  setOpen(false)
+                  setBirth(moment(date).format('YYYY/MM/DD'))
+                  handleChange('dob')
+                  let age = (new Date()).getFullYear() - date.getFullYear()
+                  setAge(age)
+                  setBirthError(false)
+                  // console.log(age)
+                }}
+                onCancel={() => {
+                  setOpen(!open)
+                }}
+              />
+            </Wheeldropdown>
+            {/* <DatePicker
               modal
               mode="date"
               open={open}
@@ -173,7 +201,7 @@ const AddChild = props => {
               onCancel={() => {
                 setOpen(!open)
               }}
-            />
+            /> */}
             {
               birtherror && <Text style={styles.errors}>D.O.B. is a required</Text>
             }

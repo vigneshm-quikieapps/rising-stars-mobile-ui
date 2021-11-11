@@ -3,7 +3,6 @@ import { mobile_url, api_url, heroku_url } from '../../Constant/config'
 
 // --------------------------------------------------------Auth
 export function fetchMobileOTP(payload) {
-    console.log(payload)
     return fetch(`${heroku_url}/get-otp/mobile-no`, {
         method: 'POST',
         headers: {
@@ -109,7 +108,6 @@ export function fetchClubFinanc(id) {
 // --------------------------------------------------------Home
 
 export function fetchMemberData(token) {
-
     return fetch(`${heroku_url}/members/of-a-logged-in-parent`, {
         method: 'GET',
         headers: {
@@ -117,14 +115,13 @@ export function fetchMemberData(token) {
         }
     })
         .then(response => response.json())
-        .catch(error => { console.log(error) })
+        .catch(error => { throw error })
 }
 
 export function fetchMemberClassData(id) {
-console.log('id :', id);
     return fetch(`${heroku_url}/members/${id}/enrolments`, {
         method: 'GET',
     })
         .then(response => response.json())
-        .catch(error => { console.log(error) })
+        .catch(error => { throw error })
 }
