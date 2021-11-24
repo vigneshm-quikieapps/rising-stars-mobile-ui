@@ -1,15 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Formik } from 'formik';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
+import {Formik} from 'formik';
 import * as Yup from 'yup';
-import { useSelector, useDispatch } from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux';
 
-import { colors, Fontsize, hp, wp } from '../../Constant/Constant';
+import {colors, Fontsize, hp, wp} from '../../Constant/Constant';
 import TextInputField from '../../custom/TextInputField';
 import ErrorMessage from '../../custom/ErrorMessage';
 import AppButton from '../../custom/AppButton';
-import { loginUserData } from '../../redux/action/auth';
-
+import {loginUserData} from '../../redux/action/auth';
 
 const validationSchema = Yup.object().shape({
   mobileNumber: Yup.number().required().min(10).label('Mobile Number'),
@@ -17,9 +24,9 @@ const validationSchema = Yup.object().shape({
 });
 
 function Login(props) {
-  const dispatch = useDispatch()
-  const isLoading = useSelector(state => state.LoginData.isloading)
-  console.log(isLoading)
+  const dispatch = useDispatch();
+  const isLoading = useSelector(state => state.LoginData.isloading);
+  console.log(isLoading);
 
   const gotoRegister = () => {
     props.navigation.navigate('Register');
@@ -50,13 +57,13 @@ function Login(props) {
       </Text>
 
       <Formik
-        initialValues={{ mobileNumber: '', password: '' }}
+        initialValues={{mobileNumber: '', password: ''}}
         onSubmit={values => {
-          console.log(values)
-          dispatch(loginUserData(values))
+          console.log(values);
+          dispatch(loginUserData(values));
         }}
         validationSchema={validationSchema}>
-        {({ handleChange, handleSubmit, errors, setFieldTouched, touched }) => (
+        {({handleChange, handleSubmit, errors, setFieldTouched, touched}) => (
           <>
             <TextInputField
               placeholder="Mobile Number"
@@ -88,18 +95,27 @@ function Login(props) {
               visible={touched.password}
             />
 
-            {isLoading ? <ActivityIndicator size="large" color={colors.orange} style={{ marginVertical: hp('2%') }} /> : <AppButton
-
-              title="Login"
-              onPress={handleSubmit}
-              style={{
-                fontFamily: 'Nunito-SemiBold',
-                marginTop: touched.password === true ? hp('1%') : hp('3%'),
-              }}
-              size="small"
-              color="white"
-            />}
-            <TouchableOpacity onPress={gotoForgotPassword} style={{ alignItems: 'center' }}>
+            {isLoading ? (
+              <ActivityIndicator
+                size="large"
+                color={colors.orange}
+                style={{marginVertical: hp('2%')}}
+              />
+            ) : (
+              <AppButton
+                title="Login"
+                onPress={handleSubmit}
+                style={{
+                  fontFamily: 'Nunito-SemiBold',
+                  marginTop: touched.password === true ? hp('1%') : hp('3%'),
+                }}
+                size="small"
+                color="white"
+              />
+            )}
+            <TouchableOpacity
+              onPress={gotoForgotPassword}
+              style={{alignItems: 'center'}}>
               <Text style={styles.forgotPasswordText}>Forgot Password</Text>
             </TouchableOpacity>
           </>
@@ -107,19 +123,16 @@ function Login(props) {
       </Formik>
 
       <View style={styles.text}>
-        <Text style={styles.forgotPasswordText, { color: "#7f7f7f" }}>
+        <Text style={(styles.forgotPasswordText, {color: '#7f7f7f'})}>
           Don't have an account?
         </Text>
         <TouchableOpacity onPress={gotoRegister}>
-          <Text style={styles.forgotPasswordText}>
-            Register
-          </Text>
+          <Text style={styles.forgotPasswordText}>Register</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -155,7 +168,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Regular',
   },
   forgotPasswordText: {
-    color: "#ff7e00",
+    color: '#ff7e00',
     fontSize: Fontsize,
     marginTop: hp('1%'),
     alignSelf: 'center',
@@ -163,4 +176,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login
+export default Login;

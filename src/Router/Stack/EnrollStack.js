@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Stack, StackScreen} from '../Utils/Utils';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import EnrollingFlow from '../../screen/ChildEnrol/EnrollingFlow';
 import AddChild from '../../screen/ChildEnrol/AddChild';
@@ -10,7 +10,6 @@ import Confirmation from '../../screen/ChildEnrol/Confirmation';
 import Fees_Overview from '../../screen/ChildEnrol/Fees_Overview';
 import Pay from '../../screen/ChildEnrol/Pay';
 import Provide_Consent from '../../screen/ChildEnrol/Provide_Consent';
-
 
 export const EnrollStack = props => {
   return (
