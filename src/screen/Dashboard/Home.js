@@ -1,65 +1,72 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, Text, Image, ScrollView, StatusBar, TouchableOpacity, ActivityIndicator } from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useEffect, useState, useCallback} from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  ScrollView,
+  StatusBar,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { useDispatch, useSelector } from 'react-redux';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
+import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
-import { WheelPicker } from "react-native-wheel-picker-android";
+import {WheelPicker} from 'react-native-wheel-picker-android';
 
-import Wheeldropdown from '../../custom/Wheeldropdown';
-import { colors, Fontsize, hp, Images, wp } from '../../Constant/Constant';
-import ProgressBarWithStar from '../../custom/progressBarWithStar';
-import TimeLines from '../../custom/Timelines';
-import BarIndicator from '../../custom/BarIndicator';
-import AttendanceCard from '../../custom/AttendanceCard';
-import ClassCard from '../../custom/ClassCard';
-import { getLocalData } from '../../utils/LocalStorage';
-import { getmemberData, getmemberClass } from '../../redux/action/home';
-import PopUp from '../../custom/PopUp';
+import Wheeldropdown from '../../custom/wheel-dropdown';
+import {colors, Fontsize, hp, Images, wp} from '../../constants';
+import ProgressBarWithStar from '../../custom/progress-bar-with-star';
+import TimeLines from '../../custom/timelines';
+import BarIndicator from '../../custom/bar-indicator';
+import AttendanceCard from '../../custom/attendance-card';
+import ClassCard from '../../custom/class-card';
+import {getLocalData} from '../../utils/LocalStorage';
+import {getmemberData, getmemberClass} from '../../redux/action/home';
+import PopUp from '../../custom/pop-up';
 
 const Home = () => {
   const Datum = [1, 2, 3, 4]; // data.length for how many time we have scroll in Carousel
-  const dispatch = useDispatch()
-  const [user, setUser] = useState('')
+  const dispatch = useDispatch();
+  const [user, setUser] = useState('');
 
-  const [membername, setMemberName] = useState(0)
-  const [initdata,setInitdata] = useState(false)
-  const [memberid, setMemberId] = useState('')
+  const [memberName, setMemberName] = useState(0);
+  const [initdata, setInitdata] = useState(false);
+  const [memberid, setMemberId] = useState('');
   console.log('memberid :');
-  const [memberModal, setMemberModal] = useState(false)
-  const members = []
-
-
+  const [memberModal, setMemberModal] = useState(false);
+  const members = [];
 
   const [activeDotIndex, setActiveDotIndex] = React.useState(0);
-  const membersdata = useSelector(state => state.memberData.memberData)
-  // console.log('membersdata :', membersdata);
-  const memberclassdata = useSelector(state => state.memberClassData.classData)
+  const membersdata = useSelector(state => state.memberData.memberData);
+  const memberclassdata = useSelector(state => state.memberClassData.classData);
 
   console.log(' memberclassdata :', memberclassdata);
 
-  membersdata && membersdata.forEach((item, index) => item.index = index)
-  // console.log('membersdata forEach  :', membersdata);  
-  membersdata && membersdata.map(item => members.push(item.name))
-  // console.log('members :', membersdata);
+  membersdata && membersdata.forEach((item, index) => (item.index = index));
+  membersdata && membersdata.map(item => members.push(item.name));
 
-  useEffect(async () => {
-    const user = await getLocalData('user', true)
-    setUser(user)
+  useEffect(() => {
+    getLocalUserData();
     // const accesstoken = await getLocalData('accessToken')
     // dispatch(getmemberData(accesstoken))
-    dispatch(getmemberClass(membersdata[0]._id))
+    membersdata?.length && dispatch(getmemberClass(membersdata[0]._id));
     // console.log('membersdata[0]._id :', membersdata[0]);
-  }, [])
+  }, [dispatch, getLocalUserData, membersdata]);
 
-
+  const getLocalUserData = useCallback(async () => {
+    const userData = await getLocalData('user', true);
+    setUser(userData);
+  }, []);
 
   const pagination = () => {
     return (
       <Pagination
         dotsLength={memberclassdata && memberclassdata.length}
         activeDotIndex={activeDotIndex}
-        containerStyle={{ paddingVertical: 0 }}
+        containerStyle={{paddingVertical: 0}}
         dotStyle={{
           width: wp('2.5%'),
           height: wp('1.5%'),
@@ -73,25 +80,26 @@ const Home = () => {
           width: wp('3%'),
           height: wp('3%'),
           borderRadius: wp('2%'),
-
         }}
         inactiveDotOpacity={0.5}
         inactiveDotScale={0.5}
       />
     );
   };
-  const renderItem = ({ item, index }) => {
-    console.log(memberclassdata.length)
+  const renderItem = ({item, index}) => {
+    console.log(memberclassdata.length);
     return (
       <ClassCard
         id={item.businessId}
-        classname={item.class.name}
+        className={item.class.name}
         subtitle={item.business.name}
         day={item.session.pattern[0].day}
-        time={`${moment(item.session.pattern[0].startTime).format('HH:SS')} -${moment(item.session.pattern[0].endTime).format('HH:SS')} `}
+        time={`${moment(item.session.pattern[0].startTime).format(
+          'HH:SS',
+        )} -${moment(item.session.pattern[0].endTime).format('HH:SS')} `}
         facility={item.session.facility}
         coach={item.session.coach}
-        style={{ backgroundColor: 'white', borderRadius: 20 }}
+        style={{backgroundColor: 'white', borderRadius: 20}}
       />
     );
   };
@@ -99,7 +107,7 @@ const Home = () => {
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      style={{ backgroundColor: colors.white }}>
+      style={{backgroundColor: colors.white}}>
       <StatusBar backgroundColor="rgb(255,163,0)" />
       <View style={styles.container}>
         <LinearGradient
@@ -108,8 +116,7 @@ const Home = () => {
           style={styles.linearGradient}>
           <Text style={styles.welcome}>{`Hi ${user.name}, your child`}</Text>
           <View style={styles.containerMember}>
-            <View
-              style={{ marginTop: hp('1%') }}>
+            <View style={{marginTop: hp('1%')}}>
               <Image
                 style={{
                   height: 57,
@@ -122,12 +129,14 @@ const Home = () => {
               />
             </View>
 
-            <View style={{ marginLeft: 10, justifyContent: 'center' }}>
-              <Text style={styles.memberName}>{initdata ?"hello":"hello"}</Text>
+            <View style={{marginLeft: 10, justifyContent: 'center'}}>
+              <Text style={styles.memberName}>
+                {initdata ? 'hello' : 'hello'}
+              </Text>
             </View>
 
-            <View style={{ flex: 1 }} />
-            {membersdata && membersdata.length > 1 &&
+            <View style={{flex: 1}} />
+            {membersdata && membersdata.length > 1 && (
               <TouchableOpacity onPress={() => setMemberModal(!memberModal)}>
                 <LinearGradient
                   colors={['#fcb12b', '#e6780e']}
@@ -140,11 +149,12 @@ const Home = () => {
                     alignItems: 'center',
                   }}>
                   <Image
-                    style={{ height: 14, width: 18 }}
+                    style={{height: 14, width: 18}}
                     source={Images.dropDown_white}
                   />
                 </LinearGradient>
-              </TouchableOpacity>}
+              </TouchableOpacity>
+            )}
           </View>
 
           <Wheeldropdown
@@ -152,47 +162,45 @@ const Home = () => {
             visible={memberModal}
             cancel={() => setMemberModal(!memberModal)}
             confirm={() => {
-              const member = membersdata.filter(item => item.index === membername)
-              setMemberId(member)
-              dispatch(getmemberClass(member[0]._id))
+              const member = membersdata.filter(
+                item => item.index === memberName,
+              );
+              setMemberId(member);
+              dispatch(getmemberClass(member[0]._id));
               console.log('memberid :', memberid);
-              setInitdata(true)
+              setInitdata(true);
               // console.log('member :', member);
-            }}
-          >
+            }}>
             <WheelPicker
               isCyclic={true}
-              selectedItem={membername}
+              selectedItem={memberName}
               onItemSelected={item => setMemberName(item)}
-              selectedItemTextColor={"black"}
+              selectedItemTextColor={'black'}
               selectedItemTextSize={Fontsize}
               hideIndicator={true}
               itemTextFontFamily="Nunito-Regular"
               selectedItemTextFontFamily="Nunito-Regular"
               data={members}
             />
-
-
           </Wheeldropdown>
           <View style={styles.courosoul}>
-            {
-              memberclassdata && memberclassdata.length ?
-                <Carousel
-                  // autoplay={true}
-                  // loop={true}
-                  // style={{ width: wp('0%') }}
-                  layout={'default'}
-                  data={memberclassdata}
-                  sliderWidth={wp('95%')}
-                  itemWidth={wp('90%')}
-                  renderItem={renderItem}
-                  onSnapToItem={index => {
-                    setActiveDotIndex(index);
-                  }}
-                />
-                : <ActivityIndicator size="large" color={'white'} />
-            }
-
+            {memberclassdata && memberclassdata.length ? (
+              <Carousel
+                // autoplay={true}
+                // loop={true}
+                // style={{ width: wp('0%') }}
+                layout={'default'}
+                data={memberclassdata}
+                sliderWidth={wp('95%')}
+                itemWidth={wp('90%')}
+                renderItem={renderItem}
+                onSnapToItem={index => {
+                  setActiveDotIndex(index);
+                }}
+              />
+            ) : (
+              <ActivityIndicator size="large" color={'white'} />
+            )}
 
             {Datum != '' && (
               <View
@@ -209,12 +217,10 @@ const Home = () => {
 
         <View style={styles.attendance}>
           <View>
-            <Image
-              source={Images.calendarOrange}
-            />
+            <Image source={Images.calendarOrange} />
           </View>
-          <View style={{ marginLeft: wp('3.5%') }}>
-            <Text style={{ fontSize: wp('5%'), fontFamily: 'Nunito-SemiBold' }}>
+          <View style={{marginLeft: wp('3.5%')}}>
+            <Text style={{fontSize: wp('5%'), fontFamily: 'Nunito-SemiBold'}}>
               Class Overview
             </Text>
           </View>
@@ -233,47 +239,45 @@ const Home = () => {
                 class={43}
                 value={'Total'}
                 label={'Classes'}
-                style={{ backgroundColor: '#fff4e7' }}
+                style={{backgroundColor: '#fff4e7'}}
               />
             </View>
-            <View style={{ justifyContent: 'space-evenly' }}>
+            <View style={{justifyContent: 'space-evenly'}}>
               <BarIndicator
                 color={['#ffa300', '#ff7e00']}
-                style={{ width: wp('20%') }}
+                style={{width: wp('20%')}}
               />
               <BarIndicator
                 color={['#68d6ab', '#33ab96']}
-                style={{ width: wp('10%') }}
+                style={{width: wp('10%')}}
               />
               <BarIndicator
                 color={['#EA5C5C', '#AB3333']}
-                style={{ width: wp('4%') }}
+                style={{width: wp('4%')}}
               />
             </View>
           </View>
 
-          <View style={{ paddingHorizontal: wp('2%'), flexDirection: 'row' }}>
+          <View style={{paddingHorizontal: wp('2%'), flexDirection: 'row'}}>
             <AttendanceCard
               color={['#68D6AB', '#33AB96']}
               value={14}
               label={'Attended'}
-              style={{ backgroundColor: '#c0f8e8' }}
+              style={{backgroundColor: '#c0f8e8'}}
             />
             <AttendanceCard
               color={['#EA5C5C', '#AB3333']}
               value={14}
               label={'No Show'}
-              style={{ backgroundColor: '#ffe5e5' }}
+              style={{backgroundColor: '#ffe5e5'}}
             />
           </View>
         </View>
         <View style={styles.activityProgress}>
           <View style={styles.activityProgressTitle}>
-            <Image
-              source={Images.medal}
-            />
-            <View style={{ marginLeft: wp('3.5%') }}>
-              <Text style={{ fontSize: wp('5%'), fontFamily: 'Nunito-SemiBold' }}>
+            <Image source={Images.medal} />
+            <View style={{marginLeft: wp('3.5%')}}>
+              <Text style={{fontSize: wp('5%'), fontFamily: 'Nunito-SemiBold'}}>
                 Class Progress
               </Text>
             </View>
@@ -281,7 +285,7 @@ const Home = () => {
         </View>
 
         <View style={[styles.ProgressReports, styles.timeline]}>
-          <View style={{ paddingRight: wp('4%') }}>
+          <View style={{paddingRight: wp('4%')}}>
             <ProgressBarWithStar />
           </View>
           <View
@@ -318,7 +322,7 @@ const styles = StyleSheet.create({
   },
   welcome: {
     fontSize: Fontsize,
-    color: "white",
+    color: 'white',
     fontFamily: 'Nunito-SemiBold',
     opacity: 0.9,
   },
@@ -380,5 +384,4 @@ const styles = StyleSheet.create({
     elevation: 10,
     shadowColor: '#52006A',
   },
-
 });

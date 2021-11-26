@@ -1,21 +1,20 @@
-import React, { useState, useRef } from 'react';
-import { View, StyleSheet, Text, Alert, Modal, Pressable } from 'react-native';
+import React, {useState, useRef} from 'react';
+import {View, StyleSheet} from 'react-native';
 
-
-import CustomLayout from './../../custom/CustomLayout';
-import TextInputField from './../../custom/TextInputField';
-import AppButton from '../../custom/AppButton';
-import { colors, hp, wp } from './../../Constant/Constant';
+import CustomLayout from './../../custom/custom-layout';
+import TextInputField from './../../custom/text-input-field';
+import AppButton from '../../custom/app-button';
+import {colors, hp, wp} from './../../constants';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import InputOTPScreen from './InputOTPScreen';
 
 function CreateNewPassword(props) {
   const refRBSheet = useRef();
 
-  const handleSubmit1 = no => {
-    userNumber = no;
-    refRBSheet.current.open();
-  };
+  // const handleSubmit1 = no => {
+  //   userNumber = no;
+  //   refRBSheet.current.open();
+  // };
 
   const [button1, setButton1] = useState(false);
   const [button2, setButton2] = useState(false);
@@ -37,8 +36,7 @@ function CreateNewPassword(props) {
       backbutton={() => props.navigation.goBack()}
       header
       headerTextBigText
-      headertext={`Forgot Password`}
-    >
+      headertext={`Forgot Password`}>
       <View>
         {/* <Text style={styles.title}>Forget Password</Text> */}
         {/* <Text style={styles.subTitle}>
@@ -116,10 +114,10 @@ function CreateNewPassword(props) {
         {/* <TextInputField placeholder="Password" style={{marginTop: hp('2%')}} />
         <TextInputField placeholder="Confirm Password" /> */}
       </View>
-      <View style={{ height: hp('50%') }} />
+      <View style={{height: hp('50%')}} />
       <AppButton
         title="Send OTP"
-        style={[styles.generateButton, { backgroundColor: colors.orange }]}
+        style={[styles.generateButton, {backgroundColor: colors.orange}]}
         onPress={gotoGeneratePassword}
       />
       {/* BOTTOMSHEET CODE START */}

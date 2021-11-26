@@ -1,7 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, Text, StyleSheet, Button,KeyboardAvoidingView,Platform} from 'react-native';
-import AppButton from './../../custom/AppButton';
-import {hp, wp} from '../../Constant/Constant';
+import {
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  Button,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
+import AppButton from './../../custom/app-button';
+import {hp, wp} from '../../constants';
 import {useNavigation} from '@react-navigation/native';
 
 import {
@@ -16,14 +23,13 @@ const CELL_COUNT = 6;
 function InputOTPScreen(props) {
   const navigation = useNavigation();
   const [value1, setValue1] = useState('');
-  
 
   const ref = useBlurOnFulfill({value1, cellCount: CELL_COUNT});
   const [propss1, getCellOnLayoutHandler1] = useClearByFocusCell({
     value1,
     setValue1,
   });
-  
+
   const RESEND_OTP_TIME_LIMIT = 90;
   const [resendButtonDisabledTime, setResendButtonDisabledTime] = useState(
     RESEND_OTP_TIME_LIMIT,
@@ -44,7 +50,6 @@ function InputOTPScreen(props) {
     }, 1000);
   };
 
- 
   // useEffect(() => {
   //   startResendOtpTimer();
   //   return () => {
@@ -65,57 +70,54 @@ function InputOTPScreen(props) {
       }
     }
   };
-  console.log(props.twoInputField)
+  console.log(props.twoInputField);
   return (
-    <SafeAreaView style={{paddingHorizontal:wp('4%')}}>
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      // style={styles.root}
-    >
-      <Text style={styles.title}>OTP Verificaton</Text>
-      {props.twoInputField ? (
-        <Text style={[styles.subtitle, {alignSelf: 'flex-start'}]}>
-          Enter Mobile OTP
-        </Text>
-      ) : (
-        <>
-          <Text style={[styles.subtitle, {marginTop: hp('2%')}]}>
-            Enter the verificaton code we
+    <SafeAreaView style={{paddingHorizontal: wp('4%')}}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        // style={styles.root}
+      >
+        <Text style={styles.title}>OTP Verificaton</Text>
+        {props.twoInputField ? (
+          <Text style={[styles.subtitle, {alignSelf: 'flex-start'}]}>
+            Enter Mobile OTP
           </Text>
-          <Text style={[styles.subtitle, {marginBottom: hp('5%')}]}>
-            {' '}
-            just sent to your Number.
-          </Text>
-        </>
-      )}
-
-     
-      <CodeField
-        ref={ref}
-        {...props}
-       
-        value={value1}
-        onChangeText={setValue1}
-        cellCount={CELL_COUNT}
-        rootStyle={styles.codeFieldRoot}
-        keyboardType="number-pad"
-        textContentType="oneTimeCode"
-        renderCell={({index, symbol, isFocused}) => (
-          <Text
-            key={index}
-            style={[styles.cell, isFocused && styles.focusCell]}
-            onLayout={getCellOnLayoutHandler1(index)}>
-            {symbol || (isFocused ? <Cursor /> : null)}
-          </Text>
+        ) : (
+          <>
+            <Text style={[styles.subtitle, {marginTop: hp('2%')}]}>
+              Enter the verificaton code we
+            </Text>
+            <Text style={[styles.subtitle, {marginBottom: hp('5%')}]}>
+              {' '}
+              just sent to your Number.
+            </Text>
+          </>
         )}
-      />
 
+        <CodeField
+          ref={ref}
+          {...props}
+          value={value1}
+          onChangeText={setValue1}
+          cellCount={CELL_COUNT}
+          rootStyle={styles.codeFieldRoot}
+          keyboardType="number-pad"
+          textContentType="oneTimeCode"
+          renderCell={({index, symbol, isFocused}) => (
+            <Text
+              key={index}
+              style={[styles.cell, isFocused && styles.focusCell]}
+              onLayout={getCellOnLayoutHandler1(index)}>
+              {symbol || (isFocused ? <Cursor /> : null)}
+            </Text>
+          )}
+        />
 
-      <AppButton
-        title={props.twoInputField ? 'Verify' : 'Verify Account'}
-        onPress={OTPValidation}
-        style={{marginVertical: 30}}
-      />
+        <AppButton
+          title={props.twoInputField ? 'Verify' : 'Verify Account'}
+          onPress={OTPValidation}
+          style={{marginVertical: 30}}
+        />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

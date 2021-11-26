@@ -6,7 +6,7 @@ import Home from '../../screen/Dashboard/Home';
 import ActivityProgress from '../../screen/Dashboard/ActivityProgress';
 import AttendenceShow from '../../screen/Dashboard/AttendenceShow';
 import Profile from '../../screen/Dashboard/Profile';
-import {colors} from './../../Constant/Constant';
+import {colors} from './../../constants';
 
 const Tab = createBottomTabNavigator();
 
@@ -42,11 +42,7 @@ function HomeTab() {
           return <Image source={iconName} size={size} color={color} />;
         },
       })}>
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{headerShown: false}}
-      />
+      <Tab.Screen name="Home" component={Home} options={{headerShown: false}} />
       <Tab.Screen
         name="Progress"
         component={ActivityProgress}

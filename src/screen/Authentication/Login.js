@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   StyleSheet,
@@ -12,20 +13,23 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {colors, Fontsize, hp, wp} from '../../Constant/Constant';
-import TextInputField from '../../custom/TextInputField';
-import ErrorMessage from '../../custom/ErrorMessage';
-import AppButton from '../../custom/AppButton';
+import {colors, Fontsize, hp, wp} from '../../constants';
+import TextInputField from '../../custom/text-input-field';
+import ErrorMessage from '../../custom/error-message';
+import AppButton from '../../custom/app-button';
 import {loginUserData} from '../../redux/action/auth';
+import {getLocalData} from '../../utils/LocalStorage';
 
 const validationSchema = Yup.object().shape({
   mobileNumber: Yup.number().required().min(10).label('Mobile Number'),
   password: Yup.string().required().min(6).label('Password'),
 });
 
-function Login(props) {
+const Login = props => {
   const dispatch = useDispatch();
+  const currentUser = useSelector(state => state.LoginData.user);
   const isLoading = useSelector(state => state.LoginData.isloading);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   console.log(isLoading);
 
   const gotoRegister = () => {
@@ -35,8 +39,22 @@ function Login(props) {
   const gotoForgotPassword = () => {
     props.navigation.navigate('CreateNewPassword');
   };
-
   const star = <Text style={styles.star}>Star</Text>;
+
+  useEffect(() => {
+    getToken();
+  }, [getToken]);
+
+  const getToken = useCallback(async () => {
+    const refreshToken = await getLocalData('refreshToken');
+    setIsLoggedIn(refreshToken);
+  }, []);
+
+  useEffect(() => {
+    console.log('check login status: ', currentUser);
+    currentUser.name && props.navigation.navigate('HomeTab');
+  }, [props.navigation, currentUser]);
+
   return (
     <ScrollView style={styles.container}>
       <Text
@@ -132,7 +150,7 @@ function Login(props) {
       </View>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

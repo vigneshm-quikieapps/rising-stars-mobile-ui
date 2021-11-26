@@ -1,21 +1,20 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import CustomLayout from '../../custom/CustomLayout';
-import { useSelector, useDispatch } from 'react-redux'
+import {View, Text, StyleSheet, Image} from 'react-native';
+import CustomLayout from '../../custom/custom-layout';
+import {useSelector, useDispatch} from 'react-redux';
 import moment from 'moment';
 
-import Studentcard from '../../custom/Studentcard';
-import ProgressTracker from '../../custom/ProgressTracker';
-import { colors, Fontsize, hp, wp,Stepend } from '../../Constant/Constant';
-import Slot from '../../custom/Slot';
-import AppButton from '../../custom/AppButton';
-
+import Studentcard from '../../custom/student-card';
+import ProgressTracker from '../../custom/progress-tracker';
+import {colors, Fontsize, hp, wp, Stepend} from '../../constants';
+import Slot from '../../custom/slot';
+import AppButton from '../../custom/app-button';
 
 const Confirmation = props => {
-  const child = useSelector(state => state.childData.addchild)
-  const club = useSelector(state => state.childData.clubdata)
-  const slot = useSelector(state => state.childData.slotdata)
-  const classes = useSelector(state => state.childData.classdata)
+  const child = useSelector(state => state.childData.addchild);
+  const club = useSelector(state => state.childData.clubdata);
+  const slot = useSelector(state => state.childData.slotdata);
+  const classes = useSelector(state => state.childData.classdata);
 
   console.log('classes :', slot);
 
@@ -50,7 +49,9 @@ const Confirmation = props => {
           Class={'Pre-school gymnastics (Age 1-3)'}
           sessions={classes.name}
           day={slot.pattern[0].day}
-          time={`${moment(slot.pattern[0].startTime).format('HH:mm')} - ${moment(slot.pattern[0].endTime).format('HH:mm')}`}
+          time={`${moment(slot.pattern[0].startTime).format(
+            'HH:mm',
+          )} - ${moment(slot.pattern[0].endTime).format('HH:mm')}`}
           facility={slot.name}
           coach={slot.coach[0].name}
         />
@@ -63,7 +64,7 @@ const Confirmation = props => {
           waitlisted enrolments, pay charges offline
         </Text>
       </View>
-      <View style={{ height: hp('0%') }} />
+      <View style={{height: hp('0%')}} />
       <AppButton
         title={'Done'}
         onPress={() => props.navigation.navigate('HomeTab')}

@@ -1,13 +1,20 @@
-import React, { useState, useEffect, useRef, createRef } from 'react';
-import { View, StyleSheet, Text, Image, Pressable, TouchableOpacity, Dimensions } from 'react-native';
+import React, {useState, useEffect, useRef, createRef} from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  Pressable,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImagePicker from 'react-native-image-crop-picker';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
-import { removeLocalData } from '../../utils/LocalStorage'
-import CustomLayout from '../../custom/CustomLayout';
-import { colors, hp, wp } from '../../Constant/Constant';
-
+import {removeLocalData} from '../../utils/LocalStorage';
+import CustomLayout from '../../custom/custom-layout';
+import {colors, hp, wp} from '../../constants';
 
 function Profile(props) {
   // let steps = false;
@@ -20,15 +27,15 @@ function Profile(props) {
   };
 
   const SignOut = async () => {
-    console.log('hello')
-    await removeLocalData('refreshToken')
-    await removeLocalData("accesstoken")
-    props.navigation.navigate('AuthStack') 
-  }
+    console.log('hello');
+    await removeLocalData('refreshToken');
+    await removeLocalData('accesstoken');
+    props.navigation.navigate('AuthStack');
+  };
 
   useEffect(() => {
-    SignOut
-  }, [])
+    SignOut;
+  }, []);
 
   const choosePhotoFromLibrary = () => {
     ImagePicker.openPicker({
@@ -75,7 +82,7 @@ function Profile(props) {
 
           <Text style={styles.parentText}>Parent</Text>
         </View>
-        <View style={{ justifyContent: 'center' }}>
+        <View style={{justifyContent: 'center'}}>
           <Text style={styles.editProfile}>Edit Profile</Text>
         </View>
       </View>
@@ -89,14 +96,14 @@ function Profile(props) {
             name="plus"
             size={15}
             color="white"
-            style={{ alignSelf: 'center' }}
+            style={{alignSelf: 'center'}}
           />
           <Text style={styles.addChildText}>Add Child</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.profileImageCard}>
-        <View style={{ flexDirection: 'row', marginTop: hp('3%') }}>
+        <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
           <TouchableOpacity onPress={updateProfilePicture}>
             {fileUri === null ? (
               <Image
@@ -104,10 +111,10 @@ function Profile(props) {
                 source={require('../../assets/images/children.jpg')}
               />
             ) : (
-              <Image style={styles.image} source={{ uri: fileUri }} />
+              <Image style={styles.image} source={{uri: fileUri}} />
             )}
           </TouchableOpacity>
-          <View style={{ justifyContent: 'center' }}>
+          <View style={{justifyContent: 'center'}}>
             <Text
               style={{
                 fontSize: 18,
@@ -151,13 +158,13 @@ function Profile(props) {
             borderTopLeftRadius: 16,
           },
         }}>
-        <View style={{ paddingHorizontal: wp('10%') }}>
+        <View style={{paddingHorizontal: wp('10%')}}>
           <Pressable style={[styles.button1]} onPress={takePhotoFromCamera}>
             <Text style={styles.textStyle}>Take Photo</Text>
           </Pressable>
 
           <Pressable
-            style={[styles.button1, { marginVertical: hp('1.5%') }]}
+            style={[styles.button1, {marginVertical: hp('1.5%')}]}
             onPress={choosePhotoFromLibrary}>
             <Text style={styles.textStyle}>Choose Image</Text>
           </Pressable>

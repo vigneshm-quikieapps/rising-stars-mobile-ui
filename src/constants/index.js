@@ -21,10 +21,10 @@ export const colors = {
   veryLightPink: 'rgba(255,244,231,1)',
   veryLightGreen: 'rgba(192,248,232,1)',
   veryLightRed: 'rgba(255,229,229,1)',
-  orangeYellow: "rgba(255,163,0,1)",
-  pumpkinOrange: "rgba(255,126,0,1)",
-  reddish: "rgb(204,66,66)",
-  seafoamBlue: "rgb(107,213,153)",
+  orangeYellow: 'rgba(255,163,0,1)',
+  pumpkinOrange: 'rgba(255,126,0,1)',
+  reddish: 'rgb(204,66,66)',
+  seafoamBlue: 'rgb(107,213,153)',
   pumpkinorange: '#ffe5cc',
   lightgrey: 'rgb(227,227,227)',
   profileColorGray: 'rgb(242, 242, 242)',
@@ -33,28 +33,29 @@ export const colors = {
   cancelMembership: 'rgb( 204, 66, 66)',
 };
 
-export const Fontsize = wp('4%')
+export const Fontsize = wp('4%');
 
-export const Theme = ['#ffa300', '#ff7e00']
-export const Country_Code = "+91"
-export const Today = new Date()
-export const Term_Condition = " Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting , remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-export const Stepend = "6"
+export const Theme = ['#ffa300', '#ff7e00'];
+export const Country_Code = '+91';
+export const Today = new Date();
+export const Term_Condition =
+  " Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting , remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+export const Stepend = '6';
 
 export const gender = [
-  {id:1,title:'Boy'},
-  {id:2,title:'Girl'},
-  {id:3,title:'other'}
-]
+  {id: 1, title: 'Boy'},
+  {id: 2, title: 'Girl'},
+  {id: 3, title: 'other'},
+];
 
 export const EnrollData = [
-  { id: 1, title: 'Step 1', description: 'Add Child and Emergency Contact' },
-  { id: 2, title: 'Step 2', description: 'Class Selection' },
-  { id: 3, title: 'Step 3', description: 'Fees Overview' },
-  { id: 4, title: 'Step 4', description: 'Provide Consent' },
-  { id: 5, title: 'Step 5', description: 'Pay' },
-  { id: 6, title: 'Step 6', description: 'Confirmation' },
-]
+  {id: 1, title: 'Step 1', description: 'Add Child and Emergency Contact'},
+  {id: 2, title: 'Step 2', description: 'Class Selection'},
+  {id: 3, title: 'Step 3', description: 'Fees Overview'},
+  {id: 4, title: 'Step 4', description: 'Provide Consent'},
+  {id: 5, title: 'Step 5', description: 'Pay'},
+  {id: 6, title: 'Step 6', description: 'Confirmation'},
+];
 
 export const Images = {
   Child: require('../assets/images/girl.jpg'),
@@ -68,4 +69,4 @@ export const Images = {
   completed_white: require('../assets/images/checkmark.png'),
   dropDown_white: require('../assets/images/dropDown.png'),
 };
-export { wp, hp };
+export {wp, hp};

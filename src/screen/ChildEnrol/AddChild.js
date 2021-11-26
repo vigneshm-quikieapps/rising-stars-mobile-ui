@@ -1,60 +1,55 @@
-
-import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Formik } from 'formik';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useState, useRef} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {Formik} from 'formik';
 import * as Yup from 'yup';
-import EmergencyCard from '../../custom/EmergencyCard';
+import EmergencyCard from '../../custom/emergency-card';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import { useSelector, useDispatch } from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux';
 
-
-import PopUpCard from '../../custom/PopUpCard';
-import PopUp from '../../custom/PopUp';
-import CustomLayout from '../../custom/CustomLayout';
-import TextInputField from '../../custom/TextInputField';
-import ProgressTracker from '../../custom/ProgressTracker';
-import { colors, hp, wp, Stepend } from '../../Constant/Constant';
-import Forwardbutton from '../../custom/Forwardbutton';
-import ErrorMessage from '../../custom/ErrorMessage';
-import AppButton from '../../custom/AppButton';
-import { setChildData, getClubdata } from '../../redux/action/enrol'
+import PopUpCard from '../../custom/pop-up-card';
+import PopUp from '../../custom/pop-up';
+import CustomLayout from '../../custom/custom-layout';
+import TextInputField from '../../custom/text-input-field';
+import ProgressTracker from '../../custom/progress-tracker';
+import {colors, hp, wp, Stepend} from '../../constants';
+import Forwardbutton from '../../custom/forward-button';
+import ErrorMessage from '../../custom/error-message';
+import AppButton from '../../custom/app-button';
+import {setChildData, getClubdata} from '../../redux/action/enrol';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
-import Wheeldropdown from '../../custom/Wheeldropdown';
-
-
+import Wheeldropdown from '../../custom/wheel-dropdown';
 
 const gender = [
-  { id: 1, gender: 'Boy' },
-  { id: 2, gender: 'Girl' },
+  {id: 1, gender: 'Boy'},
+  {id: 2, gender: 'Girl'},
 ];
 const relation = [
-  { id: 1, relation: 'Parents' },
-  { id: 2, relation: 'Guardian' },
-  { id: 3, relation: 'Others' },
+  {id: 1, relation: 'Parents'},
+  {id: 2, relation: 'Guardian'},
+  {id: 3, relation: 'Others'},
 ];
 const AddChild = props => {
-  const genderef = useRef()
-  const relationref = useRef()
-  const dispatch = useDispatch()
-  const name = useSelector(state => state.childData.payload)
-
+  const genderef = useRef();
+  const relationref = useRef();
+  const dispatch = useDispatch();
+  const name = useSelector(state => state.childData.payload);
 
   const [count, setCount] = useState(1);
   const [data, setData] = useState([]);
 
-  const [birthModal, setBirthModal] = useState(false)
-  const [birth, setBirth] = useState('')
-  const [birtherror, setBirthError] = useState(false)
+  const [birthModal, setBirthModal] = useState(false);
+  const [birth, setBirth] = useState('');
+  const [birtherror, setBirthError] = useState(false);
 
-
-  const [age, setAge] = useState('')
-  const [open, setOpen] = useState(false)
+  const [age, setAge] = useState('');
+  const [open, setOpen] = useState(false);
 
   const [relationmodal, setRelationmodal] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(true);
 
-  const [relationdata, setRelationdata] = useState('');
+  const [relationData, setRelationData] = useState('');
 
   const [gender, setGender] = useState('');
   const [gendererror, setGenderError] = useState(false);
@@ -66,25 +61,25 @@ const AddChild = props => {
   });
 
   const gendersubmit = item => {
-    setGender(item)
-    genderef.current.close()
+    setGender(item);
+    genderef.current.close();
   };
 
   const relationsubmit = item => {
-    setRelationdata(item);
-    relationref.current.close()
+    setRelationData(item);
+    relationref.current.close();
   };
 
   const handleSubmits = () => {
     setCount(item => item + 1);
-    setData(item => [...item, { id: count }]);
-    setButtonVisible(!buttonVisible)
+    setData(item => [...item, {id: count}]);
+    setButtonVisible(!buttonVisible);
   };
   const backsubmit = item => {
     let datafilter = data.filter(items => items.id !== item.id);
     let idrest = datafilter.forEach(item => (item.id = item.id - 1));
     setData(datafilter);
-    setButtonVisible(!buttonVisible)
+    setButtonVisible(!buttonVisible);
   };
 
   return (
@@ -110,20 +105,20 @@ const AddChild = props => {
           age: '',
         }}
         onSubmit={values => {
-          values.dob = birth
-          values.gender = gender
-          values.age = age
-          values.relationship = relationdata
-          if (values.dob === "") {
-            setBirthError(true)
-          } else if (values.gender === "") {
-            setGenderError(true)
+          values.dob = birth;
+          values.gender = gender;
+          values.age = age;
+          values.relationship = relationData;
+          if (values.dob === '') {
+            setBirthError(true);
+          } else if (values.gender === '') {
+            setGenderError(true);
           } else if (values.age <= 2) {
-            alert('2 year children not allowed ')
+            alert('2 year children not allowed ');
           } else {
             console.log('values.age :', values.age);
-            dispatch(setChildData(values))
-            dispatch(getClubdata())
+            dispatch(setChildData(values));
+            dispatch(getClubdata());
             props.navigation.navigate('Class_Selection');
           }
         }}
@@ -150,7 +145,6 @@ const AddChild = props => {
               visible={touched.fullName}
             />
 
-
             <PopUpCard
               text={'Date of Birth'}
               textColor={colors.grey}
@@ -163,24 +157,23 @@ const AddChild = props => {
               visible={birthModal}
               confirmbutton={true}
               cancelbutton={true}
-              cancel={() => setBirthModal(!birthModal)}
-            >
+              cancel={() => setBirthModal(!birthModal)}>
               <DatePicker
                 inlined
                 mode="date"
                 open={birthModal}
                 date={new Date()}
-                onConfirm={(date) => {
-                  setOpen(false)
-                  setBirth(moment(date).format('YYYY/MM/DD'))
-                  handleChange('dob')
-                  let age = (new Date()).getFullYear() - date.getFullYear()
-                  setAge(age)
-                  setBirthError(false)
+                onConfirm={date => {
+                  setOpen(false);
+                  setBirth(moment(date).format('YYYY/MM/DD'));
+                  handleChange('dob');
+                  let age = new Date().getFullYear() - date.getFullYear();
+                  setAge(age);
+                  setBirthError(false);
                   // console.log(age)
                 }}
                 onCancel={() => {
-                  setOpen(!open)
+                  setOpen(!open);
                 }}
               />
             </Wheeldropdown>
@@ -202,9 +195,9 @@ const AddChild = props => {
                 setOpen(!open)
               }}
             /> */}
-            {
-              birtherror && <Text style={styles.errors}>D.O.B. is a required</Text>
-            }
+            {birtherror && (
+              <Text style={styles.errors}>D.O.B. is a required</Text>
+            )}
             {/* <ErrorMessage
               style={styles.errorMessage}
               error={errors.dob}
@@ -223,27 +216,39 @@ const AddChild = props => {
               closeOnDragDown={true}
               closeOnPressMask={false}
               customStyles={{
-
                 container: {
                   height: '18%',
                   borderTopRightRadius: 16,
                   borderTopLeftRadius: 16,
                 },
               }}>
-              <View style={{ flexDirection: 'row', paddingHorizontal: wp('5%'), justifyContent: 'space-between' }}>
-                <AppButton title="Boy" style={{ width: wp('40%') }} onPress={() => {
-                  setGenderError(false)
-                  gendersubmit('Boy')
-                }} />
-                <AppButton title="Girl" style={{ width: wp('40%') }} onPress={() => {
-                  setGenderError(false)
-                  gendersubmit('Girl')
-                }} />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  paddingHorizontal: wp('5%'),
+                  justifyContent: 'space-between',
+                }}>
+                <AppButton
+                  title="Boy"
+                  style={{width: wp('40%')}}
+                  onPress={() => {
+                    setGenderError(false);
+                    gendersubmit('Boy');
+                  }}
+                />
+                <AppButton
+                  title="Girl"
+                  style={{width: wp('40%')}}
+                  onPress={() => {
+                    setGenderError(false);
+                    gendersubmit('Girl');
+                  }}
+                />
               </View>
             </RBSheet>
-            {
-              gendererror && <Text style={styles.errors}>Gender is a required</Text>
-            }
+            {gendererror && (
+              <Text style={styles.errors}>Gender is a required</Text>
+            )}
 
             {/* <ErrorMessage
               style={styles.errorMessage}
@@ -251,47 +256,57 @@ const AddChild = props => {
               visible={touched.gender}
             /> */}
 
-
             <Text style={styles.emergency}>Emergency Contact (Primary)</Text>
             <EmergencyCard
               disabled={data.length === 1 ? true : false}
-              addbuttons={buttonVisible}
-              addbutton={handleSubmits}
-              valuename={values.name}
-              onChangeTextname={handleChange('name')}
-              onBlurname={() => setFieldTouched('name')}
-              errorname={errors.name}
-              visiblename={touched.name}
-              valuescontactNumber={values.contactNumber}
-              onChangeTextcontact={handleChange('contactNumber')}
-              onBlurcontact={() => setFieldTouched('contactNumber')}
-              errorcontactNumber={errors.contactNumber}
-              visiblecontactNumber={touched.contactNumber}
-              value={relationdata}
-              onPress={() => relationref.current.open()}
-
-
-            >
+              addButtons={buttonVisible}
+              addButton={handleSubmits}
+              valueName={values.name}
+              onChangeTextName={handleChange('name')}
+              onBlurName={() => setFieldTouched('name')}
+              errorName={errors.name}
+              visibleName={touched.name}
+              valuesContactNumber={values.contactNumber}
+              onChangeTextContact={handleChange('contactNumber')}
+              onBlurContact={() => setFieldTouched('contactNumber')}
+              errorContactNumber={errors.contactNumber}
+              visibleContactNumber={touched.contactNumber}
+              value={relationData}
+              onPress={() => relationref.current.open()}>
               <RBSheet
                 ref={relationref}
                 closeOnDragDown={true}
                 closeOnPressMask={false}
                 customStyles={{
-
                   container: {
                     height: '18%',
                     borderTopRightRadius: 16,
                     borderTopLeftRadius: 16,
                   },
-
                 }}>
-                <View style={{ flexDirection: 'row', paddingHorizontal: wp('5%'), justifyContent: 'space-between' }}>
-                  <AppButton title="Parents" style={{ width: wp('28%') }} onPress={() => relationsubmit("Parents")} />
-                  <AppButton title='Guardian' style={{ width: wp('30%') }} onPress={() => relationsubmit('Guardian')} />
-                  <AppButton title='Others' style={{ width: wp('28%') }} onPress={() => relationsubmit('Others')} />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    paddingHorizontal: wp('5%'),
+                    justifyContent: 'space-between',
+                  }}>
+                  <AppButton
+                    title="Parents"
+                    style={{width: wp('28%')}}
+                    onPress={() => relationsubmit('Parents')}
+                  />
+                  <AppButton
+                    title="Guardian"
+                    style={{width: wp('30%')}}
+                    onPress={() => relationsubmit('Guardian')}
+                  />
+                  <AppButton
+                    title="Others"
+                    style={{width: wp('28%')}}
+                    onPress={() => relationsubmit('Others')}
+                  />
                 </View>
               </RBSheet>
-
             </EmergencyCard>
             {data &&
               data.map(item => {
@@ -299,22 +314,19 @@ const AddChild = props => {
                   <EmergencyCard
                     key={item.id}
                     head
-                    crossbutton={() => backsubmit(item)}
-                    valuename={values.name}
-                    onChangeTextname={handleChange('name')}
-                    onBlurname={() => setFieldTouched('name')}
-                    errorname={errors.name}
-                    visiblename={touched.name}
-                    valuescontactNumber={values.contactNumber}
-                    onChangeTextcontact={handleChange('contactNumber')}
-                    onBlurcontact={() => setFieldTouched('contactNumber')}
-                    errorcontactNumber={errors.contactNumber}
-                    visiblecontactNumber={touched.contactNumber}
-                    value={relationdata}
-                    onPress={() => setRelationmodal(!relationmodal)}
-
-
-                  >
+                    crossButton={() => backsubmit(item)}
+                    valueName={values.name}
+                    onChangeTextName={handleChange('name')}
+                    onBlurName={() => setFieldTouched('name')}
+                    errorName={errors.name}
+                    visibleName={touched.name}
+                    valuesContactNumber={values.contactNumber}
+                    onChangeTextContact={handleChange('contactNumber')}
+                    onBlurContact={() => setFieldTouched('contactNumber')}
+                    errorContactNumber={errors.contactNumber}
+                    visibleContactNumber={touched.contactNumber}
+                    value={relationData}
+                    onPress={() => setRelationmodal(!relationmodal)}>
                     <PopUp
                       animationType="fade"
                       transparent={true}
@@ -341,7 +353,7 @@ const AddChild = props => {
                 );
               })}
             <Forwardbutton
-              style={{ alignSelf: 'flex-end', marginTop: hp('2%') }}
+              style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
               onPress={handleSubmit}
             />
           </>
@@ -395,27 +407,7 @@ const styles = StyleSheet.create({
     color: colors.reddish,
     fontFamily: 'Nunito-Regular',
     fontSize: wp('3%'),
-    alignSelf: 'flex-end'
-  }
+    alignSelf: 'flex-end',
+  },
 });
 export default AddChild;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

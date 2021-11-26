@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import AppButton from '../../custom/AppButton';
-import TextInputField from '../../custom/TextInputField';
-import {hp, wp} from '../../Constant/Constant';
-import CustomLayout from '../../custom/CustomLayout';
+import AppButton from '../../custom/app-button';
+import TextInputField from '../../custom/text-input-field';
+import {hp, wp} from '../../constants';
+import CustomLayout from '../../custom/custom-layout';
 
 function GeneratePassword(props) {
   const gotoLogin = () => {

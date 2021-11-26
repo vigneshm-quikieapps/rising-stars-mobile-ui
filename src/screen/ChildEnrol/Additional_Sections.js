@@ -1,35 +1,34 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Pressable, } from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useState, useRef} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import CustomLayout from '../../custom/CustomLayout';
-import Studentcard from '../../custom/Studentcard';
-import ProgressTracker from '../../custom/ProgressTracker';
-import { colors, Fontsize, hp, wp } from '../../Constant/Constant';
-import { RadioButton } from 'react-native-paper';
-import Forwardbutton from '../../custom/Forwardbutton';
-import PopUp from '../../custom/PopUp';
-import PopUpCard from '../../custom/PopUpCard';
+import CustomLayout from '../../custom/custom-layout';
+import StudentCard from '../../custom/student-card';
+import ProgressTracker from '../../custom/progress-tracker';
+import {colors, Fontsize, hp, wp} from '../../constants';
+import {RadioButton} from 'react-native-paper';
+import Forwardbutton from '../../custom/forward-button';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import EntIcon from 'react-native-vector-icons/Entypo'
+import EntIcon from 'react-native-vector-icons/Entypo';
 
-import { useSelector, useDispatch } from 'react-redux'
+import {useSelector} from 'react-redux';
 
 const Additional_Sections = props => {
-  const termref = useRef()
+  const termref = useRef();
   const [modalVisible, setModalVisible] = useState(false);
 
-  const fullName = useSelector(state => state.childData.fullName)
-  const age = useSelector(state => state.childData.age)
+  const fullName = useSelector(state => state.childData.fullName);
+  const age = useSelector(state => state.childData.age);
 
   console.log(modalVisible);
   return (
     <CustomLayout
       Customchildren={
-        <Studentcard
+        <StudentCard
           name={fullName}
           id={age}
           activityrequired
-          activity={`Zippy Totz Pre-school Gymnastics`}
+          activity={'Zippy Totz Pre-school Gymnastics'}
           subactivity={'Childhood Joy Classes'}
         />
       }
@@ -91,26 +90,45 @@ const Additional_Sections = props => {
             borderTopRightRadius: 16,
             borderTopLeftRadius: 16,
           },
-        }}
-      >
-        <View style={{ paddingHorizontal: wp('5%') }}>
-          <View style={{ flexDirection: 'row',justifyContent:'space-between'  }}>
-            <Text style={{ fontFamily: 'Nunito-Regular', fontSize: Fontsize, color: "#ff7e00" }}>Club Rule</Text>
+        }}>
+        <View style={{paddingHorizontal: wp('5%')}}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text
+              style={{
+                fontFamily: 'Nunito-Regular',
+                fontSize: Fontsize,
+                color: '#ff7e00',
+              }}>
+              Club Rule
+            </Text>
             <TouchableOpacity onPress={() => termref.current.close()}>
-              <LinearGradient style={styles.closePopUp} colors={['#ffa300', '#ff7e00']}>
+              <LinearGradient
+                style={styles.closePopUp}
+                colors={['#ffa300', '#ff7e00']}>
                 <EntIcon name="cross" size={15} color="white" />
               </LinearGradient>
             </TouchableOpacity>
           </View>
-          <Text style={{ fontFamily: 'Nunito-Regular', marginTop: hp('1.5%'), fontSize: Fontsize,alignSelf:'center' }}>
+          <Text
+            style={{
+              fontFamily: 'Nunito-Regular',
+              marginTop: hp('1.5%'),
+              fontSize: Fontsize,
+              alignSelf: 'center',
+            }}>
             Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy
-            text ever since.
+            industry. Lorem Ipsum has been the industry's standard dummy text
+            ever since.
           </Text>
         </View>
       </RBSheet>
       <Text style={styles.newsheader}>News, communication and marketing</Text>
-      <Text style={{ fontSize: Fontsize, fontFamily: 'Nunito-Regular', marginVertical: hp('1.5%') }}>
+      <Text
+        style={{
+          fontSize: Fontsize,
+          fontFamily: 'Nunito-Regular',
+          marginVertical: hp('1.5%'),
+        }}>
         I would like to receive{' '}
         <Text
           style={{
@@ -141,7 +159,7 @@ const Additional_Sections = props => {
         <Text style={styles.bottom}>Read more about Club Rule</Text>
       </TouchableOpacity>
       <Forwardbutton
-        style={{ alignSelf: 'flex-end' }}
+        style={{alignSelf: 'flex-end'}}
         onPress={() => props.navigation.navigate('Pay')}
       />
     </CustomLayout>
@@ -175,7 +193,6 @@ const styles = StyleSheet.create({
     color: '#ff7e00',
     textDecorationLine: 'underline',
     marginVertical: 5,
-
   },
   optional: {
     marginTop: hp('2.5%'),
@@ -186,14 +203,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-SemiBold',
     width: wp('80%'),
     fontSize: hp('2.8%'),
-    marginTop: hp('2%')
-  },
-  centeredView: {
-    flex: 1,
-    height: hp('5%'),
-    width: wp('30%'),
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: hp('2%'),
   },
 
   centeredView: {
@@ -223,9 +233,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 50,
     alignSelf: 'flex-end',
-    marginTop: -hp('1%')
+    marginTop: -hp('1%'),
   },
-
 });
 
 export default Additional_Sections;

@@ -1,4 +1,4 @@
-import * as Action from '../actiontype';
+import * as Action from '../action-types';
 import {storeLocalData, getLocalData} from '../../utils/LocalStorage';
 import {setLocale} from 'yup';
 
@@ -94,6 +94,7 @@ const loginState = {
 export const LoginData = (state = loginState, action) => {
   switch (action.type) {
     case Action.USER_LOGIN_SUCCESS:
+      console.log('login succesful', action.payload);
       storeLocalData('refreshToken', action.payload.refreshToken);
       storeLocalData('accessToken', action.payload.accessToken);
       storeLocalData('user', action.payload.user, true);

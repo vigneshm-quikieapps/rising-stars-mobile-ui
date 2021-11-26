@@ -1,22 +1,23 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import CustomLayout from '../../custom/CustomLayout';
-import Studentcard from '../../custom/Studentcard';
-import ProgressTracker from '../../custom/ProgressTracker';
-import {colors, Fontsize, hp, Stepend, wp} from '../../Constant/Constant';
+import CustomLayout from '../../custom/custom-layout';
+import Studentcard from '../../custom/student-card';
+import ProgressTracker from '../../custom/progress-tracker';
+import {colors, Fontsize, hp, Stepend, wp} from '../../constants';
 import {RadioButton} from 'react-native-paper';
-import Forwardbutton from '../../custom/Forwardbutton';
-import Atmcard from '../../custom/AtmCard';
-import { useSelector, useDispatch } from 'react-redux'
+import Forwardbutton from '../../custom/forward-button';
+import Atmcard from '../../custom/atm-card';
+import {useSelector} from 'react-redux';
 
 const Pay = props => {
-  const child = useSelector(state => state.childData.addchild)
-  const club = useSelector(state => state.childData.clubdata)
+  const child = useSelector(state => state.childData.addchild);
+  const club = useSelector(state => state.childData.clubdata);
   return (
     <CustomLayout
       Customchildren={
         <Studentcard
-        name={child.fullName}
+          name={child.fullName}
           id={child.age}
           activityrequired
           activity={club.name}
@@ -31,8 +32,7 @@ const Pay = props => {
       headerTextBigText={true}
       headertext={'Pay'}
       backbutton={() => props.navigation.goBack()}
-      Customchildren2={<ProgressTracker percent={6} />}
-      >
+      Customchildren2={<ProgressTracker percent={6} />}>
       <Amount head={'Club Membership'} currency={'6'} />
       <Amount head={`Pre School Gym Class${'\n'}(Monthly)`} currency={'25'} />
       <Amount
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   head: {
     fontFamily: 'Nunito-SemiBold',
-    fontSize:Fontsize,
+    fontSize: Fontsize,
     width: wp('65%'),
   },
   body: {
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   optional: {
     fontFamily: 'Nunito-SemiBold',
     marginTop: hp('1%'),
-    fontSize:Fontsize,
+    fontSize: Fontsize,
     marginVertical: hp('1%'),
   },
   breaks: {

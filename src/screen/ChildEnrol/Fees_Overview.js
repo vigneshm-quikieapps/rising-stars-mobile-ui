@@ -1,23 +1,23 @@
-import React,{useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-import CustomLayout from '../../custom/CustomLayout';
-import Studentcard from '../../custom/Studentcard';
-import ProgressTracker from '../../custom/ProgressTracker';
-import {colors, Fontsize, hp, wp,Stepend} from '../../Constant/Constant';
-import Forwardbutton from '../../custom/Forwardbutton';
+import CustomLayout from '../../custom/custom-layout';
+import Studentcard from '../../custom/student-card';
+import ProgressTracker from '../../custom/progress-tracker';
+import {colors, Fontsize, hp, wp, Stepend} from '../../constants';
+import Forwardbutton from '../../custom/forward-button';
 
-import { useSelector, useDispatch } from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux';
 
 const Fees_Overview = props => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   // const fullName = useSelector(state => state.childData.fullName)
   // const age = useSelector(state => state.childData.age)
-  const child = useSelector(state => state.childData.addchild)
-  const club = useSelector(state => state.childData.clubdata)
-  const classes = useSelector(state => state.childData.classdata)
-  console.log('classes  :', classes );
-  const clubfinance = useSelector(state => state.clubfinance.financedata)
+  const child = useSelector(state => state.childData.addchild);
+  const club = useSelector(state => state.childData.clubdata);
+  const classes = useSelector(state => state.childData.classdata);
+  console.log('classes  :', classes);
+  const clubfinance = useSelector(state => state.clubfinance.financedata);
 
   return (
     <CustomLayout
@@ -37,12 +37,25 @@ const Fees_Overview = props => {
       headerTextBigText={true}
       headertext={'Fees Overview'}
       backbutton={() => props.navigation.goBack()}
-      Customchildren2={<ProgressTracker percent={3} />}
-      >
-      <Text style={{fontFamily: 'Nunito-SemiBold',fontSize:wp('6%')}}>Fee Breakdown</Text>
-      <Amount head={'Club Membership'} body={'Annual'} currency={clubfinance && clubfinance.length > 0 ? clubfinance.businessFinance[0].charges[0].amount :'0'} />
+      Customchildren2={<ProgressTracker percent={3} />}>
+      <Text style={{fontFamily: 'Nunito-SemiBold', fontSize: wp('6%')}}>
+        Fee Breakdown
+      </Text>
+      <Amount
+        head={'Club Membership'}
+        body={'Annual'}
+        currency={
+          clubfinance && clubfinance.length > 0
+            ? clubfinance.businessFinance[0].charges[0].amount
+            : '0'
+        }
+      />
       <View style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}} />
-      <Amount head={'Pre School Gym Class'} body={'Monthly'} currency={classes.charges[0].amount} />
+      <Amount
+        head={'Pre School Gym Class'}
+        body={'Monthly'}
+        currency={classes.charges[0].amount}
+      />
       <View style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}} />
       <Amount
         head={`Scottish Gymnastics ${'\n'}Insuarance Premiun`}

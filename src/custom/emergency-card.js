@@ -1,25 +1,47 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import TextInputField from './TextInputField';
-import ErrorMessage from './ErrorMessage';
-import {wp, colors, hp} from '../Constant/Constant';
-import Buttons from './Buttons';
+import TextInputField from './text-input-field';
+import ErrorMessage from './error-message';
+import {wp, colors, hp} from '../constants';
+import Buttons from './buttons';
 import AntIcon from 'react-native-vector-icons/AntDesign';
-import PopUpCard from './PopUpCard';
-import PopUp from './PopUp';
+import PopUpCard from './pop-up-card';
 
-export default function EmergencyCard(props) {
+export default function EmergencyCard({
+  head,
+  visibleName,
+  value,
+  crossButton,
+  valueName,
+  addButton,
+  disabled,
+  addButtons,
+  children,
+  errorName,
+  errorContactNumber,
+  visibleContactNumber,
+  valuesContactNumber,
+  onPress,
+  onBlurName,
+  onChangeTextName,
+  onChangeTextContact,
+  onChangeRelation,
+  onBlurContact,
+}) {
   return (
     <View style={{flex: 1}}>
-      {props.head && (
+      {head && (
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <Text style={styles.emergency}>{`Emergenct Contact (Secondary)`}</Text>
-          <Buttons style={styles.cross} onPress={props.crossbutton}>
+          <Text style={styles.emergency}>
+            {'Emergency Contact (Secondary)'}
+          </Text>
+          <Buttons style={styles.cross} onPress={crossButton}>
             <AntIcon name="minus" size={hp('2%')} color={colors.white} />
           </Buttons>
         </View>
@@ -27,55 +49,55 @@ export default function EmergencyCard(props) {
 
       <TextInputField
         placeholder="Name *"
-        value={props.valuename}
-        onChangeText={props.onChangeTextname}
-        onBlur={props.onBlurname}
+        value={valueName}
+        onChangeText={onChangeTextName}
+        onBlur={onBlurName}
       />
 
       <ErrorMessage
         style={styles.errorMessage}
-        error={props.errorname}
-        visible={props.visiblename}
+        error={errorName}
+        visible={visibleName}
       />
 
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <View style={styles.countrycode}>
+        <View style={styles.countryCode}>
           <Text style={{fontSize: wp('4%'), color: colors.grey}}>+44</Text>
         </View>
         <TextInputField
           placeholder="Mobile Number *"
-          value={props.valuescontactNumber}
-          onChangeText={props.onChangeTextcontact}
+          value={valuesContactNumber}
+          onChangeText={onChangeTextContact}
           maxLength={10}
           keyboardType="number-pad"
           style={{width: wp('75%')}}
-          onBlur={props.onBlurcontact}
+          onBlur={onBlurContact}
         />
       </View>
 
       <ErrorMessage
         style={styles.errorMessage}
-        error={props.errorcontactNumber}
-        visible={props.visiblecontactNumber}
+        error={errorContactNumber}
+        visible={visibleContactNumber}
       />
 
       <PopUpCard
         text="Relationship *"
-        onChangeText={props.onChangerelation}
-        value={props.value}
-        onPress={props.onPress}
+        onChangeText={onChangeRelation}
+        value={value}
+        onPress={onPress}
       />
 
-      {props.children}
-      {props.addbuttons && (
+      {children}
+      {addButtons && (
         <View style={styles.bottom}>
           <Buttons
-            disabled={props.disabled}
+            disabled={disabled}
             style={styles.button}
-            onPress={props.addbutton}>
+            onPress={addButton}>
             <AntIcon name="plus" size={hp('3%')} color={colors.white} />
           </Buttons>
-          <Text style={styles.bottomtext}>Emergency Contact (Secondary)</Text>
+          <Text style={styles.bottomText}>Emergency Contact (Secondary)</Text>
         </View>
       )}
     </View>
@@ -88,9 +110,9 @@ const styles = StyleSheet.create({
     paddingRight: wp('1%'),
     opacity: 0.5,
   },
-  countrycode: {
+  countryCode: {
     borderWidth: 1,
-    borderColor: "#e3e3e3",
+    borderColor: '#e3e3e3',
     borderRadius: 10,
     backgroundColor: colors.white,
     justifyContent: 'center',
@@ -130,7 +152,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'flex-start',
     // backgroundColor: 'pink',
   },
-  bottomtext: {
+  bottomText: {
     fontFamily: 'Nunito-SemiBold',
     // fontWeight: 'bold',
     marginLeft: wp('2%'),

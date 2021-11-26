@@ -1,11 +1,11 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import { Image, ScrollView, Text, View, Dimensions } from 'react-native';
+import {Image, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Timeline from 'react-native-timeline-flatlist';
-import { Images, wp } from '../Constant/Constant';
+import {Images, wp} from '../constants';
 
 export default function TimeLine() {
-  const width = Dimensions.get('window').width;
   const data = [
     {
       title: 'Event 1',
@@ -24,7 +24,7 @@ export default function TimeLine() {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Image style={{ width: 20, height: 20 }} source={Images.completed} />
+          <Image style={{width: 20, height: 20}} source={Images.completed} />
         </View>
       ),
     },
@@ -70,7 +70,8 @@ export default function TimeLine() {
             borderColor: 'rgb(227,227,227)',
             justifyContent: 'center',
             alignItems: 'center',
-          }}></View>
+          }}
+        />
       ),
     },
     {
@@ -88,7 +89,8 @@ export default function TimeLine() {
             borderColor: 'rgb(227,227,227)',
             justifyContent: 'center',
             alignItems: 'center',
-          }}></View>
+          }}
+        />
       ),
     },
     {
@@ -106,7 +108,8 @@ export default function TimeLine() {
             borderColor: 'rgb(227,227,227)',
             justifyContent: 'center',
             alignItems: 'center',
-          }}></View>
+          }}
+        />
       ),
     },
     {
@@ -124,7 +127,8 @@ export default function TimeLine() {
             borderColor: 'rgb(227,227,227)',
             justifyContent: 'center',
             alignItems: 'center',
-          }}></View>
+          }}
+        />
       ),
     },
     {
@@ -142,14 +146,15 @@ export default function TimeLine() {
             borderColor: 'rgb(227,227,227)',
             justifyContent: 'center',
             alignItems: 'center',
-          }}></View>
+          }}
+        />
       ),
     },
   ];
 
   const renderDetail = (rowData, sectionID, rowID) => {
     var desc = null;
-    if (rowData.description)
+    if (rowData.description) {
       desc = (
         <View
           style={{
@@ -158,8 +163,8 @@ export default function TimeLine() {
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          {rowData.status != 'Upcoming' ? (
-            <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+          {rowData.status !== 'Upcoming' ? (
+            <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
               <View
                 style={{
                   height: 20,
@@ -172,14 +177,15 @@ export default function TimeLine() {
                   alignItems: 'center',
                 }}>
                 <Image
-                  style={{ height: 15, width: 15 }}
+                  style={{height: 15, width: 15}}
                   source={Images.completed_white}
                 />
               </View>
-              <View style={{ marginLeft: 10 }}>
+              <View style={{marginLeft: 10}}>
                 <Text
                   style={{
-                    color: rowData.status == 'Upcoming' ? '#000000' : '#ffffff',
+                    color:
+                      rowData.status === 'Upcoming' ? '#000000' : '#ffffff',
                     fontSize: wp('4.5%'),
 
                     fontFamily: 'Nunito-SemiBold',
@@ -189,7 +195,7 @@ export default function TimeLine() {
                 <Text
                   style={{
                     color:
-                      rowData.status == 'Upcoming'
+                      rowData.status === 'Upcoming'
                         ? 'rgb(205,210,204)'
                         : '#ffffff',
                     fontSize: wp('4.5%'),
@@ -203,7 +209,7 @@ export default function TimeLine() {
             <View style={{}}>
               <Text
                 style={{
-                  color: rowData.status == 'Upcoming' ? '#000000' : '#ffffff',
+                  color: rowData.status === 'Upcoming' ? '#000000' : '#ffffff',
                   fontSize: wp('4.5%'),
 
                   fontFamily: 'Nunito-SemiBold',
@@ -213,7 +219,7 @@ export default function TimeLine() {
               <Text
                 style={{
                   color:
-                    rowData.status == 'Upcoming'
+                    rowData.status === 'Upcoming'
                       ? 'rgb(205,210,204)'
                       : '#ffffff',
                   fontSize: wp('4.5%'),
@@ -226,15 +232,16 @@ export default function TimeLine() {
           )}
         </View>
       );
+    }
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{flex: 1}}>
         <LinearGradient
           colors={
-            rowData.status == 'Attained'
+            rowData.status === 'Attained'
               ? ['rgb(104,214,171)', 'rgb(51,171,150)']
-              : rowData.status == 'In Progress'
-                ? ['#ffa300', '#ff7e00']
-                : ['rgb(242,242,242)', 'rgb(242,242,242)']
+              : rowData.status === 'In Progress'
+              ? ['#ffa300', '#ff7e00']
+              : ['rgb(242,242,242)', 'rgb(242,242,242)']
           }
           style={{
             padding: 20,
@@ -247,26 +254,25 @@ export default function TimeLine() {
     );
   };
 
-  const renderCircle = (rowData, sectionID, rowID) => {
-    return (
-      <View
-        style={{
-          justifyContent: 'flex-start',
-          position: 'absolute',
-          left: width * 0.5,
-          transform: [{ translateX: wp('-47%') }],
-          marginTop: 30,
-        }}>
-        {rowData.icon}
-      </View>
-    );
-  };
+  // const renderCircle = (rowData, sectionID, rowID) => {
+  //   return (
+  //     <View
+  //       style={{
+  //         justifyContent: 'flex-start',
+  //         position: 'absolute',
+  //         left: width * 0.5,
+  //         transform: [{translateX: wp('-47%')}],
+  //         marginTop: 30,
+  //       }}>
+  //       {rowData.icon}
+  //     </View>
+  //   );
+  // };
 
   return (
-
     <Timeline
       data={data}
-      keyExtractor={(item) => item.key}
+      keyExtractor={item => item.key}
       showTime={false}
       lineColor={'#cccccc'}
       innerCircle={'icon'}
@@ -274,6 +280,5 @@ export default function TimeLine() {
       circleSize={34}
       lineWidth={2}
     />
-
   );
 }

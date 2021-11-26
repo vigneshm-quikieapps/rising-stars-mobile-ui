@@ -1,9 +1,11 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
-import {colors,wp} from '../Constant/Constant';
+import {StyleSheet, Text} from 'react-native';
+import {colors, wp} from '../constants';
 
 function ErrorMessage({error, visible, style}) {
-  if (!visible || !error) return null;
+  if (!visible || !error) {
+    return null;
+  }
 
   return <Text style={[styles.text, style]}>{error}</Text>;
 }
@@ -14,6 +16,6 @@ const styles = StyleSheet.create({
   text: {
     color: colors.reddish,
     fontFamily: 'Nunito-Regular',
-    fontSize:wp('3%')
+    fontSize: wp('3%'),
   },
 });

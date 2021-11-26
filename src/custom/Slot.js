@@ -1,8 +1,8 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {RadioButton} from 'react-native-paper';
-import {hp, wp, colors, Fontsize} from '../Constant/Constant';
-import Radiobutton from '../custom/Radiobutton'
+import {hp, wp, colors, Fontsize} from '../constants';
+import RadioButton from './radio-button';
 
 const Slot = props => {
   return (
@@ -11,21 +11,20 @@ const Slot = props => {
         styles.container,
         props.style,
         {
-          borderColor: props.selected || props.white ? "#ff7e00" : 'white',
+          borderColor: props.selected || props.white ? '#ff7e00' : 'white',
           backgroundColor: props.selected || props.white ? 'white' : '#f2f2f2',
         },
       ]}>
       {props.radio ? (
-        <Radiobutton
-        onPress={props.onPress}
-        status={props.status}
-        />
+        <RadioButton onPress={props.onPress} status={props.status} />
       ) : null}
 
       <View style={styles.slotdetails}>
         {props.required && (
-          <View style={{marginBottom:hp('1%')}}>
-            <Text style={styles.day,{marginLeft:wp('0.5%')}}>{props.Class}</Text>
+          <View style={{marginBottom: hp('1%')}}>
+            <Text style={(styles.day, {marginLeft: wp('0.5%')})}>
+              {props.Class}
+            </Text>
             <Text style={styles.time}>{props.sessions}</Text>
           </View>
         )}
@@ -61,8 +60,8 @@ const styles = StyleSheet.create({
   day: {
     fontFamily: 'Nunito-SemiBold',
     // fontWeight: 'bold',
-    fontSize:Fontsize ,
-    marginLeft:-wp('1%')
+    fontSize: Fontsize,
+    marginLeft: -wp('1%'),
   },
   time: {
     fontFamily: 'Nunito-Regular',

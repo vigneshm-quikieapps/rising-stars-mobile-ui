@@ -1,9 +1,19 @@
 import React, {useEffect} from 'react';
-import {  View,  Text,  StyleSheet,  Dimensions,  TouchableOpacity,  FlatList,  ScrollView,  Image,  SectionList,} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+  FlatList,
+  ScrollView,
+  Image,
+  SectionList,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel from 'react-native-snap-carousel';
-import AttendanceOverview from '../../custom/AttendanceOverview';
-import {colors, Images, wp} from '../../Constant/Constant';
+import AttendanceOverview from '../../custom/attendance-overview';
+import {colors, Images, wp} from '../../constants';
 
 const itemWidth = Dimensions.get('window').width;
 

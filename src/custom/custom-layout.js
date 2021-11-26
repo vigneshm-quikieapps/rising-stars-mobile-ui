@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {
   View,
@@ -7,7 +8,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import {hp, wp, colors, Fontsize} from '../Constant/Constant';
+import {hp, wp, colors, Fontsize} from '../constants';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 
 export default function CustomLayout(props) {
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     marginTop: hp('2.5%'),
     justifyContent: 'space-between',
   },
-    headertext: {
+  headertext: {
     // fontSize: hp('3.5%'),
     fontSize: wp('5.5%'),
     // fontWeight: 'bold',
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
     width: wp('65%'),
   },
   subheadertext: {
-    fontFamily: 'Nunito-SemiBold',    
+    fontFamily: 'Nunito-SemiBold',
     marginTop: hp('1.5%'),
     width: wp('65%'),
   },

@@ -1,62 +1,78 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Image, ActivityIndicator, Pressable, TouchableOpacity, Modal, FlatList } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import React, {useState, useEffect, useRef} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+  Pressable,
+  TouchableOpacity,
+  Modal,
+  FlatList,
+} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import moment from 'moment';
 
-import CustomLayout from '../../custom/CustomLayout';
-import Studentcard from '../../custom/Studentcard';
-import ProgressTracker from '../../custom/ProgressTracker';
-import Forwardbutton from '../../custom/Forwardbutton';
-import { colors, Fontsize, hp, wp, Stepend } from '../../Constant/Constant';
-import PopUpCard from '../../custom/PopUpCard';
-import Slot from '../../custom/Slot';
-import { getClassdata, getSessiondata, setClubData,setClassData,setSlotData, clubfinance } from '../../redux/action/enrol';
+import CustomLayout from '../../custom/custom-layout';
+import Studentcard from '../../custom/student-card';
+import ProgressTracker from '../../custom/progress-tracker';
+import Forwardbutton from '../../custom/forward-button';
+import {colors, Fontsize, hp, wp, Stepend} from '../../constants';
+import PopUpCard from '../../custom/pop-up-card';
+import Slot from '../../custom/slot';
+import {
+  getClassdata,
+  getSessiondata,
+  setClubData,
+  setClassData,
+  setSlotData,
+  clubfinance,
+} from '../../redux/action/enrol';
 
-
-import { useSelector, useDispatch } from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux';
 
 export default function Class_Selection(props) {
   const [business, setBusiness] = useState();
   const [classes, setClasses] = useState();
 
-  const [clubmodal, setClubModal] = useState(false)
-  const [classmodal, setClassModal] = useState(false)
+  const [clubmodal, setClubModal] = useState(false);
+  const [classmodal, setClassModal] = useState(false);
 
-  const [showclass, setShowClass] = useState(false)
-  const [showsession, setShowsession] = useState(false)
+  const [showclass, setShowClass] = useState(false);
+  const [showsession, setShowsession] = useState(false);
 
-  const [selectdata, setSelectdata] = useState()
+  const [selectdata, setSelectdata] = useState();
 
-  const child = useSelector(state => state.childData.addchild)  
+  const child = useSelector(state => state.childData.addchild);
 
-  const clubData = useSelector(state => state.clubname.clubData)
+  const clubData = useSelector(state => state.clubname.clubData);
 
-  const classData = useSelector(state => state.classname.classtate)
+  const classData = useSelector(state => state.classname.classtate);
 
-  const sessionData = useSelector(state => state.sessionlist.sessiondata)
+  const sessionData = useSelector(state => state.sessionlist.sessiondata);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const handleBusiness = (item) => {
-    setBusiness(item.name)
-    setShowClass(true)
-    setClubModal(!clubmodal)
-    dispatch(setClubData(item))
-    dispatch(getClassdata(item._id))
-  }
-  const handleClasses = (item) => {
-    setClasses(item.name)
-    setShowsession(true)
-    setClassModal(!classmodal)
-    dispatch(setClassData(item))
-    dispatch(clubfinance(item._id))
-    dispatch(getSessiondata(item._id))
-  }
+  const handleBusiness = item => {
+    setBusiness(item.name);
+    setShowClass(true);
+    setClubModal(!clubmodal);
+    dispatch(setClubData(item));
+    dispatch(getClassdata(item._id));
+  };
+  const handleClasses = item => {
+    setClasses(item.name);
+    setShowsession(true);
+    setClassModal(!classmodal);
+    dispatch(setClassData(item));
+    dispatch(clubfinance(item._id));
+    dispatch(getSessiondata(item._id));
+  };
 
   const handleforward = () => {
-    dispatch(setSlotData(selectdata))
-    props.navigation.navigate('Fees_Overview')
-  }
+    dispatch(setSlotData(selectdata));
+    props.navigation.navigate('Fees_Overview');
+  };
 
   return (
     <CustomLayout
@@ -75,40 +91,52 @@ export default function Class_Selection(props) {
         value={business}
         onPress={() => setClubModal(!clubmodal)}
       />
-      {
-        clubmodal && clubData.map(item => {
+      {clubmodal &&
+        clubData.map(item => {
           return (
-            <TouchableOpacity key={item._id} onPress={() => handleBusiness(item)} style={{ alignItems: 'center', justifyContent: 'center' }}>
-              <Text style={{ fontFamily: "Nunito-Regular", fontSize: Fontsize }}>{item.name}</Text>
+            <TouchableOpacity
+              key={item._id}
+              onPress={() => handleBusiness(item)}
+              style={{alignItems: 'center', justifyContent: 'center'}}>
+              <Text style={{fontFamily: 'Nunito-Regular', fontSize: Fontsize}}>
+                {item.name}
+              </Text>
             </TouchableOpacity>
-          )
-        })
-      }
-      {
-        showclass ? classData && classData.length > 0 ?
+          );
+        })}
+      {showclass ? (
+        classData && classData.length > 0 ? (
           <>
             <PopUpCard
               headertext={'Class Name*'}
-
               text="Select Your Class Name"
               value={classes}
               onPress={() => setClassModal(!classmodal)}
             />
-            {
-              classmodal && classData.map(item => {
+            {classmodal &&
+              classData.map(item => {
                 return (
-                  <TouchableOpacity key={item._id} onPress={() => handleClasses(item)} style={{ alignItems: 'center', justifyContent: 'center' }}>
-                    <Text style={{ fontFamily: "Nunito-Regular", fontSize: Fontsize }}>{item.name}</Text>
+                  <TouchableOpacity
+                    key={item._id}
+                    onPress={() => handleClasses(item)}
+                    style={{alignItems: 'center', justifyContent: 'center'}}>
+                    <Text
+                      style={{
+                        fontFamily: 'Nunito-Regular',
+                        fontSize: Fontsize,
+                      }}>
+                      {item.name}
+                    </Text>
                   </TouchableOpacity>
-                )
-              })
-            }
+                );
+              })}
           </>
-          :
-          <ActivityIndicator size="large" color={colors.orange} /> : null
-      }
-      {
-        showsession ? sessionData && sessionData.length > 0 ?
+        ) : (
+          <ActivityIndicator size="large" color={colors.orange} />
+        )
+      ) : null}
+      {showsession ? (
+        sessionData && sessionData.length > 0 ? (
           <>
             <Text
               style={{
@@ -118,29 +146,35 @@ export default function Class_Selection(props) {
               }}>
               Available Sessions
             </Text>
-            {
-              sessionData.map(item => {
-                return (
-                  <Slot
-                    white
-                    radio
-                    onPress={() => setSelectdata(item)}
-                    status={selectdata === item && 'checked'}
-                    day={item.pattern[0].day}
-                    time={`${moment(item.pattern[0].startTime).format('HH:mm')} - ${moment(item.pattern[0].endTime).format('HH:mm')}`}
-                    facility={item.name}
-                    coach={item.coach[0].name}
-                    key={item._id}
-                    style={{ marginVertical: wp('1%') }}
-                  />)
-              })}
+            {sessionData.map(item => {
+              return (
+                <Slot
+                  white
+                  radio
+                  onPress={() => setSelectdata(item)}
+                  status={selectdata === item && 'checked'}
+                  day={item.pattern[0].day}
+                  time={`${moment(item.pattern[0].startTime).format(
+                    'HH:mm',
+                  )} - ${moment(item.pattern[0].endTime).format('HH:mm')}`}
+                  facility={item.name}
+                  coach={item.coach[0].name}
+                  key={item._id}
+                  style={{marginVertical: wp('1%')}}
+                />
+              );
+            })}
           </>
-          : <ActivityIndicator size="large" color={colors.orange} /> : null
-      }
-      {selectdata && <Forwardbutton
-        style={{ alignSelf: 'flex-end', marginTop: hp('1%') }}
-        onPress={handleforward}
-      />}
+        ) : (
+          <ActivityIndicator size="large" color={colors.orange} />
+        )
+      ) : null}
+      {selectdata && (
+        <Forwardbutton
+          style={{alignSelf: 'flex-end', marginTop: hp('1%')}}
+          onPress={handleforward}
+        />
+      )}
     </CustomLayout>
   );
 }
@@ -166,8 +200,8 @@ const styles = StyleSheet.create({
     // borderRadius:50
   },
   cardtext: {
-    fontFamily: "Nunito-Regular",
-    fontSize: Fontsize
+    fontFamily: 'Nunito-Regular',
+    fontSize: Fontsize,
   },
   modalView: {
     flex: 1,
@@ -175,7 +209,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "white",
     // borderRadius: 20,
     // padding: 35,
-    alignItems: "center",
+    alignItems: 'center',
     // shadowColor: "#000",
     // shadowOffset: {
     //   width: 0,
@@ -185,5 +219,4 @@ const styles = StyleSheet.create({
     // shadowRadius: 4,
     // elevation: 5
   },
-
 });

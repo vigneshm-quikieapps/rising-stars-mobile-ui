@@ -1,14 +1,15 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Text, ActivityIndicator } from 'react-native';
-import { hp, colors, wp, Fontsize } from '../Constant/Constant';
+import {TouchableOpacity, StyleSheet, Text} from 'react-native';
+import {hp, colors, wp, Fontsize} from '../constants';
 import LinearGradient from 'react-native-linear-gradient';
 
-
-function AppButton({ title, onPress, style, color, size }) {
+function AppButton({title, onPress, style, color, size}) {
   return (
-    <TouchableOpacity onPress={onPress} >
-      <LinearGradient colors={['#ffa300', '#ff7e00']} style={[styles.container, style]}>
-        <TouchableOpacity onPress={onPress} >
+    <TouchableOpacity onPress={onPress}>
+      <LinearGradient
+        colors={['#ffa300', '#ff7e00']}
+        style={[styles.container, style]}>
+        <TouchableOpacity onPress={onPress}>
           <Text style={styles.button} onPress={onPress}>
             {title}
           </Text>

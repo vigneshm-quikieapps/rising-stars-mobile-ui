@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {
   View,
@@ -8,10 +9,10 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
-import {colors} from './../Constant/Constant';
-import AppButton from './AppButton';
+import {colors} from '../constants';
+import AppButton from './app-button';
 
-function cancelModal(props) {
+function CancelModal(props) {
   const [modalVisible, setModalVisible] = useState(true);
 
   return (
@@ -61,8 +62,6 @@ function cancelModal(props) {
   );
 }
 
-export default cancelModal;
-
 const styles = StyleSheet.create({
   container: {},
   centeredView: {
@@ -109,3 +108,5 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-SemiBold',
   },
 });
+
+export default CancelModal;

@@ -1,13 +1,8 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, View,StatusBar} from 'react-native';
+import {SafeAreaView, StyleSheet, StatusBar} from 'react-native';
 
 export default function StatusBarScreen({children, style}) {
-  return (
-    <SafeAreaView
-      style={[styles.screen, style, {backgroundColor: 'yellogreen'}]}>
-      {children}
-    </SafeAreaView>
-  );
+  return <SafeAreaView style={[styles.screen, style]}>{children}</SafeAreaView>;
 }
 
 const styles = StyleSheet.create({

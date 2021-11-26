@@ -1,21 +1,29 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, TextInput, Image, Switch, TouchableOpacity } from 'react-native';
-import CustomLayout from '../../custom/CustomLayout';
-import Studentcard from '../../custom/Studentcard';
-import ProgressTracker from '../../custom/ProgressTracker';
-import { colors, hp, wp, Fontsize, Stepend } from '../../Constant/Constant';
-import Input from '../../custom/Input'
+import React, {useState, useRef} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Image,
+  Switch,
+  TouchableOpacity,
+} from 'react-native';
+import CustomLayout from '../../custom/custom-layout';
+import Studentcard from '../../custom/student-card';
+import ProgressTracker from '../../custom/progress-tracker';
+import {colors, hp, wp, Fontsize, Stepend} from '../../constants';
+import Input from '../../custom/input';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import LinearGradient from 'react-native-linear-gradient';
-import EntIcon from 'react-native-vector-icons/Entypo'
-import { setProvide } from '../../redux/action/enrol'
+import EntIcon from 'react-native-vector-icons/Entypo';
+import {setProvide} from '../../redux/action/enrol';
 
-import { useSelector, useDispatch } from 'react-redux'
-import Forwardbutton from '../../custom/Forwardbutton';
+import {useSelector, useDispatch} from 'react-redux';
+import Forwardbutton from '../../custom/forward-button';
 
 const Provide_Consent = props => {
-  const termref = useRef()
-  const dispatch = useDispatch()
+  const termref = useRef();
+  const dispatch = useDispatch();
   const [isEnabled, setIsEnabled] = useState(false);
   const [allergies, setAllergies] = useState('');
   const [isEnabled2, setIsEnabled2] = useState(false);
@@ -25,8 +33,8 @@ const Provide_Consent = props => {
   const [isEnabled4, setIsEnabled4] = useState(false);
   const [sign, setSign] = useState('');
 
-  const child = useSelector(state => state.childData.addchild)
-  const club = useSelector(state => state.childData.clubdata)
+  const child = useSelector(state => state.childData.addchild);
+  const club = useSelector(state => state.childData.clubdata);
 
   return (
     <CustomLayout
@@ -100,21 +108,35 @@ const Provide_Consent = props => {
             borderTopRightRadius: 16,
             borderTopLeftRadius: 16,
           },
-        }}
-      >
-        <View style={{ paddingHorizontal: wp('5%') }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{ fontFamily: 'Nunito-Regular', fontSize: Fontsize, color: "#ff7e00" }}>Club Rule</Text>
+        }}>
+        <View style={{paddingHorizontal: wp('5%')}}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text
+              style={{
+                fontFamily: 'Nunito-Regular',
+                fontSize: Fontsize,
+                color: '#ff7e00',
+              }}>
+              Club Rule
+            </Text>
             <TouchableOpacity onPress={() => termref.current.close()}>
-              <LinearGradient style={styles.closePopUp} colors={['#ffa300', '#ff7e00']}>
+              <LinearGradient
+                style={styles.closePopUp}
+                colors={['#ffa300', '#ff7e00']}>
                 <EntIcon name="cross" size={15} color="white" />
               </LinearGradient>
             </TouchableOpacity>
           </View>
-          <Text style={{ fontFamily: 'Nunito-Regular', marginTop: hp('1.5%'), fontSize: Fontsize, alignSelf: 'center' }}>
+          <Text
+            style={{
+              fontFamily: 'Nunito-Regular',
+              marginTop: hp('1.5%'),
+              fontSize: Fontsize,
+              alignSelf: 'center',
+            }}>
             Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy
-            text ever since.
+            industry. Lorem Ipsum has been the industry's standard dummy text
+            ever since.
           </Text>
         </View>
       </RBSheet>
@@ -133,9 +155,7 @@ const Provide_Consent = props => {
         </View>
       )}
       <Conset
-        conset={
-          'Signed by Jube Bowman(Parent / Carer)'
-        }
+        conset={'Signed by Jube Bowman(Parent / Carer)'}
         value={isEnabled4}
         onValueChange={() => setIsEnabled4(!isEnabled4)}
       />
@@ -144,17 +164,17 @@ const Provide_Consent = props => {
           <Input
             placeholder="Signed by Jube Bowman(Parent / Carer)"
             placeholderTextColor={colors.grey}
-            style={{ width: wp('85%') }}
+            style={{width: wp('85%')}}
             onChangeText={text => setSign(text)}
-          // multiline={true}
+            // multiline={true}
           />
         </View>
       )}
       <Forwardbutton
-        style={{ alignSelf: 'flex-end', marginTop: hp('1%') }}
+        style={{alignSelf: 'flex-end', marginTop: hp('1%')}}
         onPress={() => {
-          dispatch(setProvide(allergies,condition,photo,sign))
-          props.navigation.navigate('Pay')
+          dispatch(setProvide(allergies, condition, photo, sign));
+          props.navigation.navigate('Pay');
         }}
       />
     </CustomLayout>
@@ -166,7 +186,7 @@ const Conset = props => {
     <View style={styles.container}>
       <Text style={styles.consettext}>{props.conset}</Text>
       <Switch
-        trackColor={{ false: '#767577', true: colors.pumpkinorange }}
+        trackColor={{false: '#767577', true: colors.pumpkinorange}}
         thumbColor={props.value ? colors.orange : '#f4f3f4'}
         ios_backgroundColor="#3e3e3e"
         onValueChange={props.onValueChange}
@@ -236,7 +256,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 50,
     alignSelf: 'flex-end',
-    marginTop: -hp('1%')
+    marginTop: -hp('1%'),
   },
 });
 

@@ -1,20 +1,22 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { colors, hp, wp } from '../Constant/Constant';
+import {Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {colors, hp} from '../constants';
 import LinearGradient from 'react-native-linear-gradient';
 
-const Forwardbutton = (props) => {
+const ForwardButton = props => {
   return (
     <TouchableOpacity onPress={props.onPress}>
-      <LinearGradient colors={['#ffa300', '#ff7e00']} style={[styles.backbutton, props.style]} >
+      <LinearGradient
+        colors={['#ffa300', '#ff7e00']}
+        style={[styles.backButton, props.style]}>
         <Image source={require('../assets/images/icon-forward2-line.png')} />
       </LinearGradient>
     </TouchableOpacity>
-  )
-}
+  );
+};
 // Style
 const styles = StyleSheet.create({
-  backbutton: {
+  backButton: {
     backgroundColor: colors.orange,
     height: hp('7.5%'),
     width: hp('7.5%'),
@@ -23,4 +25,4 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
 });
-export default Forwardbutton;
+export default ForwardButton;

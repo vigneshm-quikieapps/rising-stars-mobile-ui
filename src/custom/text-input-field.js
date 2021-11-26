@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
-import { configureFonts, TextInput } from 'react-native-paper';
-import { wp, colors, Fontsize } from '../Constant/Constant';
+import {StyleSheet} from 'react-native';
+import {configureFonts, TextInput} from 'react-native-paper';
+import {wp, colors, Fontsize} from '../constants';
 
-
-const TextInputField = ({ placeholder, label, style, ...otherProps }) => {
-
+const TextInputField = ({placeholder, label, style, ...otherProps}) => {
   const fontConfig = {
     default: {
       regular: {
@@ -15,22 +13,20 @@ const TextInputField = ({ placeholder, label, style, ...otherProps }) => {
     },
   };
 
-
   return (
     <TextInput
       label={placeholder}
       placeholder={label}
       mode="outlined"
-      placeholderTextColor={"#e3e3e3"}
-      outlineColor={"#e3e3e3"}
+      placeholderTextColor={'#e3e3e3'}
+      outlineColor={'#e3e3e3'}
       // outlineTextColor={"red"}
       theme={{
         roundness: 15,
         colors: {
           primary: colors.orange,
-
         },
-        fonts: configureFonts(fontConfig)
+        fonts: configureFonts(fontConfig),
       }}
       style={[styles.textInput, style]}
       {...otherProps}
@@ -45,7 +41,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Regular',
     borderColor: colors.orange,
     backgroundColor: '#ffffff',
-  }
+  },
 });
 
 export default TextInputField;
