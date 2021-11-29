@@ -12,6 +12,7 @@ import {
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {useSelector, useDispatch} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 
 import {colors, Fontsize, hp, wp} from '../../constants';
 import TextInputField from '../../custom/text-input-field';
@@ -26,6 +27,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const Login = props => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const currentUser = useSelector(state => state.LoginData.user);
   const isLoading = useSelector(state => state.LoginData.isloading);
@@ -43,7 +45,7 @@ const Login = props => {
 
   useEffect(() => {
     getToken();
-  }, [getToken]);
+  }, [getToken, currentUser]);
 
   const getToken = useCallback(async () => {
     const refreshToken = await getLocalData('refreshToken');
@@ -51,9 +53,9 @@ const Login = props => {
   }, []);
 
   useEffect(() => {
-    console.log('check login status: ', currentUser);
-    currentUser.name && props.navigation.navigate('HomeTab');
-  }, [props.navigation, currentUser]);
+    console.log('check login status: ', isLoggedIn);
+    isLoggedIn && navigation.navigate('HomeTab');
+  }, [navigation, isLoggedIn]);
 
   return (
     <ScrollView style={styles.container}>
