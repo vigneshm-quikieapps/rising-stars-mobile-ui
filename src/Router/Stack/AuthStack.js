@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Stack, StackScreen} from '../Utils/Utils';
 
+import SetPassword from '../../screen/Authentication/set-password';
 import Login from '../../screen/Authentication/Login';
 import Register from '../../screen/Authentication/Register';
 import CreateNewPassword from './../../screen/Authentication/CreateNewPassword';
@@ -13,6 +14,11 @@ export const AuthStack = props => {
       <StackScreen.Screen
         name="Login"
         component={Login}
+        options={{headerShown: false}}
+      />
+      <StackScreen.Screen
+        name="SetPassword"
+        component={SetPassword}
         options={{headerShown: false}}
       />
       <StackScreen.Screen

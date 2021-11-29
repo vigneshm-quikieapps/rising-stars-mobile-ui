@@ -15,14 +15,21 @@ export default function CustomLayout(props) {
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{
-        backgroundColor: 'white',
-      }}>
+      contentContainerStyle={[
+        {
+          backgroundColor: 'white',
+        },
+        props.style,
+      ]}>
       <View style={styles.container}>
         <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity style={styles.backIcon} onPress={props.backbutton}>
-            <Image source={require('../assets/images/icon-back-line.png')} />
-          </TouchableOpacity>
+          {props.back && (
+            <TouchableOpacity
+              style={styles.backIcon}
+              onPress={props.backbutton}>
+              <Image source={require('../assets/images/icon-back-line.png')} />
+            </TouchableOpacity>
+          )}
           <View style={styles.centertext}>
             <Text style={{fontSize: wp('5%'), fontFamily: 'Nunito-SemiBold'}}>
               {props.names}

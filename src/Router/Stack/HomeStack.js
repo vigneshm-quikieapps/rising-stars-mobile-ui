@@ -55,6 +55,11 @@ const HomeNavigation = props => {
     <NavigationContainer>
       <Stack>
         <StackScreen.Screen
+          name="AuthStack"
+          component={AuthStack}
+          options={{headerShown: false}}
+        />
+        <StackScreen.Screen
           name="HomeTab"
           component={HomeTab}
           options={{headerShown: false}}
@@ -87,11 +92,6 @@ const HomeNavigation = props => {
         <StackScreen.Screen
           name="PaymentHistory"
           component={PaymentHistory}
-          options={{headerShown: false}}
-        />
-        <StackScreen.Screen
-          name="AuthStack"
-          component={AuthStack}
           options={{headerShown: false}}
         />
       </Stack>
