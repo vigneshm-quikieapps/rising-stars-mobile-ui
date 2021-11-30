@@ -16,16 +16,18 @@ import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 import {WheelPicker} from 'react-native-wheel-picker-android';
 
-import Wheeldropdown from '../../custom/wheel-dropdown';
+import {
+  WheelDropdown,
+  ProgressBarWithStar,
+  Timelines,
+  BarIndicator,
+  AttendanceCard,
+  ClassCard,
+} from '../../components';
+
 import {colors, Fontsize, hp, Images, wp} from '../../constants';
-import ProgressBarWithStar from '../../custom/progress-bar-with-star';
-import TimeLines from '../../custom/timelines';
-import BarIndicator from '../../custom/bar-indicator';
-import AttendanceCard from '../../custom/attendance-card';
-import ClassCard from '../../custom/class-card';
 import {getLocalData} from '../../utils/LocalStorage';
 import {getmemberData, getmemberClass} from '../../redux/action/home';
-import PopUp from '../../custom/pop-up';
 
 const Home = () => {
   const Datum = [1, 2, 3, 4]; // data.length for how many time we have scroll in Carousel
@@ -64,7 +66,7 @@ const Home = () => {
   const pagination = () => {
     return (
       <Pagination
-        dotsLength={memberclassdata && memberclassdata.length}
+        dotsLength={memberclassdata.length}
         activeDotIndex={activeDotIndex}
         containerStyle={{paddingVertical: 0}}
         dotStyle={{
@@ -157,7 +159,7 @@ const Home = () => {
             )}
           </View>
 
-          <Wheeldropdown
+          <WheelDropdown
             title="child"
             visible={memberModal}
             cancel={() => setMemberModal(!memberModal)}
@@ -182,7 +184,7 @@ const Home = () => {
               selectedItemTextFontFamily="Nunito-Regular"
               data={members}
             />
-          </Wheeldropdown>
+          </WheelDropdown>
           <View style={styles.courosoul}>
             {memberclassdata && memberclassdata.length ? (
               <Carousel
@@ -296,7 +298,7 @@ const Home = () => {
               backgroundColor: colors.lightgrey,
             }}
           />
-          <TimeLines />
+          <Timelines />
         </View>
       </View>
     </ScrollView>

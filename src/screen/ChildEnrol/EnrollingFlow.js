@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Text, Dimensions, FlatList} from 'react-native';
 import Timeline from 'react-native-timeline-flatlist';
-import AppButton from './../../custom/app-button';
+import {AppButton, CustomLayout} from './../../components';
 import {colors, wp, hp, Fontsize, EnrollData} from './../../constants';
-import CustomLayout from './../../custom/custom-layout';
 import LinearGradient from 'react-native-linear-gradient';
 
 function EnrollingFlow(props) {

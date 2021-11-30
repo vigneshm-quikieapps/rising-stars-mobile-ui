@@ -4,7 +4,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import TextInputField from './text-input-field';
 import ErrorMessage from './error-message';
 import {wp, colors, hp} from '../constants';
-import Buttons from './buttons';
+import Button from './button';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import PopUpCard from './pop-up-card';
 
@@ -41,9 +41,9 @@ export default function EmergencyCard({
           <Text style={styles.emergency}>
             {'Emergency Contact (Secondary)'}
           </Text>
-          <Buttons style={styles.cross} onPress={crossButton}>
+          <Button style={styles.cross} onPress={crossButton}>
             <AntIcon name="minus" size={hp('2%')} color={colors.white} />
-          </Buttons>
+          </Button>
         </View>
       )}
 
@@ -91,12 +91,9 @@ export default function EmergencyCard({
       {children}
       {addButtons && (
         <View style={styles.bottom}>
-          <Buttons
-            disabled={disabled}
-            style={styles.button}
-            onPress={addButton}>
+          <Button disabled={disabled} style={styles.button} onPress={addButton}>
             <AntIcon name="plus" size={hp('3%')} color={colors.white} />
-          </Buttons>
+          </Button>
           <Text style={styles.bottomText}>Emergency Contact (Secondary)</Text>
         </View>
       )}

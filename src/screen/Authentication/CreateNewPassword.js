@@ -1,9 +1,7 @@
 import React, {useState, useRef} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import CustomLayout from './../../custom/custom-layout';
-import TextInputField from './../../custom/text-input-field';
-import AppButton from '../../custom/app-button';
+import {CustomLayout, TextInputField, AppButton} from './../../components';
 import {colors, hp, wp} from './../../constants';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import InputOTPScreen from './InputOTPScreen';

@@ -1,17 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect, useRef} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Alert,
-  Modal,
-  Pressable,
-  FlatList,
-  Dimensions,
-  ActivityIndicator,
-} from 'react-native';
+import {View, StyleSheet, Text, ActivityIndicator} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -25,16 +14,17 @@ import {
 } from 'react-native-confirmation-code-field';
 
 import {TextInput} from 'react-native-paper';
-import ErrorMessage from '../../custom/error-message';
-import TextInputField from '../../custom/text-input-field';
+import {
+  ErrorMessage,
+  TextInputField,
+  AppButton,
+  PopUp,
+  CustomLayout,
+} from '../../components';
 import {colors, Fontsize, hp, wp, Term_Condition} from '../../constants';
-import AppButton from './../../custom/app-button';
-import PopUp from './../../custom/pop-up';
-import CustomLayout from '../../custom/custom-layout';
 import {PostCode, PostDataPass, RegisterData} from '../../redux/action/auth';
 import PostComponent from './components/Postcode';
 import {fetchMobileOTP} from '../../redux/service/request';
-import * as Action from '../../redux/action-types';
 
 const CELL_COUNT = 6;
 const validationSchema = Yup.object().shape({

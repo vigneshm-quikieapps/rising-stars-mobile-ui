@@ -2,9 +2,7 @@ import React, {useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 
 import {hp, wp, colors} from '../../constants';
-import CustomLayout from './../../custom/custom-layout';
-import TextInputField from './../../custom/text-input-field';
-import AppButton from '../../custom/app-button';
+import {CustomLayout, TextInputField, AppButton} from './../../components';
 
 function ForgotPassword(props) {
   const [button1, setButton1] = useState(false);

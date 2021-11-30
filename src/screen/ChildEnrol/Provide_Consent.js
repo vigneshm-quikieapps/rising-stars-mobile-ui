@@ -8,18 +8,20 @@ import {
   Switch,
   TouchableOpacity,
 } from 'react-native';
-import CustomLayout from '../../custom/custom-layout';
-import Studentcard from '../../custom/student-card';
-import ProgressTracker from '../../custom/progress-tracker';
+import {
+  CustomLayout,
+  StudentCard,
+  ProgressTracker,
+  Input,
+  ForwardButton,
+} from '../../components';
 import {colors, hp, wp, Fontsize, Stepend} from '../../constants';
-import Input from '../../custom/input';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import LinearGradient from 'react-native-linear-gradient';
 import EntIcon from 'react-native-vector-icons/Entypo';
 import {setProvide} from '../../redux/action/enrol';
 
 import {useSelector, useDispatch} from 'react-redux';
-import Forwardbutton from '../../custom/forward-button';
 
 const Provide_Consent = props => {
   const termref = useRef();
@@ -39,7 +41,7 @@ const Provide_Consent = props => {
   return (
     <CustomLayout
       Customchildren={
-        <Studentcard
+        <StudentCard
           name={child.fullName}
           id={child.age}
           activityrequired
@@ -170,7 +172,7 @@ const Provide_Consent = props => {
           />
         </View>
       )}
-      <Forwardbutton
+      <ForwardButton
         style={{alignSelf: 'flex-end', marginTop: hp('1%')}}
         onPress={() => {
           dispatch(setProvide(allergies, condition, photo, sign));

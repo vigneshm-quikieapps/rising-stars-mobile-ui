@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Text, Dimensions, FlatList} from 'react-native';
 import Timeline from 'react-native-timeline-flatlist';
-import AppButton from './../../custom/app-button';
+import {AppButton, CustomLayout} from './../../components';
 import {colors, wp, hp, Fontsize} from './../../constants';
-import CustomLayout from './../../custom/custom-layout';
 import LinearGradient from 'react-native-linear-gradient';
 
 function EnrollingFlow(props) {
@@ -17,7 +16,7 @@ function EnrollingFlow(props) {
     {id: 7, title: 'Step 7', description: 'Confirmation'},
   ];
 
-  renderCircle = (rowData, sectionID, rowID) => {
+  const renderCircle = (rowData, sectionID, rowID) => {
     let title = (
       <Text style={{alignSelf: 'center', color: colors.white}}>
         {rowData.no}

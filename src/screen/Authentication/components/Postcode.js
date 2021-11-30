@@ -12,10 +12,8 @@ import {useSelector, useDispatch} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import EntIcon from 'react-native-vector-icons/Entypo';
 
-import PopUp from '../../../custom/pop-up';
-import AppButton from '../../../custom/app-button';
+import {PopUp, AppButton, RadioButton} from '../../../components';
 import {colors, Fontsize, wp, hp} from '../../../constants';
-import RadioButton from '../../../custom/radio-button';
 import {PostDataPass} from '../../../redux/action/auth';
 
 export default function PostComponent(props) {

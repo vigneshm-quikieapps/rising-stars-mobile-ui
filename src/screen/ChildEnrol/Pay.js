@@ -1,13 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import CustomLayout from '../../custom/custom-layout';
-import Studentcard from '../../custom/student-card';
-import ProgressTracker from '../../custom/progress-tracker';
+import {
+  CustomLayout,
+  StudentCard,
+  ProgressTracker,
+  ForwardButton,
+  AtmCard,
+} from '../../components';
 import {colors, Fontsize, hp, Stepend, wp} from '../../constants';
 import {RadioButton} from 'react-native-paper';
-import Forwardbutton from '../../custom/forward-button';
-import Atmcard from '../../custom/atm-card';
 import {useSelector} from 'react-redux';
 
 const Pay = props => {
@@ -16,7 +18,7 @@ const Pay = props => {
   return (
     <CustomLayout
       Customchildren={
-        <Studentcard
+        <StudentCard
           name={child.fullName}
           id={child.age}
           activityrequired
@@ -47,7 +49,7 @@ const Pay = props => {
       />
       <View style={styles.breaks} />
       <Text style={styles.optional}>Payment Options</Text>
-      <Atmcard />
+      <AtmCard />
       <View style={styles.bottom}>
         <RadioButton />
         <Text
@@ -68,7 +70,7 @@ const Pay = props => {
           Wallets
         </Text>
       </View>
-      <Forwardbutton
+      <ForwardButton
         style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
         onPress={() => props.navigation.navigate('Confirmation')}
       />

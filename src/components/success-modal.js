@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
@@ -12,19 +12,14 @@ import {
 import {colors} from '../constants';
 import AppButton from './app-button';
 
-function SuccessModal(props) {
-  const [modalVisible, setModalVisible] = useState(true);
-
+function SuccessModal({title, onDone, isVisible, ...props}) {
   return (
     <View style={styles.centeredView}>
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
+        visible={isVisible}
+        onRequestClose={() => {}}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Image
@@ -35,10 +30,11 @@ function SuccessModal(props) {
               }}
               source={require('../assets/images/successIcon.png')}
             />
-            <Text style={styles.modalText}>Cancel dropped successfully</Text>
+            <Text style={styles.modalText}>{title}</Text>
             <View>
-              <Pressable onPress={() => setModalVisible(!modalVisible)}>
+              <Pressable>
                 <AppButton
+                  onPress={onDone}
                   title="Done"
                   style={{
                     paddingLeft: 130,

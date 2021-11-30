@@ -1,15 +1,16 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
-import CustomLayout from '../../custom/custom-layout';
+import {
+  CustomLayout,
+  StudentCard,
+  ProgressTracker,
+  Slot,
+  AppButton,
+} from '../../components';
 import {useSelector, useDispatch} from 'react-redux';
 import moment from 'moment';
 
-import Studentcard from '../../custom/student-card';
-import ProgressTracker from '../../custom/progress-tracker';
 import {colors, Fontsize, hp, wp, Stepend} from '../../constants';
-import Slot from '../../custom/slot';
-import AppButton from '../../custom/app-button';
-
 const Confirmation = props => {
   const child = useSelector(state => state.childData.addchild);
   const club = useSelector(state => state.childData.clubdata);
@@ -30,7 +31,7 @@ const Confirmation = props => {
       subheadertext={'Thank you for enroling your child with our club'}
       Customchildren2={<ProgressTracker percent={7} />}
       Customchildren3={
-        <Studentcard
+        <StudentCard
           name={child.fullName}
           id={child.age}
           activityrequired

@@ -15,9 +15,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 
 import {colors, Fontsize, hp, wp} from '../../constants';
-import TextInputField from '../../custom/text-input-field';
-import ErrorMessage from '../../custom/error-message';
-import AppButton from '../../custom/app-button';
+import {TextInputField, ErrorMessage, AppButton} from '../../components';
 import {loginUserData} from '../../redux/action/auth';
 import {getLocalData} from '../../utils/LocalStorage';
 

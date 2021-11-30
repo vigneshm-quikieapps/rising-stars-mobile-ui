@@ -1,10 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Text, FlatList} from 'react-native';
-import CustomLayout from '../../custom/custom-layout';
-import LinearStudentCard from '../../custom/linear-student-card';
-import ClassCard from '../../custom/class-card';
-import {PaymentCard, Card} from '../../custom/payment-card';
+import {
+  CustomLayout,
+  LinearStudentCard,
+  ClassCard,
+  PaymentCard,
+  Card,
+} from '../../components';
 import {colors, wp} from '../../constants';
 
 const data = [

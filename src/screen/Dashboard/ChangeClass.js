@@ -1,10 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import CustomLayout from '../../custom/custom-layout';
-import StudentCard from '../../custom/student-card';
-import ClassCard from '../../custom/class-card';
-import Slot from '../../custom/slot';
+import {CustomLayout, StudentCard, ClassCard, Slot} from '../../components';
 import {hp, colors} from '../../constants';
 
 export default function ChangeClass() {

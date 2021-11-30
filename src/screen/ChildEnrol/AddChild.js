@@ -3,23 +3,24 @@ import React, {useState, useRef} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import EmergencyCard from '../../custom/emergency-card';
+import {
+  EmergencyCard,
+  WheelDropdown,
+  PopUpCard,
+  PopUp,
+  CustomLayout,
+  TextInputField,
+  ProgressTracker,
+  ForwardButton,
+  ErrorMessage,
+  AppButton,
+} from '../../components';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {useSelector, useDispatch} from 'react-redux';
-
-import PopUpCard from '../../custom/pop-up-card';
-import PopUp from '../../custom/pop-up';
-import CustomLayout from '../../custom/custom-layout';
-import TextInputField from '../../custom/text-input-field';
-import ProgressTracker from '../../custom/progress-tracker';
 import {colors, hp, wp, Stepend} from '../../constants';
-import Forwardbutton from '../../custom/forward-button';
-import ErrorMessage from '../../custom/error-message';
-import AppButton from '../../custom/app-button';
 import {setChildData, getClubdata} from '../../redux/action/enrol';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
-import Wheeldropdown from '../../custom/wheel-dropdown';
 
 const gender = [
   {id: 1, gender: 'Boy'},
@@ -152,7 +153,7 @@ const AddChild = props => {
               onPress={() => setBirthModal(!birthModal)}
               onBlur={() => setBirthError(true)}
             />
-            <Wheeldropdown
+            <WheelDropdown
               title=" Date of Birth"
               visible={birthModal}
               confirmbutton={true}
@@ -176,7 +177,7 @@ const AddChild = props => {
                   setOpen(!open);
                 }}
               />
-            </Wheeldropdown>
+            </WheelDropdown>
             {/* <DatePicker
               modal
               mode="date"
@@ -352,7 +353,7 @@ const AddChild = props => {
                   </EmergencyCard>
                 );
               })}
-            <Forwardbutton
+            <ForwardButton
               style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
               onPress={handleSubmit}
             />

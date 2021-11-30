@@ -1,11 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {Text, StyleSheet} from 'react-native';
-import CustomLayout from '../../custom/custom-layout';
-import LinearStudentCard from '../../custom/linear-student-card';
-import ClassCard from '../../custom/class-card';
+import {
+  CustomLayout,
+  LinearStudentCard,
+  ClassCard,
+  AppButton,
+} from '../../components';
 import {colors, Fontsize} from '../../constants';
-import AppButton from '../../custom/app-button';
 
 export default function EnrolledChild(props) {
   const [modalVisible, setModalVisible] = useState(false);

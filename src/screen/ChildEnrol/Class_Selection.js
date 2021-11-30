@@ -1,25 +1,21 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState} from 'react';
 import {
-  View,
   Text,
   StyleSheet,
-  Image,
   ActivityIndicator,
-  Pressable,
   TouchableOpacity,
-  Modal,
-  FlatList,
 } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
 import moment from 'moment';
 
-import CustomLayout from '../../custom/custom-layout';
-import Studentcard from '../../custom/student-card';
-import ProgressTracker from '../../custom/progress-tracker';
-import Forwardbutton from '../../custom/forward-button';
+import {
+  CustomLayout,
+  Studentcard,
+  ProgressTracker,
+  Forwardbutton,
+  Slot,
+  PopUpCard,
+} from '../../components';
 import {colors, Fontsize, hp, wp, Stepend} from '../../constants';
-import PopUpCard from '../../custom/pop-up-card';
-import Slot from '../../custom/slot';
 import {
   getClassdata,
   getSessiondata,

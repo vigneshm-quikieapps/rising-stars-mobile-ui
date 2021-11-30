@@ -1,11 +1,13 @@
 import React, {useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-import CustomLayout from '../../custom/custom-layout';
-import Studentcard from '../../custom/student-card';
-import ProgressTracker from '../../custom/progress-tracker';
+import {
+  CustomLayout,
+  StudentCard,
+  ProgressTracker,
+  ForwardButton,
+} from '../../components';
 import {colors, Fontsize, hp, wp, Stepend} from '../../constants';
-import Forwardbutton from '../../custom/forward-button';
 
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -22,7 +24,7 @@ const Fees_Overview = props => {
   return (
     <CustomLayout
       Customchildren={
-        <Studentcard
+        <StudentCard
           name={child.fullName}
           id={child.age}
           activityrequired
@@ -63,7 +65,7 @@ const Fees_Overview = props => {
         currency={'13'}
       />
       <View style={{marginVertical: hp('1.8%')}} />
-      <Forwardbutton
+      <ForwardButton
         style={{alignSelf: 'flex-end', marginTop: hp('-1.7%')}}
         onPress={() => props.navigation.navigate('Provide_Consent')}
       />

@@ -1,7 +1,7 @@
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
 
-const Btn = props => {
+const Button = props => {
   return (
     <TouchableOpacity onPress={props.onPress} disabled={props.disabled}>
       {props.children}
@@ -9,4 +9,4 @@ const Btn = props => {
   );
 };
 
-export default Btn;
+export default Button;

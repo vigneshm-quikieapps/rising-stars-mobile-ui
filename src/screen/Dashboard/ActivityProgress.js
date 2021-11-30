@@ -10,8 +10,7 @@ import {
 import {colors, Images, wp} from '../../constants';
 import Carousel from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
-import ProgressBarWithStar from '../../custom/progress-bar-with-star';
-import TimeLines from '../../custom/timelines';
+import {ProgressBarWithStar, Timelines} from '../../components';
 
 const ActivityProgress = () => {
   const Datum = [1, 2, 3, 4];
@@ -110,7 +109,7 @@ const ActivityProgress = () => {
       </View>
 
       <View style={{marginTop: 10, paddingVertical: 20}}>
-        <TimeLines />
+        <Timelines />
       </View>
     </ScrollView>
   );

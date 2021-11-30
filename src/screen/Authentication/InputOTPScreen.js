@@ -1,13 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   Text,
   StyleSheet,
-  Button,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import AppButton from './../../custom/app-button';
+import {AppButton} from './../../components';
 import {hp, wp} from '../../constants';
 import {useNavigation} from '@react-navigation/native';
 

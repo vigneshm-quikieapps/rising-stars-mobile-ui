@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel from 'react-native-snap-carousel';
-import AttendanceOverview from '../../custom/attendance-overview';
+import {AttendanceOverview} from '../../components';
 import {colors, Images, wp} from '../../constants';
 
 const itemWidth = Dimensions.get('window').width;

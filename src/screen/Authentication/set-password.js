@@ -1,42 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect, useRef} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Alert,
-  Modal,
-  Pressable,
-  FlatList,
-  Dimensions,
-  ActivityIndicator,
-} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import RBSheet from 'react-native-raw-bottom-sheet';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import {useSelector, useDispatch} from 'react-redux';
 import {
-  CodeField,
-  Cursor,
-  useBlurOnFulfill,
-  useClearByFocusCell,
-} from 'react-native-confirmation-code-field';
+  ErrorMessage,
+  TextInputField,
+  AppButton,
+  CustomLayout,
+  SuccessModal,
+} from '../../components';
+import {colors, Fontsize, hp, wp} from '../../constants';
+import {useNavigation} from '@react-navigation/core';
 
-import {TextInput} from 'react-native-paper';
-import ErrorMessage from '../../custom/error-message';
-import TextInputField from '../../custom/text-input-field';
-import {colors, Fontsize, hp, wp, Term_Condition} from '../../constants';
-import AppButton from './../../custom/app-button';
-import PopUp from './../../custom/pop-up';
-import CustomLayout from '../../custom/custom-layout';
-import {PostCode, PostDataPass, RegisterData} from '../../redux/action/auth';
-import PostComponent from './components/Postcode';
-import {fetchMobileOTP} from '../../redux/service/request';
-import * as Action from '../../redux/action-types';
-
-const CELL_COUNT = 6;
 const validationSchema = Yup.object().shape({
   password: Yup.string()
     .required('Password is required')
@@ -49,6 +25,8 @@ const validationSchema = Yup.object().shape({
 });
 
 function Register(props) {
+  const navigation = useNavigation();
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
   return (
     <CustomLayout
       style={{height: '100%'}}
@@ -61,6 +39,14 @@ function Register(props) {
       subheader
       subheadertext={'Setup your password'}
       subheadertextstyle={{fontSize: wp('5.3%'), opacity: 0.5}}>
+      <SuccessModal
+        title="Password changed successfully"
+        isVisible={successModalVisible}
+        onDone={() => {
+          setSuccessModalVisible(false);
+          navigation.navigate('Login');
+        }}
+      />
       <Formik
         initialValues={{
           password: '',
@@ -106,7 +92,13 @@ function Register(props) {
             <AppButton
               title="Confirm Password"
               style={{marginTop: hp('40%')}}
-              onPress={() => {}}
+              onPress={() => {
+                setSuccessModalVisible(true);
+                setTimeout(() => {
+                  setSuccessModalVisible(false);
+                  navigation.navigate('Login');
+                }, 3000);
+              }}
             />
           </View>
         )}

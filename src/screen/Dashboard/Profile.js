@@ -13,7 +13,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
 import {removeLocalData} from '../../utils/LocalStorage';
-import CustomLayout from '../../custom/custom-layout';
+import {CustomLayout} from '../../components';
 import {colors, hp, wp} from '../../constants';
 
 function Profile(props) {

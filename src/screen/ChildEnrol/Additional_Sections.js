@@ -2,12 +2,14 @@
 import React, {useState, useRef} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import CustomLayout from '../../custom/custom-layout';
-import StudentCard from '../../custom/student-card';
-import ProgressTracker from '../../custom/progress-tracker';
+import {
+  CustomLayout,
+  StudentCard,
+  ProgressTracker,
+  ForwardButton,
+} from '../../components';
 import {colors, Fontsize, hp, wp} from '../../constants';
 import {RadioButton} from 'react-native-paper';
-import Forwardbutton from '../../custom/forward-button';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import EntIcon from 'react-native-vector-icons/Entypo';
 
@@ -158,7 +160,7 @@ const Additional_Sections = props => {
       <TouchableOpacity onPress={() => termref.current.open()}>
         <Text style={styles.bottom}>Read more about Club Rule</Text>
       </TouchableOpacity>
-      <Forwardbutton
+      <ForwardButton
         style={{alignSelf: 'flex-end'}}
         onPress={() => props.navigation.navigate('Pay')}
       />
