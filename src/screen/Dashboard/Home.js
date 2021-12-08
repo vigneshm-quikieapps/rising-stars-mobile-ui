@@ -27,7 +27,7 @@ import {
 
 import {colors, Fontsize, hp, Images, wp} from '../../constants';
 import {getLocalData} from '../../utils/LocalStorage';
-import {getmemberData, getmemberClass} from '../../redux/action/home';
+import {getmemberClass} from '../../redux/action/home';
 
 const Home = () => {
   const Datum = [1, 2, 3, 4]; // data.length for how many time we have scroll in Carousel

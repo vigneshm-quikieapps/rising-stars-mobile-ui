@@ -30,7 +30,7 @@ const Login = props => {
   const currentUser = useSelector(state => state.LoginData.user);
   const isLoading = useSelector(state => state.LoginData.isloading);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  console.log(isLoading);
+  //console.log(isLoading);
 
   const gotoRegister = () => {
     props.navigation.navigate('Register');
@@ -77,7 +77,7 @@ const Login = props => {
       <Formik
         initialValues={{mobileNumber: '', password: ''}}
         onSubmit={values => {
-          console.log(values);
+          console.log('values:', values);
           dispatch(loginUserData(values));
         }}
         validationSchema={validationSchema}>

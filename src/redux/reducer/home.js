@@ -1,6 +1,7 @@
 import * as Action from '../action-types';
 
 const memberstate = {
+  classesOfLoggedInUser: {},
   memberdata: '',
   sagaerror: '',
   error: '',
@@ -9,6 +10,20 @@ const memberstate = {
 
 export const memberData = (state = memberstate, action) => {
   switch (action.type) {
+    case Action.USER_GET_CLASSES_SUCCESS:
+      console.log('Classes :', action);
+      return {
+        ...state,
+        classesOfLoggedInUser: action.data.docs,
+        error: action.data.message,
+        isloading: false,
+      };
+    case Action.USER_GET_CLASSES_FAILED:
+      return {
+        ...state,
+        sagaerror: action.error,
+        isloading: false,
+      };
     case Action.USER_GET_MEMBER_SUCCESS:
       console.log('action memberData :', action);
       return {

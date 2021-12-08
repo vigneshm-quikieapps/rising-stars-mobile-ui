@@ -16,6 +16,7 @@ import {getLocalData} from '../../utils/LocalStorage';
 import {getmemberData} from '../../redux/action/home';
 
 const HomeNavigation = props => {
+  console.log('hii', props.token);
   const [token, setToken] = useState('');
   const dispatch = useDispatch();
   // const membersdata = useSelector(state => state.memberData.memberData)

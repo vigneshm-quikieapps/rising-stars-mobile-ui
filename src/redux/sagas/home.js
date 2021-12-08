@@ -2,7 +2,11 @@ import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
 
 import * as Action from '../action-types';
 
-import {fetchMemberData, fetchMemberClassData} from '../service/request';
+import {
+  fetchMemberData,
+  fetchMemberClassData,
+  fetchClasses,
+} from '../service/request';
 
 function* handleGetMember(action) {
   console.log('action saga :', action);
@@ -28,4 +32,17 @@ function* handleGetMemberClass(action) {
 
 export function* watcherMemberClassSaga() {
   yield takeEvery(Action.USER_GET_MEMBER_CLASS_DATA, handleGetMemberClass);
+}
+
+function* handleGetMemberClasses(action) {
+  try {
+    const classes = yield call(fetchClasses, action.payload);
+    yield put({type: Action.USER_GET_CLASSES_SUCCESS, data: classes});
+  } catch (error) {
+    yield put({type: Action.USER_GET_CLASS_FAILED, error: error});
+  }
+}
+
+export function* watcherMemberClasses() {
+  yield takeEvery(Action.USER_GET_CLASSES, handleGetMemberClasses);
 }

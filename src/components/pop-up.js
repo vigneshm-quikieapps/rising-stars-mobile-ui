@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Modal, StyleSheet} from 'react-native';
+import {View, Modal, StyleSheet, TouchableOpacity} from 'react-native';
 
 function PopUp(props) {
   return (
@@ -8,7 +8,11 @@ function PopUp(props) {
       transparent={props.transparent}
       visible={props.visible}
       onRequestClose={props.onRequestClose}>
-      <View style={styles.container}>{props.children}</View>
+      <TouchableOpacity
+        onPressOut={() => props.setVisibility(false)}
+        style={styles.container}>
+        <View>{props.children}</View>
+      </TouchableOpacity>
     </Modal>
   );
 }

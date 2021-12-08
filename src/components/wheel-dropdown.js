@@ -8,7 +8,11 @@ import {wp, hp, Fontsize} from '../constants';
 
 export default function WheelDropdown(props) {
   return (
-    <PopUp animationType="slide" transparent={true} visible={props.visible}>
+    <PopUp
+      animationType="slide"
+      transparent={true}
+      visible={props.visible}
+      setVisibility={props.setVisibility}>
       <View style={styles.container}>
         <View style={styles.subContainer}>
           <View
@@ -26,30 +30,25 @@ export default function WheelDropdown(props) {
               Select {props.title}
             </Text>
             <View style={{alignItems: 'center'}} />
+            {props.children}
             <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
               }}>
-              {props.cancelbutton ? null : (
-                <Text style={styles.cancel} onPress={props.cancel}>
-                  Cancel
-                </Text>
-              )}
-              {props.children}
-              {props.confirmbutton ? null : (
-                <TouchableOpacity onPress={props.confirm}>
-                  <LinearGradient
-                    colors={['#ffa300', '#ff7e00']}
-                    style={styles.confirm}>
-                    <Text
-                      style={{color: 'white', fontFamily: 'Nunito-Regular'}}>
-                      Confirm
-                    </Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-              )}
+              <Text style={styles.cancel} onPress={props.cancel}>
+                Cancel
+              </Text>
+              <TouchableOpacity onPress={props.confirm}>
+                <LinearGradient
+                  colors={['#ffa300', '#ff7e00']}
+                  style={styles.confirm}>
+                  <Text style={{color: 'white', fontFamily: 'Nunito-Regular'}}>
+                    Confirm
+                  </Text>
+                </LinearGradient>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: hp('76%'),
+    marginTop: hp('60%'),
   },
   subContainer: {
     backgroundColor: 'white',

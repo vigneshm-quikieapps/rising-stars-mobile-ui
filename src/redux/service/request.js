@@ -147,3 +147,16 @@ export function fetchMemberClassData(id) {
       throw error;
     });
 }
+
+export function fetchClasses(token) {
+  return fetch(`${heroku_url}/api/classes/of-logged-in-user`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then(response => response.json())
+    .catch(error => {
+      throw error;
+    });
+}

@@ -1,19 +1,28 @@
-import { all } from "redux-saga/effects"
-import { watcherLoginSaga,watcherPostcode,watcherRegister } from "./sagas/auth"
-import { watcherClubSaga, watcherClassSaga, watcherSessionSaga, watcherClubfinance } from "./sagas/enrol"
-import {watcherMemberSaga,watcherMemberClassSaga} from './sagas/home'
+import {all} from 'redux-saga/effects';
+import {watcherLoginSaga, watcherPostcode, watcherRegister} from './sagas/auth';
+import {
+  watcherClubSaga,
+  watcherClassSaga,
+  watcherSessionSaga,
+  watcherClubfinance,
+} from './sagas/enrol';
+import {
+  watcherMemberSaga,
+  watcherMemberClassSaga,
+  watcherMemberClasses,
+} from './sagas/home';
 
 export default function* rootSaga() {
-    yield all([
-        watcherLoginSaga(),
-        watcherClubSaga(),
-        watcherClassSaga(),
-        watcherSessionSaga(),
-        watcherPostcode(),
-        watcherRegister(),
-        watcherClubfinance(),
-        watcherMemberSaga(),
-        watcherMemberClassSaga(),
-    ])
+  yield all([
+    watcherLoginSaga(),
+    watcherClubSaga(),
+    watcherClassSaga(),
+    watcherSessionSaga(),
+    watcherPostcode(),
+    watcherRegister(),
+    watcherClubfinance(),
+    watcherMemberSaga(),
+    watcherMemberClassSaga(),
+    watcherMemberClasses(),
+  ]);
 }
-

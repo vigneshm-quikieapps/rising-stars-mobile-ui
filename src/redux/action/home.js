@@ -13,3 +13,10 @@ export const getmemberClass = id => {
     payload: id,
   };
 };
+
+export const getClasses = id => {
+  return {
+    type: action.USER_GET_CLASSES,
+    payload: id,
+  };
+};
