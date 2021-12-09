@@ -57,17 +57,20 @@ const AddChild = props => {
 
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required().min(3).label('Full Name'),
-    name: Yup.string().required().min(3).label('Name'),
-    esNumber: Yup.number().required().min(10).label('Mobile Number'),
+    epname: Yup.string().required().min(3).label('Name'),
+    esname: Yup.string().min(3).label('Name'),
+    esNumber: Yup.number().min(10).label('Mobile Number'),
     dob: Yup.date().required().label('Date Of Birth'),
+    eprelation: Yup.string().required().label('Relationship'),
+    esrelation: Yup.string().label('Relationship'),
     gender: Yup.string().required().label('Gender'),
     epNumber: Yup.number().required().min(10).label('Mobile Number'),
   });
 
-  const gendersubmit = item => {
-    setGender(item);
-    genderef.current.close();
-  };
+  // const gendersubmit = item => {
+  //   setGender(item);
+  //   genderef.current.close();
+  // };
 
   const relationsubmit = item => {
     setRelationData(item);
@@ -103,16 +106,18 @@ const AddChild = props => {
           fullName: '',
           dob: birth,
           gender: '',
-          name: '',
-          contactNumber: '',
-          relationship: '',
-          //age: '',
+          esNumber: '',
+          epNumber: '',
+          esrelation: '',
+          eprelation: '',
+          epname: '',
+          esname: '',
         }}
         onSubmit={values => {
-          values.dob = birth;
-          values.gender = gender;
-          values.age = age;
-          values.relationship = relationData;
+          // values.dob = birth;
+          // values.gender = gender;
+          // values.age = age;
+          // values.relationship = relationData;
           console.log('Values:', values);
           if (values.dob === '') {
             setBirthError(true);
@@ -218,7 +223,7 @@ const AddChild = props => {
               <PopUpCard
                 text={'Gender'}
                 textColor={colors.grey}
-                value={gender}
+                value={values.gender}
                 onBlur={() => setFieldTouched('gender')}
                 onPress={() => genderef.current.open()}
               />
@@ -245,6 +250,8 @@ const AddChild = props => {
                     onPress={() => {
                       setGenderError(false);
                       //gendersubmit('Boy');
+                      values.gender = 'Boy';
+                      genderef.current.close();
                       setFieldValue('');
                     }}
                   />
@@ -253,6 +260,7 @@ const AddChild = props => {
                     style={{width: wp('40%')}}
                     onPress={() => {
                       setGenderError(false);
+                      genderef.current.close();
                       //gendersubmit('Girl');
                     }}
                   />
@@ -273,17 +281,21 @@ const AddChild = props => {
                 disabled={data.length === 1 ? true : false}
                 addButtons={buttonVisible}
                 addButton={handleSubmits}
-                valueName={values.name}
-                onChangeTextName={handleChange('name')}
-                onBlurName={() => setFieldTouched('name')}
-                errorName={errors.name}
-                visibleName={touched.name}
-                valuesContactNumber={values.contactNumber}
-                onChangeTextContact={handleChange('contactNumber')}
-                onBlurContact={() => setFieldTouched('contactNumber')}
-                errorContactNumber={errors.contactNumber}
-                visibleContactNumber={touched.contactNumber}
-                value={relationData}
+                valueName={values.epname}
+                onChangeTextName={handleChange('epname')}
+                onBlurName={() => setFieldTouched('epname')}
+                errorName={errors.epname}
+                visibleName={touched.epname}
+                valuesContactNumber={values.epNumber}
+                onChangeTextContact={handleChange('epNumber')}
+                onBlurContact={() => setFieldTouched('epNumber')}
+                errorContactNumber={errors.epNumber}
+                visibleContactNumber={touched.epNumber}
+                onChangeRelation={relation =>
+                  setFieldValue('eprelation', relation)
+                }
+                value={values.eprelation}
+                onBlur={() => setFieldTouched('gender')}
                 onPress={() => relationref.current.open()}>
                 <RBSheet
                   ref={relationref}
@@ -305,17 +317,26 @@ const AddChild = props => {
                     <AppButton
                       title="Parents"
                       style={{width: wp('28%')}}
-                      onPress={() => relationsubmit('Parents')}
+                      onPress={() => {
+                        values.eprelation = 'Parents';
+                        relationref.current.close();
+                      }}
                     />
                     <AppButton
                       title="Guardian"
                       style={{width: wp('30%')}}
-                      onPress={() => relationsubmit('Guardian')}
+                      onPress={() => {
+                        values.eprelation = 'Guardian';
+                        relationref.current.close();
+                      }}
                     />
                     <AppButton
                       title="Others"
                       style={{width: wp('28%')}}
-                      onPress={() => relationsubmit('Others')}
+                      onPress={() => {
+                        values.eprelation = 'Parents';
+                        relationref.current.close();
+                      }}
                     />
                   </View>
                 </RBSheet>
@@ -327,17 +348,17 @@ const AddChild = props => {
                       key={item.id}
                       head
                       crossButton={() => backsubmit(item)}
-                      valueName={values.name}
-                      onChangeTextName={handleChange('name')}
-                      onBlurName={() => setFieldTouched('name')}
-                      errorName={errors.name}
-                      visibleName={touched.name}
+                      valueName={values.epname}
+                      onChangeTextName={handleChange('epname')}
+                      onBlurName={() => setFieldTouched('epname')}
+                      errorName={errors.epname}
+                      visibleName={touched.epname}
                       valuesContactNumber={values.contactNumber}
                       onChangeTextContact={handleChange('contactNumber')}
                       onBlurContact={() => setFieldTouched('contactNumber')}
                       errorContactNumber={errors.contactNumber}
                       visibleContactNumber={touched.contactNumber}
-                      value={relationData}
+                      value={values.eprelation}
                       onPress={() => setRelationmodal(!relationmodal)}>
                       <PopUp
                         animationType="fade"

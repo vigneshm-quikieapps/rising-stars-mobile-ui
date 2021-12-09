@@ -89,7 +89,7 @@ function Register(props) {
   useEffect(() => {
     timeout();
   });
-
+  console.log(' Size : ', postsize);
   return (
     <CustomLayout
       header
@@ -198,6 +198,7 @@ function Register(props) {
             <TextInputField
               placeholder="Password*"
               autoCapitalize="none"
+              secureTextEntry
               autoCorrect={false}
               onChangeText={handleChange('password')}
               onBlur={() => setFieldTouched('password')}
@@ -210,6 +211,7 @@ function Register(props) {
             <TextInputField
               placeholder="Confirm Password*"
               autoCapitalize="none"
+              secureTextEntry
               autoCorrect={false}
               onChangeText={handleChange('passwordConfirmation')}
               onBlur={() => setFieldTouched('passwordConfirmation')}
@@ -251,7 +253,7 @@ function Register(props) {
               data={postcodeData}
               visible={postsize !== 0 ? !postcodeshow : postcodeshow}
               title={values.postCode}
-              ClosePopUp={() => setPostCodeshow(!postcodeshow)}
+              ClosePopUp={a => setPostCodeshow(!postcodeshow)}
               ManuallyButton={() => {
                 setPostCodeshow(!postcodeshow);
                 {

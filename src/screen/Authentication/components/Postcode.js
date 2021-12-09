@@ -54,6 +54,7 @@ export default function PostComponent(props) {
           animationType="slide"
           transparent={true}
           visible={props.visible}
+          setVisibility={bin => props.ClosePopUp(bin)}
           onRequestClose={() => {}}>
           <View
             style={[
@@ -65,7 +66,7 @@ export default function PostComponent(props) {
               },
             ]}>
             <View>
-              <View>
+              <View style={{height: hp('10%')}}>
                 <TouchableOpacity onPress={props.ClosePopUp}>
                   <LinearGradient
                     style={styles.closePopUp}
@@ -88,58 +89,60 @@ export default function PostComponent(props) {
                   }}
                 />
               </View>
-              {props.data && postcodeData.length > 0 && (
-                <FlatList
-                  data={postcodeData}
-                  keyExtractor={item => item.addressline1}
-                  initialNumToRender={10}
-                  renderItem={item => {
-                    return (
-                      <View style={styles.postcodeconatiner}>
-                        <RadioButton
-                          status={
-                            selected.addressline1 === item.item.addressline1 &&
-                            'checked'
-                          }
-                          onPress={() => setSelected(item.item)}
-                        />
-                        <View style={{width: wp('65%')}}>
-                          <Text style={styles.head} ellipsizeMode="head">
-                            {item.item.organisation}
-                          </Text>
-                          <Text
-                            style={styles.body}
-                            numberOfLines={
-                              show === item.item.addressline1 && data ? 0 : 1
+              <View style={{height: hp('70%')}}>
+                {props.data && postcodeData.length > 0 && (
+                  <FlatList
+                    data={props.data}
+                    keyExtractor={item => item.addressline1}
+                    initialNumToRender={10}
+                    renderItem={item => {
+                      return (
+                        <View style={styles.postcodeconatiner}>
+                          <RadioButton
+                            status={
+                              selected.addressline1 ===
+                                item.item.addressline1 && 'checked'
                             }
-                            ellipsizeMode="tail">
-                            {item.item.addressline1}
-                            <Text>{item.item.addressline2}</Text>
-                          </Text>
-                          <Text
-                            onPress={() => handlemore(item.item.addressline1)}
-                            style={{
-                              alignSelf: 'flex-end',
-                              fontSize: wp('2.5%'),
-                              color: colors.orange,
-                              textDecorationLine: 'underline',
-                            }}>
-                            {show === item.item.addressline1 && data
-                              ? 'Less info'
-                              : 'More info'}
-                          </Text>
+                            onPress={() => setSelected(item.item)}
+                          />
+                          <View style={{width: wp('65%')}}>
+                            <Text style={styles.head} ellipsizeMode="head">
+                              {item.item.organisation}
+                            </Text>
+                            <Text
+                              style={styles.body}
+                              numberOfLines={
+                                show === item.item.addressline1 && data ? 0 : 1
+                              }
+                              ellipsizeMode="tail">
+                              {item.item.addressline1}
+                              <Text>{item.item.addressline2}</Text>
+                            </Text>
+                            <Text
+                              onPress={() => handlemore(item.item.addressline1)}
+                              style={{
+                                alignSelf: 'flex-end',
+                                fontSize: wp('2.5%'),
+                                color: colors.orange,
+                                textDecorationLine: 'underline',
+                              }}>
+                              {show === item.item.addressline1 && data
+                                ? 'Less info'
+                                : 'More info'}
+                            </Text>
+                          </View>
                         </View>
-                      </View>
-                    );
+                      );
+                    }}
+                  />
+                )}
+                <View
+                  style={{
+                    borderBottomWidth: 1,
+                    borderBottomColor: colors.lightgrey,
                   }}
                 />
-              )}
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: colors.lightgrey,
-                }}
-              />
+              </View>
               <View style={styles.bottomView}>
                 <AppButton
                   title="Enter Manually"
@@ -169,6 +172,8 @@ const styles = StyleSheet.create({
     paddingVertical: hp('2%'),
     borderRadius: 10,
     borderWidth: 1,
+    overflow: 'hidden',
+    //paddingBottom: hp('10%'),
   },
   postcodeconatiner: {
     flexDirection: 'row',
@@ -208,6 +213,7 @@ const styles = StyleSheet.create({
   bottomView: {
     margin: 0,
     flexDirection: 'row',
+    height: hp('10%'),
     justifyContent: 'space-between',
   },
 });

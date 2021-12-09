@@ -21,14 +21,19 @@ export function fetchMobileOTP(payload) {
 }
 
 export function fetchPostCode(payload) {
+  console.log('Fetch Postcode Called');
   return fetch(
     `https://ws.postcoder.com/pcw/PCW45-12345-12345-1234X/address/UK/${payload}?format=json&lines=2`,
     {
       method: 'GET',
     },
   )
-    .then(response => response.json())
+    .then(response => {
+      console.log('Fetch postCode:', JSON.stringify(response));
+      return response.json();
+    })
     .catch(error => {
+      console.log('Fetch Postcode Failed');
       throw error;
     });
 }

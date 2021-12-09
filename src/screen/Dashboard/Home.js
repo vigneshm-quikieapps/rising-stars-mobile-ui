@@ -50,19 +50,13 @@ const Home = () => {
   membersdata && membersdata.forEach((item, index) => (item.index = index));
   membersdata && membersdata.map(item => members.push(item.name));
 
-  const getMembersData = useCallback(async () => {
-    const accesstoken = await getLocalData('accessToken');
-    dispatch(getmemberData(accesstoken));
-  }, [dispatch]);
-
   useEffect(() => {
     getLocalUserData();
-    getMembersData();
-  }, [getLocalUserData, getMembersData]);
-
-  useEffect(() => {
+    // const accesstoken = await getLocalData('accessToken')
+    // dispatch(getmemberData(accesstoken))
     membersdata?.length && dispatch(getmemberClass(membersdata[0]._id));
-  }, [membersdata, dispatch]);
+    // console.log('membersdata[0]._id :', membersdata[0]);
+  }, [dispatch, getLocalUserData, membersdata]);
 
   const getLocalUserData = useCallback(async () => {
     const userData = await getLocalData('user', true);

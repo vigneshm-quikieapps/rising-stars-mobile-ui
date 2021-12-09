@@ -7,6 +7,7 @@ import {fetchLogin, fetchPostCode, fetchRegister} from '../service/request';
 function* handlePostcode(action) {
   try {
     const postcode = yield call(fetchPostCode, action.payload);
+    console.log('Postcode Saga:', postcode);
     yield put({type: Action.USER_GET_POST_CODE_SUCCESS, payload: postcode});
   } catch (error) {
     yield put({type: Action.USER_GET_POST_CODE_FAILED, error: error.message});
