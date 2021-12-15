@@ -154,13 +154,29 @@ export function fetchMemberClassData(id) {
 }
 
 export function fetchClasses(token) {
-  return fetch(`${heroku_url}/api/classes/of-logged-in-user`, {
+  return fetch(`${heroku_url}/classes/of-logged-in-user`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
     },
   })
     .then(response => response.json())
+    .catch(error => {
+      throw error;
+    });
+}
+
+export function addChild(payload) {
+  return fetch(`${heroku_url}/members`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+    .then(response => response.json())
+    .then(response => console.log(response))
     .catch(error => {
       throw error;
     });

@@ -9,7 +9,7 @@ import moment from 'moment';
 
 import {
   CustomLayout,
-  Studentcard,
+  StudentCard,
   ProgressTracker,
   Forwardbutton,
   Slot,
@@ -27,7 +27,7 @@ import {
 
 import {useSelector, useDispatch} from 'react-redux';
 
-export default function Class_Selection(props) {
+const Class_Selection = props => {
   const [business, setBusiness] = useState();
   const [classes, setClasses] = useState();
 
@@ -72,7 +72,7 @@ export default function Class_Selection(props) {
 
   return (
     <CustomLayout
-      Customchildren={<Studentcard name={child.fullName} id={child.age} />}
+      Customchildren={<StudentCard name={child.fullName} id={child.age} />}
       steps
       start={2}
       end={Stepend}
@@ -173,8 +173,7 @@ export default function Class_Selection(props) {
       )}
     </CustomLayout>
   );
-}
-
+};
 const styles = StyleSheet.create({
   business: {
     height: hp('11%'),
@@ -216,3 +215,4 @@ const styles = StyleSheet.create({
     // elevation: 5
   },
 });
+export default Class_Selection;

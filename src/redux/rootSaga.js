@@ -5,6 +5,7 @@ import {
   watcherClassSaga,
   watcherSessionSaga,
   watcherClubfinance,
+  watcherAddChild,
 } from './sagas/enrol';
 import {
   watcherMemberSaga,
@@ -24,5 +25,6 @@ export default function* rootSaga() {
     watcherMemberSaga(),
     watcherMemberClassSaga(),
     watcherMemberClasses(),
+    watcherAddChild(),
   ]);
 }

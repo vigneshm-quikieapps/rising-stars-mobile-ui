@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useRef} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Button} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {
@@ -21,21 +21,27 @@ import {colors, hp, wp, Stepend} from '../../constants';
 import {setChildData, getClubdata} from '../../redux/action/enrol';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
+import {getLocalData} from '../../utils/LocalStorage';
 
-const gender = [
-  {id: 1, gender: 'Boy'},
-  {id: 2, gender: 'Girl'},
-];
-const relation = [
-  {id: 1, relation: 'Parents'},
-  {id: 2, relation: 'Guardian'},
-  {id: 3, relation: 'Others'},
-];
+// const gender = [
+//   {id: 1, gender: 'Boy'},
+//   {id: 2, gender: 'Girl'},
+// ];
+// const relation = [
+//   {id: 1, relation: 'Parents'},
+//   {id: 2, relation: 'Guardian'},
+//   {id: 3, relation: 'Others'},
+// ];
 const AddChild = props => {
   const genderef = useRef();
   const relationref = useRef();
+  const relationre = useRef();
   const dispatch = useDispatch();
-  const name = useSelector(state => state.childData.payload);
+  //  const name = useSelector(state => state.childData.payloa);
+
+  const getuser = async () => {
+    return await getLocalData('usercred');
+  };
 
   const [count, setCount] = useState(1);
   const [data, setData] = useState([]);
@@ -44,15 +50,15 @@ const AddChild = props => {
   const [birth, setBirth] = useState(new Date());
   const [birtherror, setBirthError] = useState(false);
 
-  const [age, setAge] = useState('');
-  const [open, setOpen] = useState(false);
+  // const [age, setAge] = useState('');
+  // const [open, setOpen] = useState(false);
 
-  const [relationmodal, setRelationmodal] = useState(false);
+  // const [relationmodal, setRelationmodal] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(true);
 
-  const [relationData, setRelationData] = useState('');
+  // const [relationData, setRelationData] = useState('');
 
-  const [gender, setGender] = useState('');
+  // const [gender, setGender] = useState('');
   const [gendererror, setGenderError] = useState(false);
 
   const validationSchema = Yup.object().shape({
@@ -72,10 +78,10 @@ const AddChild = props => {
   //   genderef.current.close();
   // };
 
-  const relationsubmit = item => {
-    setRelationData(item);
-    relationref.current.close();
-  };
+  // const relationsubmit = item => {
+  //   setRelationData(item);
+  //   relationref.current.close();
+  // };
 
   const handleSubmits = () => {
     setCount(item => item + 1);
@@ -89,6 +95,7 @@ const AddChild = props => {
     setButtonVisible(!buttonVisible);
   };
 
+  var openSecondary = false;
   return (
     <CustomLayout
       steps
@@ -114,11 +121,37 @@ const AddChild = props => {
           esname: '',
         }}
         onSubmit={values => {
-          // values.dob = birth;
-          // values.gender = gender;
-          // values.age = age;
-          // values.relationship = relationData;
-          console.log('Values:', values);
+          var valuesForDispatch = {
+            userId: getuser(),
+            fullName: values.fullName,
+            dob: moment(values.dob).format('YYYY-MM-DD'),
+            gender: values.gender,
+            contacts:
+              values.esname.length != 0
+                ? [
+                    {
+                      addressType: 'PRIMARY',
+                      fullName: values.epname,
+                      contact: values.epNumber,
+                      relationship: values.eprelation,
+                    },
+                    {
+                      addressType: 'SECONDARY',
+                      fullName: values.esname,
+                      contact: values.esNumber,
+                      relationship: values.esrelation,
+                    },
+                  ]
+                : [
+                    {
+                      addressType: 'PRIMARY',
+                      fullName: values.epname,
+                      contact: values.epNumber,
+                      relationship: values.eprelation,
+                    },
+                  ],
+          };
+          console.log(valuesForDispatch);
           if (values.dob === '') {
             setBirthError(true);
           } else if (values.gender === '') {
@@ -127,9 +160,21 @@ const AddChild = props => {
             alert('2 year children not allowed ');
           } else {
             //console.log('values.age :', values.age);
-            dispatch(setChildData(values));
-            dispatch(getClubdata());
-            props.navigation.navigate('Class__Selection');
+            dispatch(
+              setChildData({
+                data: valuesForDispatch,
+                callback: () => {
+                  console.log('Dispatch Testing');
+                  dispatch(
+                    getClubdata({
+                      callback: () => {
+                        props.navigation.navigate('Class_Selection');
+                      },
+                    }),
+                  );
+                },
+              }),
+            );
           }
         }}
         validationSchema={validationSchema}>
@@ -142,8 +187,6 @@ const AddChild = props => {
           touched,
           values,
         }) => {
-          console.log('Errors', errors);
-          console.log('Values:', values);
           return (
             <>
               <TextInputField
@@ -250,7 +293,7 @@ const AddChild = props => {
                     onPress={() => {
                       setGenderError(false);
                       //gendersubmit('Boy');
-                      values.gender = 'Boy';
+                      values.gender = 'MALE';
                       genderef.current.close();
                       setFieldValue('');
                     }}
@@ -260,6 +303,8 @@ const AddChild = props => {
                     style={{width: wp('40%')}}
                     onPress={() => {
                       setGenderError(false);
+                      values.gender = 'FEMALE';
+                      setFieldValue('');
                       genderef.current.close();
                       //gendersubmit('Girl');
                     }}
@@ -291,57 +336,163 @@ const AddChild = props => {
                 onBlurContact={() => setFieldTouched('epNumber')}
                 errorContactNumber={errors.epNumber}
                 visibleContactNumber={touched.epNumber}
-                onChangeRelation={relation =>
-                  setFieldValue('eprelation', relation)
+                onChangeRelation={relations =>
+                  setFieldValue('eprelation', relations)
                 }
                 value={values.eprelation}
                 onBlur={() => setFieldTouched('gender')}
-                onPress={() => relationref.current.open()}>
-                <RBSheet
-                  ref={relationref}
-                  closeOnDragDown={true}
-                  closeOnPressMask={false}
-                  customStyles={{
-                    container: {
-                      height: '18%',
-                      borderTopRightRadius: 16,
-                      borderTopLeftRadius: 16,
-                    },
+              />
+              <PopUpCard
+                text="Relationship *"
+                onBlur={() => setFieldTouched('eprelation')}
+                value={values.eprelation}
+                onPress={() => relationre.current.open()}
+              />
+              <RBSheet
+                ref={relationre}
+                closeOnDragDown={true}
+                closeOnPressMask={false}
+                customStyles={{
+                  container: {
+                    height: '18%',
+                    borderTopRightRadius: 16,
+                    borderTopLeftRadius: 16,
+                  },
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    paddingHorizontal: wp('5%'),
+                    justifyContent: 'space-between',
                   }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      paddingHorizontal: wp('5%'),
-                      justifyContent: 'space-between',
+                  <AppButton
+                    title="Parents"
+                    style={{width: wp('28%')}}
+                    onPress={() => {
+                      values.eprelation = 'Parents';
+                      relationre.current.close();
+                      setFieldValue('');
+                    }}
+                  />
+                  <AppButton
+                    title="Guardian"
+                    style={{width: wp('30%')}}
+                    onPress={() => {
+                      values.eprelation = 'Guardian';
+                      setFieldValue('');
+                      relationre.current.close();
+                    }}
+                  />
+                  <AppButton
+                    title="Others"
+                    style={{width: wp('28%')}}
+                    onPress={() => {
+                      values.eprelation = 'Others';
+                      setFieldValue('');
+                      relationre.current.close();
+                    }}
+                  />
+                </View>
+              </RBSheet>
+              <View style={{flexDirection: 'row'}}>
+                {!openSecondary ? (
+                  <AppButton
+                    title="+"
+                    style={{width: wp('15%')}}
+                    onPress={() => {
+                      setFieldValue('');
+                      openSecondary = true;
+                    }}
+                  />
+                ) : null}
+                <Text
+                  style={{
+                    fontFamily: 'Nunito-SemiBold',
+                    fontSize: wp('4.5%'),
+                    marginTop: hp('2.5%'),
+                    paddingTop: wp('5%'),
+                    paddingLeft: wp('2%'),
+                  }}>
+                  Emergency Contact (Secondary)
+                </Text>
+              </View>
+              {openSecondary ? (
+                <View>
+                  <EmergencyCard
+                    disabled={data.length === 1 ? true : false}
+                    addButtons={buttonVisible}
+                    addButton={handleSubmits}
+                    valueName={values.esname}
+                    onChangeTextName={handleChange('esname')}
+                    onBlurName={() => setFieldTouched('esname')}
+                    errorName={errors.esname}
+                    visibleName={touched.esname}
+                    valuesContactNumber={values.esNumber}
+                    onChangeTextContact={handleChange('esNumber')}
+                    onBlurContact={() => setFieldTouched('esNumber')}
+                    errorContactNumber={errors.esNumber}
+                    visibleContactNumber={touched.esNumber}
+                    onChangeRelation={relations =>
+                      setFieldValue('esrelation', relations)
+                    }
+                    value={values.esrelation}
+                    onBlur={() => setFieldTouched('gender')}
+                  />
+                  <PopUpCard
+                    text="Relationship *"
+                    onBlur={() => setFieldTouched('esrelation')}
+                    value={values.esrelation}
+                    onPress={() => relationref.current.open()}
+                  />
+                  <RBSheet
+                    ref={relationref}
+                    closeOnDragDown={true}
+                    closeOnPressMask={false}
+                    customStyles={{
+                      container: {
+                        height: '18%',
+                        borderTopRightRadius: 16,
+                        borderTopLeftRadius: 16,
+                      },
                     }}>
-                    <AppButton
-                      title="Parents"
-                      style={{width: wp('28%')}}
-                      onPress={() => {
-                        values.eprelation = 'Parents';
-                        relationref.current.close();
-                      }}
-                    />
-                    <AppButton
-                      title="Guardian"
-                      style={{width: wp('30%')}}
-                      onPress={() => {
-                        values.eprelation = 'Guardian';
-                        relationref.current.close();
-                      }}
-                    />
-                    <AppButton
-                      title="Others"
-                      style={{width: wp('28%')}}
-                      onPress={() => {
-                        values.eprelation = 'Parents';
-                        relationref.current.close();
-                      }}
-                    />
-                  </View>
-                </RBSheet>
-              </EmergencyCard>
-              {data &&
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        paddingHorizontal: wp('5%'),
+                        justifyContent: 'space-between',
+                      }}>
+                      <AppButton
+                        title="Parents"
+                        style={{width: wp('28%')}}
+                        onPress={() => {
+                          values.esrelation = 'Parents';
+                          relationref.current.close();
+                          setFieldValue('');
+                        }}
+                      />
+                      <AppButton
+                        title="Guardian"
+                        style={{width: wp('30%')}}
+                        onPress={() => {
+                          values.esrelation = 'Guardian';
+                          setFieldValue('');
+                          relationref.current.close();
+                        }}
+                      />
+                      <AppButton
+                        title="Others"
+                        style={{width: wp('28%')}}
+                        onPress={() => {
+                          values.esrelation = 'Others';
+                          setFieldValue('');
+                          relationref.current.close();
+                        }}
+                      />
+                    </View>
+                  </RBSheet>
+                </View>
+              ) : null}
+              {/* {data &&
                 data.map(item => {
                   return (
                     <EmergencyCard
@@ -384,7 +535,7 @@ const AddChild = props => {
                       </PopUp>
                     </EmergencyCard>
                   );
-                })}
+                })} */}
               <ForwardButton
                 style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
                 title="Submit"

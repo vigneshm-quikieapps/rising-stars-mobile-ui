@@ -81,20 +81,12 @@ export default function EmergencyCard({
         visible={visibleContactNumber}
       />
 
-      <PopUpCard
-        text="Relationship *"
-        onChangeText={onChangeRelation}
-        value={value}
-        onPress={onPress}
-      />
-
       {children}
       {addButtons && (
         <View style={styles.bottom}>
           <Button disabled={disabled} style={styles.button} onPress={addButton}>
             <AntIcon name="plus" size={hp('3%')} color={colors.white} />
           </Button>
-          <Text style={styles.bottomText}>Emergency Contact (Secondary)</Text>
         </View>
       )}
     </View>

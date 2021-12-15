@@ -5,7 +5,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../../screen/Dashboard/Home';
 import ActivityProgress from '../../screen/Dashboard/ActivityProgress';
 import AttendenceShow from '../../screen/Dashboard/AttendenceShow';
-import Profile from '../../screen/Dashboard/Profile';
+import {ProfileStack} from '../Stack/ProfileStack';
 import {colors} from './../../constants';
 
 const Tab = createBottomTabNavigator();
@@ -55,7 +55,7 @@ function HomeTab() {
       />
       <Tab.Screen
         name="Acount"
-        component={Profile}
+        component={ProfileStack}
         options={{headerShown: false}}
       />
     </Tab.Navigator>

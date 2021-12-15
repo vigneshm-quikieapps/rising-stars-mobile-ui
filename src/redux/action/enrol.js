@@ -1,9 +1,9 @@
 import * as action from '../action-types';
 
-export const setChildData = values => {
+export const setChildData = params => {
   return {
-    type: action.USER_ADDCHILD,
-    payload: values,
+    type: action.USER_ADD_CHILD,
+    payload: params,
   };
 };
 
@@ -40,9 +40,10 @@ export const errorchildData = () => {
   };
 };
 
-export const getClubdata = () => {
+export const getClubdata = params => {
   return {
     type: action.USER_GET_CLUB_NAME,
+    payload: params,
   };
 };
 

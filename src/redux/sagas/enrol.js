@@ -3,16 +3,18 @@ import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
 import * as Action from '../action-types';
 
 import {
+  addChild,
   fetchclubName,
   fetchclassName,
   fetchSessionList,
   fetchClubFinanc,
 } from '../service/request';
 
-function* handleGetClub() {
+function* handleGetClub(params) {
   try {
     const club = yield call(fetchclubName);
     yield put({type: Action.USER_GET_CLUB_SUCCESS, payload: club});
+    yield call(params.payload.callback);
   } catch (error) {
     yield put({type: Action.USER_GET_CLUB_FAILED, message: error.message});
   }
@@ -62,4 +64,21 @@ function* handleClubfinance(action) {
 
 export function* watcherClubfinance() {
   yield takeEvery(Action.USER_GET_CLUB_FINANCE, handleClubfinance);
+}
+
+function* handleAddChild(action) {
+  try {
+    const child = yield call(addChild, action.payload.data);
+    yield put({type: Action.USER_ADD_CHILD_SUCCEDED, payload: child});
+    yield call(action.payload.callback);
+  } catch (error) {
+    yield put({
+      type: Action.USER_ADD_CHILD_FAILED,
+      error: error.message,
+    });
+  }
+}
+
+export function* watcherAddChild() {
+  yield takeEvery(Action.USER_ADD_CHILD, handleAddChild);
 }

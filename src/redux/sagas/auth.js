@@ -1,5 +1,5 @@
 import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
-
+import {storeLocalData} from '../../utils/LocalStorage';
 import * as Action from '../action-types';
 
 import {fetchLogin, fetchPostCode, fetchRegister} from '../service/request';
@@ -31,9 +31,14 @@ export function* watcherRegister() {
   yield takeEvery(Action.USER_REGISTER, handleRegister);
 }
 
+const save = async login => {
+  console.log('LOGIN: ', login.user._id);
+  await storeLocalData('usercred', login.user._id, true);
+};
 function* handleLogin(action) {
   try {
     const login = yield call(fetchLogin, action.payload.data);
+    save(login);
     yield put({type: Action.USER_LOGIN_SUCCESS, payload: login});
   } catch (error) {
     yield put({type: Action.USER_LOGIN_ERROR, error: error.message});

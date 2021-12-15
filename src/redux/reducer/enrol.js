@@ -8,7 +8,7 @@ const childState = {
 };
 export const childData = (state = childState, action) => {
   switch (action.type) {
-    case Action.USER_ADDCHILD:
+    case Action.USER_ADD_CHILD_SUCCEDED:
       return {
         ...state,
         addchild: action.payload,
