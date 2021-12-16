@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -37,12 +37,17 @@ const AddChild = props => {
   const relationref = useRef();
   const relationre = useRef();
   const dispatch = useDispatch();
+  const [user, setUser] = useState('');
   //  const name = useSelector(state => state.childData.payloa);
 
   const getuser = async () => {
-    return await getLocalData('usercred');
+    const userId = await getLocalData('usercred');
+    setUser(userId);
   };
 
+  useEffect(() => {
+    getuser();
+  }, []);
   const [count, setCount] = useState(1);
   const [data, setData] = useState([]);
 
@@ -122,7 +127,7 @@ const AddChild = props => {
         }}
         onSubmit={values => {
           var valuesForDispatch = {
-            userId: getuser(),
+            userId: user,
             fullName: values.fullName,
             dob: moment(values.dob).format('YYYY-MM-DD'),
             gender: values.gender,

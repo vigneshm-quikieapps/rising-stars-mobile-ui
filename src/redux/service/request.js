@@ -167,16 +167,12 @@ export function fetchClasses(token) {
 }
 
 export function addChild(payload) {
+  console.log('Checking API: ', JSON.stringify(payload));
   return fetch(`${heroku_url}/members`, {
     method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
     body: JSON.stringify(payload),
   })
     .then(response => response.json())
-    .then(response => console.log(response))
     .catch(error => {
       throw error;
     });

@@ -39,7 +39,7 @@ const Class_Selection = props => {
 
   const [selectdata, setSelectdata] = useState();
 
-  const child = useSelector(state => state.childData.addchild);
+  const child = useSelector(state => state);
 
   const clubData = useSelector(state => state.clubname.clubData);
 
@@ -69,7 +69,7 @@ const Class_Selection = props => {
     dispatch(setSlotData(selectdata));
     props.navigation.navigate('Fees_Overview');
   };
-
+  console.log('STATE: ', child);
   return (
     <CustomLayout
       Customchildren={<StudentCard name={child.fullName} id={child.age} />}
