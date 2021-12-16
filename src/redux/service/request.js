@@ -14,14 +14,12 @@ export function fetchMobileOTP(payload) {
     }),
   })
     .then(response => response.json())
-    .then(response => console.log(response))
     .catch(error => {
       throw error;
     });
 }
 
 export function fetchPostCode(payload) {
-  console.log('Fetch Postcode Called');
   return fetch(
     `https://ws.postcoder.com/pcw/PCW45-12345-12345-1234X/address/UK/${payload}?format=json&lines=2`,
     {
@@ -29,7 +27,6 @@ export function fetchPostCode(payload) {
     },
   )
     .then(response => {
-      console.log('Fetch postCode:', JSON.stringify(response));
       return response.json();
     })
     .catch(error => {
@@ -39,33 +36,29 @@ export function fetchPostCode(payload) {
 }
 
 export function fetchRegister(payload) {
-  // console.log('fetch-------->', payload)
-  return (
-    fetch(`${heroku_url}/sign-up`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: payload.fullName,
-        email: payload.email,
-        mobileNo: `${Country_Code}${payload.contactNumber}`,
-        password: payload.password,
-        mobileNoOTP: payload.mobileNoOTP,
-        postcode: payload.postCode,
-        addressLine1: payload.addressLine1,
-        addressLine2: payload.addressLine2,
-        city: payload.cityTown,
-        country: 'country',
-      }),
-    })
-      .then(response => response.json())
-      // .then(response => console.log(response))
-      .catch(error => {
-        throw error;
-      })
-  );
+  return fetch(`${heroku_url}/sign-up`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: payload.fullName,
+      email: payload.email,
+      mobileNo: `${Country_Code}${payload.contactNumber}`,
+      password: payload.password,
+      mobileNoOTP: payload.mobileNoOTP,
+      postcode: payload.postCode,
+      addressLine1: payload.addressLine1,
+      addressLine2: payload.addressLine2,
+      city: payload.cityTown,
+      country: 'country',
+    }),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      throw error;
+    });
 }
 
 export function fetchLogin(payload) {
@@ -167,7 +160,6 @@ export function fetchClasses(token) {
 }
 
 export function addChild(payload) {
-  console.log('Inside Fetch Addchild', payload);
   return fetch(`${heroku_url}/members`, {
     method: 'POST',
     headers: {

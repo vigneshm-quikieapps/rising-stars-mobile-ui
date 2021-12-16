@@ -94,11 +94,9 @@ const loginState = {
 export const LoginData = (state = loginState, action) => {
   switch (action.type) {
     case Action.USER_LOGIN_SUCCESS:
-      console.log('login succesful', action.payload);
       storeLocalData('refreshToken', action.payload.refreshToken);
       storeLocalData('accessToken', action.payload.accessToken);
       storeLocalData('user', action.payload.user, true);
-      console.log(action.payload);
       return {
         ...state,
         accessToken: action.payload.accessToken,
