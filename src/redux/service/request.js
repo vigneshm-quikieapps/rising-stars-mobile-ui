@@ -167,17 +167,18 @@ export function fetchClasses(token) {
 }
 
 export function addChild(payload) {
+  console.log('Inside Fetch Addchild', payload);
   return fetch(`${heroku_url}/members`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${payload.token}`,
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(payload.data),
   })
     .then(response => response.json())
-    .then(response => console.log(response))
     .catch(error => {
-      throw error;
+      console.log(error);
     });
 }
