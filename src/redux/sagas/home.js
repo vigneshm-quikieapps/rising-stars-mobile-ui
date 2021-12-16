@@ -9,7 +9,6 @@ import {
 } from '../service/request';
 
 function* handleGetMember(action) {
-  console.log('action saga :', action);
   try {
     const member = yield call(fetchMemberData, action.payload);
     yield put({type: Action.USER_GET_MEMBER_SUCCESS, data: member});

@@ -69,7 +69,6 @@ const Class_Selection = props => {
     dispatch(setSlotData(selectdata));
     props.navigation.navigate('Fees_Overview');
   };
-  console.log('Child: ', child);
   return (
     <CustomLayout
       Customchildren={<StudentCard name={child.member.name} age={'19'} />}

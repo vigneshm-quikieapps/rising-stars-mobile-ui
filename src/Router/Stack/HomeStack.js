@@ -16,17 +16,14 @@ import {getLocalData} from '../../utils/LocalStorage';
 import {getmemberData} from '../../redux/action/home';
 
 const HomeNavigation = props => {
-  console.log('hii', props.token);
   const [token, setToken] = useState('');
   const dispatch = useDispatch();
   // const membersdata = useSelector(state => state.memberData.memberData)
-  // console.log('token :', token);
   const refreshToken = useSelector(state => state.LoginData.refreshToken);
 
   const validation = () => {
     const Today = new Date().getTime();
     const extract = jwt_decode(token);
-    console.log(extract);
   };
 
   useEffect(() => {
@@ -37,7 +34,6 @@ const HomeNavigation = props => {
     // if(validity > 0){
     //   setToken(token)
     // }
-    // console.log(validity)
     getAccessToken();
     getToken();
   }, [getToken, getAccessToken]);
@@ -51,7 +47,6 @@ const HomeNavigation = props => {
     const refreshTokenLocal = await getLocalData('refreshToken');
     setToken(refreshTokenLocal);
   }, []);
-  console.log(' props.token  :', props.token);
   return (
     <NavigationContainer>
       <Stack>
