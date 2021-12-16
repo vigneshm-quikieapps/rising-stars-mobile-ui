@@ -167,13 +167,18 @@ export function fetchClasses(token) {
 }
 
 export function addChild(payload) {
-  console.log('Checking API: ', JSON.stringify(payload));
+  console.log('Inside Fetch Addchild', payload);
   return fetch(`${heroku_url}/members`, {
     method: 'POST',
-    body: JSON.stringify(payload),
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${payload.token}`,
+    },
+    body: JSON.stringify(payload.data),
   })
     .then(response => response.json())
     .catch(error => {
-      throw error;
+      console.log(error);
     });
 }

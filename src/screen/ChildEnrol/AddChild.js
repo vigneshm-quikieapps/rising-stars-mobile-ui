@@ -38,16 +38,19 @@ const AddChild = props => {
   const relationre = useRef();
   const dispatch = useDispatch();
   const [user, setUser] = useState('');
-  //  const name = useSelector(state => state.childData.payloa);
+  const [token, setToken] = useState('');
 
   const getuser = async () => {
     const userId = await getLocalData('usercred');
+    const accesstoken = await getLocalData('accessToken');
+    setToken(accesstoken);
     setUser(userId);
   };
 
   useEffect(() => {
     getuser();
   }, []);
+  console.log('TOKEN: ', token);
   const [count, setCount] = useState(1);
   const [data, setData] = useState([]);
 
@@ -127,34 +130,37 @@ const AddChild = props => {
         }}
         onSubmit={values => {
           var valuesForDispatch = {
-            userId: user,
-            fullName: values.fullName,
-            dob: moment(values.dob).format('YYYY-MM-DD'),
-            gender: values.gender,
-            contacts:
-              values.esname.length != 0
-                ? [
-                    {
-                      addressType: 'PRIMARY',
-                      fullName: values.epname,
-                      contact: values.epNumber,
-                      relationship: values.eprelation,
-                    },
-                    {
-                      addressType: 'SECONDARY',
-                      fullName: values.esname,
-                      contact: values.esNumber,
-                      relationship: values.esrelation,
-                    },
-                  ]
-                : [
-                    {
-                      addressType: 'PRIMARY',
-                      fullName: values.epname,
-                      contact: values.epNumber,
-                      relationship: values.eprelation,
-                    },
-                  ],
+            token: token,
+            data: {
+              userId: user,
+              name: values.fullName,
+              dob: moment(values.dob).format('YYYY-MM-DD'),
+              gender: values.gender,
+              contacts:
+                values.esname.length != 0
+                  ? [
+                      {
+                        addressType: 'PRIMARY',
+                        name: values.epname,
+                        contact: values.epNumber,
+                        relationship: 'UNCLE',
+                      },
+                      {
+                        addressType: 'SECONDARY',
+                        name: values.esname,
+                        contact: values.esNumber,
+                        relationship: 'UNCLE',
+                      },
+                    ]
+                  : [
+                      {
+                        addressType: 'PRIMARY',
+                        name: values.epname,
+                        contact: values.epNumber,
+                        relationship: 'UNCLE',
+                      },
+                    ],
+            },
           };
           console.log(valuesForDispatch);
           if (values.dob === '') {
@@ -374,7 +380,7 @@ const AddChild = props => {
                     title="Parents"
                     style={{width: wp('28%')}}
                     onPress={() => {
-                      values.eprelation = 'Parents';
+                      values.eprelation = 'PARENT';
                       relationre.current.close();
                       setFieldValue('');
                     }}
@@ -383,7 +389,7 @@ const AddChild = props => {
                     title="Guardian"
                     style={{width: wp('30%')}}
                     onPress={() => {
-                      values.eprelation = 'Guardian';
+                      values.eprelation = 'GUARDIAN';
                       setFieldValue('');
                       relationre.current.close();
                     }}

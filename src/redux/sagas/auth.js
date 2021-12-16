@@ -32,7 +32,6 @@ export function* watcherRegister() {
 }
 
 const save = async login => {
-  console.log('LOGIN: ', login.user._id);
   await storeLocalData('usercred', login.user._id);
 };
 function* handleLogin(action) {
