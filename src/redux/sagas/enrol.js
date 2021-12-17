@@ -8,6 +8,7 @@ import {
   fetchclassName,
   fetchSessionList,
   fetchClubFinanc,
+  createMembership,
 } from '../service/request';
 
 function* handleGetClub(params) {

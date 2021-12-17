@@ -24,6 +24,7 @@ import {
   setSlotData,
   clubfinance,
 } from '../../redux/action/enrol';
+import {getLocalData} from '../../utils/LocalStorage';
 
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -31,7 +32,7 @@ const Class_Selection = props => {
   const [business, setBusiness] = useState();
   const [classes, setClasses] = useState();
 
-  const [clubmodal, setClubModal] = useState(false);
+  const [clubmodal, setClubModal] = useState(true);
   const [classmodal, setClassModal] = useState(false);
 
   const [showclass, setShowClass] = useState(false);
@@ -49,20 +50,26 @@ const Class_Selection = props => {
 
   const dispatch = useDispatch();
 
-  const handleBusiness = item => {
+  const handleBusiness = async item => {
+    console.log('inside handhe club');
+
     setBusiness(item.name);
-    setShowClass(true);
     setClubModal(!clubmodal);
+    // item.MemberId = child.member._id;
+    // item.Token = await getLocalData('accessToken');
     dispatch(setClubData(item));
-    dispatch(getClassdata(item._id));
+    dispatch(
+      getClassdata({id: item._id, token: await getLocalData('accessToken')}),
+    );
+    setShowClass(true);
   };
   const handleClasses = item => {
     setClasses(item.name);
-    setShowsession(true);
-    setClassModal(!classmodal);
     dispatch(setClassData(item));
-    dispatch(clubfinance(item._id));
+    //dispatch(clubfinance(item._id));
     dispatch(getSessiondata(item._id));
+    setClassModal(!classmodal);
+    setShowsession(true);
   };
 
   const handleforward = () => {
@@ -70,9 +77,13 @@ const Class_Selection = props => {
     props.navigation.navigate('Fees_Overview');
   };
   console.log('Child: ', child);
+  // console.log(
+  //   'Child Age: ',
+  //   new Date().getFullYear() - child.member.dob.getFullYear(),
+  // );
   return (
     <CustomLayout
-      Customchildren={<StudentCard name={child.member.name} age={'19'} />}
+      Customchildren={<StudentCard name={child.member.name} age={'23'} />}
       steps
       start={2}
       end={Stepend}

@@ -98,9 +98,13 @@ export function fetchclubName() {
     });
 }
 
-export function fetchclassName(id) {
-  return fetch(`${heroku_url}/businesses/${id}/classes`, {
+export function fetchclassName(data) {
+  console.log('im here inside classes fetch');
+  return fetch(`${heroku_url}/businesses/614ae0f9c265630cd520ab36/classes`, {
     method: 'GET',
+    headers: {
+      Authorization: `Bearer ${data.token}`,
+    },
   })
     .then(response => response.json())
     .catch(error => {
@@ -125,6 +129,36 @@ export function fetchClubFinanc(id) {
     .then(response => response.json())
     .catch(error => {
       throw error;
+    });
+}
+//enroll to class
+export function regularEnrollment(payload) {
+  return fetch(`${heroku_url}/enrolments`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${payload.Token}`,
+    },
+    body: JSON.stringify({
+      sessionId: '614b1b0fc265630cd550944e',
+      memberId: '61baefe18121503303cf9e89',
+      consent: {
+        allergies: 'allergies',
+        condition: 'condition',
+        photographConsent: 'true',
+        signedByParent: 'true',
+      },
+      newsletter: {
+        email: 'false',
+        telephone: 'false',
+        sms: 'false',
+      },
+    }),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      console.log(error);
     });
 }
 

@@ -47,10 +47,10 @@ export const getClubdata = params => {
   };
 };
 
-export const getClassdata = id => {
+export const getClassdata = data => {
   return {
     type: action.USER_GET_CLASS_NAME,
-    payload: id,
+    payload: data,
   };
 };
 
