@@ -25,7 +25,7 @@ const Fees_Overview = props => {
     <CustomLayout
       Customchildren={
         <StudentCard
-          name={child.fullName}
+          name={child.name}
           id={child.age}
           activityrequired
           activity={club.name}
