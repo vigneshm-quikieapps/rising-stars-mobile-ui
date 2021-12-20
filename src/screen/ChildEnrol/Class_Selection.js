@@ -32,7 +32,7 @@ const Class_Selection = props => {
   const [business, setBusiness] = useState();
   const [classes, setClasses] = useState();
 
-  const [clubmodal, setClubModal] = useState(true);
+  const [clubmodal, setClubModal] = useState(false);
   const [classmodal, setClassModal] = useState(false);
 
   const [showclass, setShowClass] = useState(false);
@@ -111,10 +111,16 @@ const Class_Selection = props => {
         clubData.map(item => {
           return (
             <TouchableOpacity
+              onPressOut={() => setClubModal(false)}
               key={item._id}
               onPress={() => handleBusiness(item)}
-              style={{alignItems: 'center', justifyContent: 'center'}}>
-              <Text style={{fontFamily: 'Nunito-Regular', fontSize: Fontsize}}>
+              style={{marginLeft: wp('5%'), justifyContent: 'center'}}>
+              <Text
+                style={{
+                  fontFamily: 'Nunito-Regular',
+                  paddingTop: wp('2%'),
+                  fontSize: Fontsize,
+                }}>
                 {item.name}
               </Text>
             </TouchableOpacity>
@@ -133,13 +139,15 @@ const Class_Selection = props => {
               classData.map(item => {
                 return (
                   <TouchableOpacity
+                    onPressOut={() => setClubModal(false)}
                     key={item._id}
                     onPress={() => handleClasses(item)}
-                    style={{alignItems: 'center', justifyContent: 'center'}}>
+                    style={{marginLeft: wp('5%'), justifyContent: 'center'}}>
                     <Text
                       style={{
                         fontFamily: 'Nunito-Regular',
                         fontSize: Fontsize,
+                        paddingTop: wp('2%'),
                       }}>
                       {item.name}
                     </Text>

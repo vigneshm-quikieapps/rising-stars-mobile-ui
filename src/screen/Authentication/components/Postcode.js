@@ -12,7 +12,12 @@ import {useSelector, useDispatch} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import EntIcon from 'react-native-vector-icons/Entypo';
 
-import {PopUp, AppButton, RadioButton} from '../../../components';
+import {
+  PopUp,
+  AppButton,
+  RadioButton,
+  TextInputField,
+} from '../../../components';
 import {colors, Fontsize, wp, hp} from '../../../constants';
 import {PostDataPass} from '../../../redux/action/auth';
 
@@ -66,7 +71,7 @@ export default function PostComponent(props) {
               },
             ]}>
             <View>
-              <View style={{height: hp('10%')}}>
+              <View style={{height: hp('20%')}}>
                 <TouchableOpacity onPress={props.ClosePopUp}>
                   <LinearGradient
                     style={styles.closePopUp}
@@ -74,12 +79,21 @@ export default function PostComponent(props) {
                     <EntIcon name="cross" size={15} color="white" />
                   </LinearGradient>
                 </TouchableOpacity>
-                <View style={styles.titlestyle}>
-                  <Text style={styles.herderstyle}>Search Your address</Text>
-                  <Text style={styles.title}>
+                <View>
+                  <Text style={styles.herderstyle}>Search Address</Text>
+                  <TextInputField
+                    placeholder={'Postcode'}
+                    borderColor={'#e3e3e3'}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    editable={false}
+                    value={props.title}
+                  />
+                  <Text style={styles.subtitle}>Available Address</Text>
+                  {/* <Text style={styles.title}>
                     Your PostCode{' '}
                     <Text style={{fontWeight: 'bold'}}>{props.title}</Text>
-                  </Text>
+                  </Text> */}
                 </View>
                 <View
                   style={{
@@ -89,7 +103,7 @@ export default function PostComponent(props) {
                   }}
                 />
               </View>
-              <View style={{height: hp('70%')}}>
+              <View style={{height: hp('60%')}}>
                 {props.data && postcodeData.length > 0 && (
                   <FlatList
                     data={props.data}
@@ -105,7 +119,7 @@ export default function PostComponent(props) {
                             }
                             onPress={() => setSelected(item.item)}
                           />
-                          <View style={{width: wp('65%')}}>
+                          <View style={{width: wp('90%')}}>
                             <Text style={styles.head} ellipsizeMode="head">
                               {item.item.organisation}
                             </Text>
@@ -173,11 +187,24 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     overflow: 'hidden',
+    width: wp('100%'),
+    borderBottomWidth: 2,
+    borderColor: colors.lightgrey,
+    marginBottom: hp('0.1%'),
     //paddingBottom: hp('10%'),
+  },
+  subtitle: {
+    color: '#8a8787',
+    marginTop: wp('1%'),
+    marginBottom: wp('1%'),
   },
   postcodeconatiner: {
     flexDirection: 'row',
     marginVertical: hp('0.5%'),
+    width: wp('100%'),
+    height: hp('15%'),
+    backgroundColor: colors.lightgrey,
+    alignItems: 'center',
   },
   head: {
     fontFamily: 'Nunito-Regular',
@@ -195,11 +222,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Nunito-Regular',
-  },
-  titlestyle: {
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   closePopUp: {
     height: hp('3%'),
