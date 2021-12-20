@@ -66,7 +66,7 @@ const Class_Selection = props => {
   const handleClasses = item => {
     setClasses(item.name);
     dispatch(setClassData(item));
-    //dispatch(clubfinance(item._id));
+    dispatch(clubfinance(item._id));
     dispatch(getSessiondata(item._id));
     setClassModal(!classmodal);
     setShowsession(true);
