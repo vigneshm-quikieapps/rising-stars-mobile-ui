@@ -21,6 +21,7 @@ const Fees_Overview = props => {
   console.log('classes  :', classes);
   const clubfinance = useSelector(state => state.clubfinance.financedata);
 
+  clubfinance && console.log('FINANCE: ', clubfinance);
   return (
     <CustomLayout
       Customchildren={

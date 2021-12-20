@@ -69,7 +69,7 @@ function Register(props) {
     setValue,
   });
   const [checked, setChecked] = useState('first');
-  const [postcodeshow, setPostCodeshow] = useState(false);
+  const [postcodeshow, setPostCodeshow] = useState(true);
   const [term, setTerm] = useState(false);
   const [temp, setTemp] = useState(false);
   const [main, setMain] = useState(false);
@@ -404,6 +404,7 @@ function Register(props) {
                   height: hp('40%'),
                   borderTopRightRadius: 16,
                   borderTopLeftRadius: 16,
+                  marginBottom: hp('10%'),
                 },
               }}>
               <View style={{paddingHorizontal: wp('5%')}}>

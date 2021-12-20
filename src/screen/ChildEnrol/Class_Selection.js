@@ -59,14 +59,18 @@ const Class_Selection = props => {
     // item.Token = await getLocalData('accessToken');
     dispatch(setClubData(item));
     dispatch(
-      getClassdata({id: item._id, token: await getLocalData('accessToken')}),
+      getClassdata({
+        id: item._id,
+        token: await getLocalData('accessToken'),
+        businessid: selectdata.businessId,
+      }),
     );
     setShowClass(true);
   };
   const handleClasses = item => {
     setClasses(item.name);
     dispatch(setClassData(item));
-    //dispatch(clubfinance(item._id));
+    dispatch(clubfinance(item._id));
     dispatch(getSessiondata(item._id));
     setClassModal(!classmodal);
     setShowsession(true);
