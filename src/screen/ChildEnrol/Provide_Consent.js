@@ -42,8 +42,8 @@ const Provide_Consent = props => {
     <CustomLayout
       Customchildren={
         <StudentCard
-          name={child.name}
-          id={new Date().getFullYear() - parseInt(child.member.dob.slice(0, 4))}
+          name={child.member.name}
+          id={child.member._id}
           activityrequired
           activity={club.name}
         />

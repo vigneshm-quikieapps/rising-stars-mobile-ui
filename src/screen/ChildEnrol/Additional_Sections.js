@@ -12,12 +12,13 @@ import {colors, Fontsize, hp, wp} from '../../constants';
 import {RadioButton} from 'react-native-paper';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import EntIcon from 'react-native-vector-icons/Entypo';
-
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 const Additional_Sections = props => {
   const termref = useRef();
   const [modalVisible, setModalVisible] = useState(false);
+  const child = useSelector(state => state.childData.addchild);
+  const club = useSelector(state => state.childData.clubdata);
 
   const fullName = useSelector(state => state.childData.fullName);
   const age = useSelector(state => state.childData.age);
@@ -27,10 +28,10 @@ const Additional_Sections = props => {
     <CustomLayout
       Customchildren={
         <StudentCard
-          name={fullName}
+          name={child.member.name}
           id={age}
           activityrequired
-          activity={'Zippy Totz Pre-school Gymnastics'}
+          activity={club.name}
           subactivity={'Childhood Joy Classes'}
         />
       }
