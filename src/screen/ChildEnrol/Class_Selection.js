@@ -11,7 +11,7 @@ import {
   CustomLayout,
   StudentCard,
   ProgressTracker,
-  Forwardbutton,
+  ForwardButton,
   Slot,
   PopUpCard,
 } from '../../components';
@@ -32,7 +32,7 @@ const Class_Selection = props => {
   const [business, setBusiness] = useState();
   const [classes, setClasses] = useState();
 
-  const [clubmodal, setClubModal] = useState(true);
+  const [clubmodal, setClubModal] = useState(false);
   const [classmodal, setClassModal] = useState(false);
 
   const [showclass, setShowClass] = useState(false);
@@ -77,13 +77,22 @@ const Class_Selection = props => {
     props.navigation.navigate('Fees_Overview');
   };
   console.log('Child: ', child);
+  sessionData && console.log('Session data: ', sessionData);
+  selectdata && console.log('selectdata data: ', selectdata);
   // console.log(
   //   'Child Age: ',
   //   new Date().getFullYear() - child.member.dob.getFullYear(),
   // );
   return (
     <CustomLayout
-      Customchildren={<StudentCard name={child.member.name} age={'23'} />}
+      Customchildren={
+        <StudentCard
+          name={child.member.name}
+          age={
+            new Date().getFullYear() - parseInt(child.member.dob.slice(0, 4))
+          }
+        />
+      }
       steps
       start={2}
       end={Stepend}
@@ -102,10 +111,16 @@ const Class_Selection = props => {
         clubData.map(item => {
           return (
             <TouchableOpacity
+              onPressOut={() => setClubModal(false)}
               key={item._id}
               onPress={() => handleBusiness(item)}
-              style={{alignItems: 'center', justifyContent: 'center'}}>
-              <Text style={{fontFamily: 'Nunito-Regular', fontSize: Fontsize}}>
+              style={{marginLeft: wp('5%'), justifyContent: 'center'}}>
+              <Text
+                style={{
+                  fontFamily: 'Nunito-Regular',
+                  paddingTop: wp('2%'),
+                  fontSize: Fontsize,
+                }}>
                 {item.name}
               </Text>
             </TouchableOpacity>
@@ -124,13 +139,15 @@ const Class_Selection = props => {
               classData.map(item => {
                 return (
                   <TouchableOpacity
+                    onPressOut={() => setClubModal(false)}
                     key={item._id}
                     onPress={() => handleClasses(item)}
-                    style={{alignItems: 'center', justifyContent: 'center'}}>
+                    style={{marginLeft: wp('5%'), justifyContent: 'center'}}>
                     <Text
                       style={{
                         fontFamily: 'Nunito-Regular',
                         fontSize: Fontsize,
+                        paddingTop: wp('2%'),
                       }}>
                       {item.name}
                     </Text>
@@ -157,7 +174,10 @@ const Class_Selection = props => {
               return (
                 <Slot
                   white
+                  required={true}
+                  Class={classes}
                   radio
+                  sessions={item.name}
                   onPress={() => setSelectdata(item)}
                   status={selectdata === item && 'checked'}
                   day={item.pattern[0].day}
@@ -165,7 +185,7 @@ const Class_Selection = props => {
                     'HH:mm',
                   )} - ${moment(item.pattern[0].endTime).format('HH:mm')}`}
                   facility={item.name}
-                  coach={item.coach[0].name}
+                  coach={item.coach.name}
                   key={item._id}
                   style={{marginVertical: wp('1%')}}
                 />
@@ -177,9 +197,16 @@ const Class_Selection = props => {
         )
       ) : null}
       {selectdata && (
-        <Forwardbutton
-          style={{alignSelf: 'flex-end', marginTop: hp('1%')}}
-          onPress={handleforward}
+        // <ForwardButton
+        //   style={{alignSelf: 'flex-end', marginTop: hp('1%')}}
+        //   onPress={() => handleforward()}
+        // />
+        <ForwardButton
+          style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
+          title="Submit"
+          onPress={() => {
+            handleforward();
+          }}
         />
       )}
     </CustomLayout>
