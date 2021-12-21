@@ -136,3 +136,24 @@ export const addProvidedata = (state = provideState, action) => {
       return state;
   }
 };
+const enrolledChild = {
+  enrollstate: '',
+  error: '',
+};
+
+export const enrollChild = (state = enrolledChild, action) => {
+  switch (action.type) {
+    case Action.USER_ENROLL_CHILD_SUCCEDED:
+      return {
+        ...state,
+        enrollstate: action.payload,
+      };
+    case Action.USER_ENROLL_CHILD_FAILED:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};

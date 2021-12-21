@@ -33,6 +33,12 @@ export const uploadedChildData = () => {
     type: action.USER_ADDCHILD_SUCCESS,
   };
 };
+export const enrollChildData = value => {
+  return {
+    type: action.USER_ENROLL_CHILD,
+    payload: value,
+  };
+};
 
 export const errorchildData = () => {
   return {

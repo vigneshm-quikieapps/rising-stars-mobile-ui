@@ -26,8 +26,8 @@ const Fees_Overview = props => {
     <CustomLayout
       Customchildren={
         <StudentCard
-          name={child.name}
-          id={child.age}
+          name={child.member.name}
+          id={child.member._id}
           activityrequired
           activity={club.name}
           // subactivity={'Childhood Joy Classes'}
@@ -44,28 +44,42 @@ const Fees_Overview = props => {
       <Text style={{fontFamily: 'Nunito-SemiBold', fontSize: wp('6%')}}>
         Fee Breakdown
       </Text>
-      <Amount
-        head={'Club Membership'}
-        body={'Annual'}
-        currency={
-          clubfinance && clubfinance.length > 0
-            ? clubfinance.businessFinance[0].charges[0].amount
-            : '0'
+      {classes.charges.map(item => (
+        <>
+          <Amount
+            head={item.name}
+            body={item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
+            currency={item.amount}
+          />
+          <View
+            style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}}
+          />
+        </>
+      ))}
+      {/* <Amount
+        head={classes.charges[0].name}
+        body={
+          classes.charges[0].payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'
         }
-      />
-      <View style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}} />
-      <Amount
-        head={'Pre School Gym Class'}
-        body={'Monthly'}
         currency={classes.charges[0].amount}
       />
       <View style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}} />
       <Amount
-        head={`Scottish Gymnastics ${'\n'}Insuarance Premiun`}
-        body={'Annual'}
-        currency={'13'}
+        head={classes.charges[1].name}
+        body={
+          classes.charges[1].payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'
+        }
+        currency={classes.charges[1].amount}
       />
-      <View style={{marginVertical: hp('1.8%')}} />
+      <View style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}} />
+      <Amount
+        head={classes.charges[2].name}
+        body={
+          classes.charges[2].payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'
+        }
+        currency={classes.charges[2].amount}
+      />
+      <View style={{marginVertical: hp('1.8%')}} /> */}
       <ForwardButton
         style={{alignSelf: 'flex-end', marginTop: hp('-1.7%')}}
         onPress={() => props.navigation.navigate('Provide_Consent')}

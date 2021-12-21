@@ -100,7 +100,7 @@ export function fetchclubName() {
 
 export function fetchclassName(data) {
   console.log('im here inside classes fetch');
-  return fetch(`${heroku_url}/businesses/614ae0f9c265630cd520ab36/classes`, {
+  return fetch(`${heroku_url}/businesses/${data.businessid}/classes`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${data.token}`,
@@ -133,28 +133,16 @@ export function fetchClubFinanc(id) {
 }
 //enroll to class
 export function regularEnrollment(payload) {
+  console.log('inside regular enrollment');
+
   return fetch(`${heroku_url}/enrolments`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${payload.Token}`,
+      Authorization: `Bearer ${payload.token}`,
     },
-    body: JSON.stringify({
-      sessionId: '614b1b0fc265630cd550944e',
-      memberId: '61baefe18121503303cf9e89',
-      consent: {
-        allergies: 'allergies',
-        condition: 'condition',
-        photographConsent: 'true',
-        signedByParent: 'true',
-      },
-      newsletter: {
-        email: 'false',
-        telephone: 'false',
-        sms: 'false',
-      },
-    }),
+    body: JSON.stringify(payload.data),
   })
     .then(response => response.json())
     .catch(error => {

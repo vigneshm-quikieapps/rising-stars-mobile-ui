@@ -51,7 +51,7 @@ const Class_Selection = props => {
   const dispatch = useDispatch();
 
   const handleBusiness = async item => {
-    console.log('inside handhe club');
+    console.log('ITEM: ', item);
 
     setBusiness(item.name);
     setClubModal(!clubmodal);
@@ -62,7 +62,7 @@ const Class_Selection = props => {
       getClassdata({
         id: item._id,
         token: await getLocalData('accessToken'),
-        businessid: selectdata.businessId,
+        businessid: item._id,
       }),
     );
     setShowClass(true);
@@ -118,9 +118,15 @@ const Class_Selection = props => {
               onPressOut={() => setClubModal(false)}
               key={item._id}
               onPress={() => handleBusiness(item)}
-              style={{marginLeft: wp('5%'), justifyContent: 'center'}}>
+              style={{
+                marginLeft: wp('5%'),
+                justifyContent: 'center',
+                alignContent: 'center',
+              }}>
               <Text
                 style={{
+                  backgroundColor: colors.lightgrey,
+                  margin: wp('0.5%'),
                   fontFamily: 'Nunito-Regular',
                   paddingTop: wp('2%'),
                   fontSize: Fontsize,
@@ -146,12 +152,18 @@ const Class_Selection = props => {
                     onPressOut={() => setClubModal(false)}
                     key={item._id}
                     onPress={() => handleClasses(item)}
-                    style={{marginLeft: wp('5%'), justifyContent: 'center'}}>
+                    style={{
+                      marginLeft: wp('5%'),
+                      justifyContent: 'center',
+                      alignContent: 'center',
+                    }}>
                     <Text
                       style={{
+                        backgroundColor: colors.lightgrey,
                         fontFamily: 'Nunito-Regular',
                         fontSize: Fontsize,
                         paddingTop: wp('2%'),
+                        margin: wp('0.5%'),
                       }}>
                       {item.name}
                     </Text>
