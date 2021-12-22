@@ -100,7 +100,7 @@ export function fetchclubName() {
 
 export function fetchclassName(data) {
   console.log('im here inside classes fetch');
-  return fetch(`${heroku_url}/businesses/614ae0f9c265630cd520ab36/classes`, {
+  return fetch(`${heroku_url}/businesses/${data.businessid}/classes`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${data.token}`,
@@ -134,7 +134,7 @@ export function fetchClubFinanc(id) {
 //enroll to class
 export function regularEnrollment(payload) {
   console.log('inside regular enrollment');
-
+  console.log('DATA: ', payload.data);
   return fetch(`${heroku_url}/enrolments`, {
     method: 'POST',
     headers: {

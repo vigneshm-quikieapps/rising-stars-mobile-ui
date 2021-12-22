@@ -51,7 +51,7 @@ const Class_Selection = props => {
   const dispatch = useDispatch();
 
   const handleBusiness = async item => {
-    console.log('inside handhe club');
+    console.log('ITEM: ', item);
 
     setBusiness(item.name);
     setClubModal(!clubmodal);
@@ -59,7 +59,11 @@ const Class_Selection = props => {
     // item.Token = await getLocalData('accessToken');
     dispatch(setClubData(item));
     dispatch(
-      getClassdata({id: item._id, token: await getLocalData('accessToken')}),
+      getClassdata({
+        id: item._id,
+        token: await getLocalData('accessToken'),
+        businessid: item._id,
+      }),
     );
     setShowClass(true);
   };
@@ -114,9 +118,15 @@ const Class_Selection = props => {
               onPressOut={() => setClubModal(false)}
               key={item._id}
               onPress={() => handleBusiness(item)}
-              style={{marginLeft: wp('5%'), justifyContent: 'center'}}>
+              style={{
+                marginLeft: wp('8%'),
+                justifyContent: 'center',
+                alignContent: 'center',
+                backgroundColor: colors.lightgrey,
+              }}>
               <Text
                 style={{
+                  margin: wp('0.5%'),
                   fontFamily: 'Nunito-Regular',
                   paddingTop: wp('2%'),
                   fontSize: Fontsize,
@@ -142,12 +152,18 @@ const Class_Selection = props => {
                     onPressOut={() => setClubModal(false)}
                     key={item._id}
                     onPress={() => handleClasses(item)}
-                    style={{marginLeft: wp('5%'), justifyContent: 'center'}}>
+                    style={{
+                      marginLeft: wp('8%'),
+                      justifyContent: 'center',
+                      alignContent: 'center',
+                    }}>
                     <Text
                       style={{
+                        backgroundColor: colors.lightgrey,
                         fontFamily: 'Nunito-Regular',
                         fontSize: Fontsize,
                         paddingTop: wp('2%'),
+                        margin: wp('0.5%'),
                       }}>
                       {item.name}
                     </Text>

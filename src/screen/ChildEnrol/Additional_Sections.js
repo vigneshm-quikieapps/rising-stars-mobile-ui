@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {
@@ -12,17 +12,37 @@ import {colors, Fontsize, hp, wp} from '../../constants';
 import {RadioButton} from 'react-native-paper';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import EntIcon from 'react-native-vector-icons/Entypo';
+import {setAdditionDetails} from '../../redux/action/enrol';
 import {useSelector, useDispatch} from 'react-redux';
+import {baseProps} from 'react-native-gesture-handler/lib/typescript/handlers/gestureHandlers';
 
 const Additional_Sections = props => {
   const termref = useRef();
+  const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const child = useSelector(state => state.childData.addchild);
   const club = useSelector(state => state.childData.clubdata);
 
+  const [email, setEmail] = useState(false);
+  const [telephone, setTelephone] = useState(false);
+  const [sms, setSms] = useState(false);
   const fullName = useSelector(state => state.childData.fullName);
   const age = useSelector(state => state.childData.age);
-
+  const handleSubmit = () => {
+    var det = {
+      email: email,
+      telephone: telephone,
+      sms: sms,
+    };
+    console.log(det);
+    dispatch(setAdditionDetails(det));
+    props.navigation.navigate('Pay');
+  };
+  const selectaddition = way => {
+    way === 'email' ? setEmail(!email) : null;
+    way === 'telephone' ? setTelephone(!telephone) : null;
+    way === 'sms' ? setSms(!sms) : null;
+  };
   console.log(modalVisible);
   return (
     <CustomLayout
@@ -143,9 +163,27 @@ const Additional_Sections = props => {
         </Text>{' '}
         newsletter and other communications
       </Text>
-      <Select way={'by Email'} />
-      <Select way={'by Telephone'} />
-      <Select way={'by SMS'} />
+      <View style={styles.container}>
+        <RadioButton
+          onPress={() => selectaddition('email')}
+          status={email ? 'checked' : 'unchecked'}
+        />
+        <Text style={styles.way}>{'by Email'}</Text>
+      </View>
+      <View style={styles.container}>
+        <RadioButton
+          onPress={() => selectaddition('telephone')}
+          status={telephone ? 'checked' : 'unchecked'}
+        />
+        <Text style={styles.way}>{'by Telephone'}</Text>
+      </View>
+      <View style={styles.container}>
+        <RadioButton
+          onPress={() => selectaddition('sms')}
+          status={sms ? 'checked' : 'unchecked'}
+        />
+        <Text style={styles.way}>{'by SMS'}</Text>
+      </View>
       <Text style={styles.newsheader}>Club Rules</Text>
       <Text
         style={{
@@ -163,18 +201,9 @@ const Additional_Sections = props => {
       </TouchableOpacity>
       <ForwardButton
         style={{alignSelf: 'flex-end'}}
-        onPress={() => props.navigation.navigate('Pay')}
+        onPress={() => handleSubmit()}
       />
     </CustomLayout>
-  );
-};
-
-const Select = props => {
-  return (
-    <View style={styles.container}>
-      <RadioButton />
-      <Text style={styles.way}>{props.way}</Text>
-    </View>
   );
 };
 

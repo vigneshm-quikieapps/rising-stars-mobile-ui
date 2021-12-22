@@ -68,7 +68,7 @@ const Confirmation = props => {
       <View style={{height: hp('0%')}} />
       <AppButton
         title={'Done'}
-        onPress={() => props.navigation.navigate('HomeTab')}
+        onPress={() => props.navigation.navigate('Profile')}
       />
     </CustomLayout>
   );

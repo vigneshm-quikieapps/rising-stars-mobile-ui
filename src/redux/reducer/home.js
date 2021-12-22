@@ -11,7 +11,6 @@ const memberstate = {
 export const memberData = (state = memberstate, action) => {
   switch (action.type) {
     case Action.USER_GET_CLASSES_SUCCESS:
-      console.log('Classes :', action);
       return {
         ...state,
         classesOfLoggedInUser: action.data.docs,
@@ -25,7 +24,6 @@ export const memberData = (state = memberstate, action) => {
         isloading: false,
       };
     case Action.USER_GET_MEMBER_SUCCESS:
-      console.log('action.data.docs memberData :', action.data.docs);
       return {
         ...state,
         memberData: action.data.docs,

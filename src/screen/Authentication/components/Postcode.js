@@ -25,14 +25,14 @@ export default function PostComponent(props) {
   const dispatch = useDispatch();
   const postcodeData = useSelector(state => state.Postcode.postcode);
   const isloading = useSelector(state => state.Postcode.isloading);
-  const [show, setShow] = useState('');
-  const [data, setData] = useState(false);
+  // const [show, setShow] = useState('');
+  // const [data, setData] = useState(false);
   const [selected, setSelected] = useState('');
 
-  const handlemore = item => {
-    setShow(item);
-    setData(!data);
-  };
+  // const handlemore = item => {
+  //   setShow(item);
+  //   setData(!data);
+  // };
   Object.size = function (obj) {
     var size = 0,
       key;
@@ -103,7 +103,7 @@ export default function PostComponent(props) {
                   }}
                 />
               </View>
-              <View style={{height: hp('60%')}}>
+              <View style={{height: hp('60%'), marginTop: hp('2%')}}>
                 {props.data && postcodeData.length > 0 && (
                   <FlatList
                     data={props.data}
@@ -119,22 +119,25 @@ export default function PostComponent(props) {
                             }
                             onPress={() => setSelected(item.item)}
                           />
-                          <View style={{width: wp('90%')}}>
+                          <View
+                            style={{width: wp('90%'), marginLeft: wp('2%')}}>
                             <Text style={styles.head} ellipsizeMode="head">
                               {item.item.organisation}
                             </Text>
                             <Text
                               style={styles.body}
-                              numberOfLines={
-                                show === item.item.addressline1 && data ? 0 : 1
-                              }
-                              ellipsizeMode="tail">
+                              // numberOfLines={
+                              //   show === item.item.addressline1 && data ? 1 : 1
+                              // }
+                              // ellipsizeMode="tail"
+                            >
                               {item.item.addressline1}
-                              <Text>{item.item.addressline2}</Text>
+                              {item.item.addressline2}
                             </Text>
-                            <Text
+                            {/* <Text
                               onPress={() => handlemore(item.item.addressline1)}
                               style={{
+                                marginRight: wp('10%'),
                                 alignSelf: 'flex-end',
                                 fontSize: wp('2.5%'),
                                 color: colors.orange,
@@ -143,7 +146,7 @@ export default function PostComponent(props) {
                               {show === item.item.addressline1 && data
                                 ? 'Less info'
                                 : 'More info'}
-                            </Text>
+                            </Text> */}
                           </View>
                         </View>
                       );
@@ -201,10 +204,11 @@ const styles = StyleSheet.create({
   postcodeconatiner: {
     flexDirection: 'row',
     marginVertical: hp('0.5%'),
-    width: wp('100%'),
+    width: wp('92%'),
     height: hp('15%'),
     backgroundColor: colors.lightgrey,
     alignItems: 'center',
+    borderRadius: wp('5%'),
   },
   head: {
     fontFamily: 'Nunito-Regular',
