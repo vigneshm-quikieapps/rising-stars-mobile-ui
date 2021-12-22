@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Text, View, Image} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import Home from '../../screen/Dashboard/Home';
+import Home from '../../screen/Dashboard/newhome';
 import ActivityProgress from '../../screen/Dashboard/ActivityProgress';
 import AttendenceShow from '../../screen/Dashboard/AttendenceShow';
 import {ProfileStack} from '../Stack/ProfileStack';

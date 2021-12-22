@@ -17,7 +17,7 @@ const Confirmation = props => {
   const slot = useSelector(state => state.childData.slotdata);
   const classes = useSelector(state => state.childData.classdata);
 
-  console.log('classes :', slot);
+  console.log('Session :', slot);
 
   return (
     <CustomLayout
@@ -32,8 +32,8 @@ const Confirmation = props => {
       Customchildren2={<ProgressTracker percent={7} />}
       Customchildren3={
         <StudentCard
-          name={child.fullName}
-          id={child.age}
+          name={child.member.name}
+          id={child.member._id}
           activityrequired
           activity={club.name}
           subactivity={classes.name}
@@ -53,8 +53,8 @@ const Confirmation = props => {
           time={`${moment(slot.pattern[0].startTime).format(
             'HH:mm',
           )} - ${moment(slot.pattern[0].endTime).format('HH:mm')}`}
-          facility={slot.name}
-          coach={slot.coach[0].name}
+          facility={slot.facility}
+          coach={slot.coach.name}
         />
       </View>
       <View style={styles.remark}>
@@ -68,7 +68,7 @@ const Confirmation = props => {
       <View style={{height: hp('0%')}} />
       <AppButton
         title={'Done'}
-        onPress={() => props.navigation.navigate('HomeTab')}
+        onPress={() => props.navigation.navigate('Profile')}
       />
     </CustomLayout>
   );

@@ -3,7 +3,7 @@ import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {hp, wp} from '../constants';
 
-export default function RadioButton(props) {
+const RadioButton = props => {
   return (
     <TouchableOpacity onPress={props.onPress}>
       <LinearGradient
@@ -26,7 +26,7 @@ export default function RadioButton(props) {
       </LinearGradient>
     </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -53,3 +53,5 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
 });
+
+export default RadioButton;
