@@ -119,13 +119,13 @@ const Class_Selection = props => {
               key={item._id}
               onPress={() => handleBusiness(item)}
               style={{
-                marginLeft: wp('5%'),
+                marginLeft: wp('8%'),
                 justifyContent: 'center',
                 alignContent: 'center',
+                backgroundColor: colors.lightgrey,
               }}>
               <Text
                 style={{
-                  backgroundColor: colors.lightgrey,
                   margin: wp('0.5%'),
                   fontFamily: 'Nunito-Regular',
                   paddingTop: wp('2%'),
@@ -153,7 +153,7 @@ const Class_Selection = props => {
                     key={item._id}
                     onPress={() => handleClasses(item)}
                     style={{
-                      marginLeft: wp('5%'),
+                      marginLeft: wp('8%'),
                       justifyContent: 'center',
                       alignContent: 'center',
                     }}>

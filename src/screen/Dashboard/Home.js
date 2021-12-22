@@ -158,7 +158,6 @@ const Home = () => {
               </TouchableOpacity>
             )}
           </View>
-
           <WheelDropdown
             title="child"
             visible={memberModal}

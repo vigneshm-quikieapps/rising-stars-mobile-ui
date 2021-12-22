@@ -134,7 +134,7 @@ export function fetchClubFinanc(id) {
 //enroll to class
 export function regularEnrollment(payload) {
   console.log('inside regular enrollment');
-
+  console.log('DATA: ', payload.data);
   return fetch(`${heroku_url}/enrolments`, {
     method: 'POST',
     headers: {

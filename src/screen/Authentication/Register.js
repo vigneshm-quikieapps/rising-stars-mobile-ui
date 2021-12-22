@@ -128,8 +128,14 @@ function Register(props) {
             values.cityTown = postdata.posttown;
             console.log(values);
             dispatch(RegisterData(values));
-            if (status.message !== null) {
+            if (status === 'created successfully') {
+              //POP-UP with message
+              //Navigate to Login Screen
               props.navigation.navigate('EnrollStack');
+            }
+            if (Reerror) {
+              //POP-UP with error message
+              //navigate to register
             }
           }
         }}

@@ -20,14 +20,14 @@ const Pay = props => {
   const club = useSelector(state => state.childData.clubdata);
   const consent = useSelector(state => state.addProvidedata);
   const dispatch = useDispatch();
-
+  const state = useDispatch(state => state);
+  console.log('STATE: ', state);
   const handleforward = async () => {
     dispatch(
       enrollChildData({
         data: {
           sessionId: slot._id,
           memberId: child.member._id,
-          consent: consent,
           newsletter: {
             email: 'false',
             telephone: 'false',
