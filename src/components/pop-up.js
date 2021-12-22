@@ -9,7 +9,7 @@ function PopUp(props) {
       visible={props.visible}
       onRequestClose={props.onRequestClose}>
       <TouchableOpacity
-        onPressOut={() => props.setVisibility(false)}
+        onPressOut={() => props.setVisibility(true)}
         style={styles.container}>
         <View>{props.children}</View>
       </TouchableOpacity>

@@ -27,7 +27,7 @@ import {
 
 import {colors, Fontsize, hp, Images, wp} from '../../constants';
 import {getLocalData} from '../../utils/LocalStorage';
-import {getmemberClass} from '../../redux/action/home';
+import {getmemberClass, getmemberData} from '../../redux/action/home';
 
 const Home = () => {
   const Datum = [1, 2, 3, 4]; // data.length for how many time we have scroll in Carousel
@@ -49,14 +49,22 @@ const Home = () => {
 
   membersdata && membersdata.forEach((item, index) => (item.index = index));
   membersdata && membersdata.map(item => members.push(item.name));
+  const token = async () => {
+    const accToken = await getLocalData('accessToken');
+    console.log('token token', accToken);
+    setAccessTocken(accToken);
+  };
+  const [accessTocken, setAccessTocken] = useState('');
 
   useEffect(() => {
     getLocalUserData();
-    // const accesstoken = await getLocalData('accessToken')
-    // dispatch(getmemberData(accesstoken))
-    membersdata?.length && dispatch(getmemberClass(membersdata[0]._id));
-    // console.log('membersdata[0]._id :', membersdata[0]);
-  }, [dispatch, getLocalUserData, membersdata]);
+    token();
+    console.log('access tocken:', accessTocken);
+    dispatch(getmemberData(accessTocken));
+
+    membersdata?.length &&
+      dispatch(getmemberClass(membersdata[membersdata.length - 1]._id));
+  }, [dispatch, getLocalUserData]);
 
   const getLocalUserData = useCallback(async () => {
     const userData = await getLocalData('user', true);
@@ -88,7 +96,7 @@ const Home = () => {
       />
     );
   };
-  const renderItem = ({item, index}) => {
+  const renderItem = ({memberclassdata, index}) => {
     console.log(memberclassdata.length);
     return (
       <ClassCard
@@ -108,7 +116,7 @@ const Home = () => {
 
   return (
     <ScrollView
-      showsVerticalScrollIndicator={false}
+      showsVerticalScrollIndicator={true}
       style={{backgroundColor: colors.white}}>
       <StatusBar backgroundColor="rgb(255,163,0)" />
       <View style={styles.container}>
@@ -132,13 +140,11 @@ const Home = () => {
             </View>
 
             <View style={{marginLeft: 10, justifyContent: 'center'}}>
-              <Text style={styles.memberName}>
-                {initdata ? 'hello' : 'hello'}
-              </Text>
+              <Text style={styles.memberName}>{memberName}</Text>
             </View>
 
             <View style={{flex: 1}} />
-            {membersdata && membersdata.length > 1 && (
+            {membersdata && membersdata.length > 0 && (
               <TouchableOpacity onPress={() => setMemberModal(!memberModal)}>
                 <LinearGradient
                   colors={['#fcb12b', '#e6780e']}
@@ -162,6 +168,7 @@ const Home = () => {
           <WheelDropdown
             title="child"
             visible={memberModal}
+            setVisibility={visibility => setMemberModal(visibility)}
             cancel={() => setMemberModal(!memberModal)}
             confirm={() => {
               const member = membersdata.filter(
@@ -179,7 +186,7 @@ const Home = () => {
               onItemSelected={item => setMemberName(item)}
               selectedItemTextColor={'black'}
               selectedItemTextSize={Fontsize}
-              hideIndicator={true}
+              hideIndicator={false}
               itemTextFontFamily="Nunito-Regular"
               selectedItemTextFontFamily="Nunito-Regular"
               data={members}
