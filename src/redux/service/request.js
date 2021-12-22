@@ -91,9 +91,13 @@ export function fetchclubName() {
     });
 }
 
-export function fetchclassName(id) {
-  return fetch(`${heroku_url}/businesses/${id}/classes`, {
+export function fetchclassName(data) {
+  console.log('im here inside classes fetch');
+  return fetch(`${heroku_url}/businesses/${data.businessid}/classes`, {
     method: 'GET',
+    headers: {
+      Authorization: `Bearer ${data.token}`,
+    },
   })
     .then(response => response.json())
     .catch(error => {
@@ -120,11 +124,29 @@ export function fetchClubFinanc(id) {
       throw error;
     });
 }
+//enroll to class
+export function regularEnrollment(payload) {
+  console.log('inside regular enrollment');
+  console.log('DATA: ', payload.data);
+  return fetch(`${heroku_url}/enrolments`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${payload.token}`,
+    },
+    body: JSON.stringify(payload.data),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      console.log(error);
+    });
+}
 
 // --------------------------------------------------------Home
 
 export function fetchMemberData(token) {
-  return fetch(`${heroku_url}/members/of-a-logged-in-parent`, {
+  return fetch(`${heroku_url}/members/of-a-logged-in-parent?limit=50`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
