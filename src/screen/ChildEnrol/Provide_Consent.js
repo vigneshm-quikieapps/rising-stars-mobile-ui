@@ -42,8 +42,8 @@ const Provide_Consent = props => {
     <CustomLayout
       Customchildren={
         <StudentCard
-          name={child.fullName}
-          id={child.age}
+          name={child.member.name}
+          id={child.member._id}
           activityrequired
           activity={club.name}
         />
@@ -176,7 +176,7 @@ const Provide_Consent = props => {
         style={{alignSelf: 'flex-end', marginTop: hp('1%')}}
         onPress={() => {
           dispatch(setProvide(allergies, condition, photo, sign));
-          props.navigation.navigate('Pay');
+          props.navigation.navigate('Additional_Sections');
         }}
       />
     </CustomLayout>

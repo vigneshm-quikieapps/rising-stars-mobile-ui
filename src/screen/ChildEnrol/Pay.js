@@ -10,17 +10,41 @@ import {
 } from '../../components';
 import {colors, Fontsize, hp, Stepend, wp} from '../../constants';
 import {RadioButton} from 'react-native-paper';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {enrollChildData} from '../../redux/action/enrol';
+import {getLocalData} from '../../utils/LocalStorage';
 
 const Pay = props => {
   const child = useSelector(state => state.childData.addchild);
+  const slot = useSelector(state => state.childData.slotdata);
   const club = useSelector(state => state.childData.clubdata);
+  const consent = useSelector(state => state.addProvidedata);
+  const dispatch = useDispatch();
+  const state = useDispatch(state => state);
+  console.log('STATE: ', state);
+  const handleforward = async () => {
+    dispatch(
+      enrollChildData({
+        data: {
+          sessionId: slot._id,
+          memberId: child.member._id,
+          newsletter: {
+            email: 'false',
+            telephone: 'false',
+            sms: 'false',
+          },
+        },
+        token: await getLocalData('accessToken'),
+      }),
+    );
+    props.navigation.navigate('Confirmation');
+  };
   return (
     <CustomLayout
       Customchildren={
         <StudentCard
-          name={child.fullName}
-          id={child.age}
+          name={child.member.name}
+          id={child.member._id}
           activityrequired
           activity={club.name}
           subactivity={'Childhood Joy Classes'}
@@ -49,7 +73,7 @@ const Pay = props => {
       />
       <View style={styles.breaks} />
       <Text style={styles.optional}>Payment Options</Text>
-      <AtmCard />
+      {/* <AtmCard />
       <View style={styles.bottom}>
         <RadioButton />
         <Text
@@ -69,10 +93,10 @@ const Pay = props => {
           }}>
           Wallets
         </Text>
-      </View>
+      </View> */}
       <ForwardButton
         style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
-        onPress={() => props.navigation.navigate('Confirmation')}
+        onPress={() => handleforward()}
       />
     </CustomLayout>
   );

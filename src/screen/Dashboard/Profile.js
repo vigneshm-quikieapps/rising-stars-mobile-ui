@@ -11,16 +11,22 @@ import {
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImagePicker from 'react-native-image-crop-picker';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import {useSelector, useDispatch} from 'react-redux';
 
 import {removeLocalData} from '../../utils/LocalStorage';
 import {CustomLayout} from '../../components';
 import {colors, hp, wp} from '../../constants';
+import {getmemberClass} from '../../redux/action/home';
 
 function Profile(props) {
+  const membersdata = useSelector(state => state.memberData.memberData);
+  const memberclassdata = useSelector(state => state.memberClassData.classData);
+  membersdata && console.log('membersData', membersdata);
   // let steps = false;
   const refRBSheet = useRef();
 
   const [fileUri, setfileUri] = useState(null);
+  const dispatch = useDispatch();
 
   const updateProfilePicture = () => {
     refRBSheet.current.open();
@@ -31,6 +37,11 @@ function Profile(props) {
     await removeLocalData('usercred');
     await removeLocalData('accesstoken');
     props.navigation.navigate('AuthStack');
+  };
+  const handleMembership = async id => {
+    dispatch(getmemberClass(id));
+
+    props.navigation.navigate('EnrolledChild');
   };
 
   const choosePhotoFromLibrary = () => {
@@ -84,7 +95,7 @@ function Profile(props) {
       </View>
 
       <View style={styles.childContainer}>
-        <Text style={styles.yourChild}>Your child</Text>
+        <Text style={styles.yourChild}>Your children</Text>
         <TouchableOpacity
           style={styles.addChild}
           onPress={() => props.navigation.navigate('Addchildren')}>
@@ -98,41 +109,47 @@ function Profile(props) {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.profileImageCard}>
-        <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
-          <TouchableOpacity onPress={updateProfilePicture}>
-            {fileUri === null ? (
-              <Image
-                style={styles.image}
-                source={require('../../assets/images/children.jpg')}
-              />
-            ) : (
-              <Image style={styles.image} source={{uri: fileUri}} />
-            )}
-          </TouchableOpacity>
-          <View style={{justifyContent: 'center'}}>
-            <Text
-              style={{
-                fontSize: 18,
-                fontFamily: 'Nunito-SemiBold',
-                marginBottom: wp('1%'),
-              }}>
-              Ayman Mogal
-            </Text>
-          </View>
-        </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => props.navigation.navigate('EnrolledChild')}>
-          <Text style={styles.cardButton}>Memberships / Classes</Text>
-        </TouchableOpacity>
+      {/* children card starts here */}
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => props.navigation.navigate('PaymentHistory')}>
-          <Text style={styles.cardButton}>Payment History</Text>
-        </TouchableOpacity>
-      </View>
+      {membersdata && (
+        <View style={styles.profileImageCard}>
+          <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
+            <TouchableOpacity onPress={updateProfilePicture}>
+              {fileUri === null ? (
+                <Image
+                  style={styles.image}
+                  source={require('../../assets/images/children.jpg')}
+                />
+              ) : (
+                <Image style={styles.image} source={{uri: fileUri}} />
+              )}
+            </TouchableOpacity>
+            <View style={{justifyContent: 'center'}}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontFamily: 'Nunito-SemiBold',
+                  marginBottom: wp('1%'),
+                }}>
+                {membersdata[0].name}
+              </Text>
+            </View>
+          </View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleMembership(membersdata[0]._id)}>
+            <Text style={styles.cardButton}>Memberships / Classes</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => props.navigation.navigate('PaymentHistory')}>
+            <Text style={styles.cardButton}>Payment History</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {/* children card ends here */}
 
       <TouchableOpacity onPress={() => SignOut()}>
         <Text style={styles.signoutButton}>Sign out</Text>
@@ -226,6 +243,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Regular',
   },
   profileImageCard: {
+    marginTop: hp('3%'),
+    marginBottom: hp('3%'),
     height: hp('37%'),
     width: '93%',
     backgroundColor: colors.white,

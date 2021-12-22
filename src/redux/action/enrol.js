@@ -33,6 +33,12 @@ export const uploadedChildData = () => {
     type: action.USER_ADDCHILD_SUCCESS,
   };
 };
+export const enrollChildData = value => {
+  return {
+    type: action.USER_ENROLL_CHILD,
+    payload: value,
+  };
+};
 
 export const errorchildData = () => {
   return {
@@ -82,5 +88,13 @@ export const setProvide = (allergie, condition, photo, sign) => {
     condition: condition,
     photo: photo,
     sign: sign,
+  };
+};
+
+export const setAdditionDetails = value => {
+  console.log('inside action');
+  return {
+    type: action.USER_SET_ADDITION,
+    payload: value,
   };
 };

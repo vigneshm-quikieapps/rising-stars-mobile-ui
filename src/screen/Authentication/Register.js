@@ -67,7 +67,7 @@ function Register(props) {
     setValue,
   });
   const [checked, setChecked] = useState('first');
-  const [postcodeshow, setPostCodeshow] = useState(false);
+  const [postcodeshow, setPostCodeshow] = useState(true);
   const [term, setTerm] = useState(false);
   const [temp, setTemp] = useState(false);
   const [main, setMain] = useState(false);
@@ -126,8 +126,14 @@ function Register(props) {
             values.cityTown = postdata.posttown;
             console.log(values);
             dispatch(RegisterData(values));
-            if (status.message !== null) {
+            if (status === 'created successfully') {
+              //POP-UP with message
+              //Navigate to Login Screen
               props.navigation.navigate('EnrollStack');
+            }
+            if (Reerror) {
+              //POP-UP with error message
+              //navigate to register
             }
           }
         }}
@@ -402,6 +408,7 @@ function Register(props) {
                   height: hp('40%'),
                   borderTopRightRadius: 16,
                   borderTopLeftRadius: 16,
+                  marginBottom: hp('10%'),
                 },
               }}>
               <View style={{paddingHorizontal: wp('5%')}}>
