@@ -80,16 +80,6 @@ const Class_Selection = props => {
     dispatch(setSlotData(selectdata));
     props.navigation.navigate('Fees_Overview');
   };
-<<<<<<< HEAD
-  console.log('Child: ', child);
-  sessionData && console.log('Session data: ', sessionData);
-  selectdata && console.log('selectdata data: ', selectdata);
-  // console.log(
-  //   'Child Age: ',
-  //   new Date().getFullYear() - child.member.dob.getFullYear(),
-  // );
-=======
->>>>>>> 316832762ae26dc9ae1e07a3de264ca4aade59eb
   return (
     <CustomLayout
       Customchildren={
