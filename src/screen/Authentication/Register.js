@@ -60,8 +60,6 @@ function Register(props) {
   const status = useSelector(state => state.RegisterData.status);
   const Reerror = useSelector(state => state.RegisterData.error);
   const isRegloading = useSelector(state => state.RegisterData.isLoading);
-
-  // console.log('error ----------->',Reerror.errors)
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [prop, getCellOnLayoutHandler] = useClearByFocusCell({

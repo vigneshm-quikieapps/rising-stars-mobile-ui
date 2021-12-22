@@ -50,7 +50,6 @@ const AddChild = props => {
   useEffect(() => {
     getuser();
   }, []);
-  console.log('TOKEN: ', token);
   const [count, setCount] = useState(1);
   const [data, setData] = useState([]);
 
@@ -162,7 +161,6 @@ const AddChild = props => {
                     ],
             },
           };
-          console.log(valuesForDispatch);
           if (values.dob === '') {
             setBirthError(true);
           } else if (values.gender === '') {
@@ -170,12 +168,10 @@ const AddChild = props => {
           } else if (new Date().getFullYear() - values.dob.getFullYear() <= 2) {
             alert('2 year children not allowed ');
           } else {
-            //console.log('values.age :', values.age);
             dispatch(
               setChildData({
                 data: valuesForDispatch,
                 callback: () => {
-                  console.log('Dispatch Testing');
                   dispatch(
                     getClubdata({
                       callback: () => {
@@ -233,8 +229,6 @@ const AddChild = props => {
                 confirm={() => {
                   setBirthModal(false);
                   setBirthError(false);
-                  //setFieldValue('dob', birth);
-                  // console.log(age)
                 }}>
                 <DatePicker
                   mode={'date'}
@@ -242,7 +236,6 @@ const AddChild = props => {
                     //handleChange('dob');
                     //setBirth(select);
                     setFieldValue('dob', date);
-                    console.log(birth);
                   }}
                   date={values.dob}
                 />
@@ -259,7 +252,6 @@ const AddChild = props => {
                 let age = (new Date()).getFullYear() - date.getFullYear()
                 setAge(age)
                 setBirthError(false)
-                // console.log(age)
               }}
               onCancel={() => {
                 setOpen(!open)

@@ -76,11 +76,14 @@ const Class_Selection = props => {
     dispatch(setSlotData(selectdata));
     props.navigation.navigate('Fees_Overview');
   };
+<<<<<<< HEAD
   console.log('Child: ', child);
   // console.log(
   //   'Child Age: ',
   //   new Date().getFullYear() - child.member.dob.getFullYear(),
   // );
+=======
+>>>>>>> 316832762ae26dc9ae1e07a3de264ca4aade59eb
   return (
     <CustomLayout
       Customchildren={<StudentCard name={child.member.name} age={'23'} />}

@@ -70,7 +70,6 @@ export function* watcherClubfinance() {
 function* handleAddChild(action) {
   try {
     const child = yield call(addChild, action.payload.data);
-    console.log('CHILD: ', child);
     yield put({type: Action.USER_ADD_CHILD_SUCCEDED, payload: child});
     yield call(action.payload.callback);
   } catch (error) {
