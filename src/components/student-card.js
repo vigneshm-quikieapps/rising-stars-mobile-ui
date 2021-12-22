@@ -11,10 +11,10 @@ export default function StudentCard(props) {
           <Text style={styles.head}>Child Name</Text>
           <Text style={styles.body}>{props.name}</Text>
         </View>
-        {props.id ? (
+        {props.age ? (
           <View style={{alignItems: 'center'}}>
             <Text style={styles.head}>Child Age</Text>
-            <Text style={styles.body}>{props.id}</Text>
+            <Text style={styles.body}>{props.age}</Text>
           </View>
         ) : null}
       </View>

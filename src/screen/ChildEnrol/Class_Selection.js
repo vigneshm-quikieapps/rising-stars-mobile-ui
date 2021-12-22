@@ -69,10 +69,9 @@ const Class_Selection = props => {
     dispatch(setSlotData(selectdata));
     props.navigation.navigate('Fees_Overview');
   };
-
   return (
     <CustomLayout
-      Customchildren={<StudentCard name={child.fullName} id={child.age} />}
+      Customchildren={<StudentCard name={child.member.name} age={'19'} />}
       steps
       start={2}
       end={Stepend}

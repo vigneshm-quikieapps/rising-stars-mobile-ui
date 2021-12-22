@@ -7,7 +7,6 @@ import {fetchLogin, fetchPostCode, fetchRegister} from '../service/request';
 function* handlePostcode(action) {
   try {
     const postcode = yield call(fetchPostCode, action.payload);
-    console.log('Postcode Saga:', postcode);
     yield put({type: Action.USER_GET_POST_CODE_SUCCESS, payload: postcode});
   } catch (error) {
     yield put({type: Action.USER_GET_POST_CODE_FAILED, error: error.message});
@@ -32,8 +31,7 @@ export function* watcherRegister() {
 }
 
 const save = async login => {
-  console.log('LOGIN: ', login.user._id);
-  await storeLocalData('usercred', login.user._id, true);
+  await storeLocalData('usercred', login.user._id);
 };
 function* handleLogin(action) {
   try {
