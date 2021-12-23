@@ -165,7 +165,7 @@ const AddChild = props => {
             setBirthError(true);
           } else if (values.gender === '') {
             setGenderError(true);
-          } else if (new Date().getFullYear - values.dob.getFullYear() <= 2) {
+          } else if (new Date().getFullYear() - values.dob.getFullYear() <= 2) {
             alert('2 year children not allowed ');
           } else {
             dispatch(

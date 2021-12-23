@@ -115,11 +115,28 @@ export const clubfinance = (state = clubfinancestate, action) => {
   }
 };
 
+const additionalState = {
+  additionalData: '',
+  error: '',
+};
+
+export const addAdditionaldata = (state = additionalState, action) => {
+  switch (action.type) {
+    case Action.USER_SET_ADDITION:
+      return {
+        ...state,
+        additionalData: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
 const provideState = {
   allergie: '',
   condition: '',
-  photograhConsent: '',
-  signedbyParent: '',
+  photographConsent: '',
+  signedByParent: '',
 };
 
 export const addProvidedata = (state = provideState, action) => {
@@ -127,10 +144,31 @@ export const addProvidedata = (state = provideState, action) => {
     case Action.USER_SET_PROVIDE_CONSENT:
       return {
         ...state,
-        allergie: action.allergie,
+        allergies: action.allergie,
         condition: action.condition,
         photograhConsent: action.photo,
         signedbyParent: action.sign,
+      };
+    default:
+      return state;
+  }
+};
+const enrolledChild = {
+  enrollstate: '',
+  error: '',
+};
+
+export const enrollChild = (state = enrolledChild, action) => {
+  switch (action.type) {
+    case Action.USER_ENROLL_CHILD_SUCCEDED:
+      return {
+        ...state,
+        enrollstate: action.payload,
+      };
+    case Action.USER_ENROLL_CHILD_FAILED:
+      return {
+        ...state,
+        error: action.payload,
       };
     default:
       return state;

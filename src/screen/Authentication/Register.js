@@ -20,6 +20,7 @@ import {
   AppButton,
   PopUp,
   CustomLayout,
+  Alert,
 } from '../../components';
 import {colors, Fontsize, hp, wp, Term_Condition} from '../../constants';
 import {PostCode, PostDataPass, RegisterData} from '../../redux/action/auth';
@@ -67,10 +68,12 @@ function Register(props) {
     setValue,
   });
   const [checked, setChecked] = useState('first');
-  const [postcodeshow, setPostCodeshow] = useState(false);
+  const [postcodeshow, setPostCodeshow] = useState(true);
   const [term, setTerm] = useState(false);
   const [temp, setTemp] = useState(false);
   const [main, setMain] = useState(false);
+  const [showSuccessalert, setSuccessAlert] = useState(false);
+  const [showFailurealert, setFailureAlert] = useState(false);
   const [seconds, setSeconds] = React.useState(10);
   const refRBSheet = useRef();
 
@@ -126,8 +129,26 @@ function Register(props) {
             values.cityTown = postdata.posttown;
             console.log(values);
             dispatch(RegisterData(values));
-            if (status.message !== null) {
-              props.navigation.navigate('EnrollStack');
+            setSuccessAlert(true);
+            if (status === 'created successfully') {
+              <Alert
+                visible={showSuccessalert}
+                message={'Profile Created Successfully'}
+                confirm={'OKAY'}
+                success={props.navigation.navigate('Login')}
+              />;
+              //POP-UP with message
+              //Navigate to Login Screen
+            }
+            if (Reerror) {
+              <Alert
+                visible={showFailurealert}
+                message={'Something Went Wrong'}
+                confirm={'Retry'}
+                success={props.navigation.navigate('Register')}
+              />;
+              //POP-UP with error message
+              //navigate to register
             }
           }
         }}
@@ -402,6 +423,7 @@ function Register(props) {
                   height: hp('40%'),
                   borderTopRightRadius: 16,
                   borderTopLeftRadius: 16,
+                  marginBottom: hp('10%'),
                 },
               }}>
               <View style={{paddingHorizontal: wp('5%')}}>

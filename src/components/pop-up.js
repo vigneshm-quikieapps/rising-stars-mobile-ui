@@ -3,26 +3,26 @@ import {View, Modal, StyleSheet, TouchableOpacity} from 'react-native';
 
 function PopUp(props) {
   return (
-    <Modal
-      animationType={props.animationType}
-      transparent={props.transparent}
-      visible={props.visible}
-      onRequestClose={props.onRequestClose}>
-      <TouchableOpacity
-        onPressOut={() => props.setVisibility(false)}
-        style={styles.container}>
+    <TouchableOpacity
+      //onPressOut={() => props.setVisibility(false)}
+      style={styles.container}>
+      <Modal
+        animationType={props.animationType}
+        transparent={props.transparent}
+        visible={props.visible}
+        onRequestClose={props.onRequestClose}>
         <View>{props.children}</View>
-      </TouchableOpacity>
-    </Modal>
+      </Modal>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginLeft: 0,
+    // justifyContent: 'center',
+    // alignItems: 'center',
     // marginTop: hp('46%')
   },
 });

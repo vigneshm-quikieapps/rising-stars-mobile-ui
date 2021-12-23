@@ -8,6 +8,8 @@ import {
   fetchclassName,
   fetchSessionList,
   fetchClubFinanc,
+  createMembership,
+  regularEnrollment,
 } from '../service/request';
 
 function* handleGetClub(params) {
@@ -81,4 +83,25 @@ function* handleAddChild(action) {
 
 export function* watcherAddChild() {
   yield takeEvery(Action.USER_ADD_CHILD, handleAddChild);
+}
+//calling enrollment api
+function* handleEnrollChild(action) {
+  try {
+    console.log('inside sagas');
+    const enrolledChild = yield call(regularEnrollment, action.payload);
+    console.log('enrolledChild: ', enrolledChild);
+    yield put({
+      type: Action.USER_ENROLL_CHILD_SUCCEDED,
+      payload: enrolledChild,
+    });
+  } catch (error) {
+    yield put({
+      type: Action.USER_ENROLL_CHILD_FAILED,
+      payload: error.message,
+    });
+  }
+}
+
+export function* watcherEnrollChild() {
+  yield takeEvery(Action.USER_ENROLL_CHILD, handleEnrollChild);
 }
