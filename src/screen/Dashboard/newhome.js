@@ -56,7 +56,12 @@ const Home = () => {
   const pagination = () => {
     return (
       <Pagination
-        dotsLength={memberClassData ? memberClassData.length : 1}
+        dotsLength={
+          memberClassData
+            ? memberClassData.filter(item => item.enrolledStatus === 'ENROLLED')
+                .length
+            : 1
+        }
         activeDotIndex={activeDotIndex}
         containerStyle={{paddingVertical: 0}}
         dotStyle={{
@@ -192,7 +197,9 @@ const Home = () => {
           </WheelDropdown>
           <View style={styles.courosoul}></View>
           <Carousel
-            data={memberClassData}
+            data={memberClassData.filter(
+              item => item.enrolledStatus === 'ENROLLED',
+            )}
             renderItem={renderItem}
             sliderWidth={wp('95%')}
             itemWidth={wp('90%')}

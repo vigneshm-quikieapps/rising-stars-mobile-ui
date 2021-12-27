@@ -9,17 +9,32 @@ import {
   Slot,
   AppButton,
 } from '../../components';
+import Alert from '../../components/alert-box';
 import {hp, colors, wp} from '../../constants';
+import {classTransfer} from '../../redux/service/request';
+import {getLocalData} from '../../utils/LocalStorage';
 
 export default function ChangeClass(props) {
   const dispatch = useDispatch();
   const currentMember = useSelector(state => state.currentMemberData.data);
   const sessionData = useSelector(state => state.sessionlist.sessiondata);
+  const [showAlert, setShowAlert] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showFailureAlert, setShowFailureAlert] = useState(false);
   const [newSessionId, setNewSessionId] = useState('');
+  const [token, setToken] = useState('');
   const currentClass = props.route.params.classes;
   console.log('CURRENT: ', currentClass);
   console.log('CURRENT Session: ', sessionData);
 
+  const accessToken = async () => {
+    const Token = await getLocalData('accessToken');
+    setToken(Token);
+  };
+
+  useEffect(() => {
+    accessToken();
+  });
   return (
     <CustomLayout
       names={currentMember.name}
@@ -74,13 +89,56 @@ export default function ChangeClass(props) {
         )}
       <AppButton
         title={'Change Class'}
-        onPress={props.success}
+        onPress={() => setShowAlert(true)}
         style={{
           width: wp('85%'),
           marginLeft: wp('2.5%'),
           marginBottom: wp('2%'),
         }}
       />
+      {showAlert ? (
+        <Alert
+          visible={showAlert}
+          confirm={'Yes, Change Class'}
+          success={async () => {
+            const response = await classTransfer({
+              token: token,
+              data: {
+                enrolmentId: currentClass._id,
+                newSessionId: newSessionId,
+              },
+            });
+            console.log('Response: ', response);
+            if (response.message === 'Transfer successful') {
+              setShowSuccessAlert(true);
+            } else {
+              setShowFailureAlert(true);
+            }
+          }}
+          cancel={'No, Dont change'}
+          failure={() => setShowAlert(false)}
+          image={'failure'}
+          message={'Are you sure you want to change the class'}
+        />
+      ) : null}
+      {showSuccessAlert ? (
+        <Alert
+          visible={showSuccessAlert}
+          confirm={'Done'}
+          success={() => props.navigation.navigate('Profile')}
+          image={'success'}
+          message={'Class Changed Successfully'}
+        />
+      ) : null}
+      {showFailureAlert ? (
+        <Alert
+          visible={showFailureAlert}
+          confirm={'Go Back'}
+          success={() => props.navigation.navigate('Profile')}
+          image={'failure'}
+          message={'OOPS!! Something Went Wrong!!'}
+        />
+      ) : null}
       {/* <Slot
         radio
         day={'Wednesday'}

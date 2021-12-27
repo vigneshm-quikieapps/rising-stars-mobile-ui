@@ -16,12 +16,14 @@ import {
   AppButton,
 } from '../../components';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import {Picker} from 'react-native-wheel-pick';
 import {useSelector, useDispatch} from 'react-redux';
 import {colors, hp, wp, Stepend} from '../../constants';
 import {setChildData, getClubdata} from '../../redux/action/enrol';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
 import {getLocalData} from '../../utils/LocalStorage';
+import {WheelPicker} from 'react-native-wheel-picker-android';
 
 // const gender = [
 //   {id: 1, gender: 'Boy'},
@@ -47,6 +49,8 @@ const AddChild = props => {
     setUser(userId);
   };
 
+  const genders = ['MALE', 'FEMALE', 'OTHERS'];
+
   useEffect(() => {
     getuser();
   }, []);
@@ -65,7 +69,7 @@ const AddChild = props => {
 
   // const [relationData, setRelationData] = useState('');
 
-  // const [gender, setGender] = useState('');
+  const [gender, setGender] = useState('MALE');
   const [gendererror, setGenderError] = useState(false);
 
   const validationSchema = Yup.object().shape({
@@ -275,16 +279,33 @@ const AddChild = props => {
               />
               <RBSheet
                 ref={genderef}
-                closeOnDragDown={true}
+                //closeOnDragDown={true}
                 closeOnPressMask={false}
                 customStyles={{
                   container: {
-                    height: '18%',
                     borderTopRightRadius: 16,
                     borderTopLeftRadius: 16,
+                    alignItems: 'center',
                   },
                 }}>
-                <View
+                <WheelPicker
+                  selectedItem={genders.indexOf(gender)}
+                  isCyclic={true}
+                  data={genders}
+                  onItemSelected={item => {
+                    setGender(genders[item]);
+                    values.gender = genders[item];
+                  }}
+                  style={styles.WheelPicker}
+                  //indicatorWidth={10}
+                  //hideIndicator={true}
+                />
+                <AppButton
+                  title={'Confirm'}
+                  onPress={() => genderef.current.close()}
+                  style={{width: wp('90%'), marginBottom: hp('5%')}}
+                />
+                {/* <View
                   style={{
                     flexDirection: 'row',
                     paddingHorizontal: wp('5%'),
@@ -312,7 +333,7 @@ const AddChild = props => {
                       //gendersubmit('Girl');
                     }}
                   />
-                </View>
+                </View> */}
               </RBSheet>
               {gendererror && (
                 <Text style={styles.errors}>Gender is a required</Text>
