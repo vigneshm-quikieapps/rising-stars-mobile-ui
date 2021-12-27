@@ -145,7 +145,7 @@ export default function EnrolledChild(props) {
               props.navigation.navigate('ChangeClass', {classes});
             }}
             member
-            memberbutton={() => props.navigation.navigate('AddChild')}
+            memberbutton={() => props.navigation.navigate('Profile')}
           />
         ))}
       {/* <View style={styles.centeredView}>

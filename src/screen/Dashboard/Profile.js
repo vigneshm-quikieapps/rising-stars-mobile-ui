@@ -11,18 +11,20 @@ import {
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImagePicker from 'react-native-image-crop-picker';
 import {getLocalData} from '../../utils/LocalStorage';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import RBSheet from 'react-native-raw-bottom-sheet';
 
 import {removeLocalData} from '../../utils/LocalStorage';
 import {CustomLayout} from '../../components';
 import {colors, hp, wp} from '../../constants';
+import {getmemberClass} from '../../redux/action/home';
 
 function Profile(props) {
   // let steps = false;
   const refRBSheet = useRef();
   const [user, setUser] = useState('');
+  const dispatch = useDispatch();
 
   const currentMember = useSelector(state => state.currentMemberData.data);
 
@@ -72,7 +74,9 @@ function Profile(props) {
 
   useEffect(() => {
     getLocalUserData();
-  }, [getLocalUserData]);
+    currentMember && dispatch(getmemberClass(currentMember._id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <CustomLayout

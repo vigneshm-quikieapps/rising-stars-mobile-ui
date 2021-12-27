@@ -45,6 +45,7 @@ export default function PostComponent(props) {
     const size = Object.size(selected);
     if (size !== 0) {
       dispatch(PostDataPass(selected, size));
+      props.ClosePopUp(false);
     } else {
       alert('Please Select Your Address or Tap on Manually for manual entry');
     }
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
     width: wp('88%'),
     borderBottomWidth: 2,
     borderColor: colors.lightgrey,
-    marginBottom: hp('0.1%'),
+    //marginBottom: hp('10%'),
     //paddingBottom: hp('10%'),
   },
   subtitle: {
