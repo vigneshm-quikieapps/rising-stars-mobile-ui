@@ -14,7 +14,6 @@ import {getLocalData} from '../../utils/LocalStorage';
 import {useDispatch, useSelector} from 'react-redux';
 
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {useSelector, useDispatch} from 'react-redux';
 
 import {removeLocalData} from '../../utils/LocalStorage';
 import {CustomLayout} from '../../components';
@@ -38,7 +37,6 @@ function Profile(props) {
   }, []);
 
   const [fileUri, setfileUri] = useState(null);
-  const dispatch = useDispatch();
 
   const updateProfilePicture = () => {
     refRBSheet.current.open();
@@ -128,29 +126,6 @@ function Profile(props) {
         </TouchableOpacity>
       </View>
 
-<<<<<<< HEAD
-      <View style={styles.profileImageCard}>
-        <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
-          <TouchableOpacity onPress={updateProfilePicture}>
-            {fileUri === null ? (
-              <Image
-                style={styles.image}
-                source={require('../../assets/images/children.jpg')}
-              />
-            ) : (
-              <Image style={styles.image} source={{uri: fileUri}} />
-            )}
-          </TouchableOpacity>
-          <View style={{justifyContent: 'center'}}>
-            <Text
-              style={{
-                fontSize: 18,
-                fontFamily: 'Nunito-SemiBold',
-                marginBottom: wp('1%'),
-              }}>
-              {currentMember.name}
-            </Text>
-=======
       {/* children card starts here */}
 
       {membersdata && (
@@ -176,7 +151,6 @@ function Profile(props) {
                 {membersdata[0].name}
               </Text>
             </View>
->>>>>>> 0762ddf157dfecba7ea5a19eff80a95a17937ff3
           </View>
           <TouchableOpacity
             style={styles.button}

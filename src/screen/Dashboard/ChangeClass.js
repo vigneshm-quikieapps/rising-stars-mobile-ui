@@ -1,18 +1,25 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {CustomLayout, StudentCard, ClassCard, Slot} from '../../components';
-import {hp, colors} from '../../constants';
+import {
+  CustomLayout,
+  StudentCard,
+  ClassCard,
+  Slot,
+  AppButton,
+} from '../../components';
+import {hp, colors, wp} from '../../constants';
 
 export default function ChangeClass(props) {
   const dispatch = useDispatch();
   const currentMember = useSelector(state => state.currentMemberData.data);
+  const sessionData = useSelector(state => state.sessionlist.sessiondata);
+  const [newSessionId, setNewSessionId] = useState('');
   const currentClass = props.route.params.classes;
   console.log('CURRENT: ', currentClass);
-  // useEffect(() => {
+  console.log('CURRENT Session: ', sessionData);
 
-  // });
   return (
     <CustomLayout
       names={currentMember.name}
@@ -42,16 +49,39 @@ export default function ChangeClass(props) {
       <Text style={{fontFamily: 'Nunito-SemiBold', marginVertical: hp('1%')}}>
         Available Session
       </Text>
-      <Slot
-        radio
-        selected={'checked'}
-        day={'Monday'}
-        time="9:30 am - 11:30 am"
-        facility={'Gym Hall'}
-        coach={'Henry Itondo'}
+      {sessionData &&
+        sessionData.map(
+          sessions =>
+            currentClass.session._id !== sessions._id && (
+              <>
+                <Slot
+                  radio={true}
+                  onPress={() => {
+                    setNewSessionId(sessions._id);
+                    console.log(newSessionId);
+                  }}
+                  status={
+                    newSessionId === sessions._id ? 'checked' : 'unchecked'
+                  }
+                  day={sessions.pattern[0].day}
+                  time="9:30 am - 11:30 am"
+                  facility={sessions.facility}
+                  coach={sessions.coach.name}
+                />
+                <View style={{height: hp('1%')}} />
+              </>
+            ),
+        )}
+      <AppButton
+        title={'Change Class'}
+        onPress={props.success}
+        style={{
+          width: wp('85%'),
+          marginLeft: wp('2.5%'),
+          marginBottom: wp('2%'),
+        }}
       />
-      <View style={{height: hp('1%')}} />
-      <Slot
+      {/* <Slot
         radio
         day={'Wednesday'}
         time={'9:30 am - 11:30 am'}
@@ -65,7 +95,7 @@ export default function ChangeClass(props) {
         time={'9:30 am - 11:30 am'}
         facility={'Gym Hall'}
         coach={'Sampson Totton'}
-      />
+      /> */}
     </CustomLayout>
   );
 }

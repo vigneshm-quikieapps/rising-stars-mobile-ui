@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {Text, StyleSheet} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   CustomLayout,
   LinearStudentCard,
@@ -9,12 +9,14 @@ import {
   AppButton,
 } from '../../components';
 import {colors, Fontsize} from '../../constants';
+import {getSessiondata} from '../../redux/action/enrol';
 
 export default function EnrolledChild(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
   const [modalVisible4, setModalVisible4] = useState(false);
+  const dispatch = useDispatch();
 
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const currentMember = useSelector(state => state.currentMemberData.data);
@@ -142,6 +144,7 @@ export default function EnrolledChild(props) {
             coach={'Henry Itondo'}
             class
             classbutton={() => {
+              dispatch(getSessiondata(classes.class._id));
               props.navigation.navigate('ChangeClass', {classes});
             }}
             member
