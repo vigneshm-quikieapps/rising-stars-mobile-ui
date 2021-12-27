@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, createRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {
   View,
   StyleSheet,
@@ -10,6 +10,9 @@ import {
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImagePicker from 'react-native-image-crop-picker';
+import {getLocalData} from '../../utils/LocalStorage';
+import {useDispatch, useSelector} from 'react-redux';
+
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -24,6 +27,15 @@ function Profile(props) {
   membersdata && console.log('membersData', membersdata);
   // let steps = false;
   const refRBSheet = useRef();
+  const [user, setUser] = useState('');
+  const dispatch = useDispatch();
+
+  const currentMember = useSelector(state => state.currentMemberData.data);
+
+  const getLocalUserData = useCallback(async () => {
+    const userData = await getLocalData('user', true);
+    setUser(userData);
+  }, []);
 
   const [fileUri, setfileUri] = useState(null);
   const dispatch = useDispatch();
@@ -69,6 +81,13 @@ function Profile(props) {
   const onHandleBackButton = () => {
     props.navigation.goBack();
   };
+
+  useEffect(() => {
+    getLocalUserData();
+    currentMember && dispatch(getmemberClass(currentMember._id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <CustomLayout
       style={styles.container}
@@ -85,7 +104,7 @@ function Profile(props) {
 
       <View style={styles.card}>
         <View style={styles.cardDetails}>
-          <Text style={styles.memberName}>Nizam Mogal</Text>
+          <Text style={styles.memberName}>{user.name}</Text>
 
           <Text style={styles.parentText}>Parent</Text>
         </View>
@@ -109,6 +128,29 @@ function Profile(props) {
         </TouchableOpacity>
       </View>
 
+<<<<<<< HEAD
+      <View style={styles.profileImageCard}>
+        <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
+          <TouchableOpacity onPress={updateProfilePicture}>
+            {fileUri === null ? (
+              <Image
+                style={styles.image}
+                source={require('../../assets/images/children.jpg')}
+              />
+            ) : (
+              <Image style={styles.image} source={{uri: fileUri}} />
+            )}
+          </TouchableOpacity>
+          <View style={{justifyContent: 'center'}}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontFamily: 'Nunito-SemiBold',
+                marginBottom: wp('1%'),
+              }}>
+              {currentMember.name}
+            </Text>
+=======
       {/* children card starts here */}
 
       {membersdata && (
@@ -134,6 +176,7 @@ function Profile(props) {
                 {membersdata[0].name}
               </Text>
             </View>
+>>>>>>> 0762ddf157dfecba7ea5a19eff80a95a17937ff3
           </View>
           <TouchableOpacity
             style={styles.button}
