@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {Text, StyleSheet} from 'react-native';
+import {useSelector} from 'react-redux';
 import {
   CustomLayout,
   LinearStudentCard,
@@ -14,6 +15,9 @@ export default function EnrolledChild(props) {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
   const [modalVisible4, setModalVisible4] = useState(false);
+
+  const memberClassData = useSelector(state => state.memberClassData.classData);
+  const currentMember = useSelector(state => state.currentMemberData.data);
 
   const handlesubmit = () => {
     setModalVisible(!modalVisible);
@@ -30,7 +34,7 @@ export default function EnrolledChild(props) {
       Customchildren={
         <LinearStudentCard
           colors={['#ffa300', '#ff7e00']}
-          name={'Ayman Mogal'}
+          name={currentMember.name}
           style={{backgroundColor: colors.orange}}
           activityRequired
           activity={'Zippy Totz Pre-school Gymnastics'}
@@ -122,18 +126,28 @@ export default function EnrolledChild(props) {
       <Text style={{fontFamily: 'Nunito-Regular', fontSize: Fontsize}}>
         Current Classes
       </Text>
-      <ClassCard
-        className={'Pre-school gymnastics (Age 1-3)'}
-        title={'Change Session'}
-        day={'Monday'}
-        time="9:30 am - 11:30 am"
-        facility={'Gym Hall'}
-        coach={'Henry Itondo'}
-        class
-        classButton={() => setModalVisible3(!modalVisible3)}
-        member
-        memberButton={() => setModalVisible(!modalVisible)}
-      />
+      {memberClassData &&
+        memberClassData?.map(classes => (
+          <ClassCard
+            className={classes.class.name}
+            title={'Change Session'}
+            day={classes.session.pattern[0].day}
+            time={
+              '10-11'
+              // ""classes.session.pattern[0].startTime.getTime() +
+              // '-' +
+              // classes.session.pattern[0].endTime.getTime()"
+            }
+            facility={classes.session.facility}
+            coach={'Henry Itondo'}
+            class
+            classbutton={() => {
+              props.navigation.navigate('ChangeClass', {classes});
+            }}
+            member
+            memberbutton={() => props.navigation.navigate('Profile')}
+          />
+        ))}
       {/* <View style={styles.centeredView}>
         <Modal
           animationType="slide"
@@ -213,7 +227,7 @@ export default function EnrolledChild(props) {
         </Modal>
       </View> */}
 
-      <ClassCard
+      {/* <ClassCard
         className={'Pre-school gymnastics (Age 1-3)'}
         title={'Change Session'}
         day={'Monday'}
@@ -222,7 +236,7 @@ export default function EnrolledChild(props) {
         coach={'Henry Itondo'}
         class
         member
-      />
+      /> */}
       <AppButton
         title={'New Class'}
         onPress={() => props.navigation.navigate('AddPayment')}

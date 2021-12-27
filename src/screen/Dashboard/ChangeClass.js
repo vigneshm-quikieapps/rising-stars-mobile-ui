@@ -1,16 +1,24 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
 import {CustomLayout, StudentCard, ClassCard, Slot} from '../../components';
 import {hp, colors} from '../../constants';
 
-export default function ChangeClass() {
+export default function ChangeClass(props) {
+  const dispatch = useDispatch();
+  const currentMember = useSelector(state => state.currentMemberData.data);
+  const currentClass = props.route.params.classes;
+  console.log('CURRENT: ', currentClass);
+  // useEffect(() => {
+
+  // });
   return (
     <CustomLayout
-      names={'Change Class'}
+      names={currentMember.name}
       Customchildren={
         <StudentCard
-          name={'Ayman Mongal'}
+          name={currentMember.name}
           id={'KKBK1211'}
           activityrequired
           activity={'Pre-school gymnastics(Age1-3)'}
@@ -21,14 +29,14 @@ export default function ChangeClass() {
       }>
       <Text style={{fontFamily: 'Nunito-SemiBold'}}>Current Class/Session</Text>
       <ClassCard
-        className={'Pre-school gymnastics(Age 1-3)'}
+        className={currentClass.class.name}
         // subtitle={"Childhood Joy Classes"}
         button
         title={'Change Class'}
         button2
-        day={'Monday'}
+        day={currentClass.session.pattern[0].day}
         time="9:30 am - 11:30 am"
-        facility={'Gym Hall'}
+        facility={currentClass.session.facility}
         coach={'Henry Itondo'}
       />
       <Text style={{fontFamily: 'Nunito-SemiBold', marginVertical: hp('1%')}}>
