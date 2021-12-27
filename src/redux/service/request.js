@@ -147,7 +147,7 @@ export function regularEnrollment(payload) {
 // --------------------------------------------------------Home
 
 export function fetchMemberData(token) {
-  return fetch(`${heroku_url}/members/of-a-logged-in-parent`, {
+  return fetch(`${heroku_url}/members/of-a-logged-in-parent?limit=50`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
