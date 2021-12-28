@@ -1,13 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useRef, useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {
   EmergencyCard,
   WheelDropdown,
   PopUpCard,
-  PopUp,
   CustomLayout,
   TextInputField,
   ProgressTracker,
@@ -16,14 +15,14 @@ import {
   AppButton,
 } from '../../components';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {Picker} from 'react-native-wheel-pick';
-import {useSelector, useDispatch} from 'react-redux';
-import {colors, hp, wp, Stepend} from '../../constants';
+import {useDispatch} from 'react-redux';
+import {colors, hp, wp, Stepend, Fontsize} from '../../constants';
 import {setChildData, getClubdata} from '../../redux/action/enrol';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
 import {getLocalData} from '../../utils/LocalStorage';
 import {WheelPicker} from 'react-native-wheel-picker-android';
+//import {TouchableOpacity} from 'react-native-gesture-handler';
 
 // const gender = [
 //   {id: 1, gender: 'Boy'},
@@ -50,6 +49,22 @@ const AddChild = props => {
   };
 
   const genders = ['MALE', 'FEMALE', 'OTHERS'];
+  const relations = [
+    'FRIEND',
+    'GRAND_PARENT',
+    'PARENT',
+    'UNCLE',
+    'AUNT',
+    'OTHER',
+  ];
+  const relationForDisplay = [
+    'Friend',
+    'Grand Parent',
+    'Parent',
+    'Uncle',
+    'Aunt',
+    'Other',
+  ];
 
   useEffect(() => {
     getuser();
@@ -70,6 +85,8 @@ const AddChild = props => {
   // const [relationData, setRelationData] = useState('');
 
   const [gender, setGender] = useState('MALE');
+  const [relation, setRelation] = useState('PARENT');
+
   const [gendererror, setGenderError] = useState(false);
 
   const validationSchema = Yup.object().shape({
@@ -293,18 +310,46 @@ const AddChild = props => {
                   isCyclic={true}
                   data={genders}
                   onItemSelected={item => {
-                    setGender(genders[item]);
                     values.gender = genders[item];
+                    setGender(genders[item]);
                   }}
-                  style={styles.WheelPicker}
-                  //indicatorWidth={10}
+                  indicatorWidth={1}
                   //hideIndicator={true}
                 />
-                <AppButton
-                  title={'Confirm'}
-                  onPress={() => genderef.current.close()}
-                  style={{width: wp('90%'), marginBottom: hp('5%')}}
-                />
+                <View
+                  style={{
+                    width: wp('100%'),
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                    alignItems: 'flex-end',
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      genderef.current.close();
+                      setGender('MALE');
+                    }}>
+                    <Text
+                      style={{
+                        color: colors.orangeYellow,
+                        marginBottom: hp('7.5%'),
+                        marginRight: wp('12.5%'),
+                        fontSize: Fontsize + wp('0.7%'),
+                        fontWeight: 'bold',
+                      }}>
+                      Cancel
+                    </Text>
+                  </TouchableOpacity>
+                  <AppButton
+                    title={'Confirm'}
+                    onPress={() => genderef.current.close()}
+                    style={{
+                      width: wp('31%'),
+                      marginBottom: hp('5%'),
+                      marginRight: wp('5%'),
+                      //justifyContent: 'flex-end',
+                    }}
+                  />
+                </View>
                 {/* <View
                   style={{
                     flexDirection: 'row',
@@ -370,50 +415,61 @@ const AddChild = props => {
                 text="Relationship *"
                 onBlur={() => setFieldTouched('eprelation')}
                 value={values.eprelation}
-                onPress={() => relationre.current.open()}
+                onPress={() => relationref.current.open()}
               />
               <RBSheet
-                ref={relationre}
-                closeOnDragDown={true}
-                closeOnPressMask={false}
+                ref={relationref}
+                //closeOnDragDown={true}
+                //closeOnPressMask={false}
                 customStyles={{
                   container: {
-                    height: '18%',
+                    //height: '18%',
+                    alignItems: 'center',
                     borderTopRightRadius: 16,
                     borderTopLeftRadius: 16,
                   },
                 }}>
+                <WheelPicker
+                  selectedItem={relations.indexOf(relation)}
+                  isCyclic={true}
+                  data={relationForDisplay}
+                  onItemSelected={item => {
+                    values.eprelation = relations[item];
+                    setRelation(relations[item]);
+                  }}
+                  indicatorWidth={1}
+                />
                 <View
                   style={{
+                    width: wp('100%'),
                     flexDirection: 'row',
-                    paddingHorizontal: wp('5%'),
-                    justifyContent: 'space-between',
+                    justifyContent: 'flex-end',
+                    alignItems: 'flex-end',
                   }}>
-                  <AppButton
-                    title="Parents"
-                    style={{width: wp('28%')}}
+                  <TouchableOpacity
                     onPress={() => {
-                      values.eprelation = 'PARENT';
-                      relationre.current.close();
-                      setFieldValue('');
-                    }}
-                  />
+                      relationref.current.close();
+                      setRelation('PARENT');
+                    }}>
+                    <Text
+                      style={{
+                        color: colors.orangeYellow,
+                        marginBottom: hp('7.5%'),
+                        marginRight: wp('12.5%'),
+                        fontSize: Fontsize + wp('0.7%'),
+                        fontWeight: 'bold',
+                      }}>
+                      Cancel
+                    </Text>
+                  </TouchableOpacity>
                   <AppButton
-                    title="Guardian"
-                    style={{width: wp('30%')}}
-                    onPress={() => {
-                      values.eprelation = 'GUARDIAN';
-                      setFieldValue('');
-                      relationre.current.close();
-                    }}
-                  />
-                  <AppButton
-                    title="Others"
-                    style={{width: wp('28%')}}
-                    onPress={() => {
-                      values.eprelation = 'Others';
-                      setFieldValue('');
-                      relationre.current.close();
+                    title={'Confirm'}
+                    onPress={() => relationref.current.close()}
+                    style={{
+                      width: wp('31%'),
+                      marginBottom: hp('5%'),
+                      marginRight: wp('5%'),
+                      //justifyContent: 'flex-end',
                     }}
                   />
                 </View>
