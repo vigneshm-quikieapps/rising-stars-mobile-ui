@@ -64,7 +64,7 @@ const Home = () => {
     return (
       <Pagination
         dotsLength={
-          memberClassData
+          memberClassData && memberClassData
             ? memberClassData.filter(item => item.enrolledStatus === 'ENROLLED')
                 .length
             : 1

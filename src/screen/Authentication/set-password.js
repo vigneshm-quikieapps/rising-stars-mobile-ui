@@ -2,6 +2,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
+import {useSelector, useDispatch} from 'react-redux';
 import * as Yup from 'yup';
 import {
   ErrorMessage,
@@ -12,6 +13,8 @@ import {
 } from '../../components';
 import {colors, Fontsize, hp, wp} from '../../constants';
 import {useNavigation} from '@react-navigation/core';
+import {resetPasswordData} from '../../redux/action/auth';
+
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -24,8 +27,13 @@ const validationSchema = Yup.object().shape({
   ),
 });
 
-function Register(props) {
+function SetPassword(props) {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const otp = useSelector(state => state.ForgetPasswordData.otp);
+  const email = useSelector(state => state.ForgetPasswordData.email);
+  const mobileNo = useSelector(state => state.ForgetPasswordData.mobileNo);
+  console.log("otp,email,mobileNo",otp,email,mobileNo);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   return (
     <CustomLayout
@@ -93,6 +101,8 @@ function Register(props) {
               title="Confirm Password"
               style={{marginTop: hp('40%')}}
               onPress={() => {
+                console.log("mobileNo",mobileNo)
+                dispatch(resetPasswordData({"mobileNo":mobileNo,"otp":otp,"password":values.password,"email":email}))
                 setSuccessModalVisible(true);
                 setTimeout(() => {
                   setSuccessModalVisible(false);
@@ -107,7 +117,7 @@ function Register(props) {
   );
 }
 
-export default Register;
+export default SetPassword;
 
 const styles = StyleSheet.create({
   bottomText: {
