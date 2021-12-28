@@ -1,13 +1,16 @@
 import React, {useState, useRef} from 'react';
 import {View, StyleSheet} from 'react-native';
-
+import {useSelector, useDispatch} from 'react-redux';
 import {CustomLayout, TextInputField, AppButton} from './../../components';
 import {colors, hp, wp} from './../../constants';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import InputOTPScreen from './InputOTPScreen';
+import {forgetPasswordData} from '../../redux/action/auth';
+
 
 function CreateNewPassword(props) {
   const refRBSheet = useRef();
+  const dispatch = useDispatch();
 
   // const handleSubmit1 = no => {
   //   userNumber = no;
@@ -26,6 +29,12 @@ function CreateNewPassword(props) {
 
   const gotoGeneratePassword = () => {
     // props.navigation.navigate('GeneratePassword');
+    let body={
+      "email":email,
+      "mobileNo":number
+    }
+    console.log("body",body)
+    dispatch(forgetPasswordData(body));
     refRBSheet.current.open();
   };
   return (

@@ -63,13 +63,13 @@ function InputOTPScreen(props) {
       alert('Please Enter a Valid OTP');
     } else {
       if (props.twoInputField) {
-        props.navigation.navigate('Login');
+        props.navigation.navigate('SetPassword');
       } else {
         props.navigation.navigate('EnrollStack');
       }
     }
   };
-  console.log(props.twoInputField);
+  console.log("72",props.twoInputField);
   return (
     <SafeAreaView style={{paddingHorizontal: wp('4%')}}>
       <KeyboardAvoidingView

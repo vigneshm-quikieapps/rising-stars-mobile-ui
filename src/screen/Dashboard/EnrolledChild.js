@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, StyleSheet} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -8,14 +8,23 @@ import {
   ClassCard,
   AppButton,
 } from '../../components';
+import Alert from '../../components/alert-box';
 import {colors, Fontsize} from '../../constants';
 import {getSessiondata} from '../../redux/action/enrol';
+import {dropClass} from '../../redux/service/request';
+import {getLocalData} from '../../utils/LocalStorage';
 
 export default function EnrolledChild(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
   const [modalVisible4, setModalVisible4] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showFailureAlert, setShowFailureAlert] = useState(false);
+  const [enrollmentId, setEnrollmentId] = useState('');
+
+  const [token, setToken] = useState('');
   const dispatch = useDispatch();
 
   const memberClassData = useSelector(state => state.memberClassData.classData);
@@ -30,6 +39,14 @@ export default function EnrolledChild(props) {
     setModalVisible4(!modalVisible4);
   };
 
+  const accessToken = async () => {
+    const Token = await getLocalData('accessToken');
+    setToken(Token);
+  };
+
+  useEffect(() => {
+    accessToken();
+  });
   return (
     <CustomLayout
       names={'Enrolled Classes'}
@@ -129,28 +146,34 @@ export default function EnrolledChild(props) {
         Current Classes
       </Text>
       {memberClassData &&
-        memberClassData?.map(classes => (
-          <ClassCard
-            className={classes.class.name}
-            title={'Change Session'}
-            day={classes.session.pattern[0].day}
-            time={
-              '10-11'
-              // ""classes.session.pattern[0].startTime.getTime() +
-              // '-' +
-              // classes.session.pattern[0].endTime.getTime()"
-            }
-            facility={classes.session.facility}
-            coach={'Henry Itondo'}
-            class
-            classbutton={() => {
-              dispatch(getSessiondata(classes.class._id));
-              props.navigation.navigate('ChangeClass', {classes});
-            }}
-            member
-            memberbutton={() => props.navigation.navigate('Profile')}
-          />
-        ))}
+        memberClassData?.map(
+          classes =>
+            classes.enrolledStatus === 'ENROLLED' && (
+              <ClassCard
+                className={classes.class.name}
+                title={'Change Session'}
+                day={classes.session.pattern[0].day}
+                time={
+                  '10-11'
+                  // ""classes.session.pattern[0].startTime.getTime() +
+                  // '-' +
+                  // classes.session.pattern[0].endTime.getTime()"
+                }
+                facility={classes.session.facility}
+                coach={'Henry Itondo'}
+                class
+                classbutton={() => {
+                  dispatch(getSessiondata(classes.class._id));
+                  props.navigation.navigate('ChangeClass', {classes});
+                }}
+                member
+                memberbutton={() => {
+                  setEnrollmentId(classes._id);
+                  setShowAlert(true);
+                }}
+              />
+            ),
+        )}
       {/* <View style={styles.centeredView}>
         <Modal
           animationType="slide"
@@ -244,6 +267,46 @@ export default function EnrolledChild(props) {
         title={'New Class'}
         onPress={() => props.navigation.navigate('AddPayment')}
       />
+      {showAlert ? (
+        <Alert
+          visible={showAlert}
+          confirm={'No, I have changed my mind'}
+          failure={async () => {
+            const response = await dropClass({
+              token,
+              enrollmentId,
+            });
+            console.log('Response: ', response);
+            if (response.message === 'cancellation successfull') {
+              setShowSuccessAlert(true);
+            } else {
+              setShowFailureAlert(true);
+            }
+          }}
+          cancel={'Yes, cancel membership'}
+          success={() => setShowAlert(false)}
+          image={'failure'}
+          message={'Are you sure you want to cancel the membership'}
+        />
+      ) : null}
+      {showSuccessAlert ? (
+        <Alert
+          visible={showSuccessAlert}
+          confirm={'Done'}
+          success={() => props.navigation.navigate('Profile')}
+          image={'success'}
+          message={'Cancelled Membership Successfully'}
+        />
+      ) : null}
+      {showFailureAlert ? (
+        <Alert
+          visible={showFailureAlert}
+          confirm={'Go Back'}
+          success={() => props.navigation.navigate('Profile')}
+          image={'failure'}
+          message={'OOPS!! Something Went Wrong!!'}
+        />
+      ) : null}
     </CustomLayout>
   );
 }
