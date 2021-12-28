@@ -57,7 +57,7 @@ const Home = () => {
     return (
       <Pagination
         dotsLength={
-          memberClassData
+          memberClassData && memberClassData
             ? memberClassData.filter(item => item.enrolledStatus === 'ENROLLED')
                 .length
             : 1
@@ -197,7 +197,7 @@ const Home = () => {
           </WheelDropdown>
           <View style={styles.courosoul}></View>
           <Carousel
-            data={memberClassData.filter(
+            data={memberClassData && memberClassData.filter(
               item => item.enrolledStatus === 'ENROLLED',
             )}
             renderItem={renderItem}
