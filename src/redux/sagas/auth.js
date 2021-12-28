@@ -1,13 +1,14 @@
 import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
 import {storeLocalData} from '../../utils/LocalStorage';
 import * as Action from '../action-types';
+import {getmemberData} from '../action/home';
 
 import {
   fetchLogin,
   fetchPostCode,
   fetchRegister,
   forgetPassword,
-  resetPassword
+  resetPassword,
 } from '../service/request';
 
 function* handlePostcode(action) {
@@ -47,6 +48,8 @@ function* handleLogin(action) {
   try {
     const login = yield call(fetchLogin, action.payload.data);
     save(login);
+    console.log('Log: ', login);
+    yield put(getmemberData(login.accessToken));
     yield put({type: Action.USER_LOGIN_SUCCESS, payload: login});
   } catch (error) {
     yield put({type: Action.USER_LOGIN_ERROR, error: error.message});
@@ -59,11 +62,11 @@ export function* watcherLoginSaga() {
 
 function* handleForgetPassword(action) {
   try {
-    console.log("forgetPassSaga",action)
+    console.log('forgetPassSaga', action);
     const forgetPass = yield call(forgetPassword, action.payload);
-    forgetPass['mobileNo']=action.payload.mobileNo
-    forgetPass['email']=action.payload.email
-    console.log("forgetPassaction",forgetPass)
+    forgetPass['mobileNo'] = action.payload.mobileNo;
+    forgetPass['email'] = action.payload.email;
+    console.log('forgetPassaction', forgetPass);
     if (
       forgetPass.message ===
       'Reset Password OTP has been sent to your mobile number.'
@@ -84,16 +87,12 @@ export function* watcherForgetPassword() {
   yield takeEvery(Action.USER_FORGOT_PASSWORD, handleForgetPassword);
 }
 
-
 function* handleResetPassword(action) {
   try {
-    console.log("resetPassSaga",action)
+    console.log('resetPassSaga', action);
     const resetPass = yield call(resetPassword, action.payload);
-    console.log("resetPassaction",resetPass)
-    if (
-      resetPass.message ===
-      'Password has been reset successfully'
-    ) {
+    console.log('resetPassaction', resetPass);
+    if (resetPass.message === 'Password has been reset successfully') {
       yield put({
         type: Action.USER_RESET_PASSWORD_SUCCESS,
         payload: resetPass,

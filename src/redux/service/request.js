@@ -147,7 +147,7 @@ export function regularEnrollment(payload) {
 // --------------------------------------------------------Home
 
 export function fetchMemberData(token) {
-  return fetch(`${heroku_url}/members/of-a-logged-in-parent?limit=50`, {
+  return fetch(`${heroku_url}/members/of-a-logged-in-parent`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -179,6 +179,19 @@ export function fetchClasses(token) {
     .then(response => response.json())
     .catch(error => {
       throw error;
+    });
+}
+
+export function fetchSessionById(payload) {
+  return fetch(`${heroku_url}/sessions/${payload.id}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${payload.token}`,
+    },
+  })
+    .then(response => response.json())
+    .catch(error => {
+      console.log(error);
     });
 }
 
@@ -230,9 +243,8 @@ export function dropClass(payload) {
     });
 }
 
-
 export function forgetPassword(payload) {
-  console.log("paylod",payload);
+  console.log('paylod', payload);
   return fetch(`${heroku_url}/account/password/forgot/using-mobile-no`, {
     method: 'POST',
     headers: {
@@ -243,12 +255,12 @@ export function forgetPassword(payload) {
   })
     .then(response => response.json())
     .catch(error => {
-      console.log('fetcherror',error);
+      console.log('fetcherror', error);
     });
 }
 
 export function resetPassword(payload) {
-  console.log("paylod1",payload);
+  console.log('paylod1', payload);
   return fetch(`${heroku_url}/account/password/reset/using-mobile-no`, {
     method: 'POST',
     headers: {
@@ -264,3 +276,18 @@ export function resetPassword(payload) {
     });
 }
 
+export function fetchAttendanceOfMemberInSession(payload) {
+  return fetch(`${heroku_url}/attendance/of-a-member-in-a-session`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${payload.token}`,
+    },
+    body: JSON.stringify(payload.data),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      console.log(error);
+    });
+}

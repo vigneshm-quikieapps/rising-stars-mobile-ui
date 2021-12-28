@@ -1,6 +1,5 @@
 import * as Action from '../action-types';
-import {storeLocalData, getLocalData} from '../../utils/LocalStorage';
-import {setLocale} from 'yup';
+import {storeLocalData} from '../../utils/LocalStorage';
 
 const postcodeState = {
   postcode: [],
@@ -91,7 +90,7 @@ const loginState = {
 };
 
 export const LoginData = (state = loginState, action) => {
-  console.log("LoginPasswordDataReducer",action)
+  console.log('LoginPasswordDataReducer', action);
   switch (action.type) {
     case Action.USER_LOGIN_SUCCESS:
       storeLocalData('refreshToken', action.payload.refreshToken);
@@ -125,21 +124,21 @@ const ForgetPasswordState = {
   isloading: false,
   error: '',
   message: '',
-  otp:'',
-  mobileNo:'',
-  email:''
+  otp: '',
+  mobileNo: '',
+  email: '',
 };
 
 export const ForgetPasswordData = (state = ForgetPasswordState, action) => {
-  console.log("ForgetPasswordDataReducer",action)
+  console.log('ForgetPasswordDataReducer', action);
   switch (action.type) {
     case Action.USER_FORGOT_PASSWORD_SUCCESS:
       return {
         ...state,
         message: action.payload.message,
-        otp:action.payload.otp,
-        email:action.payload.email,
-        mobileNo:action.payload.mobileNo,
+        otp: action.payload.otp,
+        email: action.payload.email,
+        mobileNo: action.payload.mobileNo,
         isloading: false,
       };
     case Action.USER_FORGOT_PASSWORD_ERROR:
@@ -165,7 +164,7 @@ const ResetPasswordState = {
 };
 
 export const ResetPasswordData = (state = ResetPasswordState, action) => {
-  console.log("ResetPasswordDataReducer",action)
+  console.log('ResetPasswordDataReducer', action);
   switch (action.type) {
     case Action.USER_RESET_PASSWORD_SUCCESS:
       return {
