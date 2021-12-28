@@ -52,7 +52,7 @@ export default function EnrolledChild(props) {
       names={'Enrolled Classes'}
       Customchildren={
         <LinearStudentCard
-          colors={['#ffa300', '#ff7e00']}
+          colors={['#FCDD8C', '#FCDD8C']}
           name={currentMember.name}
           style={{backgroundColor: colors.orange}}
           activityRequired

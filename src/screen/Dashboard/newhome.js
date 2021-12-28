@@ -17,7 +17,14 @@ import moment from 'moment';
 import {colors, Fontsize, hp, Images, wp} from '../../constants';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
-import {WheelDropdown, ClassCard} from '../../components';
+import {
+  WheelDropdown,
+  ClassCard,
+  ProgressBarWithStar,
+  Timelines,
+  AttendanceCard,
+  BarIndicator,
+} from '../../components';
 import {WheelPicker} from 'react-native-wheel-picker-android';
 import {getmemberClass, getmemberData} from '../../redux/action/home';
 const Home = () => {
@@ -197,9 +204,10 @@ const Home = () => {
           </WheelDropdown>
           <View style={styles.courosoul}></View>
           <Carousel
-            data={memberClassData && memberClassData.filter(
-              item => item.enrolledStatus === 'ENROLLED',
-            )}
+            data={
+              memberClassData &&
+              memberClassData.filter(item => item.enrolledStatus === 'ENROLLED')
+            }
             renderItem={renderItem}
             sliderWidth={wp('95%')}
             itemWidth={wp('90%')}
@@ -216,6 +224,89 @@ const Home = () => {
             {pagination()}
           </View>
         </LinearGradient>
+      </View>
+      <View style={styles.attendance}>
+        <View>
+          <Image source={Images.calendarOrange} />
+        </View>
+        <View style={{marginLeft: wp('3.5%')}}>
+          <Text style={{fontSize: wp('5%'), fontFamily: 'Nunito-SemiBold'}}>
+            Class Overview
+          </Text>
+        </View>
+      </View>
+      <View style={styles.reports}>
+        <View
+          style={{
+            flexDirection: 'row',
+            paddingHorizontal: wp('2%'),
+            marginBottom: hp('2%'),
+            justifyContent: 'space-between',
+          }}>
+          <View>
+            <AttendanceCard
+              color={['rgb(255,163,0)', 'rgb(255,126,0)']}
+              class={43}
+              value={'Total'}
+              label={'Classes'}
+              style={{backgroundColor: '#fff4e7'}}
+            />
+          </View>
+          <View style={{justifyContent: 'space-evenly'}}>
+            <BarIndicator
+              color={['#ffa300', '#ff7e00']}
+              style={{width: wp('20%')}}
+            />
+            <BarIndicator
+              color={['#68d6ab', '#33ab96']}
+              style={{width: wp('10%')}}
+            />
+            <BarIndicator
+              color={['#EA5C5C', '#AB3333']}
+              style={{width: wp('4%')}}
+            />
+          </View>
+        </View>
+
+        <View style={{paddingHorizontal: wp('2%'), flexDirection: 'row'}}>
+          <AttendanceCard
+            color={['#68D6AB', '#33AB96']}
+            value={14}
+            label={'Attended'}
+            style={{backgroundColor: '#c0f8e8'}}
+          />
+          <AttendanceCard
+            color={['#EA5C5C', '#AB3333']}
+            value={14}
+            label={'No Show'}
+            style={{backgroundColor: '#ffe5e5'}}
+          />
+        </View>
+      </View>
+      <View style={styles.activityProgress}>
+        <View style={styles.activityProgressTitle}>
+          <Image source={Images.medal} />
+          <View style={{marginLeft: wp('3.5%')}}>
+            <Text style={{fontSize: wp('5%'), fontFamily: 'Nunito-SemiBold'}}>
+              Class Progress
+            </Text>
+          </View>
+        </View>
+      </View>
+
+      <View style={[styles.ProgressReports, styles.timeline]}>
+        <View style={{paddingRight: wp('4%')}}>
+          <ProgressBarWithStar />
+        </View>
+        <View
+          style={{
+            height: hp('0.4%'),
+            width: '100%',
+            marginVertical: hp('1%'),
+            backgroundColor: colors.lightgrey,
+          }}
+        />
+        <Timelines />
       </View>
     </ScrollView>
   );
