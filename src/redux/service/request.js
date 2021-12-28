@@ -198,6 +198,38 @@ export function addChild(payload) {
     });
 }
 
+export function classTransfer(payload) {
+  return fetch(`${heroku_url}/enrolments/transfer`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${payload.token}`,
+    },
+    body: JSON.stringify(payload.data),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      console.log(error);
+    });
+}
+
+export function dropClass(payload) {
+  console.log('Payload: ', payload);
+  return fetch(`${heroku_url}/enrolments/${payload.enrollmentId}/withdraw`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${payload.token}`,
+    },
+  })
+    .then(response => response.json())
+    .catch(error => {
+      console.log(error);
+    });
+}
+
 
 export function forgetPassword(payload) {
   console.log("paylod",payload);
@@ -231,3 +263,4 @@ export function resetPassword(payload) {
       console.log(error);
     });
 }
+
