@@ -198,31 +198,33 @@ export function addChild(payload) {
     });
 }
 
-export function classTransfer(payload) {
-  return fetch(`${heroku_url}/enrolments/transfer`, {
+
+export function forgetPassword(payload) {
+  console.log("paylod",payload);
+  return fetch(`${heroku_url}/account/password/forgot/using-mobile-no`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${payload.token}`,
     },
-    body: JSON.stringify(payload.data),
+    body: JSON.stringify(payload),
   })
     .then(response => response.json())
     .catch(error => {
-      console.log(error);
+      console.log('fetcherror',error);
     });
 }
 
-export function dropClass(payload) {
-  console.log('Payload: ', payload);
-  return fetch(`${heroku_url}/enrolments/${payload.enrollmentId}/withdraw`, {
+export function resetPassword(payload) {
+  console.log("paylod1",payload);
+  return fetch(`${heroku_url}/account/password/reset/using-mobile-no`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
       Authorization: `Bearer ${payload.token}`,
     },
+    body: JSON.stringify(payload),
   })
     .then(response => response.json())
     .catch(error => {

@@ -1,5 +1,5 @@
 import {all} from 'redux-saga/effects';
-import {watcherLoginSaga, watcherPostcode, watcherRegister} from './sagas/auth';
+import {watcherLoginSaga, watcherPostcode, watcherRegister,watcherForgetPassword,watcherResetPassword} from './sagas/auth';
 import {
   watcherClubSaga,
   watcherClassSaga,
@@ -28,5 +28,7 @@ export default function* rootSaga() {
     watcherMemberClasses(),
     watcherAddChild(),
     watcherEnrollChild(),
+    watcherForgetPassword(),
+    watcherResetPassword()
   ]);
 }

@@ -2,7 +2,13 @@ import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
 import {storeLocalData} from '../../utils/LocalStorage';
 import * as Action from '../action-types';
 
-import {fetchLogin, fetchPostCode, fetchRegister} from '../service/request';
+import {
+  fetchLogin,
+  fetchPostCode,
+  fetchRegister,
+  forgetPassword,
+  resetPassword
+} from '../service/request';
 
 function* handlePostcode(action) {
   try {
@@ -49,4 +55,56 @@ function* handleLogin(action) {
 
 export function* watcherLoginSaga() {
   yield takeEvery(Action.USER_LOGIN, handleLogin);
+}
+
+function* handleForgetPassword(action) {
+  try {
+    console.log("forgetPassSaga",action)
+    const forgetPass = yield call(forgetPassword, action.payload);
+    forgetPass['mobileNo']=action.payload.mobileNo
+    forgetPass['email']=action.payload.email
+    console.log("forgetPassaction",forgetPass)
+    if (
+      forgetPass.message ===
+      'Reset Password OTP has been sent to your mobile number.'
+    ) {
+      yield put({
+        type: Action.USER_FORGOT_PASSWORD_SUCCESS,
+        payload: forgetPass,
+      });
+    } else {
+      throw new Error(forgetPass.message);
+    }
+  } catch (error) {
+    yield put({type: Action.USER_FORGOT_PASSWORD_ERROR, error: error.message});
+  }
+}
+
+export function* watcherForgetPassword() {
+  yield takeEvery(Action.USER_FORGOT_PASSWORD, handleForgetPassword);
+}
+
+
+function* handleResetPassword(action) {
+  try {
+    console.log("resetPassSaga",action)
+    const resetPass = yield call(resetPassword, action.payload);
+    console.log("resetPassaction",resetPass)
+    if (
+      resetPass.message ===
+      'Password has been reset successfully'
+    ) {
+      yield put({
+        type: Action.USER_RESET_PASSWORD_SUCCESS,
+        payload: resetPass,
+      });
+    } else {
+      throw new Error(resetPass.message);
+    }
+  } catch (error) {
+    yield put({type: Action.USER_RESET_PASSWORD_ERROR, error: error.message});
+  }
+}
+export function* watcherResetPassword() {
+  yield takeEvery(Action.USER_RESET_PASSWORD, handleResetPassword);
 }
