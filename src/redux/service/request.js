@@ -3,6 +3,7 @@ import {mobile_url, api_url, heroku_url} from '../../constants/config';
 
 // --------------------------------------------------------Auth
 export function fetchMobileOTP(payload) {
+  console.log('inside fetch');
   return fetch(`${heroku_url}/get-otp/mobile-no`, {
     method: 'POST',
     headers: {

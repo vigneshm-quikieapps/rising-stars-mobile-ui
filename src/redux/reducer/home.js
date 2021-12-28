@@ -76,3 +76,20 @@ export const memberClassData = (state = memberclassState, action) => {
       return state;
   }
 };
+
+const currentMemberState = {
+  data: '',
+};
+
+export const currentMemberData = (state = currentMemberState, action) => {
+  console.log('Action: ', action);
+  switch (action.type) {
+    case Action.USER_GET_CURRENT_MEMBER_DATA:
+      return {
+        ...state,
+        data: action.payload,
+      };
+    default:
+      return state;
+  }
+};

@@ -8,7 +8,7 @@ import {
   addProvidedata,
 } from './reducer/enrol';
 import {LoginData, Postcode, Postcodedata, RegisterData, ForgetPasswordData, ResetPasswordData} from './reducer/auth';
-import {memberData, memberClassData} from './reducer/home';
+import {memberData, memberClassData, currentMemberData} from './reducer/home';
 
 const rootReducer = combineReducers({
   LoginData,
@@ -25,6 +25,7 @@ const rootReducer = combineReducers({
   memberClassData,
   ForgetPasswordData,
   ResetPasswordData
+  currentMemberData,
 });
 
 export default rootReducer;

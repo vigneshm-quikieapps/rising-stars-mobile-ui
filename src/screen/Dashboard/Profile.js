@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, createRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {
   View,
   StyleSheet,
@@ -10,8 +10,10 @@ import {
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImagePicker from 'react-native-image-crop-picker';
+import {getLocalData} from '../../utils/LocalStorage';
+import {useDispatch, useSelector} from 'react-redux';
+
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {useSelector, useDispatch} from 'react-redux';
 
 import {removeLocalData} from '../../utils/LocalStorage';
 import {CustomLayout} from '../../components';
@@ -24,9 +26,17 @@ function Profile(props) {
   membersdata && console.log('membersData', membersdata);
   // let steps = false;
   const refRBSheet = useRef();
+  const [user, setUser] = useState('');
+  const dispatch = useDispatch();
+
+  const currentMember = useSelector(state => state.currentMemberData.data);
+
+  const getLocalUserData = useCallback(async () => {
+    const userData = await getLocalData('user', true);
+    setUser(userData);
+  }, []);
 
   const [fileUri, setfileUri] = useState(null);
-  const dispatch = useDispatch();
 
   const updateProfilePicture = () => {
     refRBSheet.current.open();
@@ -69,6 +79,13 @@ function Profile(props) {
   const onHandleBackButton = () => {
     props.navigation.goBack();
   };
+
+  useEffect(() => {
+    getLocalUserData();
+    currentMember && dispatch(getmemberClass(currentMember._id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <CustomLayout
       style={styles.container}
@@ -85,7 +102,7 @@ function Profile(props) {
 
       <View style={styles.card}>
         <View style={styles.cardDetails}>
-          <Text style={styles.memberName}>Nizam Mogal</Text>
+          <Text style={styles.memberName}>{user.name}</Text>
 
           <Text style={styles.parentText}>Parent</Text>
         </View>

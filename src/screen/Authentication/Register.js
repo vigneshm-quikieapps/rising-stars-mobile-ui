@@ -25,6 +25,7 @@ import {colors, Fontsize, hp, wp, Term_Condition} from '../../constants';
 import {PostCode, PostDataPass, RegisterData} from '../../redux/action/auth';
 import PostComponent from './components/Postcode';
 import {fetchMobileOTP} from '../../redux/service/request';
+import Alert from '../../components/alert-box';
 
 const CELL_COUNT = 6;
 const validationSchema = Yup.object().shape({
@@ -67,10 +68,12 @@ function Register(props) {
     setValue,
   });
   const [checked, setChecked] = useState('first');
-  const [postcodeshow, setPostCodeshow] = useState(true);
+  const [postcodeshow, setPostCodeshow] = useState(false);
   const [term, setTerm] = useState(false);
   const [temp, setTemp] = useState(false);
   const [main, setMain] = useState(false);
+  const [showSuccessalert, setSuccessAlert] = useState(false);
+  const [showFailurealert, setFailureAlert] = useState(false);
   const [seconds, setSeconds] = React.useState(10);
   const refRBSheet = useRef();
 
@@ -114,10 +117,10 @@ function Register(props) {
           addressLine2: '',
           cityTown: '',
         }}
-        onSubmit={values => {
+        onSubmit={async values => {
           if (values.mobileNoOTP.length === 0) {
-            fetchMobileOTP(values.contactNumber);
-            console.log(values);
+            const otp = await fetchMobileOTP(values.contactNumber);
+            console.log('OTP: ', otp);
             timeout();
             refRBSheet.current.open();
           } else if (postsize !== 0) {
@@ -127,11 +130,12 @@ function Register(props) {
             console.log(values);
             dispatch(RegisterData(values));
             if (status === 'created successfully') {
+              console.log('Done');
+              setSuccessAlert(true);
               //POP-UP with message
               //Navigate to Login Screen
-              props.navigation.navigate('EnrollStack');
-            }
-            if (Reerror) {
+            } else {
+              setFailureAlert(true);
               //POP-UP with error message
               //navigate to register
             }
@@ -255,7 +259,7 @@ function Register(props) {
 
             <PostComponent
               data={postcodeData}
-              visible={postsize !== 0 ? !postcodeshow : postcodeshow}
+              visible={postcodeshow}
               title={values.postCode}
               ClosePopUp={a => setPostCodeshow(!postcodeshow)}
               ManuallyButton={() => {
@@ -368,7 +372,7 @@ function Register(props) {
                 <ActivityIndicator size="large" color={colors.orange} />
               ) : (
                 <AppButton
-                  title="Register"
+                  title={values.mobileNoOTP === '' ? 'Get OTP' : 'Register'}
                   onPress={handleSubmit}
                   style={{
                     marginVertical: hp('0%'),
@@ -393,6 +397,24 @@ function Register(props) {
                 </Text>
               </Text>
             </View>
+            {showSuccessalert ? (
+              <Alert
+                visible={showSuccessalert}
+                confirm={'Done'}
+                success={() => props.navigation.navigate('Login')}
+                image={'success'}
+                message={'Profile Created Successfully'}
+              />
+            ) : null}
+            {showFailurealert ? (
+              <Alert
+                visible={showFailurealert}
+                confirm={'Retry'}
+                success={() => console.log('Retry')}
+                image={'failure'}
+                message={'Something Went Wrong'}
+              />
+            ) : null}
             <RBSheet
               ref={refRBSheet}
               closeOnDragDown={true}

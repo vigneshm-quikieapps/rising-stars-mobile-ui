@@ -20,9 +20,9 @@ function PopUp(props) {
 const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginLeft: 0,
+    // justifyContent: 'center',
+    // alignItems: 'center',
     // marginTop: hp('46%')
   },
 });

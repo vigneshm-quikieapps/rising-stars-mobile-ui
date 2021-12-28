@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {getLocalData} from '../../utils/LocalStorage';
+import * as Action from '../../redux/action-types';
 import {
   View,
   StyleSheet,
@@ -10,6 +11,7 @@ import {
   StatusBar,
   TouchableOpacity,
   ActivityIndicator,
+  ActionSheetIOS,
 } from 'react-native';
 import moment from 'moment';
 import {colors, Fontsize, hp, Images, wp} from '../../constants';
@@ -54,7 +56,12 @@ const Home = () => {
   const pagination = () => {
     return (
       <Pagination
-        dotsLength={memberClassData.length}
+        dotsLength={
+          memberClassData
+            ? memberClassData.filter(item => item.enrolledStatus === 'ENROLLED')
+                .length
+            : 1
+        }
         activeDotIndex={activeDotIndex}
         containerStyle={{paddingVertical: 0}}
         dotStyle={{
@@ -77,10 +84,6 @@ const Home = () => {
     );
   };
 
-  //   useEffect(() => {
-  //     getLocalUserData();
-  //   }, [getLocalUserData]);
-
   useEffect(() => {
     console.log('inside Use Effect');
     getLocalUserData();
@@ -88,6 +91,11 @@ const Home = () => {
     dispatch(getmemberData(token));
     membersdata && setCurrentMember(membersdata[currentMemberIndex]);
     membersdata && dispatch(getmemberClass(currentMember._id));
+    membersdata &&
+      dispatch({
+        type: Action.USER_GET_CURRENT_MEMBER_DATA,
+        payload: currentMember,
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, currentMember]);
 
@@ -161,8 +169,12 @@ const Home = () => {
             confirm={() => {
               setCurrentMemberIndex(wheelitem);
               setCurrentMember(membersdata[wheelitem]);
-              console.log('CURRENT: ', currentMember);
-              dispatch(getmemberClass(currentMember._id));
+              //console.log('CURRENT: ', currentMember);
+              dispatch({
+                type: Action.USER_GET_CURRENT_MEMBER_DATA,
+                payload: currentMember,
+              });
+              dispatch(getmemberClass(membersdata[wheelitem]._id));
               setMemberModal(false);
             }}>
             <View
@@ -185,7 +197,9 @@ const Home = () => {
           </WheelDropdown>
           <View style={styles.courosoul}></View>
           <Carousel
-            data={memberClassData}
+            data={memberClassData.filter(
+              item => item.enrolledStatus === 'ENROLLED',
+            )}
             renderItem={renderItem}
             sliderWidth={wp('95%')}
             itemWidth={wp('90%')}

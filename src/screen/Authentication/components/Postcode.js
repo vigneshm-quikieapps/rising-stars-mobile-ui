@@ -45,6 +45,7 @@ export default function PostComponent(props) {
     const size = Object.size(selected);
     if (size !== 0) {
       dispatch(PostDataPass(selected, size));
+      props.ClosePopUp(false);
     } else {
       alert('Please Select Your Address or Tap on Manually for manual entry');
     }
@@ -190,10 +191,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     overflow: 'hidden',
-    width: wp('100%'),
+    width: wp('88%'),
     borderBottomWidth: 2,
     borderColor: colors.lightgrey,
-    marginBottom: hp('0.1%'),
+    //marginBottom: hp('10%'),
     //paddingBottom: hp('10%'),
   },
   subtitle: {
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
   postcodeconatiner: {
     flexDirection: 'row',
     marginVertical: hp('0.5%'),
-    width: wp('92%'),
+    width: wp('80%'),
     height: hp('15%'),
     backgroundColor: colors.lightgrey,
     alignItems: 'center',
