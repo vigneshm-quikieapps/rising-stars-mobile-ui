@@ -24,7 +24,7 @@ const rootReducer = combineReducers({
   memberData,
   memberClassData,
   ForgetPasswordData,
-  ResetPasswordData
+  ResetPasswordData,
   currentMemberData,
 });
 
