@@ -230,9 +230,8 @@ export function dropClass(payload) {
     });
 }
 
-
 export function forgetPassword(payload) {
-  console.log("paylod",payload);
+  console.log('paylod', payload);
   return fetch(`${heroku_url}/account/password/forgot/using-mobile-no`, {
     method: 'POST',
     headers: {
@@ -243,12 +242,12 @@ export function forgetPassword(payload) {
   })
     .then(response => response.json())
     .catch(error => {
-      console.log('fetcherror',error);
+      console.log('fetcherror', error);
     });
 }
 
 export function resetPassword(payload) {
-  console.log("paylod1",payload);
+  console.log('paylod1', payload);
   return fetch(`${heroku_url}/account/password/reset/using-mobile-no`, {
     method: 'POST',
     headers: {
@@ -263,4 +262,3 @@ export function resetPassword(payload) {
       console.log(error);
     });
 }
-
