@@ -34,7 +34,7 @@ const Home = () => {
   const [currentMemberIndex, setCurrentMemberIndex] = useState(0);
   const [memberModal, setMemberModal] = useState(false);
   const [wheelitem, setItem] = useState(0);
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState();
   const [activeDotIndex, setActiveDotIndex] = React.useState(0);
 
   const membersdata = useSelector(state => state.memberData.memberData);
@@ -90,21 +90,40 @@ const Home = () => {
       />
     );
   };
+  // setTimeout(() => {
+  //   console.log('beforethis is the first message');
+  //   setCurrentMember(membersdata[currentMemberIndex]);
+  //   dispatch(getmemberClass(currentMember._id));
+
+  //   dispatch({
+  //     type: Action.USER_GET_CURRENT_MEMBER_DATA,
+  //     payload: currentMember,
+  //   });
+  //   console.log('after:this is the first message');
+  //   console.log('member data from timeout', membersdata);
+  // }, 15000);
+  accessToken();
 
   useEffect(() => {
     console.log('inside Use Effect');
     getLocalUserData();
-    accessToken();
-    dispatch(getmemberData(token));
+
+    token && dispatch(getmemberData(token));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
+  useEffect(() => {
     membersdata && setCurrentMember(membersdata[currentMemberIndex]);
-    membersdata && dispatch(getmemberClass(currentMember._id));
-    membersdata &&
+  }, [membersdata]);
+  useEffect(() => {
+    currentMember && dispatch(getmemberClass(currentMember._id));
+
+    currentMember &&
       dispatch({
         type: Action.USER_GET_CURRENT_MEMBER_DATA,
         payload: currentMember,
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, currentMember]);
+  }, [currentMember]);
 
   const renderItem = ({item, index}) => {
     return (
