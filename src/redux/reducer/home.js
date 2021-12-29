@@ -24,6 +24,7 @@ export const memberData = (state = memberstate, action) => {
         isloading: false,
       };
     case Action.USER_GET_MEMBER_SUCCESS:
+      console.log('reducer membersData', action.data.docs);
       return {
         ...state,
         memberData: action.data.docs,
