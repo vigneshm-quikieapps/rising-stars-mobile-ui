@@ -265,7 +265,7 @@ export default function EnrolledChild(props) {
       /> */}
       <AppButton
         title={'New Class'}
-        onPress={() => props.navigation.navigate('AddPayment')}
+        onPress={() => props.navigation.navigate('Class_Selection')}
       />
       {showAlert ? (
         <Alert

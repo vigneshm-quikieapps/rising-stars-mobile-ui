@@ -97,7 +97,14 @@ const Home = () => {
   };
 
   accessToken();
+  // useEffect(() => {
+  //   console.log('inside Use Effect');
+  //   getLocalUserData();
 
+  //   token && dispatch(getmemberData(token));
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // });
   useEffect(() => {
     console.log('inside Use Effect');
     getLocalUserData();
