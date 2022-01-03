@@ -1,3 +1,5 @@
+/* eslint-disable eslint-comments/no-unused-disable */
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {getLocalData} from '../../utils/LocalStorage';
@@ -27,6 +29,8 @@ import {
 } from '../../components';
 import {WheelPicker} from 'react-native-wheel-picker-android';
 import {getmemberClass, getmemberData} from '../../redux/action/home';
+import {fetchAttendanceOfMemberInSession} from '../../redux/service/request';
+
 const Home = () => {
   const dispatch = useDispatch();
 
@@ -36,7 +40,8 @@ const Home = () => {
   const [wheelitem, setItem] = useState(0);
   const [token, setToken] = useState();
   const [activeDotIndex, setActiveDotIndex] = React.useState(0);
-
+  const [currentSessionId, setCurrentSessionId] = useState('');
+  const [currentSessionAttendance, setCurrentSessionAttendance] = useState('');
   const membersdata = useSelector(state => state.memberData.memberData);
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const accessToken = async () => {
@@ -90,18 +95,7 @@ const Home = () => {
       />
     );
   };
-  // setTimeout(() => {
-  //   console.log('beforethis is the first message');
-  //   setCurrentMember(membersdata[currentMemberIndex]);
-  //   dispatch(getmemberClass(currentMember._id));
 
-  //   dispatch({
-  //     type: Action.USER_GET_CURRENT_MEMBER_DATA,
-  //     payload: currentMember,
-  //   });
-  //   console.log('after:this is the first message');
-  //   console.log('member data from timeout', membersdata);
-  // }, 15000);
   accessToken();
 
   useEffect(() => {
@@ -112,9 +106,12 @@ const Home = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
+
   useEffect(() => {
     membersdata && setCurrentMember(membersdata[currentMemberIndex]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [membersdata]);
+
   useEffect(() => {
     currentMember && dispatch(getmemberClass(currentMember._id));
 
@@ -123,7 +120,27 @@ const Home = () => {
         type: Action.USER_GET_CURRENT_MEMBER_DATA,
         payload: currentMember,
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMember]);
+  useEffect(() => {
+    memberClassData &&
+      setCurrentSessionId(
+        memberClassData.filter(item => item.enrolledStatus === 'ENROLLED')[
+          activeDotIndex
+        ].session._id,
+      );
+
+    currentSessionId &&
+      fetchAttendanceOfMemberInSession({
+        token,
+        data: {
+          sessionId: currentSessionId,
+          memberId: currentMember._id,
+        },
+      }).then(attendance => setCurrentSessionAttendance(attendance.attendance));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [memberClassData]);
 
   const renderItem = ({item, index}) => {
     return (
@@ -153,6 +170,7 @@ const Home = () => {
           <View style={styles.containerMember}>
             <View style={{marginTop: hp('1%')}}>
               <Image
+                // eslint-disable-next-line react-native/no-inline-styles
                 style={{
                   height: 57,
                   width: 57,
@@ -221,7 +239,7 @@ const Home = () => {
               />
             </View>
           </WheelDropdown>
-          <View style={styles.courosoul}></View>
+          <View style={styles.courosoul} />
           <Carousel
             data={
               memberClassData &&
@@ -230,8 +248,25 @@ const Home = () => {
             renderItem={renderItem}
             sliderWidth={wp('95%')}
             itemWidth={wp('90%')}
-            onSnapToItem={index => {
+            onSnapToItem={async index => {
               setActiveDotIndex(index);
+              setCurrentSessionId(
+                memberClassData &&
+                  memberClassData.filter(
+                    item => item.enrolledStatus === 'ENROLLED',
+                  )[index].session._id,
+              );
+              const attendance =
+                currentSessionId &&
+                (await fetchAttendanceOfMemberInSession({
+                  token,
+                  data: {
+                    sessionId: currentSessionId,
+                    memberId: currentMember._id,
+                  },
+                }));
+              setCurrentSessionAttendance(attendance.attendance);
+              console.log('Attendance from Carosel: ', attendance);
             }}
           />
           <View
@@ -265,7 +300,10 @@ const Home = () => {
           <View>
             <AttendanceCard
               color={['rgb(255,163,0)', 'rgb(255,126,0)']}
-              class={43}
+              class={(currentSessionAttendance?.totalCount
+                ? currentSessionAttendance.totalCount
+                : 0
+              ).toString()}
               value={'Total'}
               label={'Classes'}
               style={{backgroundColor: '#fff4e7'}}
@@ -290,13 +328,23 @@ const Home = () => {
         <View style={{paddingHorizontal: wp('2%'), flexDirection: 'row'}}>
           <AttendanceCard
             color={['#68D6AB', '#33AB96']}
-            value={14}
+            value={
+              currentSessionAttendance?.attendedCount
+                ? currentSessionAttendance.attendedCount
+                : 0
+            }
             label={'Attended'}
             style={{backgroundColor: '#c0f8e8'}}
           />
           <AttendanceCard
             color={['#EA5C5C', '#AB3333']}
-            value={14}
+            value={
+              currentSessionAttendance?.attendedCount &&
+              currentSessionAttendance?.totalCount
+                ? currentSessionAttendance.totalCount -
+                  currentSessionAttendance.attendedCount
+                : 0
+            }
             label={'No Show'}
             style={{backgroundColor: '#ffe5e5'}}
           />
