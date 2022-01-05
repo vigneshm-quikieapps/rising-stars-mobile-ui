@@ -136,7 +136,7 @@ const Home = () => {
           activeDotIndex
         ].session._id,
       );
-
+    console.log('Class : ', memberClassData);
     currentSessionId &&
       fetchAttendanceOfMemberInSession({
         token,

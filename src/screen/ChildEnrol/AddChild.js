@@ -233,7 +233,7 @@ const AddChild = props => {
               <PopUpCard
                 text={'Date of Birth'}
                 textColor={colors.grey}
-                value={moment(values.dob).format('YYYY-MM-DD')}
+                value={moment(values.dob).format('DD-MM-YYYY')}
                 onPress={() => setBirthModal(!birthModal)}
                 onBlur={() => setBirthError(true)}
               />

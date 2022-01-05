@@ -16,7 +16,9 @@ function* handleGetClub(params) {
   try {
     const club = yield call(fetchclubName);
     yield put({type: Action.USER_GET_CLUB_SUCCESS, payload: club});
-    yield call(params.payload.callback);
+    if (params.payload) {
+      yield call(params.payload.callback);
+    }
   } catch (error) {
     yield put({type: Action.USER_GET_CLUB_FAILED, message: error.message});
   }

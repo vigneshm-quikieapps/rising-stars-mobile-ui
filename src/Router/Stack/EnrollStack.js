@@ -10,6 +10,7 @@ import Confirmation from '../../screen/ChildEnrol/Confirmation';
 import Fees_Overview from '../../screen/ChildEnrol/Fees_Overview';
 import Pay from '../../screen/ChildEnrol/Pay';
 import Provide_Consent from '../../screen/ChildEnrol/Provide_Consent';
+import New_Class_Selection from '../../screen/ChildEnrol/newClassSelection';
 
 export const EnrollStack = props => {
   return (
@@ -27,6 +28,11 @@ export const EnrollStack = props => {
       <StackScreen.Screen
         name="Class_Selection"
         component={Class_Selection}
+        options={{headerShown: false}}
+      />
+      <StackScreen.Screen
+        name="New_Class_Selection"
+        component={New_Class_Selection}
         options={{headerShown: false}}
       />
       <StackScreen.Screen

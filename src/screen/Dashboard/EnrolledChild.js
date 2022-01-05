@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import {Text, StyleSheet} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import * as Action from '../../redux/action-types';
 import {
   CustomLayout,
   LinearStudentCard,
@@ -10,7 +11,7 @@ import {
 } from '../../components';
 import Alert from '../../components/alert-box';
 import {colors, Fontsize} from '../../constants';
-import {getSessiondata} from '../../redux/action/enrol';
+import {getClubdata, getSessiondata} from '../../redux/action/enrol';
 import {dropClass} from '../../redux/service/request';
 import {getLocalData} from '../../utils/LocalStorage';
 
@@ -265,7 +266,19 @@ export default function EnrolledChild(props) {
       /> */}
       <AppButton
         title={'New Class'}
-        onPress={() => props.navigation.navigate('Class_Selection')}
+        onPress={() => {
+          dispatch({
+            type: Action.USER_ADD_CHILD_SUCCEDED,
+            payload: {member: currentMember},
+          });
+          dispatch(
+            getClubdata({
+              callback: () => {
+                props.navigation.navigate('New_Class_Selection');
+              },
+            }),
+          );
+        }}
       />
       {showAlert ? (
         <Alert
