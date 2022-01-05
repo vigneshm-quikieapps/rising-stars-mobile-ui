@@ -163,13 +163,13 @@ const AddChild = props => {
                         addressType: 'PRIMARY',
                         name: values.epname,
                         contact: values.epNumber,
-                        relationship: 'UNCLE',
+                        relationship: values.eprelation,
                       },
                       {
                         addressType: 'SECONDARY',
                         name: values.esname,
                         contact: values.esNumber,
-                        relationship: 'UNCLE',
+                        relationship: values.esrelation,
                       },
                     ]
                   : [
@@ -177,7 +177,7 @@ const AddChild = props => {
                         addressType: 'PRIMARY',
                         name: values.epname,
                         contact: values.epNumber,
-                        relationship: 'UNCLE',
+                        relationship: values.eprelation,
                       },
                     ],
             },
@@ -414,7 +414,7 @@ const AddChild = props => {
               <PopUpCard
                 text="Relationship *"
                 onBlur={() => setFieldTouched('eprelation')}
-                value={values.eprelation}
+                value={relationForDisplay[relations.indexOf(values.eprelation)]}
                 onPress={() => relationref.current.open()}
               />
               <RBSheet
@@ -521,7 +521,9 @@ const AddChild = props => {
                   <PopUpCard
                     text="Relationship *"
                     onBlur={() => setFieldTouched('esrelation')}
-                    value={values.esrelation}
+                    value={
+                      relationForDisplay[relations.indexOf(values.esrelation)]
+                    }
                     onPress={() => relationref.current.open()}
                   />
                   <RBSheet

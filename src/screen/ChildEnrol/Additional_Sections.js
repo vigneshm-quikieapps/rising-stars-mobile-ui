@@ -159,7 +159,7 @@ const Additional_Sections = props => {
             // fontSize: Fontsize,
             color: '#ff7e00',
           }}>
-          Zippy’s
+          {club.name}
         </Text>{' '}
         newsletter and other communications
       </Text>

@@ -234,6 +234,7 @@ const Home = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 marginRight: wp('8%'),
+                marginBottom: -hp('3%'),
               }}>
               <WheelPicker
                 data={members}

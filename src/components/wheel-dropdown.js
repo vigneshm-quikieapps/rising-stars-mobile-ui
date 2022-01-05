@@ -35,7 +35,7 @@ export default function WheelDropdown(props) {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                justifyContent: 'flex-end',
               }}>
               <Text style={styles.cancel} onPress={props.cancel}>
                 Cancel
@@ -44,7 +44,13 @@ export default function WheelDropdown(props) {
                 <LinearGradient
                   colors={['#ffa300', '#ff7e00']}
                   style={styles.confirm}>
-                  <Text style={{color: 'white', fontFamily: 'Nunito-Regular'}}>
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontSize: wp('4%'),
+                      fontWeight: 'bold',
+                      fontFamily: 'Nunito-Regular',
+                    }}>
                     Confirm
                   </Text>
                 </LinearGradient>
@@ -62,7 +68,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: hp('60%'),
+    marginTop: hp('85%'),
   },
   subContainer: {
     backgroundColor: 'white',
@@ -83,13 +89,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-SemiBold',
     fontSize: Fontsize,
     color: 'orange',
+    marginRight: wp('10%'),
   },
   confirm: {
-    height: hp('5%'),
-    width: wp('20%'),
+    height: hp('7%'),
+    width: wp('30%'),
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 10,
+    borderRadius: 17,
     marginBottom: hp('1%'),
   },
 });

@@ -13,6 +13,7 @@ import {RadioButton} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {enrollChildData} from '../../redux/action/enrol';
 import {getLocalData} from '../../utils/LocalStorage';
+import StandingOrder from '../../components/standing-order';
 
 const Pay = props => {
   const child = useSelector(state => state.childData.addchild);
@@ -73,7 +74,8 @@ const Pay = props => {
       />
       <View style={styles.breaks} />
       <Text style={styles.optional}>Payment Options</Text>
-      {/* <AtmCard />
+      <StandingOrder />
+      <AtmCard />
       <View style={styles.bottom}>
         <RadioButton />
         <Text
@@ -93,7 +95,7 @@ const Pay = props => {
           }}>
           Wallets
         </Text>
-      </View> */}
+      </View>
       <ForwardButton
         style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
         onPress={() => handleforward()}
