@@ -262,3 +262,18 @@ export function resetPassword(payload) {
       console.log(error);
     });
 }
+export function fetchAttendanceOfMemberInSession(payload) {
+  return fetch(`${heroku_url}/attendance/of-a-member-in-a-session`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${payload.token}`,
+    },
+    body: JSON.stringify(payload.data),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      console.log(error);
+    });
+}
