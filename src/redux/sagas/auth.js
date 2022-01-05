@@ -7,7 +7,7 @@ import {
   fetchPostCode,
   fetchRegister,
   forgetPassword,
-  resetPassword
+  resetPassword,
 } from '../service/request';
 
 function* handlePostcode(action) {
@@ -59,11 +59,10 @@ export function* watcherLoginSaga() {
 
 function* handleForgetPassword(action) {
   try {
-    console.log("forgetPassSaga",action)
     const forgetPass = yield call(forgetPassword, action.payload);
-    forgetPass['mobileNo']=action.payload.mobileNo
-    forgetPass['email']=action.payload.email
-    console.log("forgetPassaction",forgetPass)
+    forgetPass['mobileNo'] = action.payload.mobileNo;
+    forgetPass['email'] = action.payload.email;
+
     if (
       forgetPass.message ===
       'Reset Password OTP has been sent to your mobile number.'
@@ -84,16 +83,11 @@ export function* watcherForgetPassword() {
   yield takeEvery(Action.USER_FORGOT_PASSWORD, handleForgetPassword);
 }
 
-
 function* handleResetPassword(action) {
   try {
-    console.log("resetPassSaga",action)
     const resetPass = yield call(resetPassword, action.payload);
-    console.log("resetPassaction",resetPass)
-    if (
-      resetPass.message ===
-      'Password has been reset successfully'
-    ) {
+
+    if (resetPass.message === 'Password has been reset successfully') {
       yield put({
         type: Action.USER_RESET_PASSWORD_SUCCESS,
         payload: resetPass,

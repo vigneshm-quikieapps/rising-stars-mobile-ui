@@ -148,13 +148,13 @@ function Profile(props) {
                   fontFamily: 'Nunito-SemiBold',
                   marginBottom: wp('1%'),
                 }}>
-                {membersdata[0].name}
+                {currentMember.name}
               </Text>
             </View>
           </View>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => handleMembership(membersdata[0]._id)}>
+            onPress={() => handleMembership(currentMember._id)}>
             <Text style={styles.cardButton}>Memberships / Classes</Text>
           </TouchableOpacity>
 
