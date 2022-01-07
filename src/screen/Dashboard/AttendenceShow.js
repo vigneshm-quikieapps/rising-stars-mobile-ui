@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel from 'react-native-snap-carousel';
+import {useSelector} from 'react-redux';
 import {AttendanceOverview} from '../../components';
 import {colors, Images, wp} from '../../constants';
 
@@ -138,6 +139,10 @@ const DATA = [
 ];
 
 const AttendenceShow = () => {
+  const memberAttendance = useSelector(
+    state => state.currentMemberAttendance.attendance,
+  );
+
   const Item = ({title}) => (
     <View style={styles.item}>
       <Text style={styles.title}>{title}</Text>
@@ -247,9 +252,18 @@ const AttendenceShow = () => {
           label1={'Total'}
           label2={'Attended'}
           label3={'No Show'}
-          value1={43}
-          value2={14}
-          value3={2}
+          value1={(memberAttendance?.totalCount
+            ? memberAttendance.totalCount
+            : 0
+          ).toString()}
+          value2={
+            memberAttendance?.attendedCount ? memberAttendance.attendedCount : 0
+          }
+          value3={
+            memberAttendance?.attendedCount && memberAttendance?.totalCount
+              ? memberAttendance.totalCount - memberAttendance.attendedCount
+              : 0
+          }
         />
       </View>
 

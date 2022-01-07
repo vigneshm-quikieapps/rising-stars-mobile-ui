@@ -13,14 +13,15 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {colors, wp, hp, Fontsize} from '../constants';
+import {colors, wp, hp, Fontsize, Images} from '../constants';
 import LinearGradient from 'react-native-linear-gradient';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const data = [
   {
     id: 1,
     labelId1: 1,
-    label1: 'Basic stretching regim',
+    label1: 'Basic stretching',
     label1status: 'Attained',
     labelId2: 2,
     label2: `Walking along  ${'\n'} balancing beam`,
@@ -34,7 +35,7 @@ const data = [
   {
     id: 2,
     labelId1: 1,
-    label1: 'Basic stretching regim',
+    label1: 'Basic stretching',
     label1status: 'Attained',
     labelId2: 2,
     label2: `Walking along ${'\n'} balancing beam`,
@@ -75,7 +76,7 @@ const Timelines = props => {
   const [expand, setExpand] = useState(false);
 
   return (
-    <View>
+    <ScrollView style={{height: hp('70%')}}>
       <FlatList
         data={data}
         keyExtractor={item => item.id}
@@ -123,7 +124,7 @@ const Timelines = props => {
                         ? '#e3e3e3'
                         : '#e3e3e3',
                       height: !expand
-                        ? hp('9%')
+                        ? hp('22%')
                         : item.item.status
                         ? hp('28%')
                         : item.item.status2
@@ -139,7 +140,7 @@ const Timelines = props => {
                   styles.subContainer,
                   {
                     marginTop: item.item.mark ? hp('0%') : -hp('2%'),
-                    height: !expand ? hp('12%') : 'auto',
+                    height: !expand ? hp('25%') : 'auto',
                   },
                   props.subcontainer,
                 ]}
@@ -179,117 +180,131 @@ const Timelines = props => {
                                 : item.item.status2
                                 ? 'white'
                                 : 'black',
-                              marginBottom: hp('1.3%'),
+                              marginBottom: hp('2%'),
+                              marginLeft: wp('7%'),
+                              marginTop: hp('2%'),
+                              backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                              paddingRight: wp('3%'),
+                              paddingLeft: wp('3%'),
+                              paddingTop: wp('1%'),
+                              height: 35,
+                              borderRadius: 10,
                             },
                           ]}>
                           Step {item.item.id}
                         </Text>
-                        {item.item.status ? (
-                          <TouchableOpacity
-                            onPress={() => setExpand(!expand)}
-                            style={styles.buttons}>
-                            <Text style={{color: 'white'}}>
-                              {expand ? '-' : '+'}
-                            </Text>
-                          </TouchableOpacity>
-                        ) : item.item.status2 ? (
-                          <TouchableOpacity
-                            onPress={() => setExpand(!expand)}
-                            style={styles.buttons}>
-                            <Text style={{color: 'white'}}>
-                              {expand ? '-' : '+'}
-                            </Text>
-                          </TouchableOpacity>
-                        ) : null}
                       </View>
-                      <Text
-                        style={[
-                          styles.insideText,
-                          {
-                            color: item.item.status
-                              ? 'white'
-                              : item.item.status2
-                              ? 'white'
-                              : 'black',
-                          },
-                        ]}>
-                        {item.item.label1}
-                      </Text>
-                      <Text
-                        style={[
-                          styles.insideText,
-                          {
-                            color: item.item.status
-                              ? 'white'
-                              : item.item.status2
-                              ? 'white'
-                              : colors.grey,
-                          },
-                        ]}>
-                        {item.item.label1status}
-                      </Text>
-                    </>
-                  )}
-                  {item.item.labelId2 && (
-                    <>
-                      <Text
-                        style={[
-                          styles.insideText,
-                          {
-                            color: item.item.status
-                              ? 'white'
-                              : item.item.status2
-                              ? 'white'
-                              : 'black',
-                          },
-                        ]}>
-                        {' '}
-                        {item.item.label2}
-                      </Text>
-                      <Text
-                        style={[
-                          styles.insideText,
-                          {
-                            color: item.item.status
-                              ? 'white'
-                              : item.item.status2
-                              ? 'white'
-                              : colors.grey,
-                          },
-                        ]}>
-                        {item.item.label2status}
-                      </Text>
-                    </>
-                  )}
-                  {item.item.labelId3 && (
-                    <>
-                      <Text
-                        style={[
-                          styles.insideText,
-                          {
-                            color: item.item.status
-                              ? 'white'
-                              : item.item.status2
-                              ? 'white'
-                              : 'black',
-                          },
-                        ]}>
-                        {' '}
-                        {item.item.label3}
-                      </Text>
-                      <Text
-                        style={[
-                          styles.insideText,
-                          {
-                            color: item.item.status
-                              ? 'white'
-                              : item.item.status2
-                              ? 'white'
-                              : colors.grey,
-                          },
-                        ]}>
-                        {item.item.label3status}
-                      </Text>
+                      <View style={{flexDirection: 'row'}}>
+                        <View
+                          style={{
+                            borderColor: colors.white,
+                            borderWidth: 2,
+                            marginTop: 20,
+                            borderRadius: 20,
+                            height: 22,
+                            width: 22,
+                          }}>
+                          <Image
+                            source={require('../assets/images/checkmark.png')}
+                            style={[
+                              styles.tick,
+                              {
+                                height: 10,
+                                width: 10,
+                                paddingTop: 17,
+                                paddingLeft: 17,
+                              },
+                            ]}
+                          />
+                        </View>
+                        <View>
+                          <Text
+                            style={[
+                              styles.insideText,
+                              {
+                                color: item.item.status
+                                  ? 'white'
+                                  : item.item.status2
+                                  ? 'white'
+                                  : 'black',
+                              },
+                              {
+                                marginLeft: wp('2%'),
+                                fontSize: Fontsize + 6,
+                                //fontWeight: 'bold',
+                              },
+                            ]}>
+                            {item.item.label1}
+                          </Text>
+                          <Text
+                            style={[
+                              styles.insideText,
+                              {
+                                color: item.item.status
+                                  ? 'white'
+                                  : item.item.status2
+                                  ? 'white'
+                                  : colors.grey,
+                              },
+                              {
+                                marginLeft: wp('2%'),
+                                fontSize: Fontsize + 2,
+                              },
+                            ]}>
+                            {item.item.label1status}
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            marginLeft: wp('10%'),
+                          }}>
+                          {item.item.status ? (
+                            <TouchableOpacity
+                              onPress={() => setExpand(!expand)}>
+                              <LinearGradient
+                                colors={[
+                                  'rgba(255, 255, 255, 0.3)',
+                                  'rgba(255, 255, 255, 0.3)',
+                                ]}
+                                style={{
+                                  marginRight: 20,
+                                  height: 32,
+                                  width: 32,
+                                  borderRadius: 8,
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                }}>
+                                <Image
+                                  style={{height: 14, width: 18}}
+                                  source={Images.dropDown_white}
+                                />
+                              </LinearGradient>
+                            </TouchableOpacity>
+                          ) : item.item.status2 ? (
+                            <TouchableOpacity
+                              onPress={() => setExpand(!expand)}>
+                              <LinearGradient
+                                colors={[
+                                  'rgba(255, 255, 255, 0.3)',
+                                  'rgba(255, 255, 255, 0.3)',
+                                ]}
+                                style={{
+                                  marginRight: 20,
+                                  height: 32,
+                                  width: 32,
+                                  borderRadius: 8,
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                }}>
+                                <Image
+                                  style={{height: 14, width: 18}}
+                                  source={Images.dropDown_white}
+                                />
+                              </LinearGradient>
+                            </TouchableOpacity>
+                          ) : null}
+                        </View>
+                      </View>
                     </>
                   )}
                 </View>
@@ -298,7 +313,7 @@ const Timelines = props => {
           );
         }}
       />
-    </View>
+    </ScrollView>
   );
 };
 
@@ -334,7 +349,6 @@ const styles = StyleSheet.create({
     flex: 1,
     // borderWidth: 1,
     // height: hp('10%'),
-
     paddingTop: hp('4%'),
     marginLeft: wp('5%'),
     // flexDirection: 'row',
@@ -358,7 +372,7 @@ const styles = StyleSheet.create({
   },
   insideText: {
     fontFamily: 'Nunito-SemiBold',
-    fontSize: Fontsize,
+    fontSize: Fontsize + 3,
   },
   buttons: {
     height: hp('3%'),

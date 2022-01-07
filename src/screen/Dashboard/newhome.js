@@ -144,7 +144,13 @@ const Home = () => {
           sessionId: currentSessionId,
           memberId: currentMember._id,
         },
-      }).then(attendance => setCurrentSessionAttendance(attendance.attendance));
+      }).then(attendance => {
+        dispatch({
+          type: Action.USER_GET_CURRENT_MEMBER_ATTENDANCE,
+          payload: attendance.attendance,
+        });
+        setCurrentSessionAttendance(attendance.attendance);
+      });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberClassData]);
@@ -370,7 +376,7 @@ const Home = () => {
       </View>
 
       <View style={[styles.ProgressReports, styles.timeline]}>
-        <View style={{paddingRight: wp('4%')}}>
+        <View style={{paddingRight: wp('4%'), paddingTop: wp('3%')}}>
           <ProgressBarWithStar />
         </View>
         <View
