@@ -13,7 +13,7 @@ export default function WheelDropdown(props) {
       transparent={true}
       visible={props.visible}
       setVisibility={props.setVisibility}>
-      <View style={styles.container}>
+      <View style={[styles.container, props.style]}>
         <View style={styles.subContainer}>
           <View
             style={{

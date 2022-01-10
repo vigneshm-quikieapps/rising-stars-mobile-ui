@@ -1,20 +1,24 @@
-import React, {useEffect} from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Dimensions,
-  TouchableOpacity,
-  FlatList,
   ScrollView,
   Image,
   SectionList,
+  TouchableOpacity,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel from 'react-native-snap-carousel';
-import {useSelector} from 'react-redux';
-import {AttendanceOverview} from '../../components';
-import {colors, Images, wp} from '../../constants';
+import {WheelPicker} from 'react-native-wheel-picker-android';
+import {useDispatch, useSelector} from 'react-redux';
+import {AttendanceOverview, WheelDropdown} from '../../components';
+import {colors, Fontsize, hp, wp} from '../../constants';
+import {getmemberClass, getmemberData} from '../../redux/action/home';
+import * as Action from '../../redux/action-types';
+import {getLocalData} from '../../utils/LocalStorage';
 
 const itemWidth = Dimensions.get('window').width;
 
@@ -142,12 +146,56 @@ const AttendenceShow = () => {
   const memberAttendance = useSelector(
     state => state.currentMemberAttendance.attendance,
   );
+  const membersdata = useSelector(state => state.memberData.memberData);
+  const dispatch = useDispatch();
 
-  const Item = ({title}) => (
-    <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
-    </View>
-  );
+  const [showModal, setShowModal] = useState(false);
+  const [wheelitem, setItem] = useState(0);
+  const [currentMember, setCurrentMember] = useState('');
+  const memberClassData = useSelector(state => state.memberClassData.classData);
+  const [user, setUser] = useState('');
+  const [token, setToken] = useState();
+
+  // const Item = ({title}) => (
+  //   <View style={styles.item}>
+  //     <Text style={styles.title}>{title}</Text>
+  //   </View>
+  // );
+
+  var member = [];
+  const accessToken = async () => {
+    const Token = await getLocalData('accessToken');
+    setToken(Token);
+  };
+
+  const getLocalUserData = useCallback(async () => {
+    const userData = await getLocalData('user', true);
+    setUser(userData);
+  }, []);
+
+  membersdata && membersdata.map(item => member.push(item.name));
+
+  accessToken();
+
+  useEffect(() => {
+    getLocalUserData();
+
+    token && dispatch(getmemberData(token));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
+
+  useEffect(() => {
+    currentMember && dispatch(getmemberClass(currentMember._id));
+
+    currentMember &&
+      dispatch({
+        type: Action.USER_GET_CURRENT_MEMBER_DATA,
+        payload: currentMember,
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentMember]);
+
   const renderItem = ({item, index}) => {
     return (
       <LinearGradient
@@ -157,6 +205,7 @@ const AttendenceShow = () => {
           paddingVertical: 30,
           paddingHorizontal: 20,
           paddingTop: 24,
+          height: hp('15%'),
           paddingBottom: 20,
           backgroundColor: colors.white,
           borderRadius: 16,
@@ -168,9 +217,9 @@ const AttendenceShow = () => {
             opacity: 0.8,
             fontFamily: 'Nunito-Regular',
           }}>
-          Class Names
+          Activity Name
         </Text>
-        <Text
+        {/* <Text
           style={{
             fontSize: wp('4.3%'),
 
@@ -178,7 +227,7 @@ const AttendenceShow = () => {
             fontFamily: 'Nunito-SemiBold',
           }}>
           K23lJ56
-        </Text>
+        </Text> */}
         <Text
           style={{
             fontSize: wp('4.3%'),
@@ -207,24 +256,54 @@ const AttendenceShow = () => {
         <Text style={{fontSize: wp('4.5%'), fontFamily: 'Nunito-SemiBold'}}>
           Ayman Mogal
         </Text>
-        <LinearGradient
-          colors={['#ffa300', '#ff7e00']}
+        <TouchableOpacity onPress={() => setShowModal(true)}>
+          <View
+            style={{
+              backgroundColor: '#ffe49c',
+              marginLeft: 6,
+              marginRight: 20,
+              height: 32,
+              width: 32,
+              borderRadius: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Image
+              style={{height: 14, width: 18}}
+              source={require('../../assets/images/icon-forward2-line-black.png')}
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
+      <WheelDropdown
+        title="child"
+        visible={showModal}
+        setVisibility={modal => setShowModal(modal)}
+        cancel={() => setShowModal(false)}
+        confirm={() => {
+          setCurrentMember(membersdata[wheelitem]);
+          //console.log('CURRENT: ', currentMember);
+          setShowModal(false);
+        }}>
+        <View
           style={{
-            marginLeft: 6,
-            marginRight: 20,
-            height: 32,
-            width: 32,
-            borderRadius: 8,
+            alignContent: 'center',
             justifyContent: 'center',
             alignItems: 'center',
+            marginRight: wp('8%'),
+            marginBottom: -hp('3%'),
           }}>
-          <Image
-            style={{height: 14, width: 18}}
-            source={Images.dropDown_white}
+          <WheelPicker
+            data={member}
+            isCyclic={true}
+            onItemSelected={item => setItem(item)}
+            selectedItemTextColor={'black'}
+            selectedItemTextSize={Fontsize}
+            itemTextFontFamily="Nunito-Regular"
+            selectedItemTextFontFamily="Nunito-Regular"
           />
-        </LinearGradient>
-      </View>
-
+        </View>
+      </WheelDropdown>
       <View style={{marginTop: 14}}>
         <Carousel
           // autoplay={true}

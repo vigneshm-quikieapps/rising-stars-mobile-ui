@@ -19,10 +19,7 @@ const Pay = props => {
   const child = useSelector(state => state.childData.addchild);
   const slot = useSelector(state => state.childData.slotdata);
   const club = useSelector(state => state.childData.clubdata);
-  const consent = useSelector(state => state.addProvidedata);
   const dispatch = useDispatch();
-  const state = useDispatch(state => state);
-  console.log('STATE: ', state);
   const handleforward = async () => {
     dispatch(
       enrollChildData({

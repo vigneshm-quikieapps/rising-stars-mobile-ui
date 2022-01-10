@@ -243,6 +243,7 @@ const AddChild = props => {
                 setVisibility={setBirthModal}
                 confirmbutton={false}
                 cancelbutton={false}
+                style={{marginTop: hp('75%')}}
                 cancel={() => {
                   setBirth('');
                   setBirthModal(!birthModal);

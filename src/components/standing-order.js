@@ -5,6 +5,7 @@ import {hp, wp, colors} from '../constants';
 import {RadioButton} from 'react-native-paper';
 import Input from './input';
 import {AppButton} from '.';
+import NewAppButton from './new-app-button';
 
 const StandingOrder = props => {
   return (
@@ -22,8 +23,8 @@ const StandingOrder = props => {
         }}
         style={{width: wp('83%')}}
       />
-      <AppButton
-        title={"I'll setup Standing Order"}
+      <NewAppButton
+        title={"I'll setup Standing Order late"}
         onPress={() => {
           //
         }}

@@ -1,4 +1,4 @@
-import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
+import {call, put, takeEvery} from 'redux-saga/effects';
 
 import * as Action from '../action-types';
 
@@ -8,7 +8,6 @@ import {
   fetchclassName,
   fetchSessionList,
   fetchClubFinanc,
-  createMembership,
   regularEnrollment,
 } from '../service/request';
 

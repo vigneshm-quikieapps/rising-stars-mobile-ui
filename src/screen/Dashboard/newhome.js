@@ -1,4 +1,3 @@
-/* eslint-disable eslint-comments/no-unused-disable */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -12,8 +11,6 @@ import {
   ScrollView,
   StatusBar,
   TouchableOpacity,
-  ActivityIndicator,
-  ActionSheetIOS,
 } from 'react-native';
 import moment from 'moment';
 import {colors, Fontsize, hp, Images, wp} from '../../constants';
@@ -48,9 +45,6 @@ const Home = () => {
     const Token = await getLocalData('accessToken');
     setToken(Token);
   };
-  console.log('Token from Home: ', token);
-  console.log('Member Class Data From Home: ', memberClassData);
-  console.log('Member Data from Home', membersdata);
   const members = [];
   membersdata && membersdata.forEach((item, index) => (item.index = index));
   membersdata && membersdata.map(item => members.push(item.name));
@@ -70,8 +64,9 @@ const Home = () => {
       <Pagination
         dotsLength={
           memberClassData && memberClassData
-            ? memberClassData.filter(item => item.enrolledStatus === 'ENROLLED')
-                .length
+            ? memberClassData.filter(
+                item => item?.enrolledStatus === 'ENROLLED',
+              ).length
             : 1
         }
         activeDotIndex={activeDotIndex}
@@ -106,7 +101,6 @@ const Home = () => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // });
   useEffect(() => {
-    console.log('inside Use Effect');
     getLocalUserData();
 
     token && dispatch(getmemberData(token));
@@ -132,7 +126,7 @@ const Home = () => {
   useEffect(() => {
     memberClassData &&
       setCurrentSessionId(
-        memberClassData.filter(item => item.enrolledStatus === 'ENROLLED')[
+        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
           activeDotIndex
         ].session._id,
       );
@@ -183,7 +177,6 @@ const Home = () => {
           <View style={styles.containerMember}>
             <View style={{marginTop: hp('1%')}}>
               <Image
-                // eslint-disable-next-line react-native/no-inline-styles
                 style={{
                   height: 57,
                   width: 57,
@@ -257,7 +250,9 @@ const Home = () => {
           <Carousel
             data={
               memberClassData &&
-              memberClassData.filter(item => item.enrolledStatus === 'ENROLLED')
+              memberClassData?.filter(
+                item => item?.enrolledStatus === 'ENROLLED',
+              )
             }
             renderItem={renderItem}
             sliderWidth={wp('95%')}
@@ -266,8 +261,8 @@ const Home = () => {
               setActiveDotIndex(index);
               setCurrentSessionId(
                 memberClassData &&
-                  memberClassData.filter(
-                    item => item.enrolledStatus === 'ENROLLED',
+                  memberClassData?.filter(
+                    item => item?.enrolledStatus === 'ENROLLED',
                   )[index].session._id,
               );
               const attendance =
