@@ -34,7 +34,6 @@ const Additional_Sections = props => {
       telephone: telephone,
       sms: sms,
     };
-    console.log(det);
     dispatch(setAdditionDetails(det));
     props.navigation.navigate('Pay');
   };
@@ -43,7 +42,6 @@ const Additional_Sections = props => {
     way === 'telephone' ? setTelephone(!telephone) : null;
     way === 'sms' ? setSms(!sms) : null;
   };
-  console.log(modalVisible);
   return (
     <CustomLayout
       Customchildren={
@@ -159,7 +157,7 @@ const Additional_Sections = props => {
             // fontSize: Fontsize,
             color: '#ff7e00',
           }}>
-          Zippy’s
+          {club.name}
         </Text>{' '}
         newsletter and other communications
       </Text>

@@ -69,7 +69,6 @@ function InputOTPScreen(props) {
       }
     }
   };
-  console.log("72",props.twoInputField);
   return (
     <SafeAreaView style={{paddingHorizontal: wp('4%')}}>
       <KeyboardAvoidingView

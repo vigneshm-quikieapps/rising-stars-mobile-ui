@@ -30,7 +30,6 @@ export const RegisterData = data => {
 };
 
 export const forgetPasswordData = data => {
-  console.log("data",data);
   return {
     type: Action.USER_FORGOT_PASSWORD,
     payload: data,
@@ -38,7 +37,6 @@ export const forgetPasswordData = data => {
 };
 
 export const resetPasswordData = data => {
-  console.log("data1",data);
   return {
     type: Action.USER_RESET_PASSWORD,
     payload: data,

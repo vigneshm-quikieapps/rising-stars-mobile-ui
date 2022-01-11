@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   StyleSheet,
@@ -28,7 +28,7 @@ import {getLocalData} from '../../utils/LocalStorage';
 
 import {useSelector, useDispatch} from 'react-redux';
 
-const Class_Selection = props => {
+const New_Class_Selection = props => {
   const [business, setBusiness] = useState();
   const [classes, setClasses] = useState();
 
@@ -37,6 +37,7 @@ const Class_Selection = props => {
 
   const [showclass, setShowClass] = useState(false);
   const [showsession, setShowsession] = useState(false);
+  const [showclass2, setShowClass2] = useState(false);
 
   const [selectdata, setSelectdata] = useState();
 
@@ -47,6 +48,8 @@ const Class_Selection = props => {
   const classData = useSelector(state => state.classname.classtate);
 
   const sessionData = useSelector(state => state.sessionlist.sessiondata);
+
+  const memberClassData = useSelector(state => state.memberClassData.classData);
 
   const dispatch = useDispatch();
 
@@ -78,6 +81,19 @@ const Class_Selection = props => {
     dispatch(setSlotData(selectdata));
     props.navigation.navigate('Fees_Overview');
   };
+
+  function checkEnroll(clas) {
+    for (var i = 0; i < memberClassData.length; i++) {
+      if (
+        clas._id === memberClassData[i].classId &&
+        memberClassData[i].enrolledStatus === 'ENROLLED'
+      ) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   return (
     <CustomLayout
       Customchildren={
@@ -137,30 +153,33 @@ const Class_Selection = props => {
               onPress={() => setClassModal(!classmodal)}
             />
             {classmodal &&
-              classData.map(item => {
-                return (
-                  <TouchableOpacity
-                    onPressOut={() => setClubModal(false)}
-                    key={item._id}
-                    onPress={() => handleClasses(item)}
-                    style={{
-                      marginLeft: wp('8%'),
-                      justifyContent: 'center',
-                      alignContent: 'center',
-                    }}>
-                    <Text
+              classData
+                .map(clas => clas)
+                .filter(checkEnroll)
+                .map(item => {
+                  return (
+                    <TouchableOpacity
+                      onPressOut={() => setClubModal(false)}
+                      key={item._id}
+                      onPress={() => handleClasses(item)}
                       style={{
-                        backgroundColor: colors.lightgrey,
-                        fontFamily: 'Nunito-Regular',
-                        fontSize: Fontsize,
-                        paddingTop: wp('2%'),
-                        margin: wp('0.5%'),
+                        marginLeft: wp('8%'),
+                        justifyContent: 'center',
+                        alignContent: 'center',
                       }}>
-                      {item.name}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
+                      <Text
+                        style={{
+                          backgroundColor: colors.lightgrey,
+                          fontFamily: 'Nunito-Regular',
+                          fontSize: Fontsize,
+                          paddingTop: wp('2%'),
+                          margin: wp('0.5%'),
+                        }}>
+                        {item.name}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
           </>
         ) : (
           <ActivityIndicator size="large" color={colors.orange} />
@@ -260,4 +279,4 @@ const styles = StyleSheet.create({
     // elevation: 5
   },
 });
-export default Class_Selection;
+export default New_Class_Selection;

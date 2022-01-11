@@ -15,7 +15,6 @@ import {colors, Fontsize, hp, wp} from '../../constants';
 import {useNavigation} from '@react-navigation/core';
 import {resetPasswordData} from '../../redux/action/auth';
 
-
 const validationSchema = Yup.object().shape({
   password: Yup.string()
     .required('Password is required')
@@ -33,7 +32,7 @@ function SetPassword(props) {
   const otp = useSelector(state => state.ForgetPasswordData.otp);
   const email = useSelector(state => state.ForgetPasswordData.email);
   const mobileNo = useSelector(state => state.ForgetPasswordData.mobileNo);
-  console.log("otp,email,mobileNo",otp,email,mobileNo);
+
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   return (
     <CustomLayout
@@ -101,8 +100,14 @@ function SetPassword(props) {
               title="Confirm Password"
               style={{marginTop: hp('40%')}}
               onPress={() => {
-                console.log("mobileNo",mobileNo)
-                dispatch(resetPasswordData({"mobileNo":mobileNo,"otp":otp,"password":values.password,"email":email}))
+                dispatch(
+                  resetPasswordData({
+                    mobileNo: mobileNo,
+                    otp: otp,
+                    password: values.password,
+                    email: email,
+                  }),
+                );
                 setSuccessModalVisible(true);
                 setTimeout(() => {
                   setSuccessModalVisible(false);
