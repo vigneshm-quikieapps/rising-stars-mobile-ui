@@ -19,6 +19,7 @@ import {colors, Fontsize, hp, wp} from '../../constants';
 import {getmemberClass, getmemberData} from '../../redux/action/home';
 import * as Action from '../../redux/action-types';
 import {getLocalData} from '../../utils/LocalStorage';
+import {fetchAttendanceOfMemberInSession} from '../../redux/service/request';
 
 const itemWidth = Dimensions.get('window').width;
 
@@ -155,6 +156,10 @@ const AttendenceShow = () => {
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const [user, setUser] = useState('');
   const [token, setToken] = useState();
+  const [currentMemberIndex, setCurrentMemberIndex] = useState(0);
+  const [currentSessionId, setCurrentSessionId] = useState('');
+  const [activeDotIndex, setActiveDotIndex] = React.useState(0);
+  const [currentSessionAttendance, setCurrentSessionAttendance] = useState('');
 
   // const Item = ({title}) => (
   //   <View style={styles.item}>
@@ -184,7 +189,10 @@ const AttendenceShow = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
-
+  useEffect(() => {
+    membersdata && setCurrentMember(membersdata[currentMemberIndex]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [membersdata]);
   useEffect(() => {
     currentMember && dispatch(getmemberClass(currentMember._id));
 
@@ -195,7 +203,31 @@ const AttendenceShow = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMember]);
+  useEffect(() => {
+    memberClassData.length > 1 &&
+      setCurrentSessionId(
+        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
+          activeDotIndex
+        ].session._id,
+      );
 
+    currentSessionId &&
+      fetchAttendanceOfMemberInSession({
+        token,
+        data: {
+          sessionId: currentSessionId,
+          memberId: currentMember._id,
+        },
+      }).then(attendance => {
+        dispatch({
+          type: Action.USER_GET_CURRENT_MEMBER_ATTENDANCE,
+          payload: attendance.attendance,
+        });
+        setCurrentSessionAttendance(attendance.attendance);
+      });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [memberClassData]);
   const renderItem = ({item, index}) => {
     return (
       <LinearGradient
@@ -254,7 +286,7 @@ const AttendenceShow = () => {
 
       <View style={{marginTop: 4, flexDirection: 'row', alignItems: 'center'}}>
         <Text style={{fontSize: wp('4.5%'), fontFamily: 'Nunito-SemiBold'}}>
-          Ayman Mogal
+          {currentMember.name}
         </Text>
         <TouchableOpacity onPress={() => setShowModal(true)}>
           <View
@@ -281,8 +313,10 @@ const AttendenceShow = () => {
         setVisibility={modal => setShowModal(modal)}
         cancel={() => setShowModal(false)}
         confirm={() => {
+          setCurrentMemberIndex(wheelitem);
+
           setCurrentMember(membersdata[wheelitem]);
-          //console.log('CURRENT: ', currentMember);
+
           setShowModal(false);
         }}>
         <View
@@ -314,10 +348,25 @@ const AttendenceShow = () => {
           sliderWidth={itemWidth - 30}
           itemWidth={itemWidth * 0.88}
           renderItem={renderItem}
-          //    onSnapToItem = { index =>{
-
-          //      setActiveDotIndex(index)
-          //      }}
+          onSnapToItem={async index => {
+            setActiveDotIndex(index);
+            setCurrentSessionId(
+              memberClassData &&
+                memberClassData?.filter(
+                  item => item?.enrolledStatus === 'ENROLLED',
+                )[index].session._id,
+            );
+            const attendance =
+              currentSessionId &&
+              (await fetchAttendanceOfMemberInSession({
+                token,
+                data: {
+                  sessionId: currentSessionId,
+                  memberId: currentMember._id,
+                },
+              }));
+            setCurrentSessionAttendance(attendance.attendance);
+          }}
         />
       </View>
       <View style={{marginTop: 20}}>

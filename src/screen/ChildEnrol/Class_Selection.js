@@ -50,7 +50,6 @@ const Class_Selection = props => {
 
   const dispatch = useDispatch();
 
-  console.log('Child: ', child);
   const handleBusiness = async item => {
     setBusiness(item.name);
     setClubModal(!clubmodal);

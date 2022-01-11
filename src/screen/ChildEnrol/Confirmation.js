@@ -20,7 +20,6 @@ const Confirmation = props => {
   const enrollment = useSelector(state => state.enrollChild.enrollstate);
   const [showAlert, setShowAlert] = useState(false);
 
-  console.log('Status: ', enrollment.message);
   useEffect(() => {
     enrollment && enrollment?.message !== 'enrolled successful'
       ? setShowAlert(true)

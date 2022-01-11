@@ -34,7 +34,6 @@ const Additional_Sections = props => {
       telephone: telephone,
       sms: sms,
     };
-    console.log(det);
     dispatch(setAdditionDetails(det));
     props.navigation.navigate('Pay');
   };
@@ -43,7 +42,6 @@ const Additional_Sections = props => {
     way === 'telephone' ? setTelephone(!telephone) : null;
     way === 'sms' ? setSms(!sms) : null;
   };
-  console.log(modalVisible);
   return (
     <CustomLayout
       Customchildren={

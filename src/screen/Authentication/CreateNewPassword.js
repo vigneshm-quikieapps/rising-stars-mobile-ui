@@ -7,7 +7,6 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import InputOTPScreen from './InputOTPScreen';
 import {forgetPasswordData} from '../../redux/action/auth';
 
-
 function CreateNewPassword(props) {
   const refRBSheet = useRef();
   const dispatch = useDispatch();
@@ -29,11 +28,10 @@ function CreateNewPassword(props) {
 
   const gotoGeneratePassword = () => {
     // props.navigation.navigate('GeneratePassword');
-    let body={
-      "email":email,
-      "mobileNo":number
-    }
-    console.log("body",body)
+    let body = {
+      email: email,
+      mobileNo: number,
+    };
     dispatch(forgetPasswordData(body));
     refRBSheet.current.open();
   };

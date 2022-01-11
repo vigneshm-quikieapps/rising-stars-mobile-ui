@@ -93,7 +93,7 @@ const Home = () => {
 
   accessToken();
   // useEffect(() => {
-  //   console.log('inside Use Effect');
+
   //   getLocalUserData();
 
   //   token && dispatch(getmemberData(token));
@@ -124,13 +124,13 @@ const Home = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMember]);
   useEffect(() => {
-    memberClassData &&
+    memberClassData.length > 1 &&
       setCurrentSessionId(
         memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
           activeDotIndex
         ].session._id,
       );
-    console.log('Class : ', memberClassData);
+
     currentSessionId &&
       fetchAttendanceOfMemberInSession({
         token,
@@ -219,7 +219,7 @@ const Home = () => {
             confirm={() => {
               setCurrentMemberIndex(wheelitem);
               setCurrentMember(membersdata[wheelitem]);
-              //console.log('CURRENT: ', currentMember);
+
               dispatch({
                 type: Action.USER_GET_CURRENT_MEMBER_DATA,
                 payload: currentMember,
@@ -275,7 +275,6 @@ const Home = () => {
                   },
                 }));
               setCurrentSessionAttendance(attendance.attendance);
-              console.log('Attendance from Carosel: ', attendance);
             }}
           />
           <View
