@@ -14,6 +14,7 @@ import ChangeClass from '../../screen/Dashboard/ChangeClass';
 import PaymentHistory from '../../screen/Dashboard/PaymentHistory';
 import {getLocalData} from '../../utils/LocalStorage';
 import {getmemberData} from '../../redux/action/home';
+import EditProfile from '../../screen/Dashboard/EditProfile';
 
 const HomeNavigation = props => {
   const [token, setToken] = useState('');
@@ -88,6 +89,11 @@ const HomeNavigation = props => {
         <StackScreen.Screen
           name="PaymentHistory"
           component={PaymentHistory}
+          options={{headerShown: false}}
+        />
+        <StackScreen.Screen
+          name="Edit_Profile"
+          component={EditProfile}
           options={{headerShown: false}}
         />
       </Stack>

@@ -1,7 +1,6 @@
 import * as action from '../action-types';
 
 export const getmemberData = token => {
-  console.log('token for members data in sagas', token);
   return {
     type: action.USER_GET_MEMBER,
     payload: token,

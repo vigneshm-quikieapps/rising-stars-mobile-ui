@@ -23,7 +23,7 @@ import {getmemberClass} from '../../redux/action/home';
 function Profile(props) {
   const membersdata = useSelector(state => state.memberData.memberData);
   const memberclassdata = useSelector(state => state.memberClassData.classData);
-  membersdata && console.log('membersData', membersdata);
+
   // let steps = false;
   const refRBSheet = useRef();
   const [user, setUser] = useState('');
@@ -106,9 +106,11 @@ function Profile(props) {
 
           <Text style={styles.parentText}>Parent</Text>
         </View>
-        <View style={{justifyContent: 'center'}}>
+        <TouchableOpacity
+          style={{justifyContent: 'center'}}
+          onPress={() => props.navigation.navigate('Edit_Profile')}>
           <Text style={styles.editProfile}>Edit Profile</Text>
-        </View>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.childContainer}>

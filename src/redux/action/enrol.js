@@ -92,7 +92,6 @@ export const setProvide = (allergie, condition, photo, sign) => {
 };
 
 export const setAdditionDetails = value => {
-  console.log('inside action');
   return {
     type: action.USER_SET_ADDITION,
     payload: value,

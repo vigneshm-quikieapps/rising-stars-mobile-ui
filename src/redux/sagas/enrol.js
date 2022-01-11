@@ -1,4 +1,4 @@
-import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
+import {call, put, takeEvery} from 'redux-saga/effects';
 
 import * as Action from '../action-types';
 
@@ -8,7 +8,6 @@ import {
   fetchclassName,
   fetchSessionList,
   fetchClubFinanc,
-  createMembership,
   regularEnrollment,
 } from '../service/request';
 
@@ -16,7 +15,9 @@ function* handleGetClub(params) {
   try {
     const club = yield call(fetchclubName);
     yield put({type: Action.USER_GET_CLUB_SUCCESS, payload: club});
-    yield call(params.payload.callback);
+    if (params.payload) {
+      yield call(params.payload.callback);
+    }
   } catch (error) {
     yield put({type: Action.USER_GET_CLUB_FAILED, message: error.message});
   }
@@ -87,9 +88,7 @@ export function* watcherAddChild() {
 //calling enrollment api
 function* handleEnrollChild(action) {
   try {
-    console.log('inside sagas');
     const enrolledChild = yield call(regularEnrollment, action.payload);
-    console.log('enrolledChild: ', enrolledChild);
     yield put({
       type: Action.USER_ENROLL_CHILD_SUCCEDED,
       payload: enrolledChild,

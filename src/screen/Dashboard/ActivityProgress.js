@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -6,16 +6,96 @@ import {
   Dimensions,
   Image,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
-import {colors, Images, wp} from '../../constants';
+import {colors, Images, Fontsize, hp, wp} from '../../constants';
 import Carousel from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
-import {ProgressBarWithStar, Timelines} from '../../components';
+import {WheelPicker} from 'react-native-wheel-picker-android';
 
+import {ProgressBarWithStar, Timelines, WheelDropdown} from '../../components';
+import {useDispatch, useSelector} from 'react-redux';
+import {getmemberClass, getmemberData} from '../../redux/action/home';
+import * as Action from '../../redux/action-types';
+import {getLocalData} from '../../utils/LocalStorage';
+import {fetchAttendanceOfMemberInSession} from '../../redux/service/request';
 const ActivityProgress = () => {
   const Datum = [1, 2, 3, 4];
   const itemWidth = Dimensions.get('window').width;
+  const membersdata = useSelector(state => state.memberData.memberData);
+  const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(false);
+  const [wheelitem, setItem] = useState(0);
+  const [currentMember, setCurrentMember] = useState('');
+  const memberClassData = useSelector(state => state.memberClassData.classData);
+  const [user, setUser] = useState('');
+  const [token, setToken] = useState();
+  const [currentMemberIndex, setCurrentMemberIndex] = useState(0);
+  const [currentSessionId, setCurrentSessionId] = useState('');
+  const [activeDotIndex, setActiveDotIndex] = React.useState(0);
+  const [currentSessionAttendance, setCurrentSessionAttendance] = useState('');
 
+  var member = [];
+  const accessToken = async () => {
+    const Token = await getLocalData('accessToken');
+    setToken(Token);
+  };
+
+  const getLocalUserData = useCallback(async () => {
+    const userData = await getLocalData('user', true);
+    setUser(userData);
+  }, []);
+
+  membersdata && membersdata.map(item => member.push(item.name));
+
+  accessToken();
+
+  useEffect(() => {
+    getLocalUserData();
+
+    token && dispatch(getmemberData(token));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
+  useEffect(() => {
+    membersdata && setCurrentMember(membersdata[currentMemberIndex]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [membersdata]);
+  useEffect(() => {
+    currentMember && dispatch(getmemberClass(currentMember._id));
+
+    currentMember &&
+      dispatch({
+        type: Action.USER_GET_CURRENT_MEMBER_DATA,
+        payload: currentMember,
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentMember]);
+  useEffect(() => {
+    memberClassData.length > 1 &&
+      setCurrentSessionId(
+        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
+          activeDotIndex
+        ].session._id,
+      );
+
+    // currentSessionId &&
+    //   fetchAttendanceOfMemberInSession({
+    //     token,
+    //     data: {
+    //       sessionId: currentSessionId,
+    //       memberId: currentMember._id,
+    //     },
+    //   }).then(attendance => {
+    //     dispatch({
+    //       type: Action.USER_GET_CURRENT_MEMBER_ATTENDANCE,
+    //       payload: attendance.attendance,
+    //     });
+    //     setCurrentSessionAttendance(attendance.attendance);
+    //   });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [memberClassData]);
   const renderItem = ({item, index}) => {
     return (
       <LinearGradient
@@ -58,25 +138,59 @@ const ActivityProgress = () => {
 
       <View style={{marginTop: 4, flexDirection: 'row', alignItems: 'center'}}>
         <Text style={{fontSize: 18, fontFamily: 'Nunito-SemiBold'}}>
-          Ayman Mogal
+          {currentMember.name}
         </Text>
-        <LinearGradient
-          colors={['#ffa300', '#ff7e00']}
+
+        <TouchableOpacity onPress={() => setShowModal(true)}>
+          <View
+            style={{
+              backgroundColor: '#ffe49c',
+              marginLeft: 6,
+              marginRight: 20,
+              height: 32,
+              width: 32,
+              borderRadius: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Image
+              style={{height: 14, width: 18}}
+              source={require('../../assets/images/icon-forward2-line-black.png')}
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
+      <WheelDropdown
+        title="child"
+        visible={showModal}
+        setVisibility={modal => setShowModal(modal)}
+        cancel={() => setShowModal(false)}
+        confirm={() => {
+          setCurrentMemberIndex(wheelitem);
+
+          setCurrentMember(membersdata[wheelitem]);
+
+          setShowModal(false);
+        }}>
+        <View
           style={{
-            marginLeft: 6,
-            marginRight: 20,
-            height: 32,
-            width: 32,
-            borderRadius: 8,
+            alignContent: 'center',
             justifyContent: 'center',
             alignItems: 'center',
+            marginRight: wp('8%'),
+            marginBottom: -hp('3%'),
           }}>
-          <Image
-            style={{height: 14, width: 18}}
-            source={Images.dropDown_white}
+          <WheelPicker
+            data={member}
+            isCyclic={true}
+            onItemSelected={item => setItem(item)}
+            selectedItemTextColor={'black'}
+            selectedItemTextSize={Fontsize}
+            itemTextFontFamily="Nunito-Regular"
+            selectedItemTextFontFamily="Nunito-Regular"
           />
-        </LinearGradient>
-      </View>
+        </View>
+      </WheelDropdown>
 
       <View style={{marginTop: 14}}>
         <Carousel
@@ -86,6 +200,25 @@ const ActivityProgress = () => {
           sliderWidth={itemWidth - 30}
           itemWidth={itemWidth * 0.88}
           renderItem={renderItem}
+          onSnapToItem={async index => {
+            setActiveDotIndex(index);
+            setCurrentSessionId(
+              memberClassData &&
+                memberClassData?.filter(
+                  item => item?.enrolledStatus === 'ENROLLED',
+                )[index].session._id,
+            );
+            const attendance =
+              currentSessionId &&
+              (await fetchAttendanceOfMemberInSession({
+                token,
+                data: {
+                  sessionId: currentSessionId,
+                  memberId: currentMember._id,
+                },
+              }));
+            setCurrentSessionAttendance(attendance.attendance);
+          }}
         />
       </View>
       <View style={{marginTop: 30, marginRight: 20}}>

@@ -50,7 +50,6 @@ const Login = props => {
   }, []);
 
   useEffect(() => {
-    console.log('check login status: ', isLoggedIn);
     isLoggedIn && navigation.navigate('HomeTab');
   }, [navigation, isLoggedIn]);
 

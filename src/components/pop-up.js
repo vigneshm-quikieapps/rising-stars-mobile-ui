@@ -5,7 +5,7 @@ function PopUp(props) {
   return (
     <TouchableOpacity
       //onPressOut={() => props.setVisibility(false)}
-      style={styles.container}>
+      style={[styles.container, props.style]}>
       <Modal
         animationType={props.animationType}
         transparent={props.transparent}
