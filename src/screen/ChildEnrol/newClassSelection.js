@@ -54,8 +54,6 @@ const New_Class_Selection = props => {
   const dispatch = useDispatch();
 
   const handleBusiness = async item => {
-    console.log('ITEM: ', item);
-
     setBusiness(item.name);
     setClubModal(!clubmodal);
     // item.MemberId = child.member._id;
@@ -85,18 +83,14 @@ const New_Class_Selection = props => {
   };
 
   function checkEnroll(clas) {
-    //console.log(num);
     for (var i = 0; i < memberClassData.length; i++) {
-      console.log(clas._id, memberClassData[i].classId);
       if (
         clas._id === memberClassData[i].classId &&
         memberClassData[i].enrolledStatus === 'ENROLLED'
       ) {
-        console.log('equals');
         return false;
       }
     }
-    console.log('not-equals');
     return true;
   }
 

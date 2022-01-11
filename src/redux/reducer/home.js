@@ -24,7 +24,6 @@ export const memberData = (state = memberstate, action) => {
         isloading: false,
       };
     case Action.USER_GET_MEMBER_SUCCESS:
-      console.log('reducer membersData', action.data.docs);
       return {
         ...state,
         memberData: action.data.docs,
@@ -83,12 +82,30 @@ const currentMemberState = {
 };
 
 export const currentMemberData = (state = currentMemberState, action) => {
-  console.log('Action: ', action);
   switch (action.type) {
     case Action.USER_GET_CURRENT_MEMBER_DATA:
       return {
         ...state,
         data: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+const currentMemberAttendanceState = {
+  attendance: '',
+};
+
+export const currentMemberAttendance = (
+  state = currentMemberAttendanceState,
+  action,
+) => {
+  switch (action.type) {
+    case Action.USER_GET_CURRENT_MEMBER_ATTENDANCE:
+      return {
+        ...state,
+        attendance: action.payload,
       };
     default:
       return state;

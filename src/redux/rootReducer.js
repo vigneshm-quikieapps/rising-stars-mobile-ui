@@ -7,8 +7,20 @@ import {
   clubfinance,
   addProvidedata,
 } from './reducer/enrol';
-import {LoginData, Postcode, Postcodedata, RegisterData, ForgetPasswordData, ResetPasswordData} from './reducer/auth';
-import {memberData, memberClassData, currentMemberData} from './reducer/home';
+import {
+  LoginData,
+  Postcode,
+  Postcodedata,
+  RegisterData,
+  ForgetPasswordData,
+  ResetPasswordData,
+} from './reducer/auth';
+import {
+  memberData,
+  memberClassData,
+  currentMemberData,
+  currentMemberAttendance,
+} from './reducer/home';
 
 const rootReducer = combineReducers({
   LoginData,
@@ -26,6 +38,7 @@ const rootReducer = combineReducers({
   ForgetPasswordData,
   ResetPasswordData,
   currentMemberData,
+  currentMemberAttendance,
 });
 
 export default rootReducer;

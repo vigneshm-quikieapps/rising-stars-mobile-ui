@@ -11,6 +11,7 @@ import Fees_Overview from '../../screen/ChildEnrol/Fees_Overview';
 import Pay from '../../screen/ChildEnrol/Pay';
 import Provide_Consent from '../../screen/ChildEnrol/Provide_Consent';
 import New_Class_Selection from '../../screen/ChildEnrol/newClassSelection';
+import EditProfile from '../../screen/Dashboard/EditProfile';
 
 export const EnrollStack = props => {
   return (
@@ -23,6 +24,11 @@ export const EnrollStack = props => {
       <StackScreen.Screen
         name="AddChild"
         component={AddChild}
+        options={{headerShown: false}}
+      />
+      <StackScreen.Screen
+        name="Edit_Profile"
+        component={EditProfile}
         options={{headerShown: false}}
       />
       <StackScreen.Screen

@@ -3,7 +3,6 @@ import {mobile_url, api_url, heroku_url} from '../../constants/config';
 
 // --------------------------------------------------------Auth
 export function fetchMobileOTP(payload) {
-  console.log('inside fetch');
   return fetch(`${heroku_url}/get-otp/mobile-no`, {
     method: 'POST',
     headers: {
@@ -31,7 +30,6 @@ export function fetchPostCode(payload) {
       return response.json();
     })
     .catch(error => {
-      console.log('Fetch Postcode Failed');
       throw error;
     });
 }
@@ -93,7 +91,6 @@ export function fetchclubName() {
 }
 
 export function fetchclassName(data) {
-  console.log('im here inside classes fetch');
   return fetch(`${heroku_url}/businesses/${data.businessid}/classes`, {
     method: 'GET',
     headers: {
@@ -127,8 +124,6 @@ export function fetchClubFinanc(id) {
 }
 //enroll to class
 export function regularEnrollment(payload) {
-  console.log('inside regular enrollment');
-  console.log('DATA: ', payload.data);
   return fetch(`${heroku_url}/enrolments`, {
     method: 'POST',
     headers: {
@@ -140,7 +135,7 @@ export function regularEnrollment(payload) {
   })
     .then(response => response.json())
     .catch(error => {
-      console.log(error);
+      throw error;
     });
 }
 
@@ -194,7 +189,7 @@ export function addChild(payload) {
   })
     .then(response => response.json())
     .catch(error => {
-      console.log(error);
+      throw error;
     });
 }
 
@@ -210,12 +205,11 @@ export function classTransfer(payload) {
   })
     .then(response => response.json())
     .catch(error => {
-      console.log(error);
+      throw error;
     });
 }
 
 export function dropClass(payload) {
-  console.log('Payload: ', payload);
   return fetch(`${heroku_url}/enrolments/${payload.enrollmentId}/withdraw`, {
     method: 'POST',
     headers: {
@@ -226,12 +220,11 @@ export function dropClass(payload) {
   })
     .then(response => response.json())
     .catch(error => {
-      console.log(error);
+      throw error;
     });
 }
 
 export function forgetPassword(payload) {
-  console.log('paylod', payload);
   return fetch(`${heroku_url}/account/password/forgot/using-mobile-no`, {
     method: 'POST',
     headers: {
@@ -242,12 +235,11 @@ export function forgetPassword(payload) {
   })
     .then(response => response.json())
     .catch(error => {
-      console.log('fetcherror', error);
+      throw error;
     });
 }
 
 export function resetPassword(payload) {
-  console.log('paylod1', payload);
   return fetch(`${heroku_url}/account/password/reset/using-mobile-no`, {
     method: 'POST',
     headers: {
@@ -259,7 +251,7 @@ export function resetPassword(payload) {
   })
     .then(response => response.json())
     .catch(error => {
-      console.log(error);
+      throw error;
     });
 }
 export function fetchAttendanceOfMemberInSession(payload) {
@@ -274,6 +266,6 @@ export function fetchAttendanceOfMemberInSession(payload) {
   })
     .then(response => response.json())
     .catch(error => {
-      console.log(error);
+      throw error;
     });
 }

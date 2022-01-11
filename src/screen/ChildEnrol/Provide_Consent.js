@@ -92,7 +92,9 @@ const Provide_Consent = props => {
         <View style={styles.mark}>
           <Image source={require('../../assets/images/icon-info.png')} />
         </View>
-        <Text style={styles.marktext}>Zippy’s is the Business Trade Name</Text>
+        <Text style={styles.marktext}>
+          {club.name} is the Business Trade Name
+        </Text>
       </View>
       <TouchableOpacity onPress={() => termref.current.open()}>
         <Text style={styles.bottom}>Read more about Club Rule</Text>

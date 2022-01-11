@@ -23,7 +23,7 @@ import {
 } from '../../components';
 import {colors, Fontsize, hp, wp, Term_Condition} from '../../constants';
 import {PostCode, PostDataPass, RegisterData} from '../../redux/action/auth';
-import PostComponent from './components/Postcode';
+import PostComponent from '../Authentication/components/Postcode';
 import {fetchMobileOTP} from '../../redux/service/request';
 import Alert from '../../components/alert-box';
 
@@ -50,7 +50,7 @@ const validationSchema = Yup.object().shape({
   cityTown: Yup.string().min(1).label('City/Town'),
 });
 
-function Register(props) {
+function EditProfile(props) {
   const dispatch = useDispatch();
 
   const postcodeData = useSelector(state => state.Postcode.postcode);
@@ -94,13 +94,13 @@ function Register(props) {
   return (
     <CustomLayout
       header
-      headertext={'Parent Registration'}
+      headertext={'Edit Profile'}
       headertextStyle={{
         width: wp('90%'),
         fontSize: wp('8%'),
       }}
       subheader
-      subheadertext={'Enter your details to register'}
+      subheadertext={'Edit your details  '}
       subheadertextstyle={styles.subtitle}
       back
       backbutton={() => props.navigation.goBack()}>
@@ -128,7 +128,7 @@ function Register(props) {
             values.addressLine2 = postdata.addressline2;
             values.cityTown = postdata.posttown;
 
-            dispatch(RegisterData(values));
+            //dispatch(RegisterData(values));
             if (status === 'created successfully') {
               setSuccessAlert(true);
               //POP-UP with message
@@ -371,7 +371,7 @@ function Register(props) {
                 <ActivityIndicator size="large" color={colors.orange} />
               ) : (
                 <AppButton
-                  title={values.mobileNoOTP === '' ? 'Get OTP' : 'Register'}
+                  title={'Done'}
                   onPress={handleSubmit}
                   style={{
                     marginVertical: hp('0%'),
@@ -493,7 +493,7 @@ function Register(props) {
   );
 }
 
-export default Register;
+export default EditProfile;
 
 const styles = StyleSheet.create({
   bottomText: {

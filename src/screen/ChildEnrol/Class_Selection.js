@@ -51,8 +51,6 @@ const Class_Selection = props => {
   const dispatch = useDispatch();
 
   const handleBusiness = async item => {
-    console.log('ITEM: ', item);
-
     setBusiness(item.name);
     setClubModal(!clubmodal);
     // item.MemberId = child.member._id;

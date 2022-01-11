@@ -24,8 +24,6 @@ export default function ChangeClass(props) {
   const [newSessionId, setNewSessionId] = useState('');
   const [token, setToken] = useState('');
   const currentClass = props.route.params.classes;
-  console.log('CURRENT: ', currentClass);
-  console.log('CURRENT Session: ', sessionData);
 
   const accessToken = async () => {
     const Token = await getLocalData('accessToken');
@@ -73,7 +71,6 @@ export default function ChangeClass(props) {
                   radio={true}
                   onPress={() => {
                     setNewSessionId(sessions._id);
-                    console.log(newSessionId);
                   }}
                   status={
                     newSessionId === sessions._id ? 'checked' : 'unchecked'
@@ -108,7 +105,6 @@ export default function ChangeClass(props) {
                 newSessionId: newSessionId,
               },
             });
-            console.log('Response: ', response);
             if (response.message === 'Transfer successful') {
               setShowSuccessAlert(true);
             } else {

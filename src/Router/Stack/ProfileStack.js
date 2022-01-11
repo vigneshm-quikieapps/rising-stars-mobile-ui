@@ -10,6 +10,7 @@ import Fees_Overview from '../../screen/ChildEnrol/Fees_Overview';
 import Pay from '../../screen/ChildEnrol/Pay';
 import Provide_Consent from '../../screen/ChildEnrol/Provide_Consent';
 import New_Class_Selection from '../../screen/ChildEnrol/newClassSelection';
+import EditProfile from '../../screen/Dashboard/EditProfile';
 
 export const ProfileStack = props => {
   return (
@@ -17,6 +18,11 @@ export const ProfileStack = props => {
       <StackScreen.Screen
         name="Profile"
         component={Profile}
+        options={{headerShown: false}}
+      />
+      <StackScreen.Screen
+        name="Edit_Profile"
+        component={EditProfile}
         options={{headerShown: false}}
       />
       <StackScreen.Screen

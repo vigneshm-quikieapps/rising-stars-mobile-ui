@@ -289,7 +289,7 @@ export default function EnrolledChild(props) {
               token,
               enrollmentId,
             });
-            console.log('Response: ', response);
+
             if (response.message === 'cancellation successfull') {
               setShowSuccessAlert(true);
             } else {

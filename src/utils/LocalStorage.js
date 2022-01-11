@@ -17,7 +17,7 @@ export const getLocalData = async (getType, object = false) => {
   try {
     const getdata = await AsyncStorage.getItem(`${getType}`);
     if (getdata !== null) {
-      console.log(getdata);
+      //
       if (object === true) {
         return JSON.parse(getdata);
       } else {

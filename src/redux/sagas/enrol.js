@@ -1,4 +1,4 @@
-import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
+import {call, put, takeEvery} from 'redux-saga/effects';
 
 import * as Action from '../action-types';
 
@@ -8,7 +8,6 @@ import {
   fetchclassName,
   fetchSessionList,
   fetchClubFinanc,
-  createMembership,
   regularEnrollment,
 } from '../service/request';
 
@@ -89,9 +88,7 @@ export function* watcherAddChild() {
 //calling enrollment api
 function* handleEnrollChild(action) {
   try {
-    console.log('inside sagas');
     const enrolledChild = yield call(regularEnrollment, action.payload);
-    console.log('enrolledChild: ', enrolledChild);
     yield put({
       type: Action.USER_ENROLL_CHILD_SUCCEDED,
       payload: enrolledChild,
