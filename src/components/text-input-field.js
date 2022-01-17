@@ -3,7 +3,13 @@ import {StyleSheet} from 'react-native';
 import {configureFonts, TextInput} from 'react-native-paper';
 import {wp, colors, Fontsize} from '../constants';
 
-const TextInputField = ({placeholder, label, style, ...otherProps}) => {
+const TextInputField = ({
+  placeholder,
+  label,
+  style,
+  onChangeText,
+  ...otherProps
+}) => {
   const fontConfig = {
     default: {
       regular: {
@@ -16,6 +22,7 @@ const TextInputField = ({placeholder, label, style, ...otherProps}) => {
   return (
     <TextInput
       label={placeholder}
+      onChangeText={onChangeText}
       placeholder={label}
       mode="outlined"
       placeholderTextColor={'#e3e3e3'}
