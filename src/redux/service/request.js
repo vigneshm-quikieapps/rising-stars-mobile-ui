@@ -34,6 +34,21 @@ export function fetchPostCode(payload) {
     });
 }
 
+export function fetchUser(payload) {
+  return fetch(`${heroku_url}/users/${payload.id}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${payload.token}`,
+    },
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(error => {
+      throw error;
+    });
+}
+
 export function fetchRegister(payload) {
   return fetch(`${heroku_url}/sign-up`, {
     method: 'POST',
