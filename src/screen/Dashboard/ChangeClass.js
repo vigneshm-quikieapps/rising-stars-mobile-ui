@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import {View, Text} from 'react-native';
+import {useSelector} from 'react-redux';
 import {
   CustomLayout,
   StudentCard,
@@ -15,7 +15,6 @@ import {classTransfer} from '../../redux/service/request';
 import {getLocalData} from '../../utils/LocalStorage';
 
 export default function ChangeClass(props) {
-  const dispatch = useDispatch();
   const currentMember = useSelector(state => state.currentMemberData.data);
   const sessionData = useSelector(state => state.sessionlist.sessiondata);
   const [showAlert, setShowAlert] = useState(false);
