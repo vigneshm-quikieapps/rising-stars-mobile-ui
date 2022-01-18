@@ -123,7 +123,7 @@ const ActivityProgress = () => {
             color: colors.white,
             fontFamily: 'Nunito-SemiBold',
           }}>
-          Pre-school gymnastics (Age 1-3)
+          {item.class.name}
         </Text>
       </LinearGradient>
     );
@@ -196,7 +196,10 @@ const ActivityProgress = () => {
         <Carousel
           style={{width: 350}}
           layout={'default'}
-          data={Datum}
+          data={
+            memberClassData &&
+            memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')
+          }
           sliderWidth={itemWidth - 30}
           itemWidth={itemWidth * 0.88}
           renderItem={renderItem}

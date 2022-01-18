@@ -26,7 +26,11 @@ import {
 } from '../../components';
 import {WheelPicker} from 'react-native-wheel-picker-android';
 import {getmemberClass, getmemberData} from '../../redux/action/home';
-import {fetchAttendanceOfMemberInSession} from '../../redux/service/request';
+import {
+  fetchAttendanceOfMemberInSession,
+  fetchCurrentUser,
+  fetchUser,
+} from '../../redux/service/request';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -48,6 +52,8 @@ const Home = () => {
   const members = [];
   membersdata && membersdata.forEach((item, index) => (item.index = index));
   membersdata && membersdata.map(item => members.push(item.name));
+  const parent = useSelector(state => state.LoginData.updatedUser);
+
   const [currentMember, setCurrentMember] = useState('');
 
   const getLocalUserData = useCallback(async () => {
@@ -105,6 +111,16 @@ const Home = () => {
 
     token && dispatch(getmemberData(token));
 
+    token &&
+      fetchCurrentUser({
+        token: token,
+      }).then(response => {
+        console.log(response.user);
+        dispatch({
+          type: Action.USER_UPDATE_SUCCESS,
+          payload: response.user,
+        });
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
@@ -173,7 +189,7 @@ const Home = () => {
         <LinearGradient
           colors={[colors.orangeYellow, colors.pumpkinOrange]}
           style={styles.linearGradient}>
-          <Text style={styles.welcome}>{`Hi ${user.name}, your child`}</Text>
+          <Text style={styles.welcome}>{`Hi ${parent.name}, your child`}</Text>
           <View style={styles.containerMember}>
             <View style={{marginTop: hp('1%')}}>
               <Image

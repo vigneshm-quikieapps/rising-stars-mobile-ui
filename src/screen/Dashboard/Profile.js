@@ -19,14 +19,19 @@ import {removeLocalData} from '../../utils/LocalStorage';
 import {CustomLayout} from '../../components';
 import {colors, hp, wp} from '../../constants';
 import {getmemberClass} from '../../redux/action/home';
+import * as Action from '../../redux/action-types/index';
+import {fetchCurrentUser} from '../../redux/service/request';
 
 function Profile(props) {
   const membersdata = useSelector(state => state.memberData.memberData);
   const memberclassdata = useSelector(state => state.memberClassData.classData);
+  const parent = useSelector(state => state.LoginData.updatedUser);
 
   // let steps = false;
   const refRBSheet = useRef();
   const [user, setUser] = useState('');
+  const [token, setToken] = useState('');
+
   const dispatch = useDispatch();
 
   const currentMember = useSelector(state => state.currentMemberData.data);
@@ -35,6 +40,11 @@ function Profile(props) {
     const userData = await getLocalData('user', true);
     setUser(userData);
   }, []);
+
+  const accessToken = async () => {
+    const Token = await getLocalData('accessToken');
+    setToken(Token);
+  };
 
   const [fileUri, setfileUri] = useState(null);
 
@@ -79,9 +89,23 @@ function Profile(props) {
   const onHandleBackButton = () => {
     props.navigation.goBack();
   };
-
   useEffect(() => {
     getLocalUserData();
+
+    token &&
+      fetchCurrentUser({
+        token: token,
+      }).then(response => {
+        console.log(response.user);
+        dispatch({
+          type: Action.USER_UPDATE_SUCCESS,
+          payload: response.user,
+        });
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
+
+  useEffect(() => {
     currentMember && dispatch(getmemberClass(currentMember._id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -102,7 +126,7 @@ function Profile(props) {
 
       <View style={styles.card}>
         <View style={styles.cardDetails}>
-          <Text style={styles.memberName}>{user.name}</Text>
+          <Text style={styles.memberName}>{parent.name}</Text>
 
           <Text style={styles.parentText}>Parent</Text>
         </View>

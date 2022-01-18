@@ -88,10 +88,18 @@ const loginState = {
   sagaerror: '',
   networkerror: '',
   user: '',
+  updatedUser: '',
 };
 
 export const LoginData = (state = loginState, action) => {
   switch (action.type) {
+    case Action.USER_UPDATE_SUCCESS:
+      storeLocalData('user', action.payload, true);
+      console.log('Inside update reducer');
+      return {
+        ...state,
+        updatedUser: action.payload,
+      };
     case Action.USER_LOGIN_SUCCESS:
       storeLocalData('refreshToken', action.payload.refreshToken);
       storeLocalData('accessToken', action.payload.accessToken);

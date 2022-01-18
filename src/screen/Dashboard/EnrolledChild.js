@@ -16,10 +16,10 @@ import {dropClass} from '../../redux/service/request';
 import {getLocalData} from '../../utils/LocalStorage';
 
 export default function EnrolledChild(props) {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalVisible2, setModalVisible2] = useState(false);
-  const [modalVisible3, setModalVisible3] = useState(false);
-  const [modalVisible4, setModalVisible4] = useState(false);
+  // const [modalVisible, setModalVisible] = useState(false);
+  // const [modalVisible2, setModalVisible2] = useState(false);
+  // const [modalVisible3, setModalVisible3] = useState(false);
+  // const [modalVisible4, setModalVisible4] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showFailureAlert, setShowFailureAlert] = useState(false);
@@ -31,14 +31,14 @@ export default function EnrolledChild(props) {
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const currentMember = useSelector(state => state.currentMemberData.data);
 
-  const handlesubmit = () => {
-    setModalVisible(!modalVisible);
-    setModalVisible2(!modalVisible2);
-  };
-  const submithandle = () => {
-    setModalVisible3(!modalVisible3);
-    setModalVisible4(!modalVisible4);
-  };
+  // const handlesubmit = () => {
+  //   setModalVisible(!modalVisible);
+  //   setModalVisible2(!modalVisible2);
+  // };
+  // const submithandle = () => {
+  //   setModalVisible3(!modalVisible3);
+  //   setModalVisible4(!modalVisible4);
+  // };
 
   const accessToken = async () => {
     const Token = await getLocalData('accessToken');

@@ -45,6 +45,7 @@ export default function PostComponent(props) {
     const size = Object.size(selected);
     if (size !== 0) {
       dispatch(PostDataPass(selected, size));
+      props.onChange && props.onChange;
       props.ClosePopUp(false);
     } else {
       alert('Please Select Your Address or Tap on Manually for manual entry');

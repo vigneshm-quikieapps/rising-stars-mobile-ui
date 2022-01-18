@@ -3,16 +3,13 @@ import React, {useState, useEffect, useRef} from 'react';
 import {View, StyleSheet, Text, ActivityIndicator} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {useSelector, useDispatch} from 'react-redux';
 import {
-  CodeField,
-  Cursor,
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-
+import * as Action from '../../redux/action-types/index';
 import {TextInput} from 'react-native-paper';
 import {
   ErrorMessage,
@@ -22,32 +19,32 @@ import {
   CustomLayout,
 } from '../../components';
 import {colors, Fontsize, hp, wp, Term_Condition} from '../../constants';
-import {PostCode, PostDataPass, RegisterData} from '../../redux/action/auth';
+import {PostCode, PostDataPass} from '../../redux/action/auth';
 import PostComponent from '../Authentication/components/Postcode';
-import {fetchMobileOTP} from '../../redux/service/request';
+import {
+  fetchMobileOTP,
+  fetchUser,
+  updateUser,
+} from '../../redux/service/request';
 import Alert from '../../components/alert-box';
+import {
+  getLocalData,
+  removeLocalData,
+  storeLocalData,
+} from '../../utils/LocalStorage';
 
 const CELL_COUNT = 6;
 const validationSchema = Yup.object().shape({
-  fullName: Yup.string()
+  name: Yup.string()
     .min(3, 'Too Short!')
     .max(20, 'Too Long!')
     .required()
-    .label('Full Name'),
-  email: Yup.string().required().min(4).email().label('Email'),
-  contactNumber: Yup.string().required().label('Mobile Number'),
-  password: Yup.string()
-    .required('Password is required')
-    .min(8)
-    .label('Password'),
-  passwordConfirmation: Yup.string().oneOf(
-    [Yup.ref('password'), null],
-    'Password must match',
-  ),
-  postalCode: Yup.string().label('Postal Code'),
+    .label('Full name'),
+  postcode: Yup.string().label('Postal Code'),
   AddressLine1: Yup.string().min(5).label('AddressLine1'),
   AddressLine2: Yup.string().min(5).label('AddressLine2'),
-  cityTown: Yup.string().min(1).label('City/Town'),
+  city: Yup.string().min(1).label('City/Town'),
+  country: Yup.string().min(1).label('country'),
 });
 
 function EditProfile(props) {
@@ -58,24 +55,36 @@ function EditProfile(props) {
   const postsize = useSelector(state => state.Postcodedata.size);
   const isloading = useSelector(state => state.Postcodedata.isloading);
   const error = useSelector(state => state.Postcodedata.error);
-  const status = useSelector(state => state.RegisterData.status);
-  const Reerror = useSelector(state => state.RegisterData.error);
-  const isRegloading = useSelector(state => state.RegisterData.isLoading);
+  // const status = useSelector(state => state.RegisterData.status);
+  // const Reerror = useSelector(state => state.RegisterData.error);
+  // const isRegloading = useSelector(state => state.RegisterData.isLoading);
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
-  const [prop, getCellOnLayoutHandler] = useClearByFocusCell({
-    value,
-    setValue,
-  });
-  const [checked, setChecked] = useState('first');
+  // const [prop, getCellOnLayoutHandler] = useClearByFocusCell({
+  //   value,
+  //   setValue,
+  // });
+  // const [checked, setChecked] = useState('first');
   const [postcodeshow, setPostCodeshow] = useState(false);
   const [term, setTerm] = useState(false);
   const [temp, setTemp] = useState(false);
   const [main, setMain] = useState(false);
+  const [user, setUser] = useState('');
+  const [token, setToken] = useState('');
   const [showSuccessalert, setSuccessAlert] = useState(false);
   const [showFailurealert, setFailureAlert] = useState(false);
+  const [showValidationError, setShowValidationError] = useState(false);
+  const [ValidationErrorMsg, setValidationErrorMsg] = useState(
+    'Something Went Wrong!!',
+  );
   const [seconds, setSeconds] = React.useState(10);
+  const [cred, setCred] = useState('');
   const refRBSheet = useRef();
+  var address = {
+    line1: '',
+    line2: '',
+    city: '',
+  };
 
   const star = <Text style={styles.star}>Rising Star</Text>;
 
@@ -87,10 +96,33 @@ function EditProfile(props) {
     }
   };
 
+  const getuser = async () => {
+    const userId = await getLocalData('usercred');
+    const accesstoken = await getLocalData('accessToken');
+    setToken(accesstoken);
+    setUser(userId);
+  };
+
+  const api = async () => {
+    user &&
+      token &&
+      setCred(
+        await fetchUser({
+          id: user,
+          token: token,
+        }),
+      );
+  };
   useEffect(() => {
     timeout();
   });
 
+  getuser();
+
+  useEffect(() => {
+    user && token && api();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, token]);
   return (
     <CustomLayout
       header
@@ -104,191 +136,172 @@ function EditProfile(props) {
       subheadertextstyle={styles.subtitle}
       back
       backbutton={() => props.navigation.goBack()}>
-      <Formik
-        initialValues={{
-          fullName: '',
-          email: '',
-          password: '',
-          passwordConfirmation: '',
-          contactNumber: '',
-          mobileNoOTP: '',
-          postCode: '',
-          addressLine1: '',
-          addressLine2: '',
-          cityTown: '',
-        }}
-        onSubmit={async values => {
-          if (values.mobileNoOTP.length === 0) {
-            const otp = await fetchMobileOTP(values.contactNumber);
-
-            timeout();
-            refRBSheet.current.open();
-          } else if (postsize !== 0) {
-            values.addressLine1 = postdata.addressline1;
-            values.addressLine2 = postdata.addressline2;
-            values.cityTown = postdata.posttown;
-
-            //dispatch(RegisterData(values));
-            if (status === 'created successfully') {
-              setSuccessAlert(true);
-              //POP-UP with message
-              //Navigate to Login Screen
-            } else {
-              setFailureAlert(true);
-              //POP-UP with error message
-              //navigate to register
+      {cred !== '' ? (
+        <Formik
+          initialValues={{
+            name: cred.user.name,
+            postcode: cred.user.postcode,
+            addressLine1: cred.user.addressLine1,
+            addressLine2: cred.user.addressLine2,
+            city: cred.user.city,
+            country: cred.user.country,
+          }}
+          onSubmit={values => {
+            if (postsize !== 0) {
+              values.addressLine1 = postdata.addressline1;
+              values.addressLine2 = postdata.addressline2;
+              values.cityTown = postdata.posttown;
             }
-          }
-        }}
-        validationSchema={validationSchema}>
-        {({
-          handleChange,
-          handleSubmit,
-          errors,
-          setFieldTouched,
-          touched,
-          values,
-          initialValues,
-        }) => (
-          <>
-            <TextInputField
-              placeholder="Your Full Name*"
-              style={[styles.inputField, {marginTop: hp('0.1%')}]}
-              onChangeText={handleChange('fullName')}
-              autoCapitalize="none"
-              autoCorrect={false}
-              // onBlur={() => setFieldTouched('fullName')}
-            />
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.fullName}
-              visible={touched.fullName}
-            />
+            values.roles = cred.user.roles;
+            console.log(values);
+            updateUser({
+              id: cred.user._id,
+              token: token,
+              body: values,
+            })
+              .then(response => {
+                if (response.message === 'updated successfully') {
+                  dispatch({
+                    type: Action.USER_UPDATE_SUCCESS,
+                    payload: response.user,
+                  });
+                  setSuccessAlert(true);
+                  //POP-UP with message
+                  //Navigate to Login Screen
+                } else {
+                  console.log('Updated successfully else');
 
-            <TextInputField
-              placeholder="Email*"
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="email-address"
-              onChangeText={handleChange('email')}
-              onBlur={() => setFieldTouched('email')}
-            />
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.email}
-              visible={touched.email}
-            />
-
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <View style={styles.countrycode}>
-                <Text style={{fontSize: wp('4.1%'), color: colors.grey}}>
-                  +44
-                </Text>
-              </View>
-              <TextInputField
-                placeholder="Mobile Number *"
-                // value={values.contactNumber}
-                onChangeText={handleChange('contactNumber')}
-                maxLength={10}
-                keyboardType="number-pad"
-                style={{width: wp('75%')}}
-                onBlur={() => setFieldTouched('contactNumber')}
-              />
-            </View>
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.contactNumber}
-              visible={touched.contactNumber}
-            />
-
-            <TextInputField
-              placeholder="Password*"
-              autoCapitalize="none"
-              secureTextEntry
-              autoCorrect={false}
-              onChangeText={handleChange('password')}
-              onBlur={() => setFieldTouched('password')}
-            />
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.password}
-              visible={touched.password}
-            />
-            <TextInputField
-              placeholder="Confirm Password*"
-              autoCapitalize="none"
-              secureTextEntry
-              autoCorrect={false}
-              onChangeText={handleChange('passwordConfirmation')}
-              onBlur={() => setFieldTouched('passwordConfirmation')}
-            />
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.passwordConfirmation}
-              visible={touched.passwordConfirmation}
-            />
-
-            <TextInputField
-              placeholder="Postcode"
-              onChangeText={handleChange('postCode')}
-              autoCapitalize="none"
-              keyboardType="default"
-              autoCorrect={false}
-              onBlur={() => setFieldTouched('postCode')}
-              booleanFlag={true}
-              right={
-                <TextInput.Icon
-                  name={() => (
-                    <EvilIcons name="search" size={30} color={'#ff7e00'} />
-                  )}
-                  onPress={() => {
-                    if (values.postCode.length <= 6) {
-                      alert('Please Enter a Valid PostCode');
-                    } else {
-                      const data = {};
-                      setPostCodeshow(!postcodeshow);
-                      dispatch(PostDataPass(data, 0));
-                      dispatch(PostCode(values.postCode));
-                    }
-                  }}
-                />
-              }
-            />
-
-            <PostComponent
-              data={postcodeData}
-              visible={postcodeshow}
-              title={values.postCode}
-              ClosePopUp={a => setPostCodeshow(!postcodeshow)}
-              ManuallyButton={() => {
-                setPostCodeshow(!postcodeshow);
-                {
-                  temp === true ? null : setTemp(!temp);
+                  if (response.message) {
+                    setValidationErrorMsg(response.message);
+                    setShowValidationError(true);
+                  } else {
+                    setShowValidationError(true);
+                  }
                 }
-                values.addressLine1 = '';
-                values.addressLine2 = '';
-                values.cityTown = '';
-              }}
-            />
+              })
+              .catch(() => {
+                console.log('Updated successfully catch');
+                setFailureAlert(true);
+              });
+          }}
+          validationSchema={validationSchema}>
+          {({
+            handleChange,
+            handleSubmit,
+            errors,
+            setFieldTouched,
+            touched,
+            values,
+            initialValues,
+          }) => (
+            <>
+              <TextInputField
+                value={values.name}
+                placeholder="Your Full Name*"
+                style={[styles.inputField, {marginTop: hp('0.1%')}]}
+                onChangeText={handleChange('name')}
+                autoCapitalize="none"
+                autoCorrect={false}
+                // onBlur={() => setFieldTouched('name')}
+              />
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.name}
+                visible={touched.name}
+              />
 
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.postCode}
-              visible={touched.postCode}
-            />
+              {/* <TextInputField
+                placeholder="Email*"
+                value={values.email}
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="email-address"
+                onChangeText={handleChange('email')}
+                onBlur={() => setFieldTouched('email')}
+              />
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.email}
+                visible={touched.email}
+              /> */}
 
-            {postsize !== 0 || temp ? (
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                {/* <View style={styles.countrycode}>
+                  <Text style={{fontSize: wp('4.1%'), color: colors.grey}}>
+                    +44
+                  </Text>
+                </View> */}
+                {/* <TextInputField
+                  placeholder="Mobile Number *"
+                  // value={values.contactNumber}
+                  onChangeText={handleChange('contactNumber')}
+                  maxLength={10}
+                  keyboardType="number-pad"
+                  value={values.contactNumber}
+                  style={{width: wp('75%')}}
+                  onBlur={() => setFieldTouched('contactNumber')}
+                /> */}
+              </View>
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.contactNumber}
+                visible={touched.contactNumber}
+              />
+
+              <TextInputField
+                placeholder="Postcode"
+                onChangeText={handleChange('postcode')}
+                autoCapitalize="none"
+                value={values.postcode}
+                keyboardType="default"
+                autoCorrect={false}
+                onBlur={() => setFieldTouched('postcode')}
+                booleanFlag={true}
+                right={
+                  <TextInput.Icon
+                    name={() => (
+                      <EvilIcons name="search" size={30} color={'#ff7e00'} />
+                    )}
+                    onPress={() => {
+                      if (values.postcode.length <= 6) {
+                        alert('Please Enter a Valid PostCode');
+                      } else {
+                        const data = {};
+                        setPostCodeshow(!postcodeshow);
+                        dispatch(PostDataPass(data, 0));
+                        dispatch(PostCode(values.postcode));
+                      }
+                    }}
+                  />
+                }
+              />
+
+              <PostComponent
+                data={postcodeData}
+                visible={postcodeshow}
+                title={values.postCode}
+                ClosePopUp={a => setPostCodeshow(!postcodeshow)}
+                ManuallyButton={() => {
+                  setPostCodeshow(!postcodeshow);
+                  // eslint-disable-next-line no-lone-blocks
+                  {
+                    temp === true ? null : setTemp(!temp);
+                  }
+                }}
+              />
+
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.postCode}
+                visible={touched.postCode}
+              />
               <>
                 <TextInputField
                   placeholder="Address Line 1"
-                  onChangeText={
-                    postsize !== 0
-                      ? postdata.addressline1
-                      : handleChange('addressLine1')
-                  }
+                  onChangeText={handleChange('addressLine1')}
                   autoCapitalize="none"
-                  editable={postsize !== 0 ? false : true}
+                  editable={true}
                   autoCorrect={false}
                   onBlur={() => setFieldTouched('addressLine1')}
                   value={
@@ -309,7 +322,7 @@ function EditProfile(props) {
                       : handleChange('addressLine2')
                   }
                   autoCapitalize="none"
-                  editable={postsize !== 0 ? false : true}
+                  editable={true}
                   autoCorrect={false}
                   onBlur={() => setFieldTouched('addressLine2')}
                   value={
@@ -325,170 +338,119 @@ function EditProfile(props) {
                 <TextInputField
                   placeholder="Town / City"
                   onChangeText={
-                    postsize !== 0
-                      ? postdata.posttown
-                      : handleChange('cityTown')
+                    postsize !== 0 ? postdata.posttown : handleChange('city')
                   }
                   autoCapitalize="none"
-                  editable={postsize !== 0 ? false : true}
+                  editable={false}
                   autoCorrect={false}
-                  onBlur={() => setFieldTouched('cityTown')}
-                  value={postsize !== 0 ? postdata.posttown : values.cityTown}
+                  onBlur={() => setFieldTouched('city')}
+                  value={postsize !== 0 ? postdata.posttown : values.city}
                 />
                 <ErrorMessage
                   style={styles.errorMessage}
                   error={errors.cityTown}
                   visible={touched.cityTown}
                 />
+                <TextInputField
+                  placeholder="Country"
+                  onChangeText={handleChange('country')}
+                  autoCapitalize="none"
+                  editable={true}
+                  autoCorrect={false}
+                  onBlur={() => setFieldTouched('country')}
+                  value={values.country}
+                />
+                <ErrorMessage
+                  style={styles.errorMessage}
+                  error={errors.country}
+                  visible={touched.country}
+                />
               </>
-            ) : null}
 
-            <View>
-              <PopUp
-                animationType="fade"
-                transparent={true}
-                visible={term}
-                onRequestClose={() => {
-                  setTerm(!term);
-                }}>
-                <View style={styles.centeredView}>
-                  <View style={styles.modalView}>
-                    <Text style={{fontFamily: 'Nunito-Regular'}}>
-                      {Term_Condition}
-                    </Text>
-                    <AppButton
-                      title="close"
-                      style={{width: '30%'}}
-                      onPress={() => setTerm(!term)}
-                    />
+              <View>
+                <PopUp
+                  animationType="fade"
+                  transparent={true}
+                  visible={term}
+                  onRequestClose={() => {
+                    setTerm(!term);
+                  }}>
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                      <Text style={{fontFamily: 'Nunito-Regular'}}>
+                        {Term_Condition}
+                      </Text>
+                      <AppButton
+                        title="close"
+                        style={{width: '30%'}}
+                        onPress={() => setTerm(!term)}
+                      />
+                    </View>
                   </View>
-                </View>
-              </PopUp>
+                </PopUp>
 
-              {error ? (
-                alert({error})
-              ) : isloading ? (
-                <ActivityIndicator size="large" color={colors.orange} />
-              ) : (
-                <AppButton
-                  title={'Done'}
-                  onPress={handleSubmit}
-                  style={{
-                    marginVertical: hp('0%'),
-                    fontFamily: 'Nunito-SemiBold',
-                    marginTop: hp('12%'),
-                  }}
-                />
-              )}
+                {error ? (
+                  alert({error})
+                ) : isloading ? (
+                  <ActivityIndicator size="large" color={colors.orange} />
+                ) : (
+                  <AppButton
+                    title={'Done'}
+                    onPress={handleSubmit}
+                    style={{
+                      marginVertical: hp('0%'),
+                      fontFamily: 'Nunito-SemiBold',
+                      marginTop: hp('12%'),
+                    }}
+                  />
+                )}
 
-              <Text
-                style={{
-                  flex: 1,
-                  alignSelf: 'center',
-                  justifyContent: 'center',
-                  fontFamily: 'Nunito-Regular',
-                  fontSize: wp('2.6%'),
-                  color: '#7f7f7f',
-                }}>
-                By registering you are agreed to our{' '}
-                <Text style={{color: colors.orange}} onPress={callPopUp}>
-                  Terms and Conditions
-                </Text>
-              </Text>
-            </View>
-            {showSuccessalert ? (
-              <Alert
-                visible={showSuccessalert}
-                confirm={'Done'}
-                success={() => props.navigation.navigate('Login')}
-                image={'success'}
-                message={'Profile Created Successfully'}
-              />
-            ) : null}
-            {showFailurealert ? (
-              <Alert
-                visible={showFailurealert}
-                confirm={'Retry'}
-                success={() => console.log('Retry')}
-                image={'failure'}
-                message={'Something Went Wrong'}
-              />
-            ) : null}
-            <RBSheet
-              ref={refRBSheet}
-              closeOnDragDown={true}
-              closeOnPressMask={false}
-              customStyles={{
-                wrapper: {
-                  backgroundColor: colors.blackOpacity,
-                },
-                draggableIcon: {
-                  backgroundColor: colors.lightgrey,
-                },
-                container: {
-                  height: hp('40%'),
-                  borderTopRightRadius: 16,
-                  borderTopLeftRadius: 16,
-                  marginBottom: hp('10%'),
-                },
-              }}>
-              <View style={{paddingHorizontal: wp('5%')}}>
-                <Text style={styles.otptitle}>Enter Your OTP</Text>
-                <CodeField
-                  ref={ref}
-                  {...prop}
-                  value={value}
-                  onChangeText={setValue}
-                  cellCount={CELL_COUNT}
-                  rootStyle={styles.codeFieldRoot}
-                  keyboardType="number-pad"
-                  textContentType="oneTimeCode"
-                  renderCell={({index, symbol, isFocused}) => (
-                    <Text
-                      key={index}
-                      style={[styles.cell, isFocused && styles.focusCell]}
-                      onLayout={getCellOnLayoutHandler(index)}>
-                      {symbol || (isFocused ? <Cursor /> : null)}
-                    </Text>
-                  )}
-                />
-
-                <AppButton
-                  title="Verification"
-                  style={{margin: 0}}
-                  onPress={() => {
-                    if (value.length < 6) {
-                      alert('Please Enter Valid OTP');
-                    } else {
-                      values.mobileNoOTP = value;
-                      setMain(!main);
-                      refRBSheet.current.close();
-                    }
-                  }}
-                />
                 <Text
                   style={{
-                    fontFamily: 'Nunito-Regular',
+                    flex: 1,
                     alignSelf: 'center',
-                    marginTop: hp('1%'),
-                    fontSize: Fontsize,
+                    justifyContent: 'center',
+                    fontFamily: 'Nunito-Regular',
+                    fontSize: wp('2.6%'),
+                    color: '#7f7f7f',
                   }}>
-                  Resend OTP{' '}
-                  {seconds === 0 ? (
-                    <Text
-                      style={{color: colors.orange}}
-                      onPress={() => fetchMobileOTP(values.contactNumber)}>
-                      Press
-                    </Text>
-                  ) : (
-                    <Text>in {seconds} sec</Text>
-                  )}
+                  By registering you are agreed to our{' '}
+                  <Text style={{color: colors.orange}} onPress={callPopUp}>
+                    Terms and Conditions
+                  </Text>
                 </Text>
               </View>
-            </RBSheet>
-          </>
-        )}
-      </Formik>
+              {showSuccessalert ? (
+                <Alert
+                  visible={showSuccessalert}
+                  confirm={'Done'}
+                  success={() => props.navigation.navigate('Profile')}
+                  image={'success'}
+                  message={'Profile Updated Successfully'}
+                />
+              ) : null}
+              {showFailurealert ? (
+                <Alert
+                  visible={showFailurealert}
+                  confirm={'Retry'}
+                  success={() => props.navigation.navigate('Profile')}
+                  image={'failure'}
+                  message={'Something Went Wrong'}
+                />
+              ) : null}
+              {showValidationError ? (
+                <Alert
+                  visible={showFailurealert}
+                  confirm={'Retry'}
+                  success={() => props.navigation.navigate('Profile')}
+                  image={'failure'}
+                  message={ValidationErrorMsg}
+                />
+              ) : null}
+            </>
+          )}
+        </Formik>
+      ) : null}
     </CustomLayout>
   );
 }

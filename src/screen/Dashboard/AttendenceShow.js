@@ -267,7 +267,7 @@ const AttendenceShow = () => {
             color: colors.white,
             fontFamily: 'Nunito-SemiBold',
           }}>
-          Pre-school gymnastics (Age 1-3)
+          {item.class.name}
         </Text>
       </LinearGradient>
     );
@@ -314,9 +314,7 @@ const AttendenceShow = () => {
         cancel={() => setShowModal(false)}
         confirm={() => {
           setCurrentMemberIndex(wheelitem);
-
           setCurrentMember(membersdata[wheelitem]);
-
           setShowModal(false);
         }}>
         <View
@@ -344,7 +342,10 @@ const AttendenceShow = () => {
           // loop={true}
           style={{width: 350}}
           layout={'default'}
-          data={Datum}
+          data={
+            memberClassData &&
+            memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')
+          }
           sliderWidth={itemWidth - 30}
           itemWidth={itemWidth * 0.88}
           renderItem={renderItem}
