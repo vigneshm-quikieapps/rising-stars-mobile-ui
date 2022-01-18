@@ -9,7 +9,7 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-
+import * as Action from '../../redux/action-types/index';
 import {TextInput} from 'react-native-paper';
 import {
   ErrorMessage,
@@ -21,31 +21,30 @@ import {
 import {colors, Fontsize, hp, wp, Term_Condition} from '../../constants';
 import {PostCode, PostDataPass} from '../../redux/action/auth';
 import PostComponent from '../Authentication/components/Postcode';
-import {fetchMobileOTP, fetchUser} from '../../redux/service/request';
+import {
+  fetchMobileOTP,
+  fetchUser,
+  updateUser,
+} from '../../redux/service/request';
 import Alert from '../../components/alert-box';
-import {getLocalData} from '../../utils/LocalStorage';
+import {
+  getLocalData,
+  removeLocalData,
+  storeLocalData,
+} from '../../utils/LocalStorage';
 
 const CELL_COUNT = 6;
 const validationSchema = Yup.object().shape({
-  fullName: Yup.string()
+  name: Yup.string()
     .min(3, 'Too Short!')
     .max(20, 'Too Long!')
     .required()
-    .label('Full Name'),
-  email: Yup.string().required().min(4).email().label('Email'),
-  contactNumber: Yup.string().required().label('Mobile Number'),
-  password: Yup.string()
-    .required('Password is required')
-    .min(8)
-    .label('Password'),
-  passwordConfirmation: Yup.string().oneOf(
-    [Yup.ref('password'), null],
-    'Password must match',
-  ),
-  postalCode: Yup.string().label('Postal Code'),
+    .label('Full name'),
+  postcode: Yup.string().label('Postal Code'),
   AddressLine1: Yup.string().min(5).label('AddressLine1'),
   AddressLine2: Yup.string().min(5).label('AddressLine2'),
-  cityTown: Yup.string().min(1).label('City/Town'),
+  city: Yup.string().min(1).label('City/Town'),
+  country: Yup.string().min(1).label('country'),
 });
 
 function EditProfile(props) {
@@ -56,16 +55,16 @@ function EditProfile(props) {
   const postsize = useSelector(state => state.Postcodedata.size);
   const isloading = useSelector(state => state.Postcodedata.isloading);
   const error = useSelector(state => state.Postcodedata.error);
-  const status = useSelector(state => state.RegisterData.status);
-  const Reerror = useSelector(state => state.RegisterData.error);
-  const isRegloading = useSelector(state => state.RegisterData.isLoading);
+  // const status = useSelector(state => state.RegisterData.status);
+  // const Reerror = useSelector(state => state.RegisterData.error);
+  // const isRegloading = useSelector(state => state.RegisterData.isLoading);
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
-  const [prop, getCellOnLayoutHandler] = useClearByFocusCell({
-    value,
-    setValue,
-  });
-  const [checked, setChecked] = useState('first');
+  // const [prop, getCellOnLayoutHandler] = useClearByFocusCell({
+  //   value,
+  //   setValue,
+  // });
+  // const [checked, setChecked] = useState('first');
   const [postcodeshow, setPostCodeshow] = useState(false);
   const [term, setTerm] = useState(false);
   const [temp, setTemp] = useState(false);
@@ -74,9 +73,18 @@ function EditProfile(props) {
   const [token, setToken] = useState('');
   const [showSuccessalert, setSuccessAlert] = useState(false);
   const [showFailurealert, setFailureAlert] = useState(false);
+  const [showValidationError, setShowValidationError] = useState(false);
+  const [ValidationErrorMsg, setValidationErrorMsg] = useState(
+    'Something Went Wrong!!',
+  );
   const [seconds, setSeconds] = React.useState(10);
   const [cred, setCred] = useState('');
   const refRBSheet = useRef();
+  var address = {
+    line1: '',
+    line2: '',
+    city: '',
+  };
 
   const star = <Text style={styles.star}>Rising Star</Text>;
 
@@ -113,8 +121,6 @@ function EditProfile(props) {
 
   useEffect(() => {
     user && token && api();
-    console.log('Credl: ', user);
-    console.log('Credt: ', token);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, token]);
   return (
@@ -133,38 +139,50 @@ function EditProfile(props) {
       {cred !== '' ? (
         <Formik
           initialValues={{
-            fullName: cred.user.name,
-            email: cred.user.email,
-            password: '',
-            passwordConfirmation: '',
-            contactNumber: cred.user.mobileNo,
-            postCode: cred.user.postcode,
+            name: cred.user.name,
+            postcode: cred.user.postcode,
             addressLine1: cred.user.addressLine1,
             addressLine2: cred.user.addressLine2,
-            cityTown: cred.user.city,
+            city: cred.user.city,
+            country: cred.user.country,
           }}
-          onSubmit={async values => {
-            if (values.mobileNoOTP.length === 0) {
-              const otp = await fetchMobileOTP(values.contactNumber);
-
-              timeout();
-              refRBSheet.current.open();
-            } else if (postsize !== 0) {
+          onSubmit={values => {
+            if (postsize !== 0) {
               values.addressLine1 = postdata.addressline1;
               values.addressLine2 = postdata.addressline2;
               values.cityTown = postdata.posttown;
-
-              //dispatch(RegisterData(values));
-              if (status === 'created successfully') {
-                setSuccessAlert(true);
-                //POP-UP with message
-                //Navigate to Login Screen
-              } else {
-                setFailureAlert(true);
-                //POP-UP with error message
-                //navigate to register
-              }
             }
+            values.roles = cred.user.roles;
+            console.log(values);
+            updateUser({
+              id: cred.user._id,
+              token: token,
+              body: values,
+            })
+              .then(response => {
+                if (response.message === 'updated successfully') {
+                  dispatch({
+                    type: Action.USER_UPDATE_SUCCESS,
+                    payload: response.user,
+                  });
+                  setSuccessAlert(true);
+                  //POP-UP with message
+                  //Navigate to Login Screen
+                } else {
+                  console.log('Updated successfully else');
+
+                  if (response.message) {
+                    setValidationErrorMsg(response.message);
+                    setShowValidationError(true);
+                  } else {
+                    setShowValidationError(true);
+                  }
+                }
+              })
+              .catch(() => {
+                console.log('Updated successfully catch');
+                setFailureAlert(true);
+              });
           }}
           validationSchema={validationSchema}>
           {({
@@ -178,21 +196,21 @@ function EditProfile(props) {
           }) => (
             <>
               <TextInputField
-                value={values.fullName}
+                value={values.name}
                 placeholder="Your Full Name*"
                 style={[styles.inputField, {marginTop: hp('0.1%')}]}
-                onChangeText={handleChange('fullName')}
+                onChangeText={handleChange('name')}
                 autoCapitalize="none"
                 autoCorrect={false}
-                // onBlur={() => setFieldTouched('fullName')}
+                // onBlur={() => setFieldTouched('name')}
               />
               <ErrorMessage
                 style={styles.errorMessage}
-                error={errors.fullName}
-                visible={touched.fullName}
+                error={errors.name}
+                visible={touched.name}
               />
 
-              <TextInputField
+              {/* <TextInputField
                 placeholder="Email*"
                 value={values.email}
                 autoCapitalize="none"
@@ -205,16 +223,16 @@ function EditProfile(props) {
                 style={styles.errorMessage}
                 error={errors.email}
                 visible={touched.email}
-              />
+              /> */}
 
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <View style={styles.countrycode}>
+                {/* <View style={styles.countrycode}>
                   <Text style={{fontSize: wp('4.1%'), color: colors.grey}}>
                     +44
                   </Text>
-                </View>
-                <TextInputField
+                </View> */}
+                {/* <TextInputField
                   placeholder="Mobile Number *"
                   // value={values.contactNumber}
                   onChangeText={handleChange('contactNumber')}
@@ -223,7 +241,7 @@ function EditProfile(props) {
                   value={values.contactNumber}
                   style={{width: wp('75%')}}
                   onBlur={() => setFieldTouched('contactNumber')}
-                />
+                /> */}
               </View>
               <ErrorMessage
                 style={styles.errorMessage}
@@ -232,40 +250,13 @@ function EditProfile(props) {
               />
 
               <TextInputField
-                placeholder="Password*"
-                autoCapitalize="none"
-                secureTextEntry
-                autoCorrect={false}
-                onChangeText={handleChange('password')}
-                onBlur={() => setFieldTouched('password')}
-              />
-              <ErrorMessage
-                style={styles.errorMessage}
-                error={errors.password}
-                visible={touched.password}
-              />
-              <TextInputField
-                placeholder="Confirm Password*"
-                autoCapitalize="none"
-                secureTextEntry
-                autoCorrect={false}
-                onChangeText={handleChange('passwordConfirmation')}
-                onBlur={() => setFieldTouched('passwordConfirmation')}
-              />
-              <ErrorMessage
-                style={styles.errorMessage}
-                error={errors.passwordConfirmation}
-                visible={touched.passwordConfirmation}
-              />
-
-              <TextInputField
                 placeholder="Postcode"
-                onChangeText={handleChange('postCode')}
+                onChangeText={handleChange('postcode')}
                 autoCapitalize="none"
-                value={values.postCode}
+                value={values.postcode}
                 keyboardType="default"
                 autoCorrect={false}
-                onBlur={() => setFieldTouched('postCode')}
+                onBlur={() => setFieldTouched('postcode')}
                 booleanFlag={true}
                 right={
                   <TextInput.Icon
@@ -273,13 +264,13 @@ function EditProfile(props) {
                       <EvilIcons name="search" size={30} color={'#ff7e00'} />
                     )}
                     onPress={() => {
-                      if (values.postCode.length <= 6) {
+                      if (values.postcode.length <= 6) {
                         alert('Please Enter a Valid PostCode');
                       } else {
                         const data = {};
                         setPostCodeshow(!postcodeshow);
                         dispatch(PostDataPass(data, 0));
-                        dispatch(PostCode(values.postCode));
+                        dispatch(PostCode(values.postcode));
                       }
                     }}
                   />
@@ -297,9 +288,6 @@ function EditProfile(props) {
                   {
                     temp === true ? null : setTemp(!temp);
                   }
-                  values.addressLine1 = '';
-                  values.addressLine2 = '';
-                  values.cityTown = '';
                 }}
               />
 
@@ -311,13 +299,9 @@ function EditProfile(props) {
               <>
                 <TextInputField
                   placeholder="Address Line 1"
-                  onChangeText={
-                    postsize !== 0
-                      ? postdata.addressline1
-                      : handleChange('addressLine1')
-                  }
+                  onChangeText={handleChange('addressLine1')}
                   autoCapitalize="none"
-                  editable={postsize !== 0 ? false : true}
+                  editable={true}
                   autoCorrect={false}
                   onBlur={() => setFieldTouched('addressLine1')}
                   value={
@@ -338,7 +322,7 @@ function EditProfile(props) {
                       : handleChange('addressLine2')
                   }
                   autoCapitalize="none"
-                  editable={postsize !== 0 ? false : true}
+                  editable={true}
                   autoCorrect={false}
                   onBlur={() => setFieldTouched('addressLine2')}
                   value={
@@ -354,20 +338,32 @@ function EditProfile(props) {
                 <TextInputField
                   placeholder="Town / City"
                   onChangeText={
-                    postsize !== 0
-                      ? postdata.posttown
-                      : handleChange('cityTown')
+                    postsize !== 0 ? postdata.posttown : handleChange('city')
                   }
                   autoCapitalize="none"
-                  editable={postsize !== 0 ? false : true}
+                  editable={false}
                   autoCorrect={false}
-                  onBlur={() => setFieldTouched('cityTown')}
-                  value={postsize !== 0 ? postdata.posttown : values.cityTown}
+                  onBlur={() => setFieldTouched('city')}
+                  value={postsize !== 0 ? postdata.posttown : values.city}
                 />
                 <ErrorMessage
                   style={styles.errorMessage}
                   error={errors.cityTown}
                   visible={touched.cityTown}
+                />
+                <TextInputField
+                  placeholder="Country"
+                  onChangeText={handleChange('country')}
+                  autoCapitalize="none"
+                  editable={true}
+                  autoCorrect={false}
+                  onBlur={() => setFieldTouched('country')}
+                  value={values.country}
+                />
+                <ErrorMessage
+                  style={styles.errorMessage}
+                  error={errors.country}
+                  visible={touched.country}
                 />
               </>
 
@@ -428,18 +424,27 @@ function EditProfile(props) {
                 <Alert
                   visible={showSuccessalert}
                   confirm={'Done'}
-                  success={() => props.navigation.navigate('Login')}
+                  success={() => props.navigation.navigate('Profile')}
                   image={'success'}
-                  message={'Profile Created Successfully'}
+                  message={'Profile Updated Successfully'}
                 />
               ) : null}
               {showFailurealert ? (
                 <Alert
                   visible={showFailurealert}
                   confirm={'Retry'}
-                  success={() => console.log('Retry')}
+                  success={() => props.navigation.navigate('Profile')}
                   image={'failure'}
                   message={'Something Went Wrong'}
+                />
+              ) : null}
+              {showValidationError ? (
+                <Alert
+                  visible={showFailurealert}
+                  confirm={'Retry'}
+                  success={() => props.navigation.navigate('Profile')}
+                  image={'failure'}
+                  message={ValidationErrorMsg}
                 />
               ) : null}
             </>

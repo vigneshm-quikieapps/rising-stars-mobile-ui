@@ -49,6 +49,37 @@ export function fetchUser(payload) {
     });
 }
 
+export function fetchCurrentUser(payload) {
+  return fetch(`${heroku_url}/auth/user/me`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${payload.token}`,
+    },
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(error => {
+      throw error;
+    });
+}
+
+export function updateUser(payload) {
+  return fetch(`${heroku_url}/users/${payload.id}`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${payload.token}`,
+    },
+    body: JSON.stringify(payload.body),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      throw error;
+    });
+}
+
 export function fetchRegister(payload) {
   return fetch(`${heroku_url}/sign-up`, {
     method: 'POST',
@@ -66,7 +97,7 @@ export function fetchRegister(payload) {
       addressLine1: payload.addressLine1,
       addressLine2: payload.addressLine2,
       city: payload.cityTown,
-      country: 'country',
+      country: payload.country,
     }),
   })
     .then(response => response.json())

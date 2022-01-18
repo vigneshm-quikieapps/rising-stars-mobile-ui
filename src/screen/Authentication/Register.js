@@ -48,6 +48,7 @@ const validationSchema = Yup.object().shape({
   AddressLine1: Yup.string().min(5).label('AddressLine1'),
   AddressLine2: Yup.string().min(5).label('AddressLine2'),
   cityTown: Yup.string().min(1).label('City/Town'),
+  country: Yup.string().min(1).label('country'),
 });
 
 function Register(props) {
@@ -116,6 +117,7 @@ function Register(props) {
           addressLine1: '',
           addressLine2: '',
           cityTown: '',
+          country: '',
         }}
         onSubmit={async values => {
           if (values.mobileNoOTP.length === 0) {
@@ -339,6 +341,21 @@ function Register(props) {
                   style={styles.errorMessage}
                   error={errors.cityTown}
                   visible={touched.cityTown}
+                />
+
+                <TextInputField
+                  placeholder="Country"
+                  onChangeText={handleChange('country')}
+                  autoCapitalize="none"
+                  editable={true}
+                  autoCorrect={false}
+                  onBlur={() => setFieldTouched('country')}
+                  value={values.country}
+                />
+                <ErrorMessage
+                  style={styles.errorMessage}
+                  error={errors.country}
+                  visible={touched.country}
                 />
               </>
             ) : null}
