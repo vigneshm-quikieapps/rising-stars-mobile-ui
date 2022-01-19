@@ -30,7 +30,6 @@ const Pay = props => {
       child.member._id,
       await getLocalData('accessToken'),
     );
-    //{"message": "Bill validation failed: subtotal: Path `subtotal` is required., total: Path `total` is required., items.0.amount: Path `amount` is required."}
     dispatch(
       enrollChildData({
         data: {

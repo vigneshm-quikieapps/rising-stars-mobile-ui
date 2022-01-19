@@ -25,7 +25,7 @@ const Confirmation = props => {
       ? setShowAlert(true)
       : null;
   }, [enrollment]);
-
+  console.log('en: ', enrollment);
   return (
     <View>
       {showAlert ? (
