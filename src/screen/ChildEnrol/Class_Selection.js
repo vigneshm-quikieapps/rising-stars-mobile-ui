@@ -142,7 +142,10 @@ const Class_Selection = props => {
                   <TouchableOpacity
                     onPressOut={() => setClubModal(false)}
                     key={item._id}
-                    onPress={() => handleClasses(item)}
+                    onPress={() => {
+                      handleClasses(item);
+                      console.log('class: ', item._id);
+                    }}
                     style={{
                       marginLeft: wp('8%'),
                       justifyContent: 'center',

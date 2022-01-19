@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {
   CustomLayout,
@@ -19,8 +19,18 @@ const Pay = props => {
   const child = useSelector(state => state.childData.addchild);
   const slot = useSelector(state => state.childData.slotdata);
   const club = useSelector(state => state.childData.clubdata);
+  const [showAtm, setShowAtm] = useState(false);
+  const [showStandingOrder, setShowStandingOrder] = useState(false);
+
   const dispatch = useDispatch();
   const handleforward = async () => {
+    console.log(
+      'Details: ',
+      slot._id,
+      child.member._id,
+      await getLocalData('accessToken'),
+    );
+    //{"message": "Bill validation failed: subtotal: Path `subtotal` is required., total: Path `total` is required., items.0.amount: Path `amount` is required."}
     dispatch(
       enrollChildData({
         data: {
@@ -71,8 +81,20 @@ const Pay = props => {
       />
       <View style={styles.breaks} />
       <Text style={styles.optional}>Payment Options</Text>
-      <StandingOrder />
-      <AtmCard />
+      <StandingOrder
+        onPress={() => {
+          setShowAtm(false);
+          setShowStandingOrder(!showStandingOrder);
+        }}
+        visible={showStandingOrder}
+      />
+      <AtmCard
+        onPress={() => {
+          setShowAtm(!showAtm);
+          setShowStandingOrder(false);
+        }}
+        visible={showAtm}
+      />
       <View style={styles.bottom}>
         <RadioButton />
         <Text

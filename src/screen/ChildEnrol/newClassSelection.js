@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useState} from 'react';
 import {
   Text,
   StyleSheet,
@@ -37,7 +38,6 @@ const New_Class_Selection = props => {
 
   const [showclass, setShowClass] = useState(false);
   const [showsession, setShowsession] = useState(false);
-  const [showclass2, setShowClass2] = useState(false);
 
   const [selectdata, setSelectdata] = useState();
 

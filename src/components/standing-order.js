@@ -3,34 +3,52 @@ import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {hp, wp, colors} from '../constants';
 import {RadioButton} from 'react-native-paper';
-import Input from './input';
 import {AppButton} from '.';
 import NewAppButton from './new-app-button';
 
 const StandingOrder = props => {
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          height: props.visible ? hp('34.5%') : hp('10%'),
+          borderColor: props.visible ? colors.orange : '#f2f2f2',
+          backgroundColor: props.visible ? 'white' : '#f2f2f2',
+        },
+      ]}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <RadioButton />
+        <RadioButton
+          onPress={props.onPress}
+          status={props.visible ? 'checked' : 'unchecked'}
+        />
         <View style={{marginLeft: wp('3%')}}>
-          <Text style={styles.cardText}>Confirm Standing Order</Text>
+          <Text
+            style={[
+              styles.cardText,
+              {fontSize: props.visible ? hp('2.5%') : wp('5%')},
+            ]}>
+            Confirm Standing Order
+          </Text>
         </View>
       </View>
-      <AppButton
-        title={"I've setup Standing Order"}
-        onPress={() => {
-          //
-        }}
-        style={{width: wp('83%')}}
-      />
-      <NewAppButton
-        title={"I'll setup Standing Order late"}
-        onPress={() => {
-          //
-        }}
-        style={{width: wp('83%')}}
-        emptyContainer={true}
-      />
+      <View style={{display: props.visible ? 'flex' : 'none'}}>
+        <AppButton
+          title={"I've setup Standing Order"}
+          onPress={() => {
+            //
+          }}
+          style={{width: wp('83%')}}
+        />
+        <NewAppButton
+          title={"I'll setup Standing Order late"}
+          onPress={() => {
+            //
+          }}
+          style={{width: wp('83%')}}
+          emptyContainer={true}
+        />
+      </View>
     </View>
   );
 };
@@ -38,17 +56,14 @@ const StandingOrder = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: hp('34.5%'),
     borderWidth: 1,
     padding: hp('2%'),
     marginVertical: hp('1%'),
     borderRadius: 10,
-    borderColor: colors.orange,
   },
   cardText: {
     fontFamily: 'Nunito-SemiBold',
     // fontWeight: "bold",
-    fontSize: hp('2.5%'),
   },
   cardOption: {
     fontFamily: 'Nunito-SemiBold',

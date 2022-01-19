@@ -89,6 +89,7 @@ export function* watcherAddChild() {
 function* handleEnrollChild(action) {
   try {
     const enrolledChild = yield call(regularEnrollment, action.payload);
+    console.log('enroll', enrolledChild);
     yield put({
       type: Action.USER_ENROLL_CHILD_SUCCEDED,
       payload: enrolledChild,
