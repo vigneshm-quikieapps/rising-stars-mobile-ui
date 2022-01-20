@@ -27,6 +27,7 @@ import {
 import {getLocalData} from '../../utils/LocalStorage';
 
 import {useSelector, useDispatch} from 'react-redux';
+import PopUpClass from '../../components/pop-up-class_selection';
 
 const Class_Selection = props => {
   const [business, setBusiness] = useState();
@@ -102,7 +103,64 @@ const Class_Selection = props => {
         value={business}
         onPress={() => setClubModal(!clubmodal)}
       />
-      {clubmodal &&
+      <PopUpClass
+        ClosePopUp={() => setClubModal(!clubmodal)}
+        visible={clubmodal}
+        title={'Available Clubs'}
+        data={clubData}
+        setClub={club => {
+          handleBusiness(club);
+        }}
+        setVisibility={bin => {
+          setClubModal(bin);
+        }}
+      />
+
+      <PopUpCard
+        headertext={'Class Name*'}
+        text="Select Your Class Name"
+        value={classes}
+        onPress={() => setClassModal(!classmodal)}
+      />
+
+      <PopUpClass
+        ClosePopUp={() => setClassModal(!classmodal)}
+        visible={classmodal}
+        title={'Available Classes'}
+        data={classData}
+        setClub={classData => {
+          handleClasses(classData);
+        }}
+        setVisibility={bin => {
+          setClassModal(bin);
+        }}
+      />
+      {/* {classmodal &&
+                  classData.map(item => {
+                    return (
+                      <TouchableOpacity
+                        onPressOut={() => setClubModal(false)}
+                        key={item._id}
+                        onPress={() => handleClasses(item)}
+                        style={{
+                          marginLeft: wp('8%'),
+                          justifyContent: 'center',
+                          alignContent: 'center',
+                        }}>
+                        <Text
+                          style={{
+                            backgroundColor: colors.lightgrey,
+                            fontFamily: 'Nunito-Regular',
+                            fontSize: Fontsize,
+                            paddingTop: wp('2%'),
+                            margin: wp('0.5%'),
+                          }}>
+                          {item.name}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })} */}
+      {/* {clubmodal &&
         clubData.map(item => {
           return (
             <TouchableOpacity
@@ -126,46 +184,7 @@ const Class_Selection = props => {
               </Text>
             </TouchableOpacity>
           );
-        })}
-      {showclass ? (
-        classData && classData.length > 0 ? (
-          <>
-            <PopUpCard
-              headertext={'Class Name*'}
-              text="Select Your Class Name"
-              value={classes}
-              onPress={() => setClassModal(!classmodal)}
-            />
-            {classmodal &&
-              classData.map(item => {
-                return (
-                  <TouchableOpacity
-                    onPressOut={() => setClubModal(false)}
-                    key={item._id}
-                    onPress={() => handleClasses(item)}
-                    style={{
-                      marginLeft: wp('8%'),
-                      justifyContent: 'center',
-                      alignContent: 'center',
-                    }}>
-                    <Text
-                      style={{
-                        backgroundColor: colors.lightgrey,
-                        fontFamily: 'Nunito-Regular',
-                        fontSize: Fontsize,
-                        paddingTop: wp('2%'),
-                        margin: wp('0.5%'),
-                      }}>
-                      {item.name}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-          </>
-        ) : (
-          <ActivityIndicator size="large" color={colors.orange} />
-        )
-      ) : null}
+        })} */}
       {showsession ? (
         sessionData && sessionData.length > 0 ? (
           <>
