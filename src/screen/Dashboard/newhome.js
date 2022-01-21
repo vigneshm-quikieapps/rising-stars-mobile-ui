@@ -115,7 +115,6 @@ const Home = () => {
       fetchCurrentUser({
         token: token,
       }).then(response => {
-        console.log(response.user);
         dispatch({
           type: Action.USER_UPDATE_SUCCESS,
           payload: response.user,
@@ -255,6 +254,7 @@ const Home = () => {
                 data={members}
                 isCyclic={true}
                 onItemSelected={wheelselected}
+                selectedItem={wheelitem}
                 selectedItemTextColor={'black'}
                 selectedItemTextSize={Fontsize}
                 itemTextFontFamily="Nunito-Regular"
@@ -263,36 +263,55 @@ const Home = () => {
             </View>
           </WheelDropdown>
           <View style={styles.courosoul} />
-          <Carousel
-            data={
-              memberClassData &&
-              memberClassData?.filter(
-                item => item?.enrolledStatus === 'ENROLLED',
-              )
-            }
-            renderItem={renderItem}
-            sliderWidth={wp('95%')}
-            itemWidth={wp('90%')}
-            onSnapToItem={async index => {
-              setActiveDotIndex(index);
-              setCurrentSessionId(
+          {memberClassData.length > 0 ? (
+            <Carousel
+              data={
                 memberClassData &&
-                  memberClassData?.filter(
-                    item => item?.enrolledStatus === 'ENROLLED',
-                  )[index].session._id,
-              );
-              const attendance =
-                currentSessionId &&
-                (await fetchAttendanceOfMemberInSession({
-                  token,
-                  data: {
-                    sessionId: currentSessionId,
-                    memberId: currentMember._id,
-                  },
-                }));
-              setCurrentSessionAttendance(attendance.attendance);
-            }}
-          />
+                memberClassData?.filter(
+                  item => item?.enrolledStatus === 'ENROLLED',
+                )
+              }
+              renderItem={renderItem}
+              sliderWidth={wp('95%')}
+              itemWidth={wp('90%')}
+              onSnapToItem={async index => {
+                setActiveDotIndex(index);
+                setCurrentSessionId(
+                  memberClassData &&
+                    memberClassData?.filter(
+                      item => item?.enrolledStatus === 'ENROLLED',
+                    )[index].session._id,
+                );
+                const attendance =
+                  currentSessionId &&
+                  (await fetchAttendanceOfMemberInSession({
+                    token,
+                    data: {
+                      sessionId: currentSessionId,
+                      memberId: currentMember._id,
+                    },
+                  }));
+                setCurrentSessionAttendance(attendance.attendance);
+              }}
+            />
+          ) : (
+            <View
+              style={{
+                backgroundColor: 'white',
+                borderRadius: 20,
+                alignContent: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: hp('15%'),
+                marginRight: wp('3%'),
+              }}>
+              <TouchableOpacity>
+                <Text style={{fontSize: wp('6%'), color: colors.orange}}>
+                  Please add a Class
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
           <View
             style={{
               paddingVertical: hp('0.8%'),
@@ -353,7 +372,7 @@ const Home = () => {
           <AttendanceCard
             color={['#68D6AB', '#33AB96']}
             value={
-              currentSessionAttendance?.attendedCount
+              currentSessionAttendance?.attendedCount !== undefined
                 ? currentSessionAttendance.attendedCount
                 : 0
             }
@@ -363,8 +382,7 @@ const Home = () => {
           <AttendanceCard
             color={['#EA5C5C', '#AB3333']}
             value={
-              currentSessionAttendance?.attendedCount &&
-              currentSessionAttendance?.totalCount
+              currentSessionAttendance?.attendedCount !== undefined
                 ? currentSessionAttendance.totalCount -
                   currentSessionAttendance.attendedCount
                 : 0

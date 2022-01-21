@@ -49,6 +49,17 @@ export function fetchUser(payload) {
     });
 }
 
+export function fetchProgress(payload) {
+  return fetch(`${heroku_url}/members/${payload.id}/progress`, {
+    method: 'GET',
+    headers: {},
+  })
+    .then(response => response.json())
+    .catch(error => {
+      throw error;
+    });
+}
+
 export function fetchCurrentUser(payload) {
   return fetch(`${heroku_url}/auth/user/me`, {
     method: 'GET',

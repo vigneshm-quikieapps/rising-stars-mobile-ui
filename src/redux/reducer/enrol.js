@@ -73,6 +73,7 @@ export const classname = (state = classtate, action) => {
 
 const sessionState = {
   sessiondata: [],
+  sessionAttendance: '',
   error: '',
 };
 
@@ -84,6 +85,16 @@ export const sessionlist = (state = sessionState, action) => {
         sessiondata: action.payload.docs,
       };
     case Action.USER_GET_SESSION_FAILED:
+      return {
+        ...state,
+        error: action.error,
+      };
+    case Action.USER_GET_SESSION_ATTENDANCE_SUCCESS:
+      return {
+        ...state,
+        sessionAttendance: action.payload,
+      };
+    case Action.USER_GET_SESSION_ATTENDANCE_FAILURE:
       return {
         ...state,
         error: action.error,

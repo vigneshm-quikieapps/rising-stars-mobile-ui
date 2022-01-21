@@ -7,15 +7,36 @@ import Input from './input';
 
 const AtmCard = props => {
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          height: props.visible ? hp('31.5%') : hp('10%'),
+          borderColor: props.visible ? colors.orange : '#f2f2f2',
+          backgroundColor: props.visible ? 'white' : '#f2f2f2',
+        },
+      ]}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <RadioButton />
+        <RadioButton
+          onPress={props.onPress}
+          status={props.visible ? 'checked' : 'unchecked'}
+        />
         <View style={{marginLeft: wp('3%')}}>
-          <Text style={styles.cardText}>Cards</Text>
+          <Text
+            style={[
+              styles.cardText,
+              {fontSize: props.visible ? hp('2.5%') : wp('5%')},
+            ]}>
+            Cards
+          </Text>
           <Text style={styles.cardOption}>Credit / Debit / ATM Card</Text>
         </View>
       </View>
-      <View style={styles.cardDetails}>
+      <View
+        style={[
+          styles.cardDetails,
+          {display: !props.visible ? 'none' : 'flex'},
+        ]}>
         <Input placeholder="Card Number" placeholderTextColor={'black'} />
         <View style={styles.breaks} />
         <Text style={styles.valid}>Valid thru</Text>
@@ -65,12 +86,10 @@ const styles = StyleSheet.create({
     padding: hp('2%'),
     marginVertical: hp('1%'),
     borderRadius: 10,
-    borderColor: colors.orange,
   },
   cardText: {
     fontFamily: 'Nunito-SemiBold',
     // fontWeight: "bold",
-    fontSize: hp('2.5%'),
   },
   cardOption: {
     fontFamily: 'Nunito-SemiBold',

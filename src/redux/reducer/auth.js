@@ -95,7 +95,6 @@ export const LoginData = (state = loginState, action) => {
   switch (action.type) {
     case Action.USER_UPDATE_SUCCESS:
       storeLocalData('user', action.payload, true);
-      console.log('Inside update reducer');
       return {
         ...state,
         updatedUser: action.payload,

@@ -6,7 +6,6 @@ import ErrorMessage from './error-message';
 import {wp, colors, hp} from '../constants';
 import Button from './button';
 import AntIcon from 'react-native-vector-icons/AntDesign';
-import PopUpCard from './pop-up-card';
 
 export default function EmergencyCard({
   head,

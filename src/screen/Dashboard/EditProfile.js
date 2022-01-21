@@ -1,14 +1,11 @@
+/* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Text, ActivityIndicator} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {useSelector, useDispatch} from 'react-redux';
-import {
-  useBlurOnFulfill,
-  useClearByFocusCell,
-} from 'react-native-confirmation-code-field';
 import * as Action from '../../redux/action-types/index';
 import {TextInput} from 'react-native-paper';
 import {
@@ -21,19 +18,10 @@ import {
 import {colors, Fontsize, hp, wp, Term_Condition} from '../../constants';
 import {PostCode, PostDataPass} from '../../redux/action/auth';
 import PostComponent from '../Authentication/components/Postcode';
-import {
-  fetchMobileOTP,
-  fetchUser,
-  updateUser,
-} from '../../redux/service/request';
+import {fetchUser, updateUser} from '../../redux/service/request';
 import Alert from '../../components/alert-box';
-import {
-  getLocalData,
-  removeLocalData,
-  storeLocalData,
-} from '../../utils/LocalStorage';
+import {getLocalData} from '../../utils/LocalStorage';
 
-const CELL_COUNT = 6;
 const validationSchema = Yup.object().shape({
   name: Yup.string()
     .min(3, 'Too Short!')
@@ -55,20 +43,9 @@ function EditProfile(props) {
   const postsize = useSelector(state => state.Postcodedata.size);
   const isloading = useSelector(state => state.Postcodedata.isloading);
   const error = useSelector(state => state.Postcodedata.error);
-  // const status = useSelector(state => state.RegisterData.status);
-  // const Reerror = useSelector(state => state.RegisterData.error);
-  // const isRegloading = useSelector(state => state.RegisterData.isLoading);
-  const [value, setValue] = useState('');
-  const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
-  // const [prop, getCellOnLayoutHandler] = useClearByFocusCell({
-  //   value,
-  //   setValue,
-  // });
-  // const [checked, setChecked] = useState('first');
   const [postcodeshow, setPostCodeshow] = useState(false);
   const [term, setTerm] = useState(false);
   const [temp, setTemp] = useState(false);
-  const [main, setMain] = useState(false);
   const [user, setUser] = useState('');
   const [token, setToken] = useState('');
   const [showSuccessalert, setSuccessAlert] = useState(false);
@@ -79,14 +56,6 @@ function EditProfile(props) {
   );
   const [seconds, setSeconds] = React.useState(10);
   const [cred, setCred] = useState('');
-  const refRBSheet = useRef();
-  var address = {
-    line1: '',
-    line2: '',
-    city: '',
-  };
-
-  const star = <Text style={styles.star}>Rising Star</Text>;
 
   const callPopUp = () => setTerm(!term);
 

@@ -1,22 +1,27 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {hp, wp, colors, Fontsize} from '../constants';
 import RadioButton from './radio-button';
 
 const Slot = props => {
+  const [selected, setSelected] = useState(false);
+  const combinedOnpress = () => {
+    props.onPress();
+    setSelected(!selected);
+  };
   return (
     <View
       style={[
         styles.container,
         props.style,
         {
-          borderColor: props.selected || props.white ? '#ff7e00' : 'white',
-          backgroundColor: props.selected || props.white ? 'white' : '#f2f2f2',
+          borderColor: selected ? '#ff7e00' : 'white',
+          backgroundColor: selected ? 'white' : '#f2f2f2',
         },
       ]}>
       {props.radio ? (
-        <RadioButton onPress={props.onPress} status={props.status} />
+        <RadioButton onPress={combinedOnpress} status={props.status} />
       ) : null}
 
       <View style={styles.slotdetails}>

@@ -20,134 +20,15 @@ import {getmemberClass, getmemberData} from '../../redux/action/home';
 import * as Action from '../../redux/action-types';
 import {getLocalData} from '../../utils/LocalStorage';
 import {fetchAttendanceOfMemberInSession} from '../../redux/service/request';
+import {FlatList} from 'react-native-gesture-handler';
 
 const itemWidth = Dimensions.get('window').width;
 
-const Datum = [1, 2, 3, 4];
-const DATA = [
-  {
-    title: 'August 2021',
-    data: [
-      {
-        date: '09',
-        day: 'Mon',
-        status: 'Attended',
-      },
-      {
-        date: '17',
-        day: 'Mon',
-        status: 'No Show',
-      },
-
-      {
-        date: '',
-        day: 'Mon',
-        status: 'Attended',
-      },
-      {
-        date: '18',
-        day: 'Wed',
-        status: 'Upcoming',
-      },
-    ],
-  },
-  {
-    title: 'September 2021',
-    data: [
-      {
-        date: '09',
-        day: 'Mon',
-        status: 'Upcoming',
-      },
-      {
-        date: '12',
-        day: 'Thu',
-        status: 'Upcoming',
-      },
-      {
-        date: '14',
-        day: 'Sat',
-        status: 'Upcoming',
-      },
-      {
-        date: '16',
-        day: 'Mon',
-        status: 'Upcoming',
-      },
-      {
-        date: '18',
-        day: 'Wed',
-        status: 'Upcoming',
-      },
-    ],
-  },
-  {
-    title: 'October 2021',
-    data: [
-      {
-        date: '09',
-        day: 'Mon',
-        status: 'Upcoming',
-      },
-      {
-        date: '12',
-        day: 'Thu',
-        status: 'Upcoming',
-      },
-      {
-        date: '14',
-        day: 'Sat',
-        status: 'Upcoming',
-      },
-      {
-        date: '16',
-        day: 'Mon',
-        status: 'Upcoming',
-      },
-      {
-        date: '18',
-        day: 'Wed',
-        status: 'Upcoming',
-      },
-    ],
-  },
-  {
-    title: 'November 2021',
-    data: [
-      {
-        date: '09',
-        day: 'Mon',
-        status: 'Upcoming',
-      },
-      {
-        date: '12',
-        day: 'Thu',
-        status: 'Upcoming',
-      },
-      {
-        date: '14',
-        day: 'Sat',
-        status: 'Upcoming',
-      },
-      {
-        date: '16',
-        day: 'Mon',
-        status: 'Upcoming',
-      },
-      {
-        date: '18',
-        day: 'Wed',
-        status: 'Upcoming',
-      },
-    ],
-  },
-];
-
 const AttendenceShow = () => {
-  const memberAttendance = useSelector(
-    state => state.currentMemberAttendance.attendance,
-  );
   const membersdata = useSelector(state => state.memberData.memberData);
+  const sessionAttendance = useSelector(
+    state => state.sessionlist.sessionAttendance,
+  );
   const dispatch = useDispatch();
 
   const [showModal, setShowModal] = useState(false);
@@ -167,6 +48,15 @@ const AttendenceShow = () => {
   //   </View>
   // );
 
+  const days = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thusday',
+    'Friday',
+    'Saturday',
+  ];
   var member = [];
   const accessToken = async () => {
     const Token = await getLocalData('accessToken');
@@ -178,9 +68,28 @@ const AttendenceShow = () => {
     setUser(userData);
   }, []);
 
+  const dispatchValues = () => {
+    setCurrentSessionAttendance('');
+    dispatch({
+      type: Action.USER_GET_SESSION_ATTENDANCE,
+      payload: {
+        token,
+        data: {
+          sessionId: id,
+          memberId: currentMember._id,
+        },
+      },
+      callback: () => {},
+    });
+  };
+
   membersdata && membersdata.map(item => member.push(item.name));
 
   accessToken();
+
+  useEffect(() => {
+    setCurrentSessionAttendance(sessionAttendance.attendance);
+  }, [sessionAttendance]);
 
   useEffect(() => {
     getLocalUserData();
@@ -203,6 +112,7 @@ const AttendenceShow = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMember]);
+  var id = '';
   useEffect(() => {
     memberClassData.length > 1 &&
       setCurrentSessionId(
@@ -210,7 +120,6 @@ const AttendenceShow = () => {
           activeDotIndex
         ].session._id,
       );
-
     currentSessionId &&
       fetchAttendanceOfMemberInSession({
         token,
@@ -251,15 +160,6 @@ const AttendenceShow = () => {
           }}>
           Activity Name
         </Text>
-        {/* <Text
-          style={{
-            fontSize: wp('4.3%'),
-
-            color: colors.white,
-            fontFamily: 'Nunito-SemiBold',
-          }}>
-          K23lJ56
-        </Text> */}
         <Text
           style={{
             fontSize: wp('4.3%'),
@@ -273,7 +173,7 @@ const AttendenceShow = () => {
     );
   };
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={{marginTop: 30}}>
         <Text
           style={{
@@ -338,8 +238,6 @@ const AttendenceShow = () => {
       </WheelDropdown>
       <View style={{marginTop: 14}}>
         <Carousel
-          // autoplay={true}
-          // loop={true}
           style={{width: 350}}
           layout={'default'}
           data={
@@ -351,22 +249,22 @@ const AttendenceShow = () => {
           renderItem={renderItem}
           onSnapToItem={async index => {
             setActiveDotIndex(index);
-            setCurrentSessionId(
+            id =
               memberClassData &&
-                memberClassData?.filter(
-                  item => item?.enrolledStatus === 'ENROLLED',
-                )[index].session._id,
-            );
-            const attendance =
-              currentSessionId &&
-              (await fetchAttendanceOfMemberInSession({
-                token,
-                data: {
-                  sessionId: currentSessionId,
-                  memberId: currentMember._id,
-                },
-              }));
-            setCurrentSessionAttendance(attendance.attendance);
+              memberClassData?.filter(
+                item => item?.enrolledStatus === 'ENROLLED',
+              )[index].session._id;
+            dispatchValues();
+            // setCurrentSessionAttendance(
+            //   currentSessionId &&
+            //     (await fetchAttendanceOfMemberInSession({
+            //       token,
+            //       data: {
+            //         sessionId: currentSessionId,
+            //         memberId: currentMember._id,
+            //       },
+            //     })),
+            // );
           }}
         />
       </View>
@@ -381,113 +279,112 @@ const AttendenceShow = () => {
           label1={'Total'}
           label2={'Attended'}
           label3={'No Show'}
-          value1={(memberAttendance?.totalCount
-            ? memberAttendance.totalCount
+          value1={(currentSessionAttendance?.totalCount
+            ? currentSessionAttendance.totalCount
             : 0
           ).toString()}
           value2={
-            memberAttendance?.attendedCount ? memberAttendance.attendedCount : 0
+            currentSessionAttendance?.attendedCount
+              ? currentSessionAttendance.attendedCount
+              : 0
           }
           value3={
-            memberAttendance?.attendedCount && memberAttendance?.totalCount
-              ? memberAttendance.totalCount - memberAttendance.attendedCount
+            currentSessionAttendance?.attendedCount !== undefined
+              ? currentSessionAttendance.totalCount -
+                currentSessionAttendance.attendedCount
               : 0
           }
         />
       </View>
 
       <View style={{marginTop: 30}}>
-        <SectionList
-          sections={DATA}
-          keyExtractor={(item, index) => item + index}
-          renderItem={({item}) => (
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                paddingBottom: 20,
-              }}>
-              <View style={{width: '20%', justifyContent: 'center'}}>
-                <Text
+        {currentSessionAttendance &&
+        currentSessionAttendance.records !== undefined ? (
+          <FlatList
+            data={currentSessionAttendance.records}
+            keyExtractor={item => item._id}
+            renderItem={item => {
+              return (
+                <View
                   style={{
-                    fontSize: wp('4%'),
-                    fontFamily: 'Nunito-Regular',
-                    color: colors.blackOpacity,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    paddingBottom: 20,
                   }}>
-                  {item.day}
-                </Text>
-                <Text
-                  style={{fontSize: wp('8%'), fontFamily: 'Nunito-SemiBold'}}>
-                  {item.date}
-                </Text>
-              </View>
-              <View style={{justifyContent: 'center'}}>
-                <LinearGradient
-                  colors={
-                    item.status === 'Attended'
-                      ? ['#68D6AB', '#33AB96']
-                      : item.status === 'No Show'
-                      ? ['#EA5C5C', '#AB3333']
-                      : item.status === 'Tardy'
-                      ? ['rgb(242,242,242)', 'rgb(242,242,242)']
-                      : item.status === 'Upcoming'
-                      ? ['rgb(255,255,255)', 'rgb(255,255,255)']
-                      : ['#ffa300', '#ff7e00']
-                  }
-                  style={{height: 1.5, width: 30}}
-                />
-              </View>
-              <View style={{justifyContent: 'center', width: '100%'}}>
-                <LinearGradient
-                  colors={
-                    item.status === 'Attended'
-                      ? ['#68D6AB', '#33AB96']
-                      : item.status === 'No Show'
-                      ? ['#EA5C5C', '#AB3333']
-                      : item.status === 'Tardy'
-                      ? ['rgb(242,242,242)', 'rgb(242,242,242)']
-                      : item.status === 'Upcoming'
-                      ? ['rgb(255,255,255)', 'rgb(255,255,255)']
-                      : ['#ffa300', '#ff7e00']
-                  }
-                  style={{
-                    padding: 20,
-                    width: '100%',
-                    borderTopLeftRadius: 16,
-                    borderBottomLeftRadius: 16,
-                    borderColor: '#d2d2d2',
-                    borderWidth: item.status === 'Upcoming' ? 0.5 : 0,
-                  }}>
-                  <Text
+                  <View
                     style={{
-                      color:
-                        item.status === 'Attended' || item.status === 'No Show'
-                          ? colors.white
-                          : item.status === 'Tardy'
-                          ? '#000000'
-                          : 'rgb(205,210,204)',
-                      fontSize: wp('4.5%'),
-                      fontFamily: 'Naunito-SemiBold',
+                      width: '20%',
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}>
-                    {item.status}
-                  </Text>
-                </LinearGradient>
-              </View>
-            </View>
-          )}
-          renderSectionHeader={({section: {title}}) => (
-            <Text
-              style={{
-                fontSize: wp('5%'),
-                fontFamily: 'Nunito-SemiBold',
-                paddingBottom: 20,
-              }}>
-              {title}
-            </Text>
-          )}
-        />
+                    <Text
+                      style={{
+                        fontSize: wp('4%'),
+                        fontFamily: 'Nunito-Regular',
+                        color: colors.blackOpacity,
+                      }}>
+                      {days[new Date(item.item.date).getDay()]}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: wp('8%'),
+                        fontFamily: 'Nunito-SemiBold',
+                      }}>
+                      {new Date(item.item.date).getDate()}
+                    </Text>
+                  </View>
+                  <View style={{justifyContent: 'center'}}>
+                    <LinearGradient
+                      colors={
+                        item.item.attended === true
+                          ? ['#68D6AB', '#33AB96']
+                          : ['#EA5C5C', '#AB3333']
+                        // : item.status === 'Tardy'
+                        // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
+                        // : item.status === 'Upcoming'
+                        // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
+                        // : ['#ffa300', '#ff7e00']
+                      }
+                      style={{height: 1.5, width: 30}}
+                    />
+                  </View>
+                  <View style={{justifyContent: 'center', width: '100%'}}>
+                    <LinearGradient
+                      colors={
+                        item.item.attended === true
+                          ? ['#68D6AB', '#33AB96']
+                          : ['#EA5C5C', '#AB3333']
+                        // : item.status === 'Tardy'
+                        // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
+                        // : item.status === 'Upcoming'
+                        // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
+                        // : ['#ffa300', '#ff7e00']
+                      }
+                      style={{
+                        padding: 20,
+                        width: '100%',
+                        borderTopLeftRadius: 16,
+                        borderBottomLeftRadius: 16,
+                        borderColor: '#d2d2d2',
+                        borderWidth: item.status === 'Upcoming' ? 0.5 : 0,
+                      }}>
+                      <Text
+                        style={{
+                          color: colors.white,
+                          fontSize: wp('4.5%'),
+                          fontFamily: 'Naunito-SemiBold',
+                        }}>
+                        {item.item.attended ? 'Attended' : 'No Show'}
+                      </Text>
+                    </LinearGradient>
+                  </View>
+                </View>
+              );
+            }}
+          />
+        ) : null}
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

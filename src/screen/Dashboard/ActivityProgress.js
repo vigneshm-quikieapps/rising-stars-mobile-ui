@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useCallback, useEffect} from 'react';
 import {
   View,
@@ -18,9 +19,11 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getmemberClass, getmemberData} from '../../redux/action/home';
 import * as Action from '../../redux/action-types';
 import {getLocalData} from '../../utils/LocalStorage';
-import {fetchAttendanceOfMemberInSession} from '../../redux/service/request';
+import {
+  //fetchAttendanceOfMemberInSession,
+  fetchProgress,
+} from '../../redux/service/request';
 const ActivityProgress = () => {
-  const Datum = [1, 2, 3, 4];
   const itemWidth = Dimensions.get('window').width;
   const membersdata = useSelector(state => state.memberData.memberData);
   const dispatch = useDispatch();
@@ -30,10 +33,11 @@ const ActivityProgress = () => {
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const [user, setUser] = useState('');
   const [token, setToken] = useState();
+  const [progress, setProgress] = useState();
   const [currentMemberIndex, setCurrentMemberIndex] = useState(0);
   const [currentSessionId, setCurrentSessionId] = useState('');
   const [activeDotIndex, setActiveDotIndex] = React.useState(0);
-  const [currentSessionAttendance, setCurrentSessionAttendance] = useState('');
+  //const [currentSessionAttendance, setCurrentSessionAttendance] = useState('');
 
   var member = [];
   const accessToken = async () => {
@@ -49,6 +53,14 @@ const ActivityProgress = () => {
   membersdata && membersdata.map(item => member.push(item.name));
 
   accessToken();
+  const getProgress = async () => {
+    setProgress(
+      await fetchProgress({
+        id: currentMember._id,
+        token: token,
+      }),
+    );
+  };
 
   useEffect(() => {
     getLocalUserData();
@@ -69,6 +81,7 @@ const ActivityProgress = () => {
         type: Action.USER_GET_CURRENT_MEMBER_DATA,
         payload: currentMember,
       });
+    getProgress();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMember]);
   useEffect(() => {
@@ -186,6 +199,7 @@ const ActivityProgress = () => {
             onItemSelected={item => setItem(item)}
             selectedItemTextColor={'black'}
             selectedItemTextSize={Fontsize}
+            selectedItem={wheelitem}
             itemTextFontFamily="Nunito-Regular"
             selectedItemTextFontFamily="Nunito-Regular"
           />
@@ -193,36 +207,57 @@ const ActivityProgress = () => {
       </WheelDropdown>
 
       <View style={{marginTop: 14}}>
-        <Carousel
-          style={{width: 350}}
-          layout={'default'}
-          data={
-            memberClassData &&
-            memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')
-          }
-          sliderWidth={itemWidth - 30}
-          itemWidth={itemWidth * 0.88}
-          renderItem={renderItem}
-          onSnapToItem={async index => {
-            setActiveDotIndex(index);
-            setCurrentSessionId(
+        {memberClassData.length > 0 ? (
+          <Carousel
+            style={{width: 350}}
+            layout={'default'}
+            data={
               memberClassData &&
-                memberClassData?.filter(
-                  item => item?.enrolledStatus === 'ENROLLED',
-                )[index].session._id,
-            );
-            const attendance =
-              currentSessionId &&
-              (await fetchAttendanceOfMemberInSession({
-                token,
-                data: {
-                  sessionId: currentSessionId,
-                  memberId: currentMember._id,
-                },
-              }));
-            setCurrentSessionAttendance(attendance.attendance);
-          }}
-        />
+              memberClassData?.filter(
+                item => item?.enrolledStatus === 'ENROLLED',
+              )
+            }
+            sliderWidth={itemWidth - 30}
+            itemWidth={itemWidth * 0.88}
+            renderItem={renderItem}
+            onSnapToItem={async index => {
+              setActiveDotIndex(index);
+              setCurrentSessionId(
+                memberClassData &&
+                  memberClassData?.filter(
+                    item => item?.enrolledStatus === 'ENROLLED',
+                  )[index].session._id,
+              );
+              // const attendance =
+              //   currentSessionId &&
+              //   (await fetchAttendanceOfMemberInSession({
+              //     token,
+              //     data: {
+              //       sessionId: currentSessionId,
+              //       memberId: currentMember._id,
+              //     },
+              //   }));
+              // setCurrentSessionAttendance(attendance.attendance);
+            }}
+          />
+        ) : (
+          <View
+            style={{
+              backgroundColor: colors.orange,
+              borderRadius: 20,
+              alignContent: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: hp('15%'),
+              marginRight: wp('3%'),
+            }}>
+            <TouchableOpacity>
+              <Text style={{fontSize: wp('6%'), color: 'white'}}>
+                Please add a Class
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
       <View style={{marginTop: 30, marginRight: 20}}>
         <ProgressBarWithStar />

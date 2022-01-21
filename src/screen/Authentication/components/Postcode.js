@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {
@@ -37,7 +38,9 @@ export default function PostComponent(props) {
     var size = 0,
       key;
     for (key in obj) {
-      if (obj.hasOwnProperty(key)) size++;
+      if (obj.hasOwnProperty(key)) {
+        size++;
+      }
     }
     return size;
   };

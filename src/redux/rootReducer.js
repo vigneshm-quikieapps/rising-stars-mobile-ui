@@ -6,6 +6,7 @@ import {
   sessionlist,
   clubfinance,
   addProvidedata,
+  enrollChild,
 } from './reducer/enrol';
 import {
   LoginData,
@@ -39,6 +40,7 @@ const rootReducer = combineReducers({
   ResetPasswordData,
   currentMemberData,
   currentMemberAttendance,
+  enrollChild,
 });
 
 export default rootReducer;
