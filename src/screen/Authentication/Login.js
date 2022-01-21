@@ -18,6 +18,7 @@ import {colors, Fontsize, hp, wp} from '../../constants';
 import {TextInputField, ErrorMessage, AppButton} from '../../components';
 import {loginUserData} from '../../redux/action/auth';
 import {getLocalData} from '../../utils/LocalStorage';
+import Alert from '../../components/alert-box';
 
 const validationSchema = Yup.object().shape({
   mobileNumber: Yup.number().required().min(10).label('Mobile Number'),
@@ -28,9 +29,10 @@ const Login = props => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const currentUser = useSelector(state => state.LoginData.user);
+  const message = useSelector(state => state.LoginData.networkerror);
   const isLoading = useSelector(state => state.LoginData.isloading);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const [showAlert, setShowAlert] = useState(false);
   const gotoRegister = () => {
     props.navigation.navigate('Register');
   };
@@ -51,8 +53,11 @@ const Login = props => {
 
   useEffect(() => {
     isLoggedIn && navigation.navigate('HomeTab');
-  }, [navigation, isLoggedIn]);
+  }, [navigation, isLoggedIn, message]);
 
+  useEffect(() => {
+    message && setShowAlert(true);
+  }, [message]);
   return (
     <ScrollView style={styles.container}>
       <Text
@@ -136,7 +141,18 @@ const Login = props => {
           </>
         )}
       </Formik>
-
+      {showAlert ? (
+        <Alert
+          image={'failure'}
+          message={message}
+          confirm={'Retry'}
+          success={() => {
+            setShowAlert(false);
+            // console.log('XYZ', props);
+            props.navigation.navigate('Login');
+          }}
+        />
+      ) : null}
       <View style={styles.text}>
         <Text style={(styles.forgotPasswordText, {color: '#7f7f7f'})}>
           Don't have an account?

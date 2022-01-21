@@ -372,7 +372,7 @@ const Home = () => {
           <AttendanceCard
             color={['#68D6AB', '#33AB96']}
             value={
-              currentSessionAttendance?.attendedCount
+              currentSessionAttendance?.attendedCount !== undefined
                 ? currentSessionAttendance.attendedCount
                 : 0
             }
@@ -382,8 +382,7 @@ const Home = () => {
           <AttendanceCard
             color={['#EA5C5C', '#AB3333']}
             value={
-              currentSessionAttendance?.attendedCount &&
-              currentSessionAttendance?.totalCount
+              currentSessionAttendance?.attendedCount !== undefined
                 ? currentSessionAttendance.totalCount -
                   currentSessionAttendance.attendedCount
                 : 0

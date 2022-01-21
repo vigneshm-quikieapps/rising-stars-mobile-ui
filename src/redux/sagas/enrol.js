@@ -9,6 +9,7 @@ import {
   fetchSessionList,
   fetchClubFinanc,
   regularEnrollment,
+  fetchAttendanceOfMemberInSession,
 } from '../service/request';
 
 function* handleGetClub(params) {
@@ -67,6 +68,29 @@ function* handleClubfinance(action) {
 
 export function* watcherClubfinance() {
   yield takeEvery(Action.USER_GET_CLUB_FINANCE, handleClubfinance);
+}
+
+function* handleSessionAttendance(action) {
+  try {
+    const finance = yield call(
+      fetchAttendanceOfMemberInSession,
+      action.payload,
+    );
+    yield put({
+      type: Action.USER_GET_SESSION_ATTENDANCE_SUCCESS,
+      payload: finance,
+    });
+    yield call(action.callback);
+  } catch (error) {
+    yield put({
+      type: Action.USER_GET_SESSION_ATTENDANCE_FAILED,
+      error: error.message,
+    });
+  }
+}
+
+export function* watcherSessionAttendance() {
+  yield takeEvery(Action.USER_GET_SESSION_ATTENDANCE, handleSessionAttendance);
 }
 
 function* handleAddChild(action) {

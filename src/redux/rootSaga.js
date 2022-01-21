@@ -1,5 +1,11 @@
 import {all} from 'redux-saga/effects';
-import {watcherLoginSaga, watcherPostcode, watcherRegister,watcherForgetPassword,watcherResetPassword} from './sagas/auth';
+import {
+  watcherLoginSaga,
+  watcherPostcode,
+  watcherRegister,
+  watcherForgetPassword,
+  watcherResetPassword,
+} from './sagas/auth';
 import {
   watcherClubSaga,
   watcherClassSaga,
@@ -7,6 +13,7 @@ import {
   watcherClubfinance,
   watcherAddChild,
   watcherEnrollChild,
+  watcherSessionAttendance,
 } from './sagas/enrol';
 import {
   watcherMemberSaga,
@@ -16,6 +23,7 @@ import {
 
 export default function* rootSaga() {
   yield all([
+    watcherSessionAttendance(),
     watcherLoginSaga(),
     watcherClubSaga(),
     watcherClassSaga(),
@@ -29,6 +37,6 @@ export default function* rootSaga() {
     watcherAddChild(),
     watcherEnrollChild(),
     watcherForgetPassword(),
-    watcherResetPassword()
+    watcherResetPassword(),
   ]);
 }
