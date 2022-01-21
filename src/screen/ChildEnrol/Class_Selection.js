@@ -115,26 +115,6 @@ const Class_Selection = props => {
           setClubModal(bin);
         }}
       />
-
-      <PopUpCard
-        headertext={'Class Name*'}
-        text="Select Your Class Name"
-        value={classes}
-        onPress={() => setClassModal(!classmodal)}
-      />
-
-      <PopUpClass
-        ClosePopUp={() => setClassModal(!classmodal)}
-        visible={classmodal}
-        title={'Available Classes'}
-        data={classData}
-        setClub={classData => {
-          handleClasses(classData);
-        }}
-        setVisibility={bin => {
-          setClassModal(bin);
-        }}
-      />
       {/* {classmodal &&
                   classData.map(item => {
                     return (
@@ -184,10 +164,7 @@ const Class_Selection = props => {
               </Text>
             </TouchableOpacity>
           );
-<<<<<<< naved_mobile
         })} */}
-=======
-        })}
       {showclass ? (
         classData && classData.length > 0 ? (
           <>
@@ -197,40 +174,23 @@ const Class_Selection = props => {
               value={classes}
               onPress={() => setClassModal(!classmodal)}
             />
-            {classmodal &&
-              classData.map(item => {
-                return (
-                  <TouchableOpacity
-                    onPressOut={() => setClubModal(false)}
-                    key={item._id}
-                    onPress={() => {
-                      handleClasses(item);
-                      console.log('class: ', item._id);
-                    }}
-                    style={{
-                      marginLeft: wp('8%'),
-                      justifyContent: 'center',
-                      alignContent: 'center',
-                    }}>
-                    <Text
-                      style={{
-                        backgroundColor: colors.lightgrey,
-                        fontFamily: 'Nunito-Regular',
-                        fontSize: Fontsize,
-                        paddingTop: wp('2%'),
-                        margin: wp('0.5%'),
-                      }}>
-                      {item.name}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
+            <PopUpClass
+              ClosePopUp={() => setClassModal(!classmodal)}
+              visible={classmodal}
+              title={'Available Classes'}
+              data={classData}
+              setClub={classData => {
+                handleClasses(classData);
+              }}
+              setVisibility={bin => {
+                setClassModal(bin);
+              }}
+            />
           </>
         ) : (
           <ActivityIndicator size="large" color={colors.orange} />
         )
       ) : null}
->>>>>>> activityProgress-Fix
       {showsession ? (
         sessionData && sessionData.length > 0 ? (
           <>
