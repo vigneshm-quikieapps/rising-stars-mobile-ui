@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {
@@ -13,16 +12,11 @@ import {useSelector, useDispatch} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import EntIcon from 'react-native-vector-icons/Entypo';
 
-import {
-  PopUp,
-  AppButton,
-  RadioButton,
-  TextInputField,
-} from '../../../components';
-import {colors, Fontsize, wp, hp} from '../../../constants';
-import {PostDataPass} from '../../../redux/action/auth';
+import {PopUp, AppButton, RadioButton, TextInputField} from '../components';
+import {colors, Fontsize, wp, hp} from '../constants';
+// import {PostDataPass} from '../../../redux/action/auth';
 
-export default function PostComponent(props) {
+export default function PopUpClass(props) {
   const dispatch = useDispatch();
   const postcodeData = useSelector(state => state.Postcode.postcode);
   const isloading = useSelector(state => state.Postcode.isloading);
@@ -38,23 +32,21 @@ export default function PostComponent(props) {
     var size = 0,
       key;
     for (key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        size++;
-      }
+      if (obj.hasOwnProperty(key)) size++;
     }
     return size;
   };
-  const handledone = () => {
-    const size = Object.size(selected);
-    if (size !== 0) {
-      dispatch(PostDataPass(selected, size));
-      props.onChange && props.onChange;
-      props.ClosePopUp(false);
-    } else {
-      alert('Please Select Your Address or Tap on Manually for manual entry');
-    }
-  };
-
+  //   const handledone = () => {
+  //     const size = Object.size(selected);
+  //     if (size !== 0) {
+  //     //   dispatch(PostDataPass(selected, size));
+  //       props.onChange && props.onChange;
+  //       props.ClosePopUp(false);
+  //     } else {
+  //       alert('Please Select Your Address or Tap on Manually for manual entry');
+  //     }
+  //   };
+  //   console.log('items', props.data);
   return (
     <>
       {isloading ? (
@@ -76,7 +68,7 @@ export default function PostComponent(props) {
               },
             ]}>
             <View>
-              <View style={{height: hp('20%')}}>
+              <View style={{height: hp('10%')}}>
                 <TouchableOpacity onPress={props.ClosePopUp}>
                   <LinearGradient
                     style={styles.closePopUp}
@@ -85,74 +77,35 @@ export default function PostComponent(props) {
                   </LinearGradient>
                 </TouchableOpacity>
                 <View>
-                  <Text style={styles.herderstyle}>Search Address</Text>
-                  <TextInputField
-                    placeholder={'Postcode'}
-                    borderColor={'#e3e3e3'}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    editable={false}
-                    value={props.title}
-                  />
-                  <Text style={styles.subtitle}>Available Address</Text>
-                  {/* <Text style={styles.title}>
-                    Your PostCode{' '}
-                    <Text style={{fontWeight: 'bold'}}>{props.title}</Text>
-                  </Text> */}
+                  <Text style={styles.herderstyle}>{props.title}</Text>
                 </View>
                 <View
                   style={{
                     borderBottomWidth: 1,
-                    borderColor: colors.lightgrey,
+                    borderColor: colors.grey,
                     marginBottom: hp('0.1%'),
                   }}
                 />
               </View>
-              <View style={{height: hp('60%'), marginTop: hp('2%')}}>
-                {props.data && postcodeData.length > 0 && (
+              <View style={{height: hp('60%'), marginTop: hp('4%')}}>
+                {props.data && (
                   <FlatList
                     data={props.data}
-                    keyExtractor={item => item.addressline1}
+                    keyExtractor={item => item._id}
                     initialNumToRender={10}
                     renderItem={item => {
+                      //   console.log('item', item);
                       return (
                         <View style={styles.postcodeconatiner}>
                           <RadioButton
                             status={
-                              selected.addressline1 ===
-                                item.item.addressline1 && 'checked'
+                              selected.name === item.item.name
+                                ? 'checked'
+                                : 'unchecked'
                             }
                             onPress={() => setSelected(item.item)}
                           />
-                          <View
-                            style={{width: wp('90%'), marginLeft: wp('2%')}}>
-                            <Text style={styles.head} ellipsizeMode="head">
-                              {item.item.organisation}
-                            </Text>
-                            <Text
-                              style={styles.body}
-                              // numberOfLines={
-                              //   show === item.item.addressline1 && data ? 1 : 1
-                              // }
-                              // ellipsizeMode="tail"
-                            >
-                              {item.item.addressline1}
-                              {item.item.addressline2}
-                            </Text>
-                            {/* <Text
-                              onPress={() => handlemore(item.item.addressline1)}
-                              style={{
-                                marginRight: wp('10%'),
-                                alignSelf: 'flex-end',
-                                fontSize: wp('2.5%'),
-                                color: colors.orange,
-                                textDecorationLine: 'underline',
-                              }}>
-                              {show === item.item.addressline1 && data
-                                ? 'Less info'
-                                : 'More info'}
-                            </Text> */}
-                          </View>
+                          <Text style={styles.itemName}>{item.item.name}</Text>
                         </View>
                       );
                     }}
@@ -167,14 +120,12 @@ export default function PostComponent(props) {
               </View>
               <View style={styles.bottomView}>
                 <AppButton
-                  title="Enter Manually"
-                  style={{paddingVertical: 12}}
-                  onPress={props.ManuallyButton}
-                />
-                <AppButton
                   title="OK"
-                  style={{paddingVertical: 12, marginVertical: 0}}
-                  onPress={handledone}
+                  style={{paddingVertical: 12, paddingHorizontal: 40}}
+                  onPress={() => {
+                    props.setVisibility(false);
+                    props.setClub(selected);
+                  }}
                 />
               </View>
             </View>
@@ -210,7 +161,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginVertical: hp('0.5%'),
     // width: wp('80%'),
-    height: hp('15%'),
+    height: hp('8%'),
     backgroundColor: colors.lightgrey,
     alignItems: 'center',
     borderRadius: wp('5%'),
@@ -245,6 +196,10 @@ const styles = StyleSheet.create({
     margin: 0,
     flexDirection: 'row',
     height: hp('10%'),
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+  },
+  itemName: {
+    marginLeft: wp('5%'),
+    fontSize: wp('4%'),
   },
 });

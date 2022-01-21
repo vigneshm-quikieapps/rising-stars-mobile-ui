@@ -28,6 +28,7 @@ import {
 import {getLocalData} from '../../utils/LocalStorage';
 
 import {useSelector, useDispatch} from 'react-redux';
+import PopUpClass from '../../components/pop-up-class_selection';
 
 const New_Class_Selection = props => {
   const [business, setBusiness] = useState();
@@ -118,7 +119,37 @@ const New_Class_Selection = props => {
         value={business}
         onPress={() => setClubModal(!clubmodal)}
       />
-      {clubmodal &&
+      <PopUpClass
+        ClosePopUp={() => setClubModal(!clubmodal)}
+        visible={clubmodal}
+        title={'Available Clubs'}
+        data={clubData}
+        setClub={club => {
+          handleBusiness(club);
+        }}
+        setVisibility={bin => {
+          setClubModal(bin);
+        }}
+      />
+      <PopUpCard
+        headertext={'Class Name*'}
+        text="Select Your Class Name"
+        value={classes}
+        onPress={() => setClassModal(!classmodal)}
+      />
+      <PopUpClass
+        ClosePopUp={() => setClassModal(!classmodal)}
+        visible={classmodal}
+        title={'Available Classes'}
+        data={classData}
+        setClub={classData => {
+          handleClasses(classData);
+        }}
+        setVisibility={bin => {
+          setClassModal(bin);
+        }}
+      />
+      {/* {clubmodal &&
         clubData.map(item => {
           return (
             <TouchableOpacity
@@ -142,8 +173,8 @@ const New_Class_Selection = props => {
               </Text>
             </TouchableOpacity>
           );
-        })}
-      {showclass ? (
+        })} */}
+      {/* {showclass ? (
         classData && classData.length > 0 ? (
           <>
             <PopUpCard
@@ -184,7 +215,7 @@ const New_Class_Selection = props => {
         ) : (
           <ActivityIndicator size="large" color={colors.orange} />
         )
-      ) : null}
+      ) : null} */}
       {showsession ? (
         sessionData && sessionData.length > 0 ? (
           <>
