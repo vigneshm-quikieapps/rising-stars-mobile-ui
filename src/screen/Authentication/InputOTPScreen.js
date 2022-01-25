@@ -2,14 +2,15 @@ import React, {useState} from 'react';
 import {
   SafeAreaView,
   Text,
+  View,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import {AppButton} from './../../components';
+// import {AppButton} from './../../components';
 import {hp, wp} from '../../constants';
 import {useNavigation} from '@react-navigation/native';
-
+import {CustomLayout, AppButton} from './../../components';
 import {
   CodeField,
   Cursor,
@@ -62,36 +63,31 @@ function InputOTPScreen(props) {
     if (value1 < 6) {
       alert('Please Enter a Valid OTP');
     } else {
-      if (props.twoInputField) {
-        props.navigation.navigate('SetPassword');
-      } else {
-        props.navigation.navigate('EnrollStack');
-      }
+      props.navigation.navigate('SetPassword');
+      // if (props.twoInputField) {
+      //   props.navigation.navigate('SetPassword');
+      // } else {
+      //   props.navigation.navigate('EnrollStack');
+      // }
     }
   };
   return (
-    <SafeAreaView style={{paddingHorizontal: wp('4%')}}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        // style={styles.root}
-      >
-        <Text style={styles.title}>OTP Verificaton</Text>
-        {props.twoInputField ? (
-          <Text style={[styles.subtitle, {alignSelf: 'flex-start'}]}>
-            Enter Mobile OTP
-          </Text>
-        ) : (
-          <>
-            <Text style={[styles.subtitle, {marginTop: hp('2%')}]}>
-              Enter the verificaton code we
-            </Text>
-            <Text style={[styles.subtitle, {marginBottom: hp('5%')}]}>
-              {' '}
-              just sent to your Number.
-            </Text>
-          </>
-        )}
-
+    <CustomLayout
+      // style={styles.container}
+      backbutton={() => props.navigation.goBack()}
+      header
+      headertextStyle={{
+        width: wp('90%'),
+        fontSize: wp('8%'),
+      }}
+      headertext={`OTP`}
+      subheader
+      subheadertext={'Enter OTP'}
+      subheadertextstyle={{
+        opacity: 0.5,
+        width: wp('90%'),
+      }}>
+      <View style={{paddingTop: hp('3%')}}>
         <CodeField
           ref={ref}
           {...props}
@@ -110,14 +106,62 @@ function InputOTPScreen(props) {
             </Text>
           )}
         />
+      </View>
+      <View style={{height: hp('48%')}} />
+      <AppButton
+        title={props.twoInputField ? 'Verify' : 'Verify Account'}
+        onPress={OTPValidation}
+        style={{marginVertical: 30}}
+      />
+    </CustomLayout>
+    // <SafeAreaView style={{paddingHorizontal: wp('4%')}}>
+    //   <KeyboardAvoidingView
+    //     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    //     // style={styles.root}
+    //   >
+    //     <Text style={styles.title}>OTP Verificaton</Text>
+    //     {props.twoInputField ? (
+    //       <Text style={[styles.subtitle, {alignSelf: 'flex-start'}]}>
+    //         Enter Mobile OTP
+    //       </Text>
+    //     ) : (
+    //       <>
+    //         <Text style={[styles.subtitle, {marginTop: hp('2%')}]}>
+    //           Enter the verificaton code we
+    //         </Text>
+    //         <Text style={[styles.subtitle, {marginBottom: hp('5%')}]}>
+    //           {' '}
+    //           just sent to your Number.
+    //         </Text>
+    //       </>
+    //     )}
 
-        <AppButton
-          title={props.twoInputField ? 'Verify' : 'Verify Account'}
-          onPress={OTPValidation}
-          style={{marginVertical: 30}}
-        />
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+    //     <CodeField
+    //       ref={ref}
+    //       {...props}
+    //       value={value1}
+    //       onChangeText={setValue1}
+    //       cellCount={CELL_COUNT}
+    //       rootStyle={styles.codeFieldRoot}
+    //       keyboardType="number-pad"
+    //       textContentType="oneTimeCode"
+    //       renderCell={({index, symbol, isFocused}) => (
+    //         <Text
+    //           key={index}
+    //           style={[styles.cell, isFocused && styles.focusCell]}
+    //           onLayout={getCellOnLayoutHandler1(index)}>
+    //           {symbol || (isFocused ? <Cursor /> : null)}
+    //         </Text>
+    //       )}
+    //     />
+
+    //     <AppButton
+    //       title={props.twoInputField ? 'Verify' : 'Verify Account'}
+    //       onPress={OTPValidation}
+    //       style={{marginVertical: 30}}
+    //     />
+    //   </KeyboardAvoidingView>
+    // </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
@@ -130,6 +174,7 @@ const styles = StyleSheet.create({
     lineHeight: 38,
     fontSize: 24,
     borderWidth: 2,
+    // borderRadius: 10,
     borderColor: '#00000030',
     textAlign: 'center',
   },

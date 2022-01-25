@@ -36,16 +36,16 @@ function SetPassword(props) {
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   return (
     <CustomLayout
-      style={{height: '100%'}}
+      // style={{height: '100%'}}
       header
       headertext={'Set password'}
       headertextStyle={{
         width: wp('90%'),
-        fontSize: wp('10%'),
+        fontSize: wp('8%'),
       }}
       subheader
       subheadertext={'Setup your password'}
-      subheadertextstyle={{fontSize: wp('5.3%'), opacity: 0.5}}>
+      subheadertextstyle={{opacity: 0.5}}>
       <SuccessModal
         title="Password changed successfully"
         isVisible={successModalVisible}
@@ -70,7 +70,7 @@ function SetPassword(props) {
           values,
           initialValues,
         }) => (
-          <View style={{height: '100%'}}>
+          <View style={{paddingTop: hp('3%')}}>
             <TextInputField
               placeholder="New Password"
               autoCapitalize="none"
@@ -95,10 +95,10 @@ function SetPassword(props) {
               error={errors.passwordConfirmation}
               visible={touched.passwordConfirmation}
             />
-
+            <View style={{height: hp('43%')}} />
             <AppButton
               title="Confirm Password"
-              style={{marginTop: hp('40%')}}
+              // style={{marginTop: hp('45%')}}
               onPress={() => {
                 dispatch(
                   resetPasswordData({

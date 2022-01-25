@@ -65,7 +65,7 @@ export default function CustomLayout(props) {
                 style={[
                   styles.subheadertext,
                   props.subheadertextstyle,
-                  {fontSize: wp('5%')},
+                  // {fontSize: wp('4%')},
                 ]}>
                 {props.subheadertext}
               </Text>
@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-SemiBold',
     marginTop: hp('1.5%'),
     width: wp('65%'),
+    fontSize: wp('4%'),
   },
   step: {
     fontSize: Fontsize,
