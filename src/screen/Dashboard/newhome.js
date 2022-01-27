@@ -45,6 +45,9 @@ const Home = () => {
   const [currentSessionAttendance, setCurrentSessionAttendance] = useState('');
   const membersdata = useSelector(state => state.memberData.memberData);
   const memberClassData = useSelector(state => state.memberClassData.classData);
+  const sessionAttendance = useSelector(
+    state => state.sessionlist.sessionAttendance,
+  );
   const accessToken = async () => {
     const Token = await getLocalData('accessToken');
     setToken(Token);
@@ -60,11 +63,30 @@ const Home = () => {
     const userData = await getLocalData('user', true);
     setUser(userData);
   }, []);
-
+  var id = '';
   const wheelselected = item => {
     setItem(item);
   };
 
+  const dispatchValues = () => {
+    setCurrentSessionAttendance('');
+    dispatch({
+      type: Action.USER_GET_SESSION_ATTENDANCE,
+      payload: {
+        token,
+        data: {
+          sessionId: id,
+          memberId: currentMember._id,
+        },
+      },
+      callback: () => {},
+    });
+  };
+
+  useEffect(() => {
+    setCurrentSessionAttendance(sessionAttendance.attendance);
+    console.log('Session: ', sessionAttendance.attendance);
+  }, [sessionAttendance]);
   const pagination = () => {
     return (
       <Pagination
@@ -276,22 +298,12 @@ const Home = () => {
               itemWidth={wp('90%')}
               onSnapToItem={async index => {
                 setActiveDotIndex(index);
-                setCurrentSessionId(
+                id =
                   memberClassData &&
-                    memberClassData?.filter(
-                      item => item?.enrolledStatus === 'ENROLLED',
-                    )[index].session._id,
-                );
-                const attendance =
-                  currentSessionId &&
-                  (await fetchAttendanceOfMemberInSession({
-                    token,
-                    data: {
-                      sessionId: currentSessionId,
-                      memberId: currentMember._id,
-                    },
-                  }));
-                setCurrentSessionAttendance(attendance.attendance);
+                  memberClassData?.filter(
+                    item => item?.enrolledStatus === 'ENROLLED',
+                  )[index].session._id;
+                dispatchValues();
               }}
             />
           ) : (

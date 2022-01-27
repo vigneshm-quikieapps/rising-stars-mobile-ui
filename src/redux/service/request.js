@@ -326,3 +326,17 @@ export function fetchAttendanceOfMemberInSession(payload) {
       throw error;
     });
 }
+
+export function fetchActivityOfMemberInSession(payload) {
+  return fetch(`${heroku_url}/members/${payload.id}/progress`, {
+    method: 'GET',
+    headers: {
+      //Authorization: `Bearer ${payload.token}`,
+    },
+    body: JSON.stringify(payload.data),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      throw error;
+    });
+}

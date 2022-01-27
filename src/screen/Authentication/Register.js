@@ -122,7 +122,7 @@ function Register(props) {
         onSubmit={async values => {
           if (values.mobileNoOTP.length === 0) {
             const otp = await fetchMobileOTP(values.contactNumber);
-
+            console.log(otp);
             timeout();
             refRBSheet.current.open();
           } else if (postsize !== 0) {

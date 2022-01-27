@@ -21,9 +21,11 @@ import {
   memberClassData,
   currentMemberData,
   currentMemberAttendance,
+  currentMemberActivity,
 } from './reducer/home';
 
 const rootReducer = combineReducers({
+  currentMemberActivity,
   LoginData,
   childData,
   clubname,
