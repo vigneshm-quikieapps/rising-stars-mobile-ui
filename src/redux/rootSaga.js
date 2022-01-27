@@ -19,11 +19,13 @@ import {
   watcherMemberSaga,
   watcherMemberClassSaga,
   watcherMemberClasses,
+  watcherMemberActivity,
 } from './sagas/home';
 
 export default function* rootSaga() {
   yield all([
     watcherSessionAttendance(),
+    watcherMemberActivity(),
     watcherLoginSaga(),
     watcherClubSaga(),
     watcherClassSaga(),

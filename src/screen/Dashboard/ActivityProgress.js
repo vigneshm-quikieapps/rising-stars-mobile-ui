@@ -23,6 +23,7 @@ import {
   //fetchAttendanceOfMemberInSession,
   fetchProgress,
 } from '../../redux/service/request';
+import {currentMemberData} from '../../redux/reducer/home';
 const ActivityProgress = () => {
   const itemWidth = Dimensions.get('window').width;
   const membersdata = useSelector(state => state.memberData.memberData);
@@ -31,6 +32,10 @@ const ActivityProgress = () => {
   const [wheelitem, setItem] = useState(0);
   const [currentMember, setCurrentMember] = useState('');
   const memberClassData = useSelector(state => state.memberClassData.classData);
+  console.log('Member: ', memberClassData);
+  const memberActivityProgress = useSelector(
+    state => state.currentMemberActivity.activity,
+  );
   const [user, setUser] = useState('');
   const [token, setToken] = useState();
   const [progress, setProgress] = useState();
@@ -53,14 +58,10 @@ const ActivityProgress = () => {
   membersdata && membersdata.map(item => member.push(item.name));
 
   accessToken();
-  const getProgress = async () => {
-    setProgress(
-      await fetchProgress({
-        id: currentMember._id,
-        token: token,
-      }),
-    );
-  };
+
+  useEffect(() => {
+    setProgress(memberActivityProgress);
+  }, [memberActivityProgress]);
 
   useEffect(() => {
     getLocalUserData();
@@ -81,7 +82,13 @@ const ActivityProgress = () => {
         type: Action.USER_GET_CURRENT_MEMBER_DATA,
         payload: currentMember,
       });
-    getProgress();
+    console.log(currentMember._id, token);
+    currentMember &&
+      token &&
+      dispatch({
+        type: Action.USER_GET_CURRENT_MEMBER_ACTIVITY,
+        payload: {id: currentMember._id, token: token},
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMember]);
   useEffect(() => {
@@ -91,21 +98,6 @@ const ActivityProgress = () => {
           activeDotIndex
         ].session._id,
       );
-
-    // currentSessionId &&
-    //   fetchAttendanceOfMemberInSession({
-    //     token,
-    //     data: {
-    //       sessionId: currentSessionId,
-    //       memberId: currentMember._id,
-    //     },
-    //   }).then(attendance => {
-    //     dispatch({
-    //       type: Action.USER_GET_CURRENT_MEMBER_ATTENDANCE,
-    //       payload: attendance.attendance,
-    //     });
-    //     setCurrentSessionAttendance(attendance.attendance);
-    //   });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberClassData]);
@@ -221,6 +213,7 @@ const ActivityProgress = () => {
             itemWidth={itemWidth * 0.88}
             renderItem={renderItem}
             onSnapToItem={async index => {
+              setProgress('');
               setActiveDotIndex(index);
               setCurrentSessionId(
                 memberClassData &&

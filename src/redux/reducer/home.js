@@ -111,3 +111,29 @@ export const currentMemberAttendance = (
       return state;
   }
 };
+
+const currentMemberActivityState = {
+  activity: '',
+  error: '',
+};
+
+export const currentMemberActivity = (
+  state = currentMemberActivityState,
+  action,
+) => {
+  // console.log('Action: ', action.payload, action.type);
+  switch (action.type) {
+    case Action.USER_GET_CURRENT_MEMBER_ACTIVITY_SUCCESS:
+      return {
+        ...state,
+        activity: action.data,
+      };
+    case Action.USER_GET_CURRENT_MEMBER_ACTIVITY_FAILURE:
+      return {
+        ...state,
+        error: action.error,
+      };
+    default:
+      return state;
+  }
+};

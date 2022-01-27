@@ -1,10 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, StyleSheet, ActivityIndicator} from 'react-native';
 import moment from 'moment';
 
 import {
