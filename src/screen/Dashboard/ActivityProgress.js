@@ -32,7 +32,6 @@ const ActivityProgress = () => {
   const [wheelitem, setItem] = useState(0);
   const [currentMember, setCurrentMember] = useState('');
   const memberClassData = useSelector(state => state.memberClassData.classData);
-  console.log('Member: ', memberClassData);
   const memberActivityProgress = useSelector(
     state => state.currentMemberActivity.activity,
   );

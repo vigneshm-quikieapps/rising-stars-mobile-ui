@@ -60,7 +60,6 @@ function Register(props) {
   const isloading = useSelector(state => state.Postcodedata.isloading);
   const error = useSelector(state => state.Postcodedata.error);
   const status = useSelector(state => state.RegisterData.status);
-  const Reerror = useSelector(state => state.RegisterData.error);
   const isRegloading = useSelector(state => state.RegisterData.isLoading);
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
@@ -73,6 +72,7 @@ function Register(props) {
   const [term, setTerm] = useState(false);
   const [temp, setTemp] = useState(false);
   const [main, setMain] = useState(false);
+  const [message, setMessage] = useState('');
   const [showSuccessalert, setSuccessAlert] = useState(false);
   const [showFailurealert, setFailureAlert] = useState(false);
   const [seconds, setSeconds] = React.useState(10);
@@ -91,6 +91,28 @@ function Register(props) {
   useEffect(() => {
     timeout();
   });
+
+  useEffect(() => {
+    console.log('Status: ', status);
+    if (status === 'created successfully') {
+      setSuccessAlert(true);
+    } else {
+      if (status.length > 0) {
+        if (status[0].email !== undefined) {
+          setMessage('Email is already Taken');
+        } else if (status[0].mobileNo !== undefined) {
+          setMessage('Phone Number is already Taken');
+        } else if (status[0].name !== undefined) {
+          setMessage(status[0].name);
+        } else if (status[0].mobileNoOTP !== undefined) {
+          setMessage('Enter a valid OTP');
+        } else {
+          setMessage('Please verify all the details');
+        }
+        setFailureAlert(true);
+      }
+    }
+  }, [status]);
 
   return (
     <CustomLayout
@@ -125,21 +147,20 @@ function Register(props) {
             console.log(otp);
             timeout();
             refRBSheet.current.open();
-          } else if (postsize !== 0) {
-            values.addressLine1 = postdata.addressline1;
-            values.addressLine2 = postdata.addressline2;
-            values.cityTown = postdata.posttown;
-
-            dispatch(RegisterData(values));
-            if (status === 'created successfully') {
-              setSuccessAlert(true);
-              //POP-UP with message
-              //Navigate to Login Screen
-            } else {
-              setFailureAlert(true);
-              //POP-UP with error message
-              //navigate to register
+          } else {
+            if (postsize !== 0) {
+              values.addressLine1 = postdata.addressline1;
+              values.addressLine2 = postdata.addressline2;
+              values.cityTown = postdata.posttown;
             }
+            console.log(values);
+            dispatch(RegisterData(values));
+            // console.log(status);
+            // if (status === 'created successfully') {
+            //   setSuccessAlert(true);
+            //   //POP-UP with message
+            //   //Navigate to Login Screen
+            // }
           }
         }}
         validationSchema={validationSchema}>
@@ -426,9 +447,12 @@ function Register(props) {
               <Alert
                 visible={showFailurealert}
                 confirm={'Retry'}
-                success={() => console.log('Retry')}
+                success={() => {
+                  setFailureAlert(false);
+                  values.mobileNoOTP = '';
+                }}
                 image={'failure'}
-                message={'Something Went Wrong'}
+                message={message}
               />
             ) : null}
             <RBSheet
@@ -443,14 +467,23 @@ function Register(props) {
                   backgroundColor: colors.lightgrey,
                 },
                 container: {
-                  height: hp('40%'),
+                  height: hp('100%'),
                   borderTopRightRadius: 16,
                   borderTopLeftRadius: 16,
                   marginBottom: hp('10%'),
                 },
               }}>
               <View style={{paddingHorizontal: wp('5%')}}>
-                <Text style={styles.otptitle}>Enter Your OTP</Text>
+                <Text style={styles.otptitle}>OTP</Text>
+                <Text
+                  style={{
+                    color: colors.grey,
+                    fontSize: Fontsize,
+                    marginTop: wp('2%'),
+                    marginBottom: wp('2%'),
+                  }}>
+                  Enter OTP
+                </Text>
                 <CodeField
                   ref={ref}
                   {...prop}
@@ -472,7 +505,7 @@ function Register(props) {
 
                 <AppButton
                   title="Verification"
-                  style={{margin: 0}}
+                  style={{margin: 0, marginTop: hp('47%')}}
                   onPress={() => {
                     if (value.length < 6) {
                       alert('Please Enter Valid OTP');
@@ -656,8 +689,6 @@ const styles = StyleSheet.create({
   },
   otptitle: {
     fontFamily: 'Nunito-Regular',
-    fontSize: Fontsize + wp('1.5%'),
-    alignSelf: 'center',
-    textDecorationLine: 'underline',
+    fontSize: Fontsize + wp('3%'),
   },
 });

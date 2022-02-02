@@ -41,7 +41,6 @@ const AttendenceShow = () => {
   const [currentSessionId, setCurrentSessionId] = useState('');
   const [activeDotIndex, setActiveDotIndex] = React.useState(0);
   const [currentSessionAttendance, setCurrentSessionAttendance] = useState('');
-
   // const Item = ({title}) => (
   //   <View style={styles.item}>
   //     <Text style={styles.title}>{title}</Text>
@@ -88,6 +87,7 @@ const AttendenceShow = () => {
   accessToken();
 
   useEffect(() => {
+    console.log('Session: ', sessionAttendance);
     setCurrentSessionAttendance(sessionAttendance.attendance);
   }, [sessionAttendance]);
 
@@ -302,83 +302,87 @@ const AttendenceShow = () => {
         currentSessionAttendance.records !== undefined ? (
           <FlatList
             data={currentSessionAttendance.records}
+            ListFooterComponent={<View />}
+            ListFooterComponentStyle={{height: 300}}
             keyExtractor={item => item._id}
             renderItem={item => {
               return (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    paddingBottom: 20,
-                  }}>
+                <>
                   <View
                     style={{
-                      width: '20%',
-                      justifyContent: 'center',
+                      flexDirection: 'row',
                       alignItems: 'center',
+                      paddingBottom: 20,
                     }}>
-                    <Text
+                    <View
                       style={{
-                        fontSize: wp('4%'),
-                        fontFamily: 'Nunito-Regular',
-                        color: colors.blackOpacity,
-                      }}>
-                      {days[new Date(item.item.date).getDay()]}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: wp('8%'),
-                        fontFamily: 'Nunito-SemiBold',
-                      }}>
-                      {new Date(item.item.date).getDate()}
-                    </Text>
-                  </View>
-                  <View style={{justifyContent: 'center'}}>
-                    <LinearGradient
-                      colors={
-                        item.item.attended === true
-                          ? ['#68D6AB', '#33AB96']
-                          : ['#EA5C5C', '#AB3333']
-                        // : item.status === 'Tardy'
-                        // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
-                        // : item.status === 'Upcoming'
-                        // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
-                        // : ['#ffa300', '#ff7e00']
-                      }
-                      style={{height: 1.5, width: 30}}
-                    />
-                  </View>
-                  <View style={{justifyContent: 'center', width: '100%'}}>
-                    <LinearGradient
-                      colors={
-                        item.item.attended === true
-                          ? ['#68D6AB', '#33AB96']
-                          : ['#EA5C5C', '#AB3333']
-                        // : item.status === 'Tardy'
-                        // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
-                        // : item.status === 'Upcoming'
-                        // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
-                        // : ['#ffa300', '#ff7e00']
-                      }
-                      style={{
-                        padding: 20,
-                        width: '100%',
-                        borderTopLeftRadius: 16,
-                        borderBottomLeftRadius: 16,
-                        borderColor: '#d2d2d2',
-                        borderWidth: item.status === 'Upcoming' ? 0.5 : 0,
+                        width: '20%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
                       }}>
                       <Text
                         style={{
-                          color: colors.white,
-                          fontSize: wp('4.5%'),
-                          fontFamily: 'Naunito-SemiBold',
+                          fontSize: wp('4%'),
+                          fontFamily: 'Nunito-Regular',
+                          color: colors.blackOpacity,
                         }}>
-                        {item.item.attended ? 'Attended' : 'No Show'}
+                        {days[new Date(item.item.date).getDay()]}
                       </Text>
-                    </LinearGradient>
+                      <Text
+                        style={{
+                          fontSize: wp('8%'),
+                          fontFamily: 'Nunito-SemiBold',
+                        }}>
+                        {new Date(item.item.date).getDate()}
+                      </Text>
+                    </View>
+                    <View style={{justifyContent: 'center'}}>
+                      <LinearGradient
+                        colors={
+                          item.item.attended === true
+                            ? ['#68D6AB', '#33AB96']
+                            : ['#EA5C5C', '#AB3333']
+                          // : item.status === 'Tardy'
+                          // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
+                          // : item.status === 'Upcoming'
+                          // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
+                          // : ['#ffa300', '#ff7e00']
+                        }
+                        style={{height: 1.5, width: 30}}
+                      />
+                    </View>
+                    <View style={{justifyContent: 'center', width: '100%'}}>
+                      <LinearGradient
+                        colors={
+                          item.item.attended === true
+                            ? ['#68D6AB', '#33AB96']
+                            : ['#EA5C5C', '#AB3333']
+                          // : item.status === 'Tardy'
+                          // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
+                          // : item.status === 'Upcoming'
+                          // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
+                          // : ['#ffa300', '#ff7e00']
+                        }
+                        style={{
+                          padding: 20,
+                          width: '100%',
+                          borderTopLeftRadius: 16,
+                          borderBottomLeftRadius: 16,
+                          borderColor: '#d2d2d2',
+                          borderWidth: item.status === 'Upcoming' ? 0.5 : 0,
+                        }}>
+                        <Text
+                          style={{
+                            color: colors.white,
+                            fontSize: wp('4.5%'),
+                            fontFamily: 'Naunito-SemiBold',
+                          }}>
+                          {item.item.attended ? 'Attended' : 'No Show'}
+                        </Text>
+                      </LinearGradient>
+                    </View>
                   </View>
-                </View>
+                </>
               );
             }}
           />

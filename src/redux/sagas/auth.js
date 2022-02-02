@@ -26,10 +26,10 @@ export function* watcherPostcode() {
 function* handleRegister(action) {
   try {
     const register = yield call(fetchRegister, action.payload);
-    if (register.message === 'created successfully') {
-      yield put({type: Action.USER_REGISTER_SUCCESS, payload: register});
+    if (register.error !== undefined) {
+      yield put({type: Action.USER_REGISTER_ERROR, error: register});
     } else {
-      throw new Error(register.message);
+      yield put({type: Action.USER_REGISTER_SUCCESS, payload: register});
     }
   } catch (error) {
     yield put({type: Action.USER_REGISTER_ERROR, error: error.message});

@@ -1,4 +1,3 @@
-import React, {useRef} from 'react';
 import {
   View,
   Text,
@@ -7,12 +6,11 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import RBSheet from 'react-native-raw-bottom-sheet';
+import React from 'react';
 import {AppButton} from '.';
 import {hp, colors, wp, Fontsize} from '../constants';
 
 function Alert(props) {
-  const ref = useRef();
   return (
     <Modal transparent={true} visible={props.visible}>
       <View style={styles.mainContainer}>

@@ -62,7 +62,9 @@ export const RegisterData = (state = RegisterState, action) => {
     case Action.USER_REGISTER_SUCCESS:
       return {
         ...state,
-        status: action.payload.message,
+        status: action.payload.message
+          ? action.payload.message
+          : action.payload.errors,
         isloading: false,
       };
     case Action.USER_REGISTER_ERROR:

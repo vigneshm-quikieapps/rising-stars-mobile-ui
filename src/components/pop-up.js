@@ -11,7 +11,9 @@ function PopUp(props) {
         transparent={props.transparent}
         visible={props.visible}
         onRequestClose={props.onRequestClose}>
-        <View>{props.children}</View>
+        <View style={{backgroundColor: 'rgba(0,0,0,0.7)'}}>
+          {props.children}
+        </View>
       </Modal>
     </TouchableOpacity>
   );
