@@ -179,6 +179,17 @@ export function fetchClubFinanc(id) {
       throw error;
     });
 }
+
+export function fetchParticularBusiness(id) {
+  return fetch(`${heroku_url}/businesses/${id}`, {
+    method: 'GET',
+  })
+    .then(response => response.json())
+    .catch(error => {
+      throw error;
+    });
+}
+
 //enroll to class
 export function regularEnrollment(payload) {
   return fetch(`${heroku_url}/enrolments`, {
