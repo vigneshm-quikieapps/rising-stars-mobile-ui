@@ -7,6 +7,7 @@ import {
   fetchMemberClassData,
   fetchClasses,
   fetchActivityOfMemberInSession,
+  fetchParticularBusiness,
 } from '../service/request';
 
 function* handleGetMember(action) {
@@ -19,6 +20,18 @@ function* handleGetMember(action) {
 }
 export function* watcherMemberSaga() {
   yield takeEvery(Action.USER_GET_MEMBER, handleGetMember);
+}
+
+function* handleGetBusinessName(action) {
+  try {
+    const business = yield call(fetchParticularBusiness, action.payload);
+    yield put({type: Action.USER_GET_CURRENT_BUSINESS_NAME_SUCCESS, data: business});
+  } catch (error) {
+    yield put({type: Action.USER_GET_CURRENT_BUSINESS_NAME_FAILED, error: error});
+  }
+}
+export function* watcherBusinessNameSaga() {
+  yield takeEvery(Action.USER_GET_CURRENT_BUSINESS_NAME, handleGetBusinessName);
 }
 
 function* handleGetMemberClass(action) {

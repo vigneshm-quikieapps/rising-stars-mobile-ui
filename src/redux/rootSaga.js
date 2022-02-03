@@ -20,6 +20,7 @@ import {
   watcherMemberClassSaga,
   watcherMemberClasses,
   watcherMemberActivity,
+  watcherBusinessNameSaga,
 } from './sagas/home';
 
 export default function* rootSaga() {
@@ -40,5 +41,6 @@ export default function* rootSaga() {
     watcherEnrollChild(),
     watcherForgetPassword(),
     watcherResetPassword(),
+    watcherBusinessNameSaga(),
   ]);
 }

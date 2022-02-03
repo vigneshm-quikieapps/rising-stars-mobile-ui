@@ -19,7 +19,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getmemberClass, getmemberData} from '../../redux/action/home';
 import * as Action from '../../redux/action-types';
 import {getLocalData} from '../../utils/LocalStorage';
+<<<<<<< HEAD
 
+=======
+import {
+  //fetchAttendanceOfMemberInSession,
+  fetchProgress,fetchParticularBusiness
+} from '../../redux/service/request';
+import {currentMemberData} from '../../redux/reducer/home';
+>>>>>>> 7eea601dec3fba7691352afd89a4f0e6cf3e0668
 const ActivityProgress = () => {
   const itemWidth = Dimensions.get('window').width;
   const membersdata = useSelector(state => state.memberData.memberData);
@@ -31,6 +39,11 @@ const ActivityProgress = () => {
   const memberActivityProgress = useSelector(
     state => state.currentMemberActivity.activity,
   );
+<<<<<<< HEAD
+=======
+  const businessData = useSelector(state => state.businessData.businessData);
+  const [user, setUser] = useState('');
+>>>>>>> 7eea601dec3fba7691352afd89a4f0e6cf3e0668
   const [token, setToken] = useState();
   const [progress, setProgress] = useState();
   const [currentMemberIndex, setCurrentMemberIndex] = useState(0);
@@ -74,8 +87,13 @@ const ActivityProgress = () => {
         type: Action.USER_GET_CURRENT_MEMBER_ACTIVITY,
         payload: {id: currentMember._id},
       });
+      currentMember && dispatch({
+        type: Action.USER_GET_CURRENT_BUSINESS_NAME,
+        payload: {id: currentMember._id},
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMember]);
+<<<<<<< HEAD
   // useEffect(() => {
   //   memberClassData.length > 1 &&
   //     setCurrentSessionId(
@@ -86,6 +104,21 @@ const ActivityProgress = () => {
 
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [memberClassData]);
+=======
+  console.log('bus', businessData._id)
+  useEffect(() => {
+    memberClassData.length > 1 &&
+      setCurrentSessionId(
+        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
+          activeDotIndex
+        ].session._id,
+      );
+    // useEffect(async () => {
+    //   currentMember && await fetchParticularBusiness({id: currentMember._id})
+    // }, [currentMember]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [memberClassData]);
+>>>>>>> 7eea601dec3fba7691352afd89a4f0e6cf3e0668
   const renderItem = ({item, index}) => {
     return (
       <LinearGradient
@@ -105,7 +138,7 @@ const ActivityProgress = () => {
             color: colors.white,
             fontFamily: 'Nunito-Regular',
           }}>
-          Class Name
+          Business Name
         </Text>
         <Text
           style={{
@@ -113,7 +146,27 @@ const ActivityProgress = () => {
             color: colors.white,
             fontFamily: 'Nunito-SemiBold',
           }}>
-          {item.class.name}
+          {/* {item.class.name} */}
+          {item.class.businessId}
+          {/* {item.business.name} */}
+        </Text>
+        <Text
+          style={{
+            fontSize: 16,
+            color: colors.white,
+            fontFamily: 'Nunito-Regular',
+            marginTop: hp('2%')
+          }}>
+          Evaluation Scheme Name
+        </Text>
+        <Text
+          style={{
+            fontSize: 18,
+            color: colors.white,
+            fontFamily: 'Nunito-SemiBold',
+          }}>
+          {/* {item.class.name} */}
+        {item.class.evaluationSchemeId}
         </Text>
       </LinearGradient>
     );
