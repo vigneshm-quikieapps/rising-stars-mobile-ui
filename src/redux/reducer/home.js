@@ -121,7 +121,7 @@ export const currentMemberActivity = (
   state = currentMemberActivityState,
   action,
 ) => {
-  // console.log('Action: ', action.payload, action.type);
+  console.log('Action reducre: ', action.payload, action.type);
   switch (action.type) {
     case Action.USER_GET_CURRENT_MEMBER_ACTIVITY_SUCCESS:
       return {

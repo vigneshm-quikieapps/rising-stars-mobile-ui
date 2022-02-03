@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {colors, Images, Fontsize, hp, wp} from '../../constants';
+import {colors, Fontsize, hp, wp} from '../../constants';
 import Carousel from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
 import {WheelPicker} from 'react-native-wheel-picker-android';
@@ -19,11 +19,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getmemberClass, getmemberData} from '../../redux/action/home';
 import * as Action from '../../redux/action-types';
 import {getLocalData} from '../../utils/LocalStorage';
-import {
-  //fetchAttendanceOfMemberInSession,
-  fetchProgress,
-} from '../../redux/service/request';
-import {currentMemberData} from '../../redux/reducer/home';
+
 const ActivityProgress = () => {
   const itemWidth = Dimensions.get('window').width;
   const membersdata = useSelector(state => state.memberData.memberData);
@@ -35,11 +31,9 @@ const ActivityProgress = () => {
   const memberActivityProgress = useSelector(
     state => state.currentMemberActivity.activity,
   );
-  const [user, setUser] = useState('');
   const [token, setToken] = useState();
   const [progress, setProgress] = useState();
   const [currentMemberIndex, setCurrentMemberIndex] = useState(0);
-  const [currentSessionId, setCurrentSessionId] = useState('');
   const [activeDotIndex, setActiveDotIndex] = React.useState(0);
   //const [currentSessionAttendance, setCurrentSessionAttendance] = useState('');
 
@@ -49,11 +43,6 @@ const ActivityProgress = () => {
     setToken(Token);
   };
 
-  const getLocalUserData = useCallback(async () => {
-    const userData = await getLocalData('user', true);
-    setUser(userData);
-  }, []);
-
   membersdata && membersdata.map(item => member.push(item.name));
 
   accessToken();
@@ -62,44 +51,41 @@ const ActivityProgress = () => {
     setProgress(memberActivityProgress);
   }, [memberActivityProgress]);
 
-  useEffect(() => {
-    getLocalUserData();
+  console.log('Activity: ', progress);
+  // useEffect(() => {
+  //   token && dispatch(getmemberData(token));
 
-    token && dispatch(getmemberData(token));
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [token]);
   useEffect(() => {
     membersdata && setCurrentMember(membersdata[currentMemberIndex]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [membersdata]);
   useEffect(() => {
-    currentMember && dispatch(getmemberClass(currentMember._id));
+    //currentMember && dispatch(getmemberClass(currentMember._id));
 
+    // currentMember &&
+    //   dispatch({
+    //     type: Action.USER_GET_CURRENT_MEMBER_DATA,
+    //     payload: currentMember,
+    //   });
     currentMember &&
-      dispatch({
-        type: Action.USER_GET_CURRENT_MEMBER_DATA,
-        payload: currentMember,
-      });
-    console.log(currentMember._id, token);
-    currentMember &&
-      token &&
       dispatch({
         type: Action.USER_GET_CURRENT_MEMBER_ACTIVITY,
-        payload: {id: currentMember._id, token: token},
+        payload: {id: currentMember._id},
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMember]);
-  useEffect(() => {
-    memberClassData.length > 1 &&
-      setCurrentSessionId(
-        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
-          activeDotIndex
-        ].session._id,
-      );
+  // useEffect(() => {
+  //   memberClassData.length > 1 &&
+  //     setCurrentSessionId(
+  //       memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
+  //         activeDotIndex
+  //       ].session._id,
+  //     );
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memberClassData]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [memberClassData]);
   const renderItem = ({item, index}) => {
     return (
       <LinearGradient
@@ -214,12 +200,12 @@ const ActivityProgress = () => {
             onSnapToItem={async index => {
               setProgress('');
               setActiveDotIndex(index);
-              setCurrentSessionId(
-                memberClassData &&
-                  memberClassData?.filter(
-                    item => item?.enrolledStatus === 'ENROLLED',
-                  )[index].session._id,
-              );
+              // setCurrentSessionId(
+              //   memberClassData &&
+              //     memberClassData?.filter(
+              //       item => item?.enrolledStatus === 'ENROLLED',
+              //     )[index].session._id,
+              // );
               // const attendance =
               //   currentSessionId &&
               //   (await fetchAttendanceOfMemberInSession({
