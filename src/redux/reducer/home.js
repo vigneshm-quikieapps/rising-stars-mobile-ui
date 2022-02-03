@@ -137,3 +137,26 @@ export const currentMemberActivity = (
       return state;
   }
 };
+
+const businessstate = {
+  businessData: '',
+  error: '',
+};
+
+export const businessData = (state = businessstate, action) => {
+  switch (action.type) {
+    case Action.USER_GET_CURRENT_BUSINESS_NAME_SUCCESS:
+      return {
+        ...state,
+        businessData: action.business,
+      };
+    case Action.USER_GET_CURRENT_BUSINESS_NAME_FAILED:
+      return {
+        ...state,
+        error: action.error,
+      };
+      default: 
+      return state;
+    }
+  }
+      

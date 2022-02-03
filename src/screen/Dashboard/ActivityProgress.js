@@ -21,7 +21,7 @@ import * as Action from '../../redux/action-types';
 import {getLocalData} from '../../utils/LocalStorage';
 import {
   //fetchAttendanceOfMemberInSession,
-  fetchProgress,
+  fetchProgress,fetchParticularBusiness
 } from '../../redux/service/request';
 import {currentMemberData} from '../../redux/reducer/home';
 const ActivityProgress = () => {
@@ -35,6 +35,7 @@ const ActivityProgress = () => {
   const memberActivityProgress = useSelector(
     state => state.currentMemberActivity.activity,
   );
+  const businessData = useSelector(state => state.businessData.businessData);
   const [user, setUser] = useState('');
   const [token, setToken] = useState();
   const [progress, setProgress] = useState();
@@ -88,8 +89,13 @@ const ActivityProgress = () => {
         type: Action.USER_GET_CURRENT_MEMBER_ACTIVITY,
         payload: {id: currentMember._id, token: token},
       });
+      currentMember && dispatch({
+        type: Action.USER_GET_CURRENT_BUSINESS_NAME,
+        payload: {id: currentMember._id},
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMember]);
+  console.log('bus', businessData._id)
   useEffect(() => {
     memberClassData.length > 1 &&
       setCurrentSessionId(
@@ -97,7 +103,9 @@ const ActivityProgress = () => {
           activeDotIndex
         ].session._id,
       );
-
+    // useEffect(async () => {
+    //   currentMember && await fetchParticularBusiness({id: currentMember._id})
+    // }, [currentMember]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberClassData]);
   const renderItem = ({item, index}) => {
@@ -119,7 +127,7 @@ const ActivityProgress = () => {
             color: colors.white,
             fontFamily: 'Nunito-Regular',
           }}>
-          Class Name
+          Business Name
         </Text>
         <Text
           style={{
@@ -127,7 +135,27 @@ const ActivityProgress = () => {
             color: colors.white,
             fontFamily: 'Nunito-SemiBold',
           }}>
-          {item.class.name}
+          {/* {item.class.name} */}
+          {item.class.businessId}
+          {/* {item.business.name} */}
+        </Text>
+        <Text
+          style={{
+            fontSize: 16,
+            color: colors.white,
+            fontFamily: 'Nunito-Regular',
+            marginTop: hp('2%')
+          }}>
+          Evaluation Scheme Name
+        </Text>
+        <Text
+          style={{
+            fontSize: 18,
+            color: colors.white,
+            fontFamily: 'Nunito-SemiBold',
+          }}>
+          {/* {item.class.name} */}
+        {item.class.evaluationSchemeId}
         </Text>
       </LinearGradient>
     );
