@@ -14,12 +14,9 @@ import {colors, Fontsize} from '../../constants';
 import {getClubdata, getSessiondata} from '../../redux/action/enrol';
 import {dropClass} from '../../redux/service/request';
 import {getLocalData} from '../../utils/LocalStorage';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export default function EnrolledChild(props) {
-  // const [modalVisible, setModalVisible] = useState(false);
-  // const [modalVisible2, setModalVisible2] = useState(false);
-  // const [modalVisible3, setModalVisible3] = useState(false);
-  // const [modalVisible4, setModalVisible4] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showFailureAlert, setShowFailureAlert] = useState(false);
@@ -30,15 +27,6 @@ export default function EnrolledChild(props) {
 
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const currentMember = useSelector(state => state.currentMemberData.data);
-
-  // const handlesubmit = () => {
-  //   setModalVisible(!modalVisible);
-  //   setModalVisible2(!modalVisible2);
-  // };
-  // const submithandle = () => {
-  //   setModalVisible3(!modalVisible3);
-  //   setModalVisible4(!modalVisible4);
-  // };
 
   const accessToken = async () => {
     const Token = await getLocalData('accessToken');
@@ -64,118 +52,40 @@ export default function EnrolledChild(props) {
         />
       }
       backbutton={() => props.navigation.goBack()}>
-      {/* <View style={styles.centeredView}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible3}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible3(!modalVisible3);
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Image
-                style={{
-                  height: 70,
-                  width: 70,
-                  marginVertical: 20,
-                }}
-                source={require('../../assets/images/cancelIcon.png')}
-              />
-              <Text style={styles.modalText}>
-                Are you sure you want to change the Session?
-              </Text>
-              <AppButton
-                title="Yes,Change Session"
-                onPress={() => submithandle()}
-              />
-
-              <Buttons
-                onPress={() => setModalVisible3(!modalVisible3)}
-                style={{marginBottom: hp('1%')}}>
-                <Text
-                  style={{
-                    color: colors.reddish,
-                    fontFamily: 'Nunito-SemiBold',
-                    marginBottom: hp('2%'),
-                  }}>
-                  No,Don't change
-                </Text>
-              </Buttons>
-            </View>
-          </View>
-        </Modal>
-      </View> */}
-      {/* <View style={styles.centeredView}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible4}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible4(!modalVisible4);
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Image
-                style={{
-                  height: 70,
-                  width: 70,
-                  marginVertical: 20,
-                }}
-                source={require('../../assets/images/successIcon.png')}
-              />
-              <Text style={styles.modalText}>Session Changed successfully</Text>
-              <View>
-                <AppButton
-                  title="Done"
-                  style={{
-                    paddingLeft: 130,
-                    paddingRight: 130,
-                    marginBottom: wp('5%'),
+      <ScrollView>
+        <Text style={{fontFamily: 'Nunito-Regular', fontSize: Fontsize}}>
+          Current Classes
+        </Text>
+        {memberClassData &&
+          memberClassData?.map(
+            classes =>
+              classes.enrolledStatus === 'ENROLLED' && (
+                <ClassCard
+                  className={classes.class.name}
+                  title={'Change Session'}
+                  day={classes.session.pattern[0].day}
+                  time={
+                    '10-11'
+                    // ""classes.session.pattern[0].startTime.getTime() +
+                    // '-' +
+                    // classes.session.pattern[0].endTime.getTime()"
+                  }
+                  facility={classes.session.facility}
+                  coach={'Henry Itondo'}
+                  class
+                  classbutton={() => {
+                    dispatch(getSessiondata(classes.class._id));
+                    props.navigation.navigate('ChangeClass', {classes});
                   }}
-                  onPress={() => setModalVisible4(!modalVisible4)}
+                  member
+                  memberbutton={() => {
+                    setEnrollmentId(classes._id);
+                    setShowAlert(true);
+                  }}
                 />
-              </View>
-            </View>
-          </View>
-        </Modal>
-      </View> */}
-
-      <Text style={{fontFamily: 'Nunito-Regular', fontSize: Fontsize}}>
-        Current Classes
-      </Text>
-      {memberClassData &&
-        memberClassData?.map(
-          classes =>
-            classes.enrolledStatus === 'ENROLLED' && (
-              <ClassCard
-                className={classes.class.name}
-                title={'Change Session'}
-                day={classes.session.pattern[0].day}
-                time={
-                  '10-11'
-                  // ""classes.session.pattern[0].startTime.getTime() +
-                  // '-' +
-                  // classes.session.pattern[0].endTime.getTime()"
-                }
-                facility={classes.session.facility}
-                coach={'Henry Itondo'}
-                class
-                classbutton={() => {
-                  dispatch(getSessiondata(classes.class._id));
-                  props.navigation.navigate('ChangeClass', {classes});
-                }}
-                member
-                memberbutton={() => {
-                  setEnrollmentId(classes._id);
-                  setShowAlert(true);
-                }}
-              />
-            ),
-        )}
-      {/* <View style={styles.centeredView}>
+              ),
+          )}
+        {/* <View style={styles.centeredView}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -218,7 +128,7 @@ export default function EnrolledChild(props) {
           </View>
         </Modal>
       </View> */}
-      {/* <View style={styles.centeredView}>
+        {/* <View style={styles.centeredView}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -254,7 +164,7 @@ export default function EnrolledChild(props) {
         </Modal>
       </View> */}
 
-      {/* <ClassCard
+        {/* <ClassCard
         className={'Pre-school gymnastics (Age 1-3)'}
         title={'Change Session'}
         day={'Monday'}
@@ -264,62 +174,63 @@ export default function EnrolledChild(props) {
         class
         member
       /> */}
-      <AppButton
-        title={'New Class'}
-        onPress={() => {
-          dispatch({
-            type: Action.USER_ADD_CHILD_SUCCEDED,
-            payload: {member: currentMember},
-          });
-          dispatch(
-            getClubdata({
-              callback: () => {
-                props.navigation.navigate('New_Class_Selection');
-              },
-            }),
-          );
-        }}
-      />
-      {showAlert ? (
-        <Alert
-          visible={showAlert}
-          confirm={'No, I have changed my mind'}
-          failure={async () => {
-            const response = await dropClass({
-              token,
-              enrollmentId,
+        <AppButton
+          title={'New Class'}
+          onPress={() => {
+            dispatch({
+              type: Action.USER_ADD_CHILD_SUCCEDED,
+              payload: {member: currentMember},
             });
-
-            if (response.message === 'cancellation successfull') {
-              setShowSuccessAlert(true);
-            } else {
-              setShowFailureAlert(true);
-            }
+            dispatch(
+              getClubdata({
+                callback: () => {
+                  props.navigation.navigate('New_Class_Selection');
+                },
+              }),
+            );
           }}
-          cancel={'Yes, cancel membership'}
-          success={() => setShowAlert(false)}
-          image={'failure'}
-          message={'Are you sure you want to cancel the membership'}
         />
-      ) : null}
-      {showSuccessAlert ? (
-        <Alert
-          visible={showSuccessAlert}
-          confirm={'Done'}
-          success={() => props.navigation.navigate('Profile')}
-          image={'success'}
-          message={'Cancelled Membership Successfully'}
-        />
-      ) : null}
-      {showFailureAlert ? (
-        <Alert
-          visible={showFailureAlert}
-          confirm={'Go Back'}
-          success={() => props.navigation.navigate('Profile')}
-          image={'failure'}
-          message={'OOPS!! Something Went Wrong!!'}
-        />
-      ) : null}
+        {showAlert ? (
+          <Alert
+            visible={showAlert}
+            confirm={'No, I have changed my mind'}
+            failure={async () => {
+              const response = await dropClass({
+                token,
+                enrollmentId,
+              });
+
+              if (response.message === 'cancellation successfull') {
+                setShowSuccessAlert(true);
+              } else {
+                setShowFailureAlert(true);
+              }
+            }}
+            cancel={'Yes, cancel membership'}
+            success={() => setShowAlert(false)}
+            image={'failure'}
+            message={'Are you sure you want to cancel the membership'}
+          />
+        ) : null}
+        {showSuccessAlert ? (
+          <Alert
+            visible={showSuccessAlert}
+            confirm={'Done'}
+            success={() => props.navigation.navigate('Profile')}
+            image={'success'}
+            message={'Cancelled Membership Successfully'}
+          />
+        ) : null}
+        {showFailureAlert ? (
+          <Alert
+            visible={showFailureAlert}
+            confirm={'Go Back'}
+            success={() => props.navigation.navigate('Profile')}
+            image={'failure'}
+            message={'OOPS!! Something Went Wrong!!'}
+          />
+        ) : null}
+      </ScrollView>
     </CustomLayout>
   );
 }

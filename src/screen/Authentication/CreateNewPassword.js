@@ -6,6 +6,7 @@ import {colors, hp, wp} from './../../constants';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import InputOTPScreen from './InputOTPScreen';
 import {forgetPasswordData} from '../../redux/action/auth';
+import {ScrollView} from 'react-native-gesture-handler';
 
 function CreateNewPassword(props) {
   const refRBSheet = useRef();
@@ -52,7 +53,7 @@ function CreateNewPassword(props) {
         opacity: 0.5,
         width: wp('90%'),
       }}>
-      <View style={{paddingTop: hp('3%')}}>
+      <ScrollView style={{paddingTop: hp('3%')}}>
         {/* <Text style={styles.title}>Forget Password</Text> */}
         {/* <Text style={styles.subTitle}>
           Enter the Email associated with your account we will send an OTP to
@@ -130,7 +131,7 @@ function CreateNewPassword(props) {
         </Text> */}
         {/* <TextInputField placeholder="Password" style={{marginTop: hp('2%')}} />
         <TextInputField placeholder="Confirm Password" /> */}
-      </View>
+      </ScrollView>
       <View style={{height: hp('38%')}} />
       <AppButton
         title="Send OTP"

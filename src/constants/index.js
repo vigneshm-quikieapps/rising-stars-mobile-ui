@@ -54,8 +54,9 @@ export const EnrollData = [
   {id: 2, title: 'Step 2', description: 'Class Selection'},
   {id: 3, title: 'Step 3', description: 'Fees Overview'},
   {id: 4, title: 'Step 4', description: 'Provide Consent'},
-  {id: 5, title: 'Step 5', description: 'Pay'},
-  {id: 6, title: 'Step 6', description: 'Confirmation'},
+  {id: 5, title: 'Step 5', description: 'Additional Sections'},
+  {id: 6, title: 'Step 6', description: 'Pay'},
+  {id: 7, title: 'Step 7', description: 'Confirmation'},
 ];
 
 export const Images = {

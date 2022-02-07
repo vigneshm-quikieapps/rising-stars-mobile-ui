@@ -1,6 +1,5 @@
 import * as Action from '../action-types';
-import {storeLocalData, getLocalData} from '../../utils/LocalStorage';
-import {setLocale} from 'yup';
+import {storeLocalData} from '../../utils/LocalStorage';
 
 const postcodeState = {
   postcode: [],

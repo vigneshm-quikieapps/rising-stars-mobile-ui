@@ -15,70 +15,14 @@ import {
 } from 'react-native';
 import {colors, wp, hp, Fontsize, Images} from '../constants';
 import LinearGradient from 'react-native-linear-gradient';
-import {ScrollView} from 'react-native-gesture-handler';
-
-const data = [
-  {
-    id: 1,
-    labelId1: 1,
-    label1: 'Basic stretching',
-    label1status: 'Attained',
-    labelId2: 2,
-    label2: `Walking along  ${'\n'} balancing beam`,
-    label2status: 'Attained',
-    labelId3: 3,
-    label3: 'Shoulder Stand',
-    label3status: 'Attained',
-    status: true,
-    mark: true,
-  },
-  {
-    id: 2,
-    labelId1: 1,
-    label1: 'Basic stretching',
-    label1status: 'Attained',
-    labelId2: 2,
-    label2: `Walking along ${'\n'} balancing beam`,
-    label2status: 'In Progress',
-    labelId3: 3,
-    label3: 'Shoulder Stand',
-    label3status: 'In Progress',
-    status: false,
-    status2: true,
-  },
-  {
-    id: 3,
-    labelId1: 1,
-    label1: 'Back-In, Full-Out',
-    label1status: 'Upcoming',
-    status: false,
-    status2: false,
-  },
-  {
-    id: 5,
-    labelId1: 1,
-    label1: 'Layout Position',
-    label1status: 'Upcoming',
-    status: false,
-    status2: false,
-  },
-  {
-    id: 6,
-    labelId1: 1,
-    label1: 'Layout Position',
-    label1status: 'Upcoming',
-    status: false,
-    status2: false,
-  },
-];
 
 const Timelines = props => {
   const [expand, setExpand] = useState(false);
 
   return (
-    <ScrollView style={{height: hp('70%')}}>
+    <View style={{height: hp('70%')}}>
       <FlatList
-        data={data}
+        data={props.data}
         keyExtractor={item => item.id}
         renderItem={item => {
           return (
@@ -313,7 +257,7 @@ const Timelines = props => {
           );
         }}
       />
-    </ScrollView>
+    </View>
   );
 };
 

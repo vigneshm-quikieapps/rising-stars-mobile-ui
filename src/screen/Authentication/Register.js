@@ -26,6 +26,7 @@ import {PostCode, PostDataPass, RegisterData} from '../../redux/action/auth';
 import PostComponent from './components/Postcode';
 import {fetchMobileOTP} from '../../redux/service/request';
 import Alert from '../../components/alert-box';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const CELL_COUNT = 6;
 const validationSchema = Yup.object().shape({
@@ -127,418 +128,424 @@ function Register(props) {
       subheadertextstyle={styles.subtitle}
       back
       backbutton={() => props.navigation.goBack()}>
-      <Formik
-        initialValues={{
-          fullName: '',
-          email: '',
-          password: '',
-          passwordConfirmation: '',
-          contactNumber: '',
-          mobileNoOTP: '',
-          postCode: '',
-          addressLine1: '',
-          addressLine2: '',
-          cityTown: '',
-          country: '',
-        }}
-        onSubmit={async values => {
-          if (values.mobileNoOTP.length === 0) {
-            const otp = await fetchMobileOTP(values.contactNumber);
-            console.log(otp);
-            timeout();
-            refRBSheet.current.open();
-          } else {
-            if (postsize !== 0) {
-              values.addressLine1 = postdata.addressline1;
-              values.addressLine2 = postdata.addressline2;
-              values.cityTown = postdata.posttown;
-            }
-            console.log(values);
-            dispatch(RegisterData(values));
-            // console.log(status);
-            // if (status === 'created successfully') {
-            //   setSuccessAlert(true);
-            //   //POP-UP with message
-            //   //Navigate to Login Screen
-            // }
-          }
-        }}
-        validationSchema={validationSchema}>
-        {({
-          handleChange,
-          handleSubmit,
-          errors,
-          setFieldTouched,
-          touched,
-          values,
-          initialValues,
-        }) => (
-          <>
-            <TextInputField
-              placeholder="Your Full Name*"
-              style={[styles.inputField, {marginTop: hp('0.1%')}]}
-              onChangeText={handleChange('fullName')}
-              autoCapitalize="none"
-              autoCorrect={false}
-              // onBlur={() => setFieldTouched('fullName')}
-            />
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.fullName}
-              visible={touched.fullName}
-            />
-
-            <TextInputField
-              placeholder="Email*"
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="email-address"
-              onChangeText={handleChange('email')}
-              onBlur={() => setFieldTouched('email')}
-            />
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.email}
-              visible={touched.email}
-            />
-
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <View style={styles.countrycode}>
-                <Text style={{fontSize: wp('4.1%'), color: colors.grey}}>
-                  +44
-                </Text>
-              </View>
-              <TextInputField
-                placeholder="Mobile Number *"
-                // value={values.contactNumber}
-                onChangeText={handleChange('contactNumber')}
-                maxLength={10}
-                keyboardType="number-pad"
-                style={{width: wp('75%')}}
-                onBlur={() => setFieldTouched('contactNumber')}
-              />
-            </View>
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.contactNumber}
-              visible={touched.contactNumber}
-            />
-
-            <TextInputField
-              placeholder="Password*"
-              autoCapitalize="none"
-              secureTextEntry
-              autoCorrect={false}
-              onChangeText={handleChange('password')}
-              onBlur={() => setFieldTouched('password')}
-            />
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.password}
-              visible={touched.password}
-            />
-            <TextInputField
-              placeholder="Confirm Password*"
-              autoCapitalize="none"
-              secureTextEntry
-              autoCorrect={false}
-              onChangeText={handleChange('passwordConfirmation')}
-              onBlur={() => setFieldTouched('passwordConfirmation')}
-            />
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.passwordConfirmation}
-              visible={touched.passwordConfirmation}
-            />
-
-            <TextInputField
-              placeholder="Postcode"
-              onChangeText={handleChange('postCode')}
-              autoCapitalize="none"
-              keyboardType="default"
-              autoCorrect={false}
-              onBlur={() => setFieldTouched('postCode')}
-              booleanFlag={true}
-              right={
-                <TextInput.Icon
-                  name={() => (
-                    <EvilIcons name="search" size={30} color={'#ff7e00'} />
-                  )}
-                  onPress={() => {
-                    if (values.postCode.length <= 6) {
-                      alert('Please Enter a Valid PostCode');
-                    } else {
-                      const data = {};
-                      setPostCodeshow(!postcodeshow);
-                      dispatch(PostDataPass(data, 0));
-                      dispatch(PostCode(values.postCode));
-                    }
-                  }}
-                />
+      <ScrollView>
+        <Formik
+          initialValues={{
+            fullName: '',
+            email: '',
+            password: '',
+            passwordConfirmation: '',
+            contactNumber: '',
+            mobileNoOTP: '',
+            postCode: '',
+            addressLine1: '',
+            addressLine2: '',
+            cityTown: '',
+            country: '',
+          }}
+          onSubmit={async values => {
+            if (values.mobileNoOTP.length === 0) {
+              const otp = await fetchMobileOTP(values.contactNumber);
+              console.log(otp);
+              timeout();
+              refRBSheet.current.open();
+            } else {
+              if (postsize !== 0) {
+                values.addressLine1 = postdata.addressline1;
+                values.addressLine2 = postdata.addressline2;
+                values.cityTown = postdata.posttown;
               }
-            />
+              console.log(values);
+              dispatch(RegisterData(values));
+              // console.log(status);
+              // if (status === 'created successfully') {
+              //   setSuccessAlert(true);
+              //   //POP-UP with message
+              //   //Navigate to Login Screen
+              // }
+            }
+          }}
+          validationSchema={validationSchema}>
+          {({
+            handleChange,
+            handleSubmit,
+            errors,
+            setFieldTouched,
+            touched,
+            values,
+            initialValues,
+          }) => (
+            <>
+              <TextInputField
+                placeholder="Your Full Name*"
+                style={[styles.inputField, {marginTop: hp('0.1%')}]}
+                onChangeText={handleChange('fullName')}
+                autoCapitalize="none"
+                autoCorrect={false}
+                // onBlur={() => setFieldTouched('fullName')}
+              />
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.fullName}
+                visible={touched.fullName}
+              />
 
-            <PostComponent
-              data={postcodeData}
-              visible={postcodeshow}
-              title={values.postCode}
-              ClosePopUp={a => setPostCodeshow(!postcodeshow)}
-              ManuallyButton={() => {
-                setPostCodeshow(!postcodeshow);
-                {
-                  temp === true ? null : setTemp(!temp);
-                }
-                values.addressLine1 = '';
-                values.addressLine2 = '';
-                values.cityTown = '';
-              }}
-            />
+              <TextInputField
+                placeholder="Email*"
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="email-address"
+                onChangeText={handleChange('email')}
+                onBlur={() => setFieldTouched('email')}
+              />
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.email}
+                visible={touched.email}
+              />
 
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.postCode}
-              visible={touched.postCode}
-            />
-
-            {postsize !== 0 || temp ? (
-              <>
-                <TextInputField
-                  placeholder="Address Line 1"
-                  onChangeText={
-                    postsize !== 0
-                      ? postdata.addressline1
-                      : handleChange('addressLine1')
-                  }
-                  autoCapitalize="none"
-                  editable={postsize !== 0 ? false : true}
-                  autoCorrect={false}
-                  onBlur={() => setFieldTouched('addressLine1')}
-                  value={
-                    postsize !== 0 ? postdata.addressline1 : values.addressLine1
-                  }
-                />
-                <ErrorMessage
-                  style={styles.errorMessage}
-                  error={errors.addressLine1}
-                  visible={touched.addressLine1}
-                />
-
-                <TextInputField
-                  placeholder="Address Line 2"
-                  onChangeText={
-                    postsize !== 0
-                      ? postdata.addressline2
-                      : handleChange('addressLine2')
-                  }
-                  autoCapitalize="none"
-                  editable={postsize !== 0 ? false : true}
-                  autoCorrect={false}
-                  onBlur={() => setFieldTouched('addressLine2')}
-                  value={
-                    postsize !== 0 ? postdata.addressline2 : values.addressLine2
-                  }
-                />
-                <ErrorMessage
-                  style={styles.errorMessage}
-                  error={errors.addressLine2}
-                  visible={touched.addressLine2}
-                />
-
-                <TextInputField
-                  placeholder="Town / City"
-                  onChangeText={
-                    postsize !== 0
-                      ? postdata.posttown
-                      : handleChange('cityTown')
-                  }
-                  autoCapitalize="none"
-                  editable={postsize !== 0 ? false : true}
-                  autoCorrect={false}
-                  onBlur={() => setFieldTouched('cityTown')}
-                  value={postsize !== 0 ? postdata.posttown : values.cityTown}
-                />
-                <ErrorMessage
-                  style={styles.errorMessage}
-                  error={errors.cityTown}
-                  visible={touched.cityTown}
-                />
-
-                <TextInputField
-                  placeholder="Country"
-                  onChangeText={handleChange('country')}
-                  autoCapitalize="none"
-                  editable={true}
-                  autoCorrect={false}
-                  onBlur={() => setFieldTouched('country')}
-                  value={values.country}
-                />
-                <ErrorMessage
-                  style={styles.errorMessage}
-                  error={errors.country}
-                  visible={touched.country}
-                />
-              </>
-            ) : null}
-
-            <View>
-              <PopUp
-                animationType="fade"
-                transparent={true}
-                visible={term}
-                onRequestClose={() => {
-                  setTerm(!term);
-                }}>
-                <View style={styles.centeredView}>
-                  <View style={styles.modalView}>
-                    <Text style={{fontFamily: 'Nunito-Regular'}}>
-                      {Term_Condition}
-                    </Text>
-                    <AppButton
-                      title="close"
-                      style={{width: '30%'}}
-                      onPress={() => setTerm(!term)}
-                    />
-                  </View>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View style={styles.countrycode}>
+                  <Text style={{fontSize: wp('4.1%'), color: colors.grey}}>
+                    +44
+                  </Text>
                 </View>
-              </PopUp>
-
-              {error ? (
-                alert({error})
-              ) : isloading ? (
-                <ActivityIndicator size="large" color={colors.orange} />
-              ) : (
-                <AppButton
-                  title={values.mobileNoOTP === '' ? 'Get OTP' : 'Register'}
-                  onPress={handleSubmit}
-                  style={{
-                    marginVertical: hp('0%'),
-                    fontFamily: 'Nunito-SemiBold',
-                    marginTop: hp('12%'),
-                  }}
-                />
-              )}
-
-              <Text
-                style={{
-                  flex: 1,
-                  alignSelf: 'center',
-                  justifyContent: 'center',
-                  fontFamily: 'Nunito-Regular',
-                  fontSize: wp('2.6%'),
-                  color: '#7f7f7f',
-                }}>
-                By registering you are agreed to our{' '}
-                <Text style={{color: colors.orange}} onPress={callPopUp}>
-                  Terms and Conditions
-                </Text>
-              </Text>
-            </View>
-            {showSuccessalert ? (
-              <Alert
-                visible={showSuccessalert}
-                confirm={'Done'}
-                success={() => props.navigation.navigate('Login')}
-                image={'success'}
-                message={'Profile Created Successfully'}
-              />
-            ) : null}
-            {showFailurealert ? (
-              <Alert
-                visible={showFailurealert}
-                confirm={'Retry'}
-                success={() => {
-                  setFailureAlert(false);
-                  values.mobileNoOTP = '';
-                }}
-                image={'failure'}
-                message={message}
-              />
-            ) : null}
-            <RBSheet
-              ref={refRBSheet}
-              closeOnDragDown={true}
-              closeOnPressMask={false}
-              customStyles={{
-                wrapper: {
-                  backgroundColor: colors.blackOpacity,
-                },
-                draggableIcon: {
-                  backgroundColor: colors.lightgrey,
-                },
-                container: {
-                  height: hp('100%'),
-                  borderTopRightRadius: 16,
-                  borderTopLeftRadius: 16,
-                  marginBottom: hp('10%'),
-                },
-              }}>
-              <View style={{paddingHorizontal: wp('5%')}}>
-                <Text style={styles.otptitle}>OTP</Text>
-                <Text
-                  style={{
-                    color: colors.grey,
-                    fontSize: Fontsize,
-                    marginTop: wp('2%'),
-                    marginBottom: wp('2%'),
-                  }}>
-                  Enter OTP
-                </Text>
-                <CodeField
-                  ref={ref}
-                  {...prop}
-                  value={value}
-                  onChangeText={setValue}
-                  cellCount={CELL_COUNT}
-                  rootStyle={styles.codeFieldRoot}
+                <TextInputField
+                  placeholder="Mobile Number *"
+                  // value={values.contactNumber}
+                  onChangeText={handleChange('contactNumber')}
+                  maxLength={10}
                   keyboardType="number-pad"
-                  textContentType="oneTimeCode"
-                  renderCell={({index, symbol, isFocused}) => (
-                    <Text
-                      key={index}
-                      style={[styles.cell, isFocused && styles.focusCell]}
-                      onLayout={getCellOnLayoutHandler(index)}>
-                      {symbol || (isFocused ? <Cursor /> : null)}
-                    </Text>
-                  )}
+                  style={{width: wp('75%')}}
+                  onBlur={() => setFieldTouched('contactNumber')}
                 />
+              </View>
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.contactNumber}
+                visible={touched.contactNumber}
+              />
 
-                <AppButton
-                  title="Verification"
-                  style={{margin: 0, marginTop: hp('47%')}}
-                  onPress={() => {
-                    if (value.length < 6) {
-                      alert('Please Enter Valid OTP');
-                    } else {
-                      values.mobileNoOTP = value;
-                      setMain(!main);
-                      refRBSheet.current.close();
+              <TextInputField
+                placeholder="Password*"
+                autoCapitalize="none"
+                secureTextEntry
+                autoCorrect={false}
+                onChangeText={handleChange('password')}
+                onBlur={() => setFieldTouched('password')}
+              />
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.password}
+                visible={touched.password}
+              />
+              <TextInputField
+                placeholder="Confirm Password*"
+                autoCapitalize="none"
+                secureTextEntry
+                autoCorrect={false}
+                onChangeText={handleChange('passwordConfirmation')}
+                onBlur={() => setFieldTouched('passwordConfirmation')}
+              />
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.passwordConfirmation}
+                visible={touched.passwordConfirmation}
+              />
+
+              <TextInputField
+                placeholder="Postcode"
+                onChangeText={handleChange('postCode')}
+                autoCapitalize="none"
+                keyboardType="default"
+                autoCorrect={false}
+                onBlur={() => setFieldTouched('postCode')}
+                booleanFlag={true}
+                right={
+                  <TextInput.Icon
+                    name={() => (
+                      <EvilIcons name="search" size={30} color={'#ff7e00'} />
+                    )}
+                    onPress={() => {
+                      if (values.postCode.length <= 6) {
+                        alert('Please Enter a Valid PostCode');
+                      } else {
+                        const data = {};
+                        setPostCodeshow(!postcodeshow);
+                        dispatch(PostDataPass(data, 0));
+                        dispatch(PostCode(values.postCode));
+                      }
+                    }}
+                  />
+                }
+              />
+
+              <PostComponent
+                data={postcodeData}
+                visible={postcodeshow}
+                title={values.postCode}
+                ClosePopUp={a => setPostCodeshow(!postcodeshow)}
+                ManuallyButton={() => {
+                  setPostCodeshow(!postcodeshow);
+                  {
+                    temp === true ? null : setTemp(!temp);
+                  }
+                  values.addressLine1 = '';
+                  values.addressLine2 = '';
+                  values.cityTown = '';
+                }}
+              />
+
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.postCode}
+                visible={touched.postCode}
+              />
+
+              {postsize !== 0 || temp ? (
+                <>
+                  <TextInputField
+                    placeholder="Address Line 1"
+                    onChangeText={
+                      postsize !== 0
+                        ? postdata.addressline1
+                        : handleChange('addressLine1')
                     }
-                  }}
-                />
+                    autoCapitalize="none"
+                    editable={postsize !== 0 ? false : true}
+                    autoCorrect={false}
+                    onBlur={() => setFieldTouched('addressLine1')}
+                    value={
+                      postsize !== 0
+                        ? postdata.addressline1
+                        : values.addressLine1
+                    }
+                  />
+                  <ErrorMessage
+                    style={styles.errorMessage}
+                    error={errors.addressLine1}
+                    visible={touched.addressLine1}
+                  />
+
+                  <TextInputField
+                    placeholder="Address Line 2"
+                    onChangeText={
+                      postsize !== 0
+                        ? postdata.addressline2
+                        : handleChange('addressLine2')
+                    }
+                    autoCapitalize="none"
+                    editable={postsize !== 0 ? false : true}
+                    autoCorrect={false}
+                    onBlur={() => setFieldTouched('addressLine2')}
+                    value={
+                      postsize !== 0
+                        ? postdata.addressline2
+                        : values.addressLine2
+                    }
+                  />
+                  <ErrorMessage
+                    style={styles.errorMessage}
+                    error={errors.addressLine2}
+                    visible={touched.addressLine2}
+                  />
+
+                  <TextInputField
+                    placeholder="Town / City"
+                    onChangeText={
+                      postsize !== 0
+                        ? postdata.posttown
+                        : handleChange('cityTown')
+                    }
+                    autoCapitalize="none"
+                    editable={postsize !== 0 ? false : true}
+                    autoCorrect={false}
+                    onBlur={() => setFieldTouched('cityTown')}
+                    value={postsize !== 0 ? postdata.posttown : values.cityTown}
+                  />
+                  <ErrorMessage
+                    style={styles.errorMessage}
+                    error={errors.cityTown}
+                    visible={touched.cityTown}
+                  />
+
+                  <TextInputField
+                    placeholder="Country"
+                    onChangeText={handleChange('country')}
+                    autoCapitalize="none"
+                    editable={true}
+                    autoCorrect={false}
+                    onBlur={() => setFieldTouched('country')}
+                    value={values.country}
+                  />
+                  <ErrorMessage
+                    style={styles.errorMessage}
+                    error={errors.country}
+                    visible={touched.country}
+                  />
+                </>
+              ) : null}
+
+              <View>
+                <PopUp
+                  animationType="fade"
+                  transparent={true}
+                  visible={term}
+                  onRequestClose={() => {
+                    setTerm(!term);
+                  }}>
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                      <Text style={{fontFamily: 'Nunito-Regular'}}>
+                        {Term_Condition}
+                      </Text>
+                      <AppButton
+                        title="close"
+                        style={{width: '30%'}}
+                        onPress={() => setTerm(!term)}
+                      />
+                    </View>
+                  </View>
+                </PopUp>
+
+                {error ? (
+                  alert({error})
+                ) : isloading ? (
+                  <ActivityIndicator size="large" color={colors.orange} />
+                ) : (
+                  <AppButton
+                    title={values.mobileNoOTP === '' ? 'Get OTP' : 'Register'}
+                    onPress={handleSubmit}
+                    style={{
+                      marginVertical: hp('0%'),
+                      fontFamily: 'Nunito-SemiBold',
+                      marginTop: hp('12%'),
+                    }}
+                  />
+                )}
+
                 <Text
                   style={{
-                    fontFamily: 'Nunito-Regular',
+                    flex: 1,
                     alignSelf: 'center',
-                    marginTop: hp('1%'),
-                    fontSize: Fontsize,
+                    justifyContent: 'center',
+                    fontFamily: 'Nunito-Regular',
+                    fontSize: wp('2.6%'),
+                    color: '#7f7f7f',
                   }}>
-                  Resend OTP{' '}
-                  {seconds === 0 ? (
-                    <Text
-                      style={{color: colors.orange}}
-                      onPress={() => fetchMobileOTP(values.contactNumber)}>
-                      Press
-                    </Text>
-                  ) : (
-                    <Text>in {seconds} sec</Text>
-                  )}
+                  By registering you are agreed to our{' '}
+                  <Text style={{color: colors.orange}} onPress={callPopUp}>
+                    Terms and Conditions
+                  </Text>
                 </Text>
               </View>
-            </RBSheet>
-          </>
-        )}
-      </Formik>
+              {showSuccessalert ? (
+                <Alert
+                  visible={showSuccessalert}
+                  confirm={'Done'}
+                  success={() => props.navigation.navigate('Login')}
+                  image={'success'}
+                  message={'Profile Created Successfully'}
+                />
+              ) : null}
+              {showFailurealert ? (
+                <Alert
+                  visible={showFailurealert}
+                  confirm={'Retry'}
+                  success={() => {
+                    setFailureAlert(false);
+                    values.mobileNoOTP = '';
+                  }}
+                  image={'failure'}
+                  message={message}
+                />
+              ) : null}
+              <RBSheet
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={false}
+                customStyles={{
+                  wrapper: {
+                    backgroundColor: colors.blackOpacity,
+                  },
+                  draggableIcon: {
+                    backgroundColor: colors.lightgrey,
+                  },
+                  container: {
+                    height: hp('100%'),
+                    borderTopRightRadius: 16,
+                    borderTopLeftRadius: 16,
+                    marginBottom: hp('10%'),
+                  },
+                }}>
+                <View style={{paddingHorizontal: wp('5%')}}>
+                  <Text style={styles.otptitle}>OTP</Text>
+                  <Text
+                    style={{
+                      color: colors.grey,
+                      fontSize: Fontsize,
+                      marginTop: wp('2%'),
+                      marginBottom: wp('2%'),
+                    }}>
+                    Enter OTP
+                  </Text>
+                  <CodeField
+                    ref={ref}
+                    {...prop}
+                    value={value}
+                    onChangeText={setValue}
+                    cellCount={CELL_COUNT}
+                    rootStyle={styles.codeFieldRoot}
+                    keyboardType="number-pad"
+                    textContentType="oneTimeCode"
+                    renderCell={({index, symbol, isFocused}) => (
+                      <Text
+                        key={index}
+                        style={[styles.cell, isFocused && styles.focusCell]}
+                        onLayout={getCellOnLayoutHandler(index)}>
+                        {symbol || (isFocused ? <Cursor /> : null)}
+                      </Text>
+                    )}
+                  />
+
+                  <AppButton
+                    title="Verification"
+                    style={{margin: 0, marginTop: hp('47%')}}
+                    onPress={() => {
+                      if (value.length < 6) {
+                        alert('Please Enter Valid OTP');
+                      } else {
+                        values.mobileNoOTP = value;
+                        setMain(!main);
+                        refRBSheet.current.close();
+                      }
+                    }}
+                  />
+                  <Text
+                    style={{
+                      fontFamily: 'Nunito-Regular',
+                      alignSelf: 'center',
+                      marginTop: hp('1%'),
+                      fontSize: Fontsize,
+                    }}>
+                    Resend OTP{' '}
+                    {seconds === 0 ? (
+                      <Text
+                        style={{color: colors.orange}}
+                        onPress={() => fetchMobileOTP(values.contactNumber)}>
+                        Press
+                      </Text>
+                    ) : (
+                      <Text>in {seconds} sec</Text>
+                    )}
+                  </Text>
+                </View>
+              </RBSheet>
+            </>
+          )}
+        </Formik>
+      </ScrollView>
     </CustomLayout>
   );
 }

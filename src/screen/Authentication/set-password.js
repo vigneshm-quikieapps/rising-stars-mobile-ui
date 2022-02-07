@@ -14,6 +14,7 @@ import {
 import {colors, Fontsize, hp, wp} from '../../constants';
 import {useNavigation} from '@react-navigation/core';
 import {resetPasswordData} from '../../redux/action/auth';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -46,78 +47,80 @@ function SetPassword(props) {
       subheader
       subheadertext={'Setup your password'}
       subheadertextstyle={{opacity: 0.5}}>
-      <SuccessModal
-        title="Password changed successfully"
-        isVisible={successModalVisible}
-        onDone={() => {
-          setSuccessModalVisible(false);
-          navigation.navigate('Login');
-        }}
-      />
-      <Formik
-        initialValues={{
-          password: '',
-          passwordConfirmation: '',
-        }}
-        onSubmit={values => {}}
-        validationSchema={validationSchema}>
-        {({
-          handleChange,
-          handleSubmit,
-          errors,
-          setFieldTouched,
-          touched,
-          values,
-          initialValues,
-        }) => (
-          <View style={{paddingTop: hp('3%')}}>
-            <TextInputField
-              placeholder="New Password"
-              autoCapitalize="none"
-              autoCorrect={false}
-              onChangeText={handleChange('password')}
-              onBlur={() => setFieldTouched('password')}
-            />
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.password}
-              visible={touched.password}
-            />
-            <TextInputField
-              placeholder="Confirm Password"
-              autoCapitalize="none"
-              autoCorrect={false}
-              onChangeText={handleChange('passwordConfirmation')}
-              onBlur={() => setFieldTouched('passwordConfirmation')}
-            />
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.passwordConfirmation}
-              visible={touched.passwordConfirmation}
-            />
-            <View style={{height: hp('43%')}} />
-            <AppButton
-              title="Confirm Password"
-              // style={{marginTop: hp('45%')}}
-              onPress={() => {
-                dispatch(
-                  resetPasswordData({
-                    mobileNo: mobileNo,
-                    otp: otp,
-                    password: values.password,
-                    email: email,
-                  }),
-                );
-                setSuccessModalVisible(true);
-                setTimeout(() => {
-                  setSuccessModalVisible(false);
-                  navigation.navigate('Login');
-                }, 3000);
-              }}
-            />
-          </View>
-        )}
-      </Formik>
+      <ScrollView>
+        <SuccessModal
+          title="Password changed successfully"
+          isVisible={successModalVisible}
+          onDone={() => {
+            setSuccessModalVisible(false);
+            navigation.navigate('Login');
+          }}
+        />
+        <Formik
+          initialValues={{
+            password: '',
+            passwordConfirmation: '',
+          }}
+          onSubmit={values => {}}
+          validationSchema={validationSchema}>
+          {({
+            handleChange,
+            handleSubmit,
+            errors,
+            setFieldTouched,
+            touched,
+            values,
+            initialValues,
+          }) => (
+            <View style={{paddingTop: hp('3%')}}>
+              <TextInputField
+                placeholder="New Password"
+                autoCapitalize="none"
+                autoCorrect={false}
+                onChangeText={handleChange('password')}
+                onBlur={() => setFieldTouched('password')}
+              />
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.password}
+                visible={touched.password}
+              />
+              <TextInputField
+                placeholder="Confirm Password"
+                autoCapitalize="none"
+                autoCorrect={false}
+                onChangeText={handleChange('passwordConfirmation')}
+                onBlur={() => setFieldTouched('passwordConfirmation')}
+              />
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.passwordConfirmation}
+                visible={touched.passwordConfirmation}
+              />
+              <View style={{height: hp('43%')}} />
+              <AppButton
+                title="Confirm Password"
+                // style={{marginTop: hp('45%')}}
+                onPress={() => {
+                  dispatch(
+                    resetPasswordData({
+                      mobileNo: mobileNo,
+                      otp: otp,
+                      password: values.password,
+                      email: email,
+                    }),
+                  );
+                  setSuccessModalVisible(true);
+                  setTimeout(() => {
+                    setSuccessModalVisible(false);
+                    navigation.navigate('Login');
+                  }, 3000);
+                }}
+              />
+            </View>
+          )}
+        </Formik>
+      </ScrollView>
     </CustomLayout>
   );
 }

@@ -15,6 +15,7 @@ import EntIcon from 'react-native-vector-icons/Entypo';
 import {setAdditionDetails} from '../../redux/action/enrol';
 import {useSelector, useDispatch} from 'react-redux';
 import {baseProps} from 'react-native-gesture-handler/lib/typescript/handlers/gestureHandlers';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Additional_Sections = props => {
   const termref = useRef();
@@ -64,143 +65,112 @@ const Additional_Sections = props => {
       }}
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={5} />}>
-      {/* <View style={styles.centeredView}>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
+      <ScrollView>
+        <RBSheet
+          ref={termref}
+          closeOnDragDown={true}
+          closeOnPressMask={false}
+          customStyles={{
+            wrapper: {
+              backgroundColor: colors.blackOpacity,
+            },
+            container: {
+              height: '25%',
+              borderTopRightRadius: 16,
+              borderTopLeftRadius: 16,
+            },
           }}>
-          <View style={styles.modalstyle}>
-            <View style={styles.modalView}>
+          <View style={{paddingHorizontal: wp('5%')}}>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <Text
-                style={{ fontFamily: 'Nunito-SemiBold', marginTop: hp('1.5%'),fontSize:Fontsize }}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since.
-              </Text>
-              <TouchableOpacity
-                onPress={() => setModalVisible(!modalVisible)}
                 style={{
-                  justifyContent: 'center',
-                  backgroundColor: colors.orange,
-                  width: wp('10%'),
-                  alignItems: 'center',
-                  borderRadius: 10,
-                  height: hp('5%'),
-                  alignSelf: 'flex-end',
+                  fontFamily: 'Nunito-Regular',
+                  fontSize: Fontsize,
+                  color: '#ff7e00',
                 }}>
-                <Text>OK</Text>
+                Club Rule
+              </Text>
+              <TouchableOpacity onPress={() => termref.current.close()}>
+                <LinearGradient
+                  style={styles.closePopUp}
+                  colors={['#ffa300', '#ff7e00']}>
+                  <EntIcon name="cross" size={15} color="white" />
+                </LinearGradient>
               </TouchableOpacity>
             </View>
-          </View>
-        </Modal>
-      </View> */}
-      <RBSheet
-        ref={termref}
-        closeOnDragDown={true}
-        closeOnPressMask={false}
-        customStyles={{
-          wrapper: {
-            backgroundColor: colors.blackOpacity,
-          },
-          container: {
-            height: '25%',
-            borderTopRightRadius: 16,
-            borderTopLeftRadius: 16,
-          },
-        }}>
-        <View style={{paddingHorizontal: wp('5%')}}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text
               style={{
                 fontFamily: 'Nunito-Regular',
+                marginTop: hp('1.5%'),
                 fontSize: Fontsize,
-                color: '#ff7e00',
+                alignSelf: 'center',
               }}>
-              Club Rule
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since.
             </Text>
-            <TouchableOpacity onPress={() => termref.current.close()}>
-              <LinearGradient
-                style={styles.closePopUp}
-                colors={['#ffa300', '#ff7e00']}>
-                <EntIcon name="cross" size={15} color="white" />
-              </LinearGradient>
-            </TouchableOpacity>
           </View>
-          <Text
-            style={{
-              fontFamily: 'Nunito-Regular',
-              marginTop: hp('1.5%'),
-              fontSize: Fontsize,
-              alignSelf: 'center',
-            }}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since.
-          </Text>
-        </View>
-      </RBSheet>
-      <Text style={styles.newsheader}>News, communication and marketing</Text>
-      <Text
-        style={{
-          fontSize: Fontsize,
-          fontFamily: 'Nunito-Regular',
-          marginVertical: hp('1.5%'),
-        }}>
-        I would like to receive{' '}
+        </RBSheet>
+        <Text style={styles.newsheader}>News, communication and marketing</Text>
         <Text
           style={{
-            // fontFamily: 'Nunito-Regular',
-            // fontSize: Fontsize,
-            color: '#ff7e00',
+            fontSize: Fontsize,
+            fontFamily: 'Nunito-Regular',
+            marginVertical: hp('1.5%'),
           }}>
-          {club.name}
-        </Text>{' '}
-        newsletter and other communications
-      </Text>
-      <View style={styles.container}>
-        <RadioButton
-          onPress={() => selectaddition('email')}
-          status={email ? 'checked' : 'unchecked'}
+          I would like to receive{' '}
+          <Text
+            style={{
+              // fontFamily: 'Nunito-Regular',
+              // fontSize: Fontsize,
+              color: '#ff7e00',
+            }}>
+            {club.name}
+          </Text>{' '}
+          newsletter and other communications
+        </Text>
+        <View style={styles.container}>
+          <RadioButton
+            onPress={() => selectaddition('email')}
+            status={email ? 'checked' : 'unchecked'}
+          />
+          <Text style={styles.way}>{'by Email'}</Text>
+        </View>
+        <View style={styles.container}>
+          <RadioButton
+            onPress={() => selectaddition('telephone')}
+            status={telephone ? 'checked' : 'unchecked'}
+          />
+          <Text style={styles.way}>{'by Telephone'}</Text>
+        </View>
+        <View style={styles.container}>
+          <RadioButton
+            onPress={() => selectaddition('sms')}
+            status={sms ? 'checked' : 'unchecked'}
+          />
+          <Text style={styles.way}>{'by SMS'}</Text>
+        </View>
+        <Text style={styles.newsheader}>Club Rules</Text>
+        <Text
+          style={{
+            fontFamily: 'Nunito-SemiBold',
+            marginTop: hp('1.5%'),
+            fontSize: Fontsize,
+            paddingRight: wp('4%'),
+          }}>
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry's standard dummy text ever
+          since.
+        </Text>
+        <TouchableOpacity onPress={() => termref.current.open()}>
+          <Text style={styles.bottom}>Read more about Club Rule</Text>
+        </TouchableOpacity>
+        <ForwardButton
+          style={{alignSelf: 'flex-end'}}
+          onPress={() => handleSubmit()}
         />
-        <Text style={styles.way}>{'by Email'}</Text>
-      </View>
-      <View style={styles.container}>
-        <RadioButton
-          onPress={() => selectaddition('telephone')}
-          status={telephone ? 'checked' : 'unchecked'}
-        />
-        <Text style={styles.way}>{'by Telephone'}</Text>
-      </View>
-      <View style={styles.container}>
-        <RadioButton
-          onPress={() => selectaddition('sms')}
-          status={sms ? 'checked' : 'unchecked'}
-        />
-        <Text style={styles.way}>{'by SMS'}</Text>
-      </View>
-      <Text style={styles.newsheader}>Club Rules</Text>
-      <Text
-        style={{
-          fontFamily: 'Nunito-SemiBold',
-          marginTop: hp('1.5%'),
-          fontSize: Fontsize,
-          paddingRight: wp('4%'),
-        }}>
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since.
-      </Text>
-      <TouchableOpacity onPress={() => termref.current.open()}>
-        <Text style={styles.bottom}>Read more about Club Rule</Text>
-      </TouchableOpacity>
-      <ForwardButton
-        style={{alignSelf: 'flex-end'}}
-        onPress={() => handleSubmit()}
-      />
+      </ScrollView>
     </CustomLayout>
   );
 };

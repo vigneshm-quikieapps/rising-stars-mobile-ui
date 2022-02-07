@@ -22,6 +22,7 @@ import EntIcon from 'react-native-vector-icons/Entypo';
 import {setProvide} from '../../redux/action/enrol';
 
 import {useSelector, useDispatch} from 'react-redux';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Provide_Consent = props => {
   const termref = useRef();
@@ -59,128 +60,131 @@ const Provide_Consent = props => {
       }}
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={4} />}>
-      <Conset
-        conset={'Does your child have any allergies we should be aware of'}
-        value={isEnabled}
-        onValueChange={() => setIsEnabled(!isEnabled)}
-      />
-      {isEnabled && (
-        <View style={styles.textarea}>
-          <Input
-            placeholder="Allergy details..."
-            placeholderTextColor={colors.grey}
-            onChangeText={text => setAllergies(text)}
-          />
-        </View>
-      )}
+      <ScrollView>
+        <Conset
+          conset={'Does your child have any allergies we should be aware of'}
+          value={isEnabled}
+          onValueChange={() => setIsEnabled(!isEnabled)}
+        />
+        {isEnabled && (
+          <View style={styles.textarea}>
+            <Input
+              placeholder="Allergy details..."
+              placeholderTextColor={colors.grey}
+              onChangeText={text => setAllergies(text)}
+            />
+          </View>
+        )}
 
-      <Conset
-        conset={'Does your child have any conditions we should be aware of'}
-        value={isEnabled2}
-        onValueChange={() => setIsEnabled2(!isEnabled2)}
-      />
-      {isEnabled2 && (
-        <View style={styles.textarea}>
-          <Input
-            placeholder="Condition details..."
-            placeholderTextColor={colors.grey}
-            onChangeText={text => setCondition(text)}
-          />
+        <Conset
+          conset={'Does your child have any conditions we should be aware of'}
+          value={isEnabled2}
+          onValueChange={() => setIsEnabled2(!isEnabled2)}
+        />
+        {isEnabled2 && (
+          <View style={styles.textarea}>
+            <Input
+              placeholder="Condition details..."
+              placeholderTextColor={colors.grey}
+              onChangeText={text => setCondition(text)}
+            />
+          </View>
+        )}
+        <View style={styles.remark}>
+          <View style={styles.mark}>
+            <Image source={require('../../assets/images/icon-info.png')} />
+          </View>
+          <Text style={styles.marktext}>
+            {club.name} is the Business Trade Name
+          </Text>
         </View>
-      )}
-      <View style={styles.remark}>
-        <View style={styles.mark}>
-          <Image source={require('../../assets/images/icon-info.png')} />
-        </View>
-        <Text style={styles.marktext}>
-          {club.name} is the Business Trade Name
-        </Text>
-      </View>
-      <TouchableOpacity onPress={() => termref.current.open()}>
-        <Text style={styles.bottom}>Read more about Club Rule</Text>
-      </TouchableOpacity>
-      <RBSheet
-        ref={termref}
-        closeOnDragDown={true}
-        closeOnPressMask={false}
-        customStyles={{
-          wrapper: {
-            backgroundColor: colors.blackOpacity,
-          },
-          container: {
-            height: '25%',
-            borderTopRightRadius: 16,
-            borderTopLeftRadius: 16,
-          },
-        }}>
-        <View style={{paddingHorizontal: wp('5%')}}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <TouchableOpacity onPress={() => termref.current.open()}>
+          <Text style={styles.bottom}>Read more about Club Rule</Text>
+        </TouchableOpacity>
+        <RBSheet
+          ref={termref}
+          closeOnDragDown={true}
+          closeOnPressMask={false}
+          customStyles={{
+            wrapper: {
+              backgroundColor: colors.blackOpacity,
+            },
+            container: {
+              height: '25%',
+              borderTopRightRadius: 16,
+              borderTopLeftRadius: 16,
+            },
+          }}>
+          <View style={{paddingHorizontal: wp('5%')}}>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text
+                style={{
+                  fontFamily: 'Nunito-Regular',
+                  fontSize: Fontsize,
+                  color: '#ff7e00',
+                }}>
+                Club Rule
+              </Text>
+              <TouchableOpacity onPress={() => termref.current.close()}>
+                <LinearGradient
+                  style={styles.closePopUp}
+                  colors={['#ffa300', '#ff7e00']}>
+                  <EntIcon name="cross" size={15} color="white" />
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
             <Text
               style={{
                 fontFamily: 'Nunito-Regular',
+                marginTop: hp('1.5%'),
                 fontSize: Fontsize,
-                color: '#ff7e00',
+                alignSelf: 'center',
               }}>
-              Club Rule
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since.
             </Text>
-            <TouchableOpacity onPress={() => termref.current.close()}>
-              <LinearGradient
-                style={styles.closePopUp}
-                colors={['#ffa300', '#ff7e00']}>
-                <EntIcon name="cross" size={15} color="white" />
-              </LinearGradient>
-            </TouchableOpacity>
           </View>
-          <Text
-            style={{
-              fontFamily: 'Nunito-Regular',
-              marginTop: hp('1.5%'),
-              fontSize: Fontsize,
-              alignSelf: 'center',
-            }}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since.
-          </Text>
-        </View>
-      </RBSheet>
-      <Conset
-        conset={'Does your child have any allergies we should be aware of'}
-        value={isEnabled3}
-        onValueChange={() => setIsEnabled3(!isEnabled3)}
-      />
-      {isEnabled3 && (
-        <View style={styles.textarea}>
-          <Input
-            placeholder="Allergy details..."
-            placeholderTextColor={colors.grey}
-            onChangeText={text => setPhoto(text)}
-          />
-        </View>
-      )}
-      <Conset
-        conset={'Signed by Jube Bowman(Parent / Carer)'}
-        value={isEnabled4}
-        onValueChange={() => setIsEnabled4(!isEnabled4)}
-      />
-      {isEnabled4 && (
-        <View style={styles.textarea}>
-          <Input
-            placeholder="Signed by Jube Bowman(Parent / Carer)"
-            placeholderTextColor={colors.grey}
-            style={{width: wp('85%')}}
-            onChangeText={text => setSign(text)}
-            // multiline={true}
-          />
-        </View>
-      )}
-      <ForwardButton
-        style={{alignSelf: 'flex-end', marginTop: hp('1%')}}
-        onPress={() => {
-          dispatch(setProvide(allergies, condition, photo, sign));
-          props.navigation.navigate('Additional_Sections');
-        }}
-      />
+        </RBSheet>
+        <Conset
+          conset={'Does your child have any allergies we should be aware of'}
+          value={isEnabled3}
+          onValueChange={() => setIsEnabled3(!isEnabled3)}
+        />
+        {isEnabled3 && (
+          <View style={styles.textarea}>
+            <Input
+              placeholder="Allergy details..."
+              placeholderTextColor={colors.grey}
+              onChangeText={text => setPhoto(text)}
+            />
+          </View>
+        )}
+        <Conset
+          conset={'Signed by Jube Bowman(Parent / Carer)'}
+          value={isEnabled4}
+          onValueChange={() => setIsEnabled4(!isEnabled4)}
+        />
+        {isEnabled4 && (
+          <View style={styles.textarea}>
+            <Input
+              placeholder="Signed by Jube Bowman(Parent / Carer)"
+              placeholderTextColor={colors.grey}
+              style={{width: wp('85%')}}
+              onChangeText={text => setSign(text)}
+              // multiline={true}
+            />
+          </View>
+        )}
+        <ForwardButton
+          style={{alignSelf: 'flex-end', marginTop: hp('1%')}}
+          onPress={() => {
+            dispatch(setProvide(allergies, condition, photo, sign));
+            props.navigation.navigate('Additional_Sections');
+          }}
+        />
+      </ScrollView>
     </CustomLayout>
   );
 };

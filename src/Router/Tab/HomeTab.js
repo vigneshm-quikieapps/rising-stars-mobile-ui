@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Text, View, Image} from 'react-native';
+import {Image} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import Home from '../../screen/Dashboard/newhome';

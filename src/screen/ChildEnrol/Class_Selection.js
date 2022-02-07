@@ -23,6 +23,7 @@ import {getLocalData} from '../../utils/LocalStorage';
 
 import {useSelector, useDispatch} from 'react-redux';
 import PopUpClass from '../../components/pop-up-class_selection';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Class_Selection = props => {
   const [business, setBusiness] = useState();
@@ -92,25 +93,26 @@ const Class_Selection = props => {
       headertext={'Class Selection'}
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={2} />}>
-      <PopUpCard
-        headertext={'Club Name*'}
-        text="Select Your Club Name"
-        value={business}
-        onPress={() => setClubModal(!clubmodal)}
-      />
-      <PopUpClass
-        ClosePopUp={() => setClubModal(!clubmodal)}
-        visible={clubmodal}
-        title={'Available Clubs'}
-        data={clubData}
-        setClub={club => {
-          handleBusiness(club);
-        }}
-        setVisibility={bin => {
-          setClubModal(bin);
-        }}
-      />
-      {/* {classmodal &&
+      <ScrollView>
+        <PopUpCard
+          headertext={'Club Name*'}
+          text="Select Your Club Name"
+          value={business}
+          onPress={() => setClubModal(!clubmodal)}
+        />
+        <PopUpClass
+          ClosePopUp={() => setClubModal(!clubmodal)}
+          visible={clubmodal}
+          title={'Available Clubs'}
+          data={clubData}
+          setClub={club => {
+            handleBusiness(club);
+          }}
+          setVisibility={bin => {
+            setClubModal(bin);
+          }}
+        />
+        {/* {classmodal &&
                   classData.map(item => {
                     return (
                       <TouchableOpacity
@@ -135,7 +137,7 @@ const Class_Selection = props => {
                       </TouchableOpacity>
                     );
                   })} */}
-      {/* {clubmodal &&
+        {/* {clubmodal &&
         clubData.map(item => {
           return (
             <TouchableOpacity
@@ -160,82 +162,83 @@ const Class_Selection = props => {
             </TouchableOpacity>
           );
         })} */}
-      {showclass ? (
-        classData && classData.length > 0 ? (
-          <>
-            <PopUpCard
-              headertext={'Class Name*'}
-              text="Select Your Class Name"
-              value={classes}
-              onPress={() => setClassModal(!classmodal)}
-            />
-            <PopUpClass
-              ClosePopUp={() => setClassModal(!classmodal)}
-              visible={classmodal}
-              title={'Available Classes'}
-              data={classData}
-              setClub={classData => {
-                handleClasses(classData);
-              }}
-              setVisibility={bin => {
-                setClassModal(bin);
-              }}
-            />
-          </>
-        ) : (
-          <ActivityIndicator size="large" color={colors.orange} />
-        )
-      ) : null}
-      {showsession ? (
-        sessionData && sessionData.length > 0 ? (
-          <>
-            <Text
-              style={{
-                fontFamily: 'Nunito-Regular',
-                marginVertical: hp('1%'),
-                fontSize: Fontsize,
-              }}>
-              Available Sessions
-            </Text>
-            {sessionData.map(item => {
-              return (
-                <Slot
-                  white
-                  required={true}
-                  Class={classes}
-                  radio
-                  sessions={item.name}
-                  onPress={() => setSelectdata(item)}
-                  status={selectdata === item && 'checked'}
-                  day={item.pattern[0].day}
-                  time={`${moment(item.pattern[0].startTime).format(
-                    'HH:mm',
-                  )} - ${moment(item.pattern[0].endTime).format('HH:mm')}`}
-                  facility={item.name}
-                  coach={item.coach.name}
-                  key={item._id}
-                  style={{marginVertical: wp('1%')}}
-                />
-              );
-            })}
-          </>
-        ) : (
-          <ActivityIndicator size="large" color={colors.orange} />
-        )
-      ) : null}
-      {selectdata && (
-        // <ForwardButton
-        //   style={{alignSelf: 'flex-end', marginTop: hp('1%')}}
-        //   onPress={() => handleforward()}
-        // />
-        <ForwardButton
-          style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
-          title="Submit"
-          onPress={() => {
-            handleforward();
-          }}
-        />
-      )}
+        {showclass ? (
+          classData && classData.length > 0 ? (
+            <>
+              <PopUpCard
+                headertext={'Class Name*'}
+                text="Select Your Class Name"
+                value={classes}
+                onPress={() => setClassModal(!classmodal)}
+              />
+              <PopUpClass
+                ClosePopUp={() => setClassModal(!classmodal)}
+                visible={classmodal}
+                title={'Available Classes'}
+                data={classData}
+                setClub={classData => {
+                  handleClasses(classData);
+                }}
+                setVisibility={bin => {
+                  setClassModal(bin);
+                }}
+              />
+            </>
+          ) : (
+            <ActivityIndicator size="large" color={colors.orange} />
+          )
+        ) : null}
+        {showsession ? (
+          sessionData && sessionData.length > 0 ? (
+            <>
+              <Text
+                style={{
+                  fontFamily: 'Nunito-Regular',
+                  marginVertical: hp('1%'),
+                  fontSize: Fontsize,
+                }}>
+                Available Sessions
+              </Text>
+              {sessionData.map(item => {
+                return (
+                  <Slot
+                    white
+                    required={true}
+                    Class={classes}
+                    radio
+                    sessions={item.name}
+                    onPress={() => setSelectdata(item)}
+                    status={selectdata === item && 'checked'}
+                    day={item.pattern[0].day}
+                    time={`${moment(item.pattern[0].startTime).format(
+                      'HH:mm',
+                    )} - ${moment(item.pattern[0].endTime).format('HH:mm')}`}
+                    facility={item.name}
+                    coach={item.coach.name}
+                    key={item._id}
+                    style={{marginVertical: wp('1%')}}
+                  />
+                );
+              })}
+            </>
+          ) : (
+            <ActivityIndicator size="large" color={colors.orange} />
+          )
+        ) : null}
+        {selectdata && (
+          // <ForwardButton
+          //   style={{alignSelf: 'flex-end', marginTop: hp('1%')}}
+          //   onPress={() => handleforward()}
+          // />
+          <ForwardButton
+            style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
+            title="Submit"
+            onPress={() => {
+              handleforward();
+            }}
+          />
+        )}
+      </ScrollView>
     </CustomLayout>
   );
 };

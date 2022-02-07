@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 import {
   CustomLayout,
@@ -46,95 +47,98 @@ export default function ChangeClass(props) {
           style={{backgroundColor: colors.orange}}
         />
       }>
-      <Text style={{fontFamily: 'Nunito-SemiBold'}}>Current Class/Session</Text>
-      <ClassCard
-        className={currentClass.class.name}
-        // subtitle={"Childhood Joy Classes"}
-        button
-        title={'Change Class'}
-        button2
-        day={currentClass.session.pattern[0].day}
-        time="9:30 am - 11:30 am"
-        facility={currentClass.session.facility}
-        coach={'Henry Itondo'}
-      />
-      <Text style={{fontFamily: 'Nunito-SemiBold', marginVertical: hp('1%')}}>
-        Available Session
-      </Text>
-      {sessionData &&
-        sessionData.map(
-          sessions =>
-            currentClass.session._id !== sessions._id && (
-              <>
-                <Slot
-                  radio={true}
-                  onPress={() => {
-                    setNewSessionId(sessions._id);
-                  }}
-                  status={
-                    newSessionId === sessions._id ? 'checked' : 'unchecked'
-                  }
-                  day={sessions.pattern[0].day}
-                  time="9:30 am - 11:30 am"
-                  facility={sessions.facility}
-                  coach={sessions.coach.name}
-                />
-                <View style={{height: hp('1%')}} />
-              </>
-            ),
-        )}
-      <AppButton
-        title={'Change Class'}
-        onPress={() => setShowAlert(true)}
-        style={{
-          width: wp('85%'),
-          marginLeft: wp('2.5%'),
-          marginBottom: wp('2%'),
-        }}
-      />
-      {showAlert ? (
-        <Alert
-          visible={showAlert}
-          confirm={'Yes, Change Class'}
-          success={async () => {
-            const response = await classTransfer({
-              token: token,
-              data: {
-                enrolmentId: currentClass._id,
-                newSessionId: newSessionId,
-              },
-            });
-            if (response.message === 'Transfer successful') {
-              setShowSuccessAlert(true);
-            } else {
-              setShowFailureAlert(true);
-            }
+      <ScrollView>
+        <Text style={{fontFamily: 'Nunito-SemiBold'}}>
+          Current Class/Session
+        </Text>
+        <ClassCard
+          className={currentClass.class.name}
+          // subtitle={"Childhood Joy Classes"}
+          button
+          title={'Change Class'}
+          button2
+          day={currentClass.session.pattern[0].day}
+          time="9:30 am - 11:30 am"
+          facility={currentClass.session.facility}
+          coach={'Henry Itondo'}
+        />
+        <Text style={{fontFamily: 'Nunito-SemiBold', marginVertical: hp('1%')}}>
+          Available Session
+        </Text>
+        {sessionData &&
+          sessionData.map(
+            sessions =>
+              currentClass.session._id !== sessions._id && (
+                <>
+                  <Slot
+                    radio={true}
+                    onPress={() => {
+                      setNewSessionId(sessions._id);
+                    }}
+                    status={
+                      newSessionId === sessions._id ? 'checked' : 'unchecked'
+                    }
+                    day={sessions.pattern[0].day}
+                    time="9:30 am - 11:30 am"
+                    facility={sessions.facility}
+                    coach={sessions.coach.name}
+                  />
+                  <View style={{height: hp('1%')}} />
+                </>
+              ),
+          )}
+        <AppButton
+          title={'Change Class'}
+          onPress={() => setShowAlert(true)}
+          style={{
+            width: wp('85%'),
+            marginLeft: wp('2.5%'),
+            marginBottom: wp('2%'),
           }}
-          cancel={'No, Dont change'}
-          failure={() => setShowAlert(false)}
-          image={'failure'}
-          message={'Are you sure you want to change the class'}
         />
-      ) : null}
-      {showSuccessAlert ? (
-        <Alert
-          visible={showSuccessAlert}
-          confirm={'Done'}
-          success={() => props.navigation.navigate('Profile')}
-          image={'success'}
-          message={'Class Changed Successfully'}
-        />
-      ) : null}
-      {showFailureAlert ? (
-        <Alert
-          visible={showFailureAlert}
-          confirm={'Go Back'}
-          success={() => props.navigation.navigate('Profile')}
-          image={'failure'}
-          message={'OOPS!! Something Went Wrong!!'}
-        />
-      ) : null}
-      {/* <Slot
+        {showAlert ? (
+          <Alert
+            visible={showAlert}
+            confirm={'Yes, Change Class'}
+            success={async () => {
+              const response = await classTransfer({
+                token: token,
+                data: {
+                  enrolmentId: currentClass._id,
+                  newSessionId: newSessionId,
+                },
+              });
+              if (response.message === 'Transfer successful') {
+                setShowSuccessAlert(true);
+              } else {
+                setShowFailureAlert(true);
+              }
+            }}
+            cancel={'No, Dont change'}
+            failure={() => setShowAlert(false)}
+            image={'failure'}
+            message={'Are you sure you want to change the class'}
+          />
+        ) : null}
+        {showSuccessAlert ? (
+          <Alert
+            visible={showSuccessAlert}
+            confirm={'Done'}
+            success={() => props.navigation.navigate('Profile')}
+            image={'success'}
+            message={'Class Changed Successfully'}
+          />
+        ) : null}
+        {showFailureAlert ? (
+          <Alert
+            visible={showFailureAlert}
+            confirm={'Go Back'}
+            success={() => props.navigation.navigate('Profile')}
+            image={'failure'}
+            message={'OOPS!! Something Went Wrong!!'}
+          />
+        ) : null}
+        {/* <Slot
         radio
         day={'Wednesday'}
         time={'9:30 am - 11:30 am'}
@@ -149,6 +153,7 @@ export default function ChangeClass(props) {
         facility={'Gym Hall'}
         coach={'Sampson Totton'}
       /> */}
+      </ScrollView>
     </CustomLayout>
   );
 }

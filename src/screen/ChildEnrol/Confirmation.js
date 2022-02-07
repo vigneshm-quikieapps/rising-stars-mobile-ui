@@ -12,6 +12,7 @@ import moment from 'moment';
 
 import {colors, Fontsize, hp, wp, Stepend} from '../../constants';
 import Alert from '../../components/alert-box';
+import {ScrollView} from 'react-native-gesture-handler';
 const Confirmation = props => {
   const child = useSelector(state => state.childData.addchild);
   const club = useSelector(state => state.childData.clubdata);
@@ -57,36 +58,38 @@ const Confirmation = props => {
             />
           }
           backbutton={() => props.navigation.goBack()}>
-          <View style={styles.bordestyle}>
-            <Text style={styles.classtext}>
-              Class will begin from 20 days from now
-            </Text>
-            <Slot
-              white
-              required
-              Class={'Pre-school gymnastics (Age 1-3)'}
-              sessions={classes.name}
-              day={slot.pattern[0].day}
-              time={`${moment(slot.pattern[0].startTime).format(
-                'HH:mm',
-              )} - ${moment(slot.pattern[0].endTime).format('HH:mm')}`}
-              facility={slot.facility}
-              coach={slot.coach.name}
-            />
-          </View>
-          <View style={styles.remark}>
-            <View style={styles.mark}>
-              <Image source={require('../../assets/images/icon-info.png')} />
+          <ScrollView>
+            <View style={styles.bordestyle}>
+              <Text style={styles.classtext}>
+                Class will begin from 20 days from now
+              </Text>
+              <Slot
+                white
+                required
+                Class={'Pre-school gymnastics (Age 1-3)'}
+                sessions={classes.name}
+                day={slot.pattern[0].day}
+                time={`${moment(slot.pattern[0].startTime).format(
+                  'HH:mm',
+                )} - ${moment(slot.pattern[0].endTime).format('HH:mm')}`}
+                facility={slot.facility}
+                coach={slot.coach.name}
+              />
             </View>
-            <Text style={styles.marktext}>
-              waitlisted enrolments, pay charges offline
-            </Text>
-          </View>
-          <View style={{height: hp('0%')}} />
-          <AppButton
-            title={'Done'}
-            onPress={() => props.navigation.navigate('Profile')}
-          />
+            <View style={styles.remark}>
+              <View style={styles.mark}>
+                <Image source={require('../../assets/images/icon-info.png')} />
+              </View>
+              <Text style={styles.marktext}>
+                waitlisted enrolments, pay charges offline
+              </Text>
+            </View>
+            <View style={{height: hp('0%')}} />
+            <AppButton
+              title={'Done'}
+              onPress={() => props.navigation.navigate('Profile')}
+            />
+          </ScrollView>
         </CustomLayout>
       )}
     </View>

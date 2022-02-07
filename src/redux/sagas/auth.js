@@ -1,4 +1,5 @@
-import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
+/* eslint-disable dot-notation */
+import {call, put, takeEvery} from 'redux-saga/effects';
 import {storeLocalData} from '../../utils/LocalStorage';
 import * as Action from '../action-types';
 

@@ -121,7 +121,6 @@ export const currentMemberActivity = (
   state = currentMemberActivityState,
   action,
 ) => {
-  console.log('Action reducre: ', action.payload, action.type);
   switch (action.type) {
     case Action.USER_GET_CURRENT_MEMBER_ACTIVITY_SUCCESS:
       return {
@@ -155,8 +154,29 @@ export const businessData = (state = businessstate, action) => {
         ...state,
         error: action.error,
       };
-      default: 
+    default:
       return state;
-    }
   }
-      
+};
+
+const evaluationstate = {
+  evaluationData: '',
+  error: '',
+};
+
+export const evaluationData = (state = evaluationstate, action) => {
+  switch (action.type) {
+    case Action.USER_GET_CURRENT_EVALUATION_NAME_SUCCESS:
+      return {
+        ...state,
+        evaluationData: action.business,
+      };
+    case Action.USER_GET_CURRENT_EVALUATION_NAME_FAILED:
+      return {
+        ...state,
+        error: action.error,
+      };
+    default:
+      return state;
+  }
+};

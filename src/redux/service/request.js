@@ -351,3 +351,13 @@ export function fetchActivityOfMemberInSession(payload) {
       throw error;
     });
 }
+
+export function fetchEvaluationById(payload) {
+  return fetch(`${heroku_url}/evaluations/${payload.id}`, {
+    method: 'GET',
+  })
+    .then(response => response.json())
+    .catch(error => {
+      throw error;
+    });
+}

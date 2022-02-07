@@ -14,6 +14,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {enrollChildData} from '../../redux/action/enrol';
 import {getLocalData} from '../../utils/LocalStorage';
 import StandingOrder from '../../components/standing-order';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Pay = props => {
   const child = useSelector(state => state.childData.addchild);
@@ -66,58 +67,60 @@ const Pay = props => {
       headertext={'Pay'}
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={6} />}>
-      <Amount head={'Club Membership'} currency={'6'} />
-      <Amount head={`Pre School Gym Class${'\n'}(Monthly)`} currency={'25'} />
-      <Amount
-        head={'Scottish Gymnastics Insuarance Premium (Annual)'}
-        currency={'25'}
-      />
-      <Amount
-        head={'Total Payable'}
-        stylehead={{fontSize: wp('5%')}}
-        currency={'123'}
-        stylecurrency={{fontSize: wp('7%s')}}
-      />
-      <View style={styles.breaks} />
-      <Text style={styles.optional}>Payment Options</Text>
-      <StandingOrder
-        onPress={() => {
-          setShowAtm(false);
-          setShowStandingOrder(!showStandingOrder);
-        }}
-        visible={showStandingOrder}
-      />
-      <AtmCard
-        onPress={() => {
-          setShowAtm(!showAtm);
-          setShowStandingOrder(false);
-        }}
-        visible={showAtm}
-      />
-      <View style={styles.bottom}>
-        <RadioButton />
-        <Text
-          style={{
-            fontFamily: 'Nunito-SemiBold',
-            fontSize: wp('5%'),
-          }}>
-          Net Banking
-        </Text>
-      </View>
-      <View style={styles.bottom}>
-        <RadioButton />
-        <Text
-          style={{
-            fontFamily: 'Nunito-SemiBold',
-            fontSize: wp('5%'),
-          }}>
-          Wallets
-        </Text>
-      </View>
-      <ForwardButton
-        style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
-        onPress={() => handleforward()}
-      />
+      <ScrollView>
+        <Amount head={'Club Membership'} currency={'6'} />
+        <Amount head={`Pre School Gym Class${'\n'}(Monthly)`} currency={'25'} />
+        <Amount
+          head={'Scottish Gymnastics Insuarance Premium (Annual)'}
+          currency={'25'}
+        />
+        <Amount
+          head={'Total Payable'}
+          stylehead={{fontSize: wp('5%')}}
+          currency={'123'}
+          stylecurrency={{fontSize: wp('7%s')}}
+        />
+        <View style={styles.breaks} />
+        <Text style={styles.optional}>Payment Options</Text>
+        <StandingOrder
+          onPress={() => {
+            setShowAtm(false);
+            setShowStandingOrder(!showStandingOrder);
+          }}
+          visible={showStandingOrder}
+        />
+        <AtmCard
+          onPress={() => {
+            setShowAtm(!showAtm);
+            setShowStandingOrder(false);
+          }}
+          visible={showAtm}
+        />
+        <View style={styles.bottom}>
+          <RadioButton />
+          <Text
+            style={{
+              fontFamily: 'Nunito-SemiBold',
+              fontSize: wp('5%'),
+            }}>
+            Net Banking
+          </Text>
+        </View>
+        <View style={styles.bottom}>
+          <RadioButton />
+          <Text
+            style={{
+              fontFamily: 'Nunito-SemiBold',
+              fontSize: wp('5%'),
+            }}>
+            Wallets
+          </Text>
+        </View>
+        <ForwardButton
+          style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
+          onPress={() => handleforward()}
+        />
+      </ScrollView>
     </CustomLayout>
   );
 };

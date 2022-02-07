@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {
   View,
@@ -6,7 +7,6 @@ import {
   Image,
   Pressable,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -21,10 +21,10 @@ import {colors, hp, wp} from '../../constants';
 import {getmemberClass} from '../../redux/action/home';
 import * as Action from '../../redux/action-types/index';
 import {fetchCurrentUser} from '../../redux/service/request';
+import {ScrollView} from 'react-native-gesture-handler';
 
 function Profile(props) {
   const membersdata = useSelector(state => state.memberData.memberData);
-  const memberclassdata = useSelector(state => state.memberClassData.classData);
   const parent = useSelector(state => state.LoginData.updatedUser);
 
   // let steps = false;
@@ -122,116 +122,118 @@ function Profile(props) {
       }}
       back
       backbutton={onHandleBackButton}>
-      {/* <Text style={styles.title}>Profile</Text> */}
+      <View>
+        {/* <Text style={styles.title}>Profile</Text> */}
 
-      <View style={styles.card}>
-        <View style={styles.cardDetails}>
-          <Text style={styles.memberName}>{parent.name}</Text>
+        <View style={styles.card}>
+          <View style={styles.cardDetails}>
+            <Text style={styles.memberName}>{parent.name}</Text>
 
-          <Text style={styles.parentText}>Parent</Text>
-        </View>
-        <TouchableOpacity
-          style={{justifyContent: 'center'}}
-          onPress={() => props.navigation.navigate('Edit_Profile')}>
-          <Text style={styles.editProfile}>Edit Profile</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.childContainer}>
-        <Text style={styles.yourChild}>Your children</Text>
-        <TouchableOpacity
-          style={styles.addChild}
-          onPress={() => props.navigation.navigate('Addchildren')}>
-          <Entypo
-            name="plus"
-            size={15}
-            color="white"
-            style={{alignSelf: 'center'}}
-          />
-          <Text style={styles.addChildText}>Add Child</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* children card starts here */}
-
-      {membersdata && (
-        <View style={styles.profileImageCard}>
-          <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
-            <TouchableOpacity onPress={updateProfilePicture}>
-              {fileUri === null ? (
-                <Image
-                  style={styles.image}
-                  source={require('../../assets/images/children.jpg')}
-                />
-              ) : (
-                <Image style={styles.image} source={{uri: fileUri}} />
-              )}
-            </TouchableOpacity>
-            <View style={{justifyContent: 'center'}}>
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontFamily: 'Nunito-SemiBold',
-                  marginBottom: wp('1%'),
-                }}>
-                {currentMember.name}
-              </Text>
-            </View>
+            <Text style={styles.parentText}>Parent</Text>
           </View>
           <TouchableOpacity
-            style={styles.button}
-            onPress={() => handleMembership(currentMember._id)}>
-            <Text style={styles.cardButton}>Memberships / Classes</Text>
+            style={{justifyContent: 'center'}}
+            onPress={() => props.navigation.navigate('Edit_Profile')}>
+            <Text style={styles.editProfile}>Edit Profile</Text>
           </TouchableOpacity>
+        </View>
 
+        <View style={styles.childContainer}>
+          <Text style={styles.yourChild}>Your children</Text>
           <TouchableOpacity
-            style={styles.button}
-            onPress={() => props.navigation.navigate('PaymentHistory')}>
-            <Text style={styles.cardButton}>Payment History</Text>
+            style={styles.addChild}
+            onPress={() => props.navigation.navigate('EnrollStack')}>
+            <Entypo
+              name="plus"
+              size={15}
+              color="white"
+              style={{alignSelf: 'center'}}
+            />
+            <Text style={styles.addChildText}>Add Child</Text>
           </TouchableOpacity>
         </View>
-      )}
 
-      {/* children card ends here */}
+        {/* children card starts here */}
 
-      <TouchableOpacity onPress={() => SignOut()}>
-        <Text style={styles.signoutButton}>Sign out</Text>
-      </TouchableOpacity>
-      <RBSheet
-        ref={refRBSheet}
-        closeOnDragDown={true}
-        closeOnPressMask={false}
-        customStyles={{
-          wrapper: {
-            backgroundColor: colors.blackOpacity,
-          },
-          draggableIcon: {
-            backgroundColor: '#000',
-          },
-          container: {
-            height: '40%',
-            borderTopRightRadius: 16,
-            borderTopLeftRadius: 16,
-          },
-        }}>
-        <View style={{paddingHorizontal: wp('10%')}}>
-          <Pressable style={[styles.button1]} onPress={takePhotoFromCamera}>
-            <Text style={styles.textStyle}>Take Photo</Text>
-          </Pressable>
+        {membersdata && (
+          <View style={styles.profileImageCard}>
+            <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
+              <TouchableOpacity onPress={updateProfilePicture}>
+                {fileUri === null ? (
+                  <Image
+                    style={styles.image}
+                    source={require('../../assets/images/children.jpg')}
+                  />
+                ) : (
+                  <Image style={styles.image} source={{uri: fileUri}} />
+                )}
+              </TouchableOpacity>
+              <View style={{justifyContent: 'center'}}>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontFamily: 'Nunito-SemiBold',
+                    marginBottom: wp('1%'),
+                  }}>
+                  {currentMember.name}
+                </Text>
+              </View>
+            </View>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => handleMembership(currentMember._id)}>
+              <Text style={styles.cardButton}>Memberships / Classes</Text>
+            </TouchableOpacity>
 
-          <Pressable
-            style={[styles.button1, {marginVertical: hp('1.5%')}]}
-            onPress={choosePhotoFromLibrary}>
-            <Text style={styles.textStyle}>Choose Image</Text>
-          </Pressable>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => props.navigation.navigate('PaymentHistory')}>
+              <Text style={styles.cardButton}>Payment History</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
-          <Pressable
-            style={[styles.button1]}
-            onPress={() => refRBSheet.current.close()}>
-            <Text style={styles.textStyle}>Cancel</Text>
-          </Pressable>
-        </View>
-      </RBSheet>
+        {/* children card ends here */}
+
+        <TouchableOpacity onPress={() => SignOut()}>
+          <Text style={styles.signoutButton}>Sign out</Text>
+        </TouchableOpacity>
+        <RBSheet
+          ref={refRBSheet}
+          closeOnDragDown={true}
+          closeOnPressMask={false}
+          customStyles={{
+            wrapper: {
+              backgroundColor: colors.blackOpacity,
+            },
+            draggableIcon: {
+              backgroundColor: '#000',
+            },
+            container: {
+              height: '40%',
+              borderTopRightRadius: 16,
+              borderTopLeftRadius: 16,
+            },
+          }}>
+          <View style={{paddingHorizontal: wp('10%')}}>
+            <Pressable style={[styles.button1]} onPress={takePhotoFromCamera}>
+              <Text style={styles.textStyle}>Take Photo</Text>
+            </Pressable>
+
+            <Pressable
+              style={[styles.button1, {marginVertical: hp('1.5%')}]}
+              onPress={choosePhotoFromLibrary}>
+              <Text style={styles.textStyle}>Choose Image</Text>
+            </Pressable>
+
+            <Pressable
+              style={[styles.button1]}
+              onPress={() => refRBSheet.current.close()}>
+              <Text style={styles.textStyle}>Cancel</Text>
+            </Pressable>
+          </View>
+        </RBSheet>
+      </View>
     </CustomLayout>
   );
 }

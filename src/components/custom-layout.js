@@ -1,15 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {hp, wp, colors, Fontsize} from '../constants';
 import AntIcon from 'react-native-vector-icons/AntDesign';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export default function CustomLayout(props) {
   return (

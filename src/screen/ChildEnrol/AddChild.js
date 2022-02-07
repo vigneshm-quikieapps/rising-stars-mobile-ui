@@ -22,6 +22,7 @@ import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
 import {getLocalData} from '../../utils/LocalStorage';
 import {WheelPicker} from 'react-native-wheel-picker-android';
+import {ScrollView} from 'react-native-gesture-handler';
 //import {TouchableOpacity} from 'react-native-gesture-handler';
 
 // const gender = [
@@ -136,133 +137,137 @@ const AddChild = props => {
       subheadertext={'Child Details'}
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={1} />}>
-      <Formik
-        initialValues={{
-          fullName: '',
-          dob: birth,
-          gender: '',
-          esNumber: '',
-          epNumber: '',
-          esrelation: '',
-          eprelation: '',
-          epname: '',
-          esname: '',
-        }}
-        onSubmit={values => {
-          var valuesForDispatch = {
-            token: token,
-            data: {
-              userId: user,
-              name: values.fullName,
-              dob: moment(values.dob).format('YYYY-MM-DD'),
-              gender: values.gender,
-              contacts:
-                values.esname.length != 0
-                  ? [
-                      {
-                        addressType: 'PRIMARY',
-                        name: values.epname,
-                        contact: values.epNumber,
-                        relationship: values.eprelation,
-                      },
-                      {
-                        addressType: 'SECONDARY',
-                        name: values.esname,
-                        contact: values.esNumber,
-                        relationship: values.esrelation,
-                      },
-                    ]
-                  : [
-                      {
-                        addressType: 'PRIMARY',
-                        name: values.epname,
-                        contact: values.epNumber,
-                        relationship: values.eprelation,
-                      },
-                    ],
-            },
-          };
-          if (values.dob === '') {
-            setBirthError(true);
-          } else if (values.gender === '') {
-            setGenderError(true);
-          } else if (new Date().getFullYear() - values.dob.getFullYear() <= 2) {
-            alert('2 year children not allowed ');
-          } else {
-            dispatch(
-              setChildData({
-                data: valuesForDispatch,
-                callback: () => {
-                  dispatch(
-                    getClubdata({
-                      callback: () => {
-                        props.navigation.navigate('Class_Selection');
-                      },
-                    }),
-                  );
-                },
-              }),
-            );
-          }
-        }}
-        validationSchema={validationSchema}>
-        {({
-          handleChange,
-          handleSubmit,
-          setFieldTouched,
-          setFieldValue,
-          errors,
-          touched,
-          values,
-        }) => {
-          return (
-            <>
-              <TextInputField
-                placeholder="Full Name"
-                onChangeText={handleChange('fullName')}
-                value={values.fullName}
-                onBlur={() => setFieldTouched('fullName')}
-              />
-
-              <ErrorMessage
-                style={styles.errorMessage}
-                error={errors.fullName}
-                visible={touched.fullName}
-              />
-
-              <PopUpCard
-                text={'Date of Birth'}
-                textColor={colors.grey}
-                value={moment(values.dob).format('DD-MM-YYYY')}
-                onPress={() => setBirthModal(!birthModal)}
-                onBlur={() => setBirthError(true)}
-              />
-              <WheelDropdown
-                title=" Date of Birth"
-                visible={birthModal}
-                setVisibility={setBirthModal}
-                confirmbutton={false}
-                cancelbutton={false}
-                style={{marginTop: hp('75%')}}
-                cancel={() => {
-                  setBirth('');
-                  setBirthModal(!birthModal);
-                }}
-                confirm={() => {
-                  setBirthModal(false);
-                  setBirthError(false);
-                }}>
-                <DatePicker
-                  mode={'date'}
-                  onDateChange={date => {
-                    //handleChange('dob');
-                    //setBirth(select);
-                    setFieldValue('dob', date);
-                  }}
-                  date={values.dob}
+      <ScrollView>
+        <Formik
+          initialValues={{
+            fullName: '',
+            dob: birth,
+            gender: '',
+            esNumber: '',
+            epNumber: '',
+            esrelation: '',
+            eprelation: '',
+            epname: '',
+            esname: '',
+          }}
+          onSubmit={values => {
+            var valuesForDispatch = {
+              token: token,
+              data: {
+                userId: user,
+                name: values.fullName,
+                dob: moment(values.dob).format('YYYY-MM-DD'),
+                gender: values.gender,
+                contacts:
+                  values.esname.length != 0
+                    ? [
+                        {
+                          addressType: 'PRIMARY',
+                          name: values.epname,
+                          contact: values.epNumber,
+                          relationship: values.eprelation,
+                        },
+                        {
+                          addressType: 'SECONDARY',
+                          name: values.esname,
+                          contact: values.esNumber,
+                          relationship: values.esrelation,
+                        },
+                      ]
+                    : [
+                        {
+                          addressType: 'PRIMARY',
+                          name: values.epname,
+                          contact: values.epNumber,
+                          relationship: values.eprelation,
+                        },
+                      ],
+              },
+            };
+            if (values.dob === '') {
+              setBirthError(true);
+            } else if (values.gender === '') {
+              setGenderError(true);
+            } else if (
+              new Date().getFullYear() - values.dob.getFullYear() <=
+              2
+            ) {
+              alert('2 year children not allowed ');
+            } else {
+              dispatch(
+                setChildData({
+                  data: valuesForDispatch,
+                  callback: () => {
+                    dispatch(
+                      getClubdata({
+                        callback: () => {
+                          props.navigation.navigate('Class_Selection');
+                        },
+                      }),
+                    );
+                  },
+                }),
+              );
+            }
+          }}
+          validationSchema={validationSchema}>
+          {({
+            handleChange,
+            handleSubmit,
+            setFieldTouched,
+            setFieldValue,
+            errors,
+            touched,
+            values,
+          }) => {
+            return (
+              <>
+                <TextInputField
+                  placeholder="Full Name"
+                  onChangeText={handleChange('fullName')}
+                  value={values.fullName}
+                  onBlur={() => setFieldTouched('fullName')}
                 />
-              </WheelDropdown>
-              {/* <DatePicker
+
+                <ErrorMessage
+                  style={styles.errorMessage}
+                  error={errors.fullName}
+                  visible={touched.fullName}
+                />
+
+                <PopUpCard
+                  text={'Date of Birth'}
+                  textColor={colors.grey}
+                  value={moment(values.dob).format('DD-MM-YYYY')}
+                  onPress={() => setBirthModal(!birthModal)}
+                  onBlur={() => setBirthError(true)}
+                />
+                <WheelDropdown
+                  title=" Date of Birth"
+                  visible={birthModal}
+                  setVisibility={setBirthModal}
+                  confirmbutton={false}
+                  cancelbutton={false}
+                  style={{marginTop: hp('75%')}}
+                  cancel={() => {
+                    setBirth('');
+                    setBirthModal(!birthModal);
+                  }}
+                  confirm={() => {
+                    setBirthModal(false);
+                    setBirthError(false);
+                  }}>
+                  <DatePicker
+                    mode={'date'}
+                    onDateChange={date => {
+                      //handleChange('dob');
+                      //setBirth(select);
+                      setFieldValue('dob', date);
+                    }}
+                    date={values.dob}
+                  />
+                </WheelDropdown>
+                {/* <DatePicker
               modal
               mode="date"
               open={open}
@@ -279,79 +284,79 @@ const AddChild = props => {
                 setOpen(!open)
               }}
             /> */}
-              {birtherror && (
-                <Text style={styles.errors}>D.O.B. is a required</Text>
-              )}
-              {/* <ErrorMessage
+                {birtherror && (
+                  <Text style={styles.errors}>D.O.B. is a required</Text>
+                )}
+                {/* <ErrorMessage
               style={styles.errorMessage}
               error={errors.dob}
               visible={touched.dob}
             /> */}
 
-              <PopUpCard
-                text={'Gender'}
-                textColor={colors.grey}
-                value={values.gender}
-                onBlur={() => setFieldTouched('gender')}
-                onPress={() => genderef.current.open()}
-              />
-              <RBSheet
-                ref={genderef}
-                //closeOnDragDown={true}
-                closeOnPressMask={false}
-                customStyles={{
-                  container: {
-                    borderTopRightRadius: 16,
-                    borderTopLeftRadius: 16,
-                    alignItems: 'center',
-                  },
-                }}>
-                <WheelPicker
-                  selectedItem={genders.indexOf(gender)}
-                  isCyclic={true}
-                  data={genders}
-                  onItemSelected={item => {
-                    values.gender = genders[item];
-                    setGender(genders[item]);
-                  }}
-                  indicatorWidth={1}
-                  //hideIndicator={true}
+                <PopUpCard
+                  text={'Gender'}
+                  textColor={colors.grey}
+                  value={values.gender}
+                  onBlur={() => setFieldTouched('gender')}
+                  onPress={() => genderef.current.open()}
                 />
-                <View
-                  style={{
-                    width: wp('100%'),
-                    flexDirection: 'row',
-                    justifyContent: 'flex-end',
-                    alignItems: 'flex-end',
+                <RBSheet
+                  ref={genderef}
+                  //closeOnDragDown={true}
+                  closeOnPressMask={false}
+                  customStyles={{
+                    container: {
+                      borderTopRightRadius: 16,
+                      borderTopLeftRadius: 16,
+                      alignItems: 'center',
+                    },
                   }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      genderef.current.close();
-                      setGender('MALE');
-                    }}>
-                    <Text
-                      style={{
-                        color: colors.orangeYellow,
-                        marginBottom: hp('7.5%'),
-                        marginRight: wp('12.5%'),
-                        fontSize: Fontsize + wp('0.7%'),
-                        fontWeight: 'bold',
-                      }}>
-                      Cancel
-                    </Text>
-                  </TouchableOpacity>
-                  <AppButton
-                    title={'Confirm'}
-                    onPress={() => genderef.current.close()}
-                    style={{
-                      width: wp('31%'),
-                      marginBottom: hp('5%'),
-                      marginRight: wp('5%'),
-                      //justifyContent: 'flex-end',
+                  <WheelPicker
+                    selectedItem={genders.indexOf(gender)}
+                    isCyclic={true}
+                    data={genders}
+                    onItemSelected={item => {
+                      values.gender = genders[item];
+                      setGender(genders[item]);
                     }}
+                    indicatorWidth={1}
+                    //hideIndicator={true}
                   />
-                </View>
-                {/* <View
+                  <View
+                    style={{
+                      width: wp('100%'),
+                      flexDirection: 'row',
+                      justifyContent: 'flex-end',
+                      alignItems: 'flex-end',
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        genderef.current.close();
+                        setGender('MALE');
+                      }}>
+                      <Text
+                        style={{
+                          color: colors.orangeYellow,
+                          marginBottom: hp('7.5%'),
+                          marginRight: wp('12.5%'),
+                          fontSize: Fontsize + wp('0.7%'),
+                          fontWeight: 'bold',
+                        }}>
+                        Cancel
+                      </Text>
+                    </TouchableOpacity>
+                    <AppButton
+                      title={'Confirm'}
+                      onPress={() => genderef.current.close()}
+                      style={{
+                        width: wp('31%'),
+                        marginBottom: hp('5%'),
+                        marginRight: wp('5%'),
+                        //justifyContent: 'flex-end',
+                      }}
+                    />
+                  </View>
+                  {/* <View
                   style={{
                     flexDirection: 'row',
                     paddingHorizontal: wp('5%'),
@@ -380,202 +385,206 @@ const AddChild = props => {
                     }}
                   />
                 </View> */}
-              </RBSheet>
-              {gendererror && (
-                <Text style={styles.errors}>Gender is a required</Text>
-              )}
+                </RBSheet>
+                {gendererror && (
+                  <Text style={styles.errors}>Gender is a required</Text>
+                )}
 
-              {/* <ErrorMessage
+                {/* <ErrorMessage
               style={styles.errorMessage}
               error={errors.gender}
               visible={touched.gender}
             /> */}
 
-              <Text style={styles.emergency}>Emergency Contact (Primary)</Text>
-              <EmergencyCard
-                disabled={data.length === 1 ? true : false}
-                addButtons={buttonVisible}
-                addButton={handleSubmits}
-                valueName={values.epname}
-                onChangeTextName={handleChange('epname')}
-                onBlurName={() => setFieldTouched('epname')}
-                errorName={errors.epname}
-                visibleName={touched.epname}
-                valuesContactNumber={values.epNumber}
-                onChangeTextContact={handleChange('epNumber')}
-                onBlurContact={() => setFieldTouched('epNumber')}
-                errorContactNumber={errors.epNumber}
-                visibleContactNumber={touched.epNumber}
-                onChangeRelation={relations =>
-                  setFieldValue('eprelation', relations)
-                }
-                value={values.eprelation}
-                onBlur={() => setFieldTouched('gender')}
-              />
-              <PopUpCard
-                text="Relationship *"
-                onBlur={() => setFieldTouched('eprelation')}
-                value={relationForDisplay[relations.indexOf(values.eprelation)]}
-                onPress={() => relationref.current.open()}
-              />
-              <RBSheet
-                ref={relationref}
-                //closeOnDragDown={true}
-                //closeOnPressMask={false}
-                customStyles={{
-                  container: {
-                    //height: '18%',
-                    alignItems: 'center',
-                    borderTopRightRadius: 16,
-                    borderTopLeftRadius: 16,
-                  },
-                }}>
-                <WheelPicker
-                  selectedItem={relations.indexOf(relation)}
-                  isCyclic={true}
-                  data={relationForDisplay}
-                  onItemSelected={item => {
-                    values.eprelation = relations[item];
-                    setRelation(relations[item]);
-                  }}
-                  indicatorWidth={1}
-                />
-                <View
-                  style={{
-                    width: wp('100%'),
-                    flexDirection: 'row',
-                    justifyContent: 'flex-end',
-                    alignItems: 'flex-end',
-                  }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      relationref.current.close();
-                      setRelation('PARENT');
-                    }}>
-                    <Text
-                      style={{
-                        color: colors.orangeYellow,
-                        marginBottom: hp('7.5%'),
-                        marginRight: wp('12.5%'),
-                        fontSize: Fontsize + wp('0.7%'),
-                        fontWeight: 'bold',
-                      }}>
-                      Cancel
-                    </Text>
-                  </TouchableOpacity>
-                  <AppButton
-                    title={'Confirm'}
-                    onPress={() => relationref.current.close()}
-                    style={{
-                      width: wp('31%'),
-                      marginBottom: hp('5%'),
-                      marginRight: wp('5%'),
-                      //justifyContent: 'flex-end',
-                    }}
-                  />
-                </View>
-              </RBSheet>
-              <View style={{flexDirection: 'row'}}>
-                {!openSecondary ? (
-                  <AppButton
-                    title="+"
-                    style={{width: wp('15%')}}
-                    onPress={() => {
-                      setFieldValue('');
-                      openSecondary = true;
-                    }}
-                  />
-                ) : null}
-                <Text
-                  style={{
-                    fontFamily: 'Nunito-SemiBold',
-                    fontSize: wp('4.5%'),
-                    marginTop: hp('2.5%'),
-                    paddingTop: wp('5%'),
-                    paddingLeft: wp('2%'),
-                  }}>
-                  Emergency Contact (Secondary)
+                <Text style={styles.emergency}>
+                  Emergency Contact (Primary)
                 </Text>
-              </View>
-              {openSecondary ? (
-                <View>
-                  <EmergencyCard
-                    disabled={data.length === 1 ? true : false}
-                    addButtons={buttonVisible}
-                    addButton={handleSubmits}
-                    valueName={values.esname}
-                    onChangeTextName={handleChange('esname')}
-                    onBlurName={() => setFieldTouched('esname')}
-                    errorName={errors.esname}
-                    visibleName={touched.esname}
-                    valuesContactNumber={values.esNumber}
-                    onChangeTextContact={handleChange('esNumber')}
-                    onBlurContact={() => setFieldTouched('esNumber')}
-                    errorContactNumber={errors.esNumber}
-                    visibleContactNumber={touched.esNumber}
-                    onChangeRelation={relations =>
-                      setFieldValue('esrelation', relations)
-                    }
-                    value={values.esrelation}
-                    onBlur={() => setFieldTouched('gender')}
+                <EmergencyCard
+                  disabled={data.length === 1 ? true : false}
+                  addButtons={buttonVisible}
+                  addButton={handleSubmits}
+                  valueName={values.epname}
+                  onChangeTextName={handleChange('epname')}
+                  onBlurName={() => setFieldTouched('epname')}
+                  errorName={errors.epname}
+                  visibleName={touched.epname}
+                  valuesContactNumber={values.epNumber}
+                  onChangeTextContact={handleChange('epNumber')}
+                  onBlurContact={() => setFieldTouched('epNumber')}
+                  errorContactNumber={errors.epNumber}
+                  visibleContactNumber={touched.epNumber}
+                  onChangeRelation={relations =>
+                    setFieldValue('eprelation', relations)
+                  }
+                  value={values.eprelation}
+                  onBlur={() => setFieldTouched('gender')}
+                />
+                <PopUpCard
+                  text="Relationship *"
+                  onBlur={() => setFieldTouched('eprelation')}
+                  value={
+                    relationForDisplay[relations.indexOf(values.eprelation)]
+                  }
+                  onPress={() => relationref.current.open()}
+                />
+                <RBSheet
+                  ref={relationref}
+                  //closeOnDragDown={true}
+                  //closeOnPressMask={false}
+                  customStyles={{
+                    container: {
+                      //height: '18%',
+                      alignItems: 'center',
+                      borderTopRightRadius: 16,
+                      borderTopLeftRadius: 16,
+                    },
+                  }}>
+                  <WheelPicker
+                    selectedItem={relations.indexOf(relation)}
+                    isCyclic={true}
+                    data={relationForDisplay}
+                    onItemSelected={item => {
+                      values.eprelation = relations[item];
+                      setRelation(relations[item]);
+                    }}
+                    indicatorWidth={1}
                   />
-                  <PopUpCard
-                    text="Relationship *"
-                    onBlur={() => setFieldTouched('esrelation')}
-                    value={
-                      relationForDisplay[relations.indexOf(values.esrelation)]
-                    }
-                    onPress={() => relationref.current.open()}
-                  />
-                  <RBSheet
-                    ref={relationref}
-                    closeOnDragDown={true}
-                    closeOnPressMask={false}
-                    customStyles={{
-                      container: {
-                        height: '18%',
-                        borderTopRightRadius: 16,
-                        borderTopLeftRadius: 16,
-                      },
+                  <View
+                    style={{
+                      width: wp('100%'),
+                      flexDirection: 'row',
+                      justifyContent: 'flex-end',
+                      alignItems: 'flex-end',
                     }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        paddingHorizontal: wp('5%'),
-                        justifyContent: 'space-between',
+                    <TouchableOpacity
+                      onPress={() => {
+                        relationref.current.close();
+                        setRelation('PARENT');
                       }}>
-                      <AppButton
-                        title="Parents"
-                        style={{width: wp('28%')}}
-                        onPress={() => {
-                          values.esrelation = 'Parents';
-                          relationref.current.close();
-                          setFieldValue('');
-                        }}
-                      />
-                      <AppButton
-                        title="Guardian"
-                        style={{width: wp('30%')}}
-                        onPress={() => {
-                          values.esrelation = 'Guardian';
-                          setFieldValue('');
-                          relationref.current.close();
-                        }}
-                      />
-                      <AppButton
-                        title="Others"
-                        style={{width: wp('28%')}}
-                        onPress={() => {
-                          values.esrelation = 'Others';
-                          setFieldValue('');
-                          relationref.current.close();
-                        }}
-                      />
-                    </View>
-                  </RBSheet>
+                      <Text
+                        style={{
+                          color: colors.orangeYellow,
+                          marginBottom: hp('7.5%'),
+                          marginRight: wp('12.5%'),
+                          fontSize: Fontsize + wp('0.7%'),
+                          fontWeight: 'bold',
+                        }}>
+                        Cancel
+                      </Text>
+                    </TouchableOpacity>
+                    <AppButton
+                      title={'Confirm'}
+                      onPress={() => relationref.current.close()}
+                      style={{
+                        width: wp('31%'),
+                        marginBottom: hp('5%'),
+                        marginRight: wp('5%'),
+                        //justifyContent: 'flex-end',
+                      }}
+                    />
+                  </View>
+                </RBSheet>
+                <View style={{flexDirection: 'row'}}>
+                  {!openSecondary ? (
+                    <AppButton
+                      title="+"
+                      style={{width: wp('15%')}}
+                      onPress={() => {
+                        setFieldValue('');
+                        openSecondary = true;
+                      }}
+                    />
+                  ) : null}
+                  <Text
+                    style={{
+                      fontFamily: 'Nunito-SemiBold',
+                      fontSize: wp('4.5%'),
+                      marginTop: hp('2.5%'),
+                      paddingTop: wp('5%'),
+                      paddingLeft: wp('2%'),
+                    }}>
+                    Emergency Contact (Secondary)
+                  </Text>
                 </View>
-              ) : null}
-              {/* {data &&
+                {openSecondary ? (
+                  <View>
+                    <EmergencyCard
+                      disabled={data.length === 1 ? true : false}
+                      addButtons={buttonVisible}
+                      addButton={handleSubmits}
+                      valueName={values.esname}
+                      onChangeTextName={handleChange('esname')}
+                      onBlurName={() => setFieldTouched('esname')}
+                      errorName={errors.esname}
+                      visibleName={touched.esname}
+                      valuesContactNumber={values.esNumber}
+                      onChangeTextContact={handleChange('esNumber')}
+                      onBlurContact={() => setFieldTouched('esNumber')}
+                      errorContactNumber={errors.esNumber}
+                      visibleContactNumber={touched.esNumber}
+                      onChangeRelation={relations =>
+                        setFieldValue('esrelation', relations)
+                      }
+                      value={values.esrelation}
+                      onBlur={() => setFieldTouched('gender')}
+                    />
+                    <PopUpCard
+                      text="Relationship *"
+                      onBlur={() => setFieldTouched('esrelation')}
+                      value={
+                        relationForDisplay[relations.indexOf(values.esrelation)]
+                      }
+                      onPress={() => relationref.current.open()}
+                    />
+                    <RBSheet
+                      ref={relationref}
+                      closeOnDragDown={true}
+                      closeOnPressMask={false}
+                      customStyles={{
+                        container: {
+                          height: '18%',
+                          borderTopRightRadius: 16,
+                          borderTopLeftRadius: 16,
+                        },
+                      }}>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          paddingHorizontal: wp('5%'),
+                          justifyContent: 'space-between',
+                        }}>
+                        <AppButton
+                          title="Parents"
+                          style={{width: wp('28%')}}
+                          onPress={() => {
+                            values.esrelation = 'Parents';
+                            relationref.current.close();
+                            setFieldValue('');
+                          }}
+                        />
+                        <AppButton
+                          title="Guardian"
+                          style={{width: wp('30%')}}
+                          onPress={() => {
+                            values.esrelation = 'Guardian';
+                            setFieldValue('');
+                            relationref.current.close();
+                          }}
+                        />
+                        <AppButton
+                          title="Others"
+                          style={{width: wp('28%')}}
+                          onPress={() => {
+                            values.esrelation = 'Others';
+                            setFieldValue('');
+                            relationref.current.close();
+                          }}
+                        />
+                      </View>
+                    </RBSheet>
+                  </View>
+                ) : null}
+                {/* {data &&
                 data.map(item => {
                   return (
                     <EmergencyCard
@@ -619,17 +628,18 @@ const AddChild = props => {
                     </EmergencyCard>
                   );
                 })} */}
-              <ForwardButton
-                style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
-                title="Submit"
-                onPress={() => {
-                  handleSubmit();
-                }}
-              />
-            </>
-          );
-        }}
-      </Formik>
+                <ForwardButton
+                  style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
+                  title="Submit"
+                  onPress={() => {
+                    handleSubmit();
+                  }}
+                />
+              </>
+            );
+          }}
+        </Formik>
+      </ScrollView>
     </CustomLayout>
   );
 };

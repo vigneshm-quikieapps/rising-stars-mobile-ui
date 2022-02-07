@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {Stack, StackScreen} from '../Utils/Utils';
-import {useDispatch, useSelector} from 'react-redux';
 
 import EnrollingFlow from '../../screen/ChildEnrol/EnrollingFlow';
 import AddChild from '../../screen/ChildEnrol/AddChild';
@@ -16,11 +15,11 @@ import EditProfile from '../../screen/Dashboard/EditProfile';
 export const EnrollStack = props => {
   return (
     <Stack>
-      {/* <StackScreen.Screen
+      <StackScreen.Screen
         name="EnrollingFlow"
         component={EnrollingFlow}
         options={{headerShown: false}}
-      /> */}
+      />
       <StackScreen.Screen
         name="AddChild"
         component={AddChild}
@@ -51,11 +50,11 @@ export const EnrollStack = props => {
         component={Provide_Consent}
         options={{headerShown: false}}
       />
-      {/* <StackScreen.Screen
+      <StackScreen.Screen
         name="Additional_Sections"
         component={Additional_Sections}
         options={{headerShown: false}}
-      /> */}
+      />
       <StackScreen.Screen
         name="Pay"
         component={Pay}

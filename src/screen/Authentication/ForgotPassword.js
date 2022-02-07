@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 
 import {hp, wp, colors} from '../../constants';
 import {CustomLayout, TextInputField, AppButton} from './../../components';
@@ -19,7 +20,7 @@ function ForgotPassword(props) {
   };
   return (
     <CustomLayout style={styles.container}>
-      <View>
+      <ScrollView>
         <Text style={styles.title}>RESET PASSWORD</Text>
         {/* <Text style={styles.subTitle}>
           Enter the Email associated with your account we will send an OTP to
@@ -91,7 +92,7 @@ function ForgotPassword(props) {
             }
           }}
         />
-      </View>
+      </ScrollView>
       <AppButton
         title="Generate New Password"
         style={[styles.generateButton, {backgroundColor: 'green'}]}

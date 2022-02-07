@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, Text, Dimensions, FlatList} from 'react-native';
-import Timeline from 'react-native-timeline-flatlist';
+import React from 'react';
+import {View, StyleSheet, Text, FlatList} from 'react-native';
 import {AppButton, CustomLayout} from './../../components';
 import {colors, wp, hp, Fontsize, EnrollData} from './../../constants';
 import LinearGradient from 'react-native-linear-gradient';
@@ -9,6 +8,7 @@ function EnrollingFlow(props) {
   return (
     <CustomLayout
       backbutton={() => props.navigation.goBack()}
+      back={true}
       headertext={'Enter Child To a Club Activity'}
       headertextStyle={{
         fontSize: wp('8%'),
@@ -26,7 +26,7 @@ function EnrollingFlow(props) {
                   style={styles.circle}>
                   <Text style={styles.circlecontainer}>{item.item.id}</Text>
                 </LinearGradient>
-                {item.item.id < 6 ? <View style={styles.line} /> : null}
+                {item.item.id < 7 ? <View style={styles.line} /> : null}
               </View>
               <View style={{marginLeft: wp('2%')}}>
                 <Text

@@ -8,6 +8,7 @@ import {
   fetchClasses,
   fetchActivityOfMemberInSession,
   fetchParticularBusiness,
+  fetchEvaluationById,
 } from '../service/request';
 
 function* handleGetMember(action) {
@@ -25,9 +26,15 @@ export function* watcherMemberSaga() {
 function* handleGetBusinessName(action) {
   try {
     const business = yield call(fetchParticularBusiness, action.payload);
-    yield put({type: Action.USER_GET_CURRENT_BUSINESS_NAME_SUCCESS, data: business});
+    yield put({
+      type: Action.USER_GET_CURRENT_BUSINESS_NAME_SUCCESS,
+      data: business,
+    });
   } catch (error) {
-    yield put({type: Action.USER_GET_CURRENT_BUSINESS_NAME_FAILED, error: error});
+    yield put({
+      type: Action.USER_GET_CURRENT_BUSINESS_NAME_FAILED,
+      error: error,
+    });
   }
 }
 export function* watcherBusinessNameSaga() {
@@ -63,7 +70,6 @@ export function* watcherMemberClasses() {
 function* handleGetMemberActivity(action) {
   try {
     const classes = yield call(fetchActivityOfMemberInSession, action.payload);
-    console.log('Classes: ', classes);
     yield put({
       type: Action.USER_GET_CURRENT_MEMBER_ACTIVITY_SUCCESS,
       data: classes,
@@ -81,4 +87,23 @@ export function* watcherMemberActivity() {
     Action.USER_GET_CURRENT_MEMBER_ACTIVITY,
     handleGetMemberActivity,
   );
+}
+
+function* handleGetEvaluation(action) {
+  try {
+    const classes = yield call(fetchEvaluationById, action.payload);
+    yield put({
+      type: Action.USER_GET_CURRENT_EVALUATION_NAME_SUCCESS,
+      data: classes,
+    });
+  } catch (error) {
+    yield put({
+      type: Action.USER_GET_CURRENT_EVALUATION_NAME_FAILURE,
+      error: error,
+    });
+  }
+}
+
+export function* watcherGetEvaluation() {
+  yield takeEvery(Action.USER_GET_CURRENT_EVALUATION_NAME, handleGetEvaluation);
 }

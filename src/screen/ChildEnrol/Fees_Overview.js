@@ -10,6 +10,7 @@ import {
 import {colors, Fontsize, hp, wp, Stepend} from '../../constants';
 
 import {useSelector, useDispatch} from 'react-redux';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Fees_Overview = props => {
   const dispatch = useDispatch();
@@ -40,22 +41,23 @@ const Fees_Overview = props => {
       headertext={'Fees Overview'}
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={3} />}>
-      <Text style={{fontFamily: 'Nunito-SemiBold', fontSize: wp('6%')}}>
-        Fee Breakdown
-      </Text>
-      {classes.charges.map(item => (
-        <>
-          <Amount
-            head={item.name}
-            body={item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
-            currency={item.amount}
-          />
-          <View
-            style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}}
-          />
-        </>
-      ))}
-      {/* <Amount
+      <ScrollView>
+        <Text style={{fontFamily: 'Nunito-SemiBold', fontSize: wp('6%')}}>
+          Fee Breakdown
+        </Text>
+        {classes.charges.map(item => (
+          <>
+            <Amount
+              head={item.name}
+              body={item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
+              currency={item.amount}
+            />
+            <View
+              style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}}
+            />
+          </>
+        ))}
+        {/* <Amount
         head={classes.charges[0].name}
         body={
           classes.charges[0].payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'
@@ -79,10 +81,11 @@ const Fees_Overview = props => {
         currency={classes.charges[2].amount}
       />
       <View style={{marginVertical: hp('1.8%')}} /> */}
-      <ForwardButton
-        style={{alignSelf: 'flex-end', marginTop: hp('-1.7%')}}
-        onPress={() => props.navigation.navigate('Provide_Consent')}
-      />
+        <ForwardButton
+          style={{alignSelf: 'flex-end', marginTop: hp('-1.7%')}}
+          onPress={() => props.navigation.navigate('Provide_Consent')}
+        />
+      </ScrollView>
     </CustomLayout>
   );
 };

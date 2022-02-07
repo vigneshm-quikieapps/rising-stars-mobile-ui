@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {
@@ -16,18 +17,7 @@ import {WheelPicker} from 'react-native-wheel-picker-android';
 
 import {ProgressBarWithStar, Timelines, WheelDropdown} from '../../components';
 import {useDispatch, useSelector} from 'react-redux';
-import {getmemberClass, getmemberData} from '../../redux/action/home';
 import * as Action from '../../redux/action-types';
-import {getLocalData} from '../../utils/LocalStorage';
-<<<<<<< HEAD
-
-=======
-import {
-  //fetchAttendanceOfMemberInSession,
-  fetchProgress,fetchParticularBusiness
-} from '../../redux/service/request';
-import {currentMemberData} from '../../redux/reducer/home';
->>>>>>> 7eea601dec3fba7691352afd89a4f0e6cf3e0668
 const ActivityProgress = () => {
   const itemWidth = Dimensions.get('window').width;
   const membersdata = useSelector(state => state.memberData.memberData);
@@ -35,90 +25,73 @@ const ActivityProgress = () => {
   const [showModal, setShowModal] = useState(false);
   const [wheelitem, setItem] = useState(0);
   const [currentMember, setCurrentMember] = useState('');
-  const memberClassData = useSelector(state => state.memberClassData.classData);
   const memberActivityProgress = useSelector(
     state => state.currentMemberActivity.activity,
   );
-<<<<<<< HEAD
-=======
-  const businessData = useSelector(state => state.businessData.businessData);
-  const [user, setUser] = useState('');
->>>>>>> 7eea601dec3fba7691352afd89a4f0e6cf3e0668
-  const [token, setToken] = useState();
+  const evaluationName = useSelector(
+    state => state.evaluationData.evaluationData,
+  );
+  const businessName = useSelector(state => state.businessData.businessData);
   const [progress, setProgress] = useState();
   const [currentMemberIndex, setCurrentMemberIndex] = useState(0);
-  const [activeDotIndex, setActiveDotIndex] = React.useState(0);
-  //const [currentSessionAttendance, setCurrentSessionAttendance] = useState('');
-
+  const [currentBusinessId, setBusinessId] = useState('');
+  const [currentEvaluationId, setcurrentEvaluationId] = useState('');
+  const [activedotIndex, setactivedotIndex] = useState(0);
+  var value;
   var member = [];
-  const accessToken = async () => {
-    const Token = await getLocalData('accessToken');
-    setToken(Token);
-  };
+  var count = 0;
 
   membersdata && membersdata.map(item => member.push(item.name));
 
-  accessToken();
-
   useEffect(() => {
     setProgress(memberActivityProgress);
+    progress && progress.docs.length > 0
+      ? setBusinessId(progress.docs[0].businessId)
+      : null;
+    progress && progress.docs.length > 0
+      ? setcurrentEvaluationId(progress.docs[0].evaluationSchemeId)
+      : null;
+    progress && progress.docs.length > 0
+      ? progress.docs.levels.forEach(levels => {
+          if (levels.status === 'AWARDED') {
+            count += 1;
+          } else if (levels.status === 'IN_PROGRESS') {
+            count += 0.5;
+          }
+        })
+      : null;
+    if (count > 0) {
+      value = (count / progress.docs[activedotIndex].levelCount) * 10;
+    }
   }, [memberActivityProgress]);
 
-  console.log('Activity: ', progress);
-  // useEffect(() => {
-  //   token && dispatch(getmemberData(token));
+  useEffect(() => {
+    dispatch({
+      type: Action.USER_GET_CURRENT_BUSINESS_NAME,
+      payload: {id: currentBusinessId},
+    });
+    dispatch({
+      type: Action.USER_GET_CURRENT_EVALUATION_NAME,
+      payload: {id: currentEvaluationId},
+    });
+  }, [currentBusinessId, currentEvaluationId]);
 
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [token]);
+  console.log('Activity: ', progress);
   useEffect(() => {
     membersdata && setCurrentMember(membersdata[currentMemberIndex]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [membersdata]);
   useEffect(() => {
-    //currentMember && dispatch(getmemberClass(currentMember._id));
-
-    // currentMember &&
-    //   dispatch({
-    //     type: Action.USER_GET_CURRENT_MEMBER_DATA,
-    //     payload: currentMember,
-    //   });
     currentMember &&
       dispatch({
         type: Action.USER_GET_CURRENT_MEMBER_ACTIVITY,
         payload: {id: currentMember._id},
       });
-      currentMember && dispatch({
+    currentMember &&
+      dispatch({
         type: Action.USER_GET_CURRENT_BUSINESS_NAME,
         payload: {id: currentMember._id},
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMember]);
-<<<<<<< HEAD
-  // useEffect(() => {
-  //   memberClassData.length > 1 &&
-  //     setCurrentSessionId(
-  //       memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
-  //         activeDotIndex
-  //       ].session._id,
-  //     );
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [memberClassData]);
-=======
-  console.log('bus', businessData._id)
-  useEffect(() => {
-    memberClassData.length > 1 &&
-      setCurrentSessionId(
-        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
-          activeDotIndex
-        ].session._id,
-      );
-    // useEffect(async () => {
-    //   currentMember && await fetchParticularBusiness({id: currentMember._id})
-    // }, [currentMember]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memberClassData]);
->>>>>>> 7eea601dec3fba7691352afd89a4f0e6cf3e0668
   const renderItem = ({item, index}) => {
     return (
       <LinearGradient
@@ -146,16 +119,14 @@ const ActivityProgress = () => {
             color: colors.white,
             fontFamily: 'Nunito-SemiBold',
           }}>
-          {/* {item.class.name} */}
-          {item.class.businessId}
-          {/* {item.business.name} */}
+          {businessName.name}
         </Text>
         <Text
           style={{
             fontSize: 16,
             color: colors.white,
             fontFamily: 'Nunito-Regular',
-            marginTop: hp('2%')
+            marginTop: hp('2%'),
           }}>
           Evaluation Scheme Name
         </Text>
@@ -166,7 +137,7 @@ const ActivityProgress = () => {
             fontFamily: 'Nunito-SemiBold',
           }}>
           {/* {item.class.name} */}
-        {item.class.evaluationSchemeId}
+          {evaluationName.name}
         </Text>
       </LinearGradient>
     );
@@ -237,38 +208,19 @@ const ActivityProgress = () => {
       </WheelDropdown>
 
       <View style={{marginTop: 14}}>
-        {memberClassData.length > 0 ? (
+        {progress && progress.docs.length > 0 ? (
           <Carousel
             style={{width: 350}}
             layout={'default'}
-            data={
-              memberClassData &&
-              memberClassData?.filter(
-                item => item?.enrolledStatus === 'ENROLLED',
-              )
-            }
+            data={progress.docs && progress.docs}
             sliderWidth={itemWidth - 30}
             itemWidth={itemWidth * 0.88}
             renderItem={renderItem}
-            onSnapToItem={async index => {
+            onSnapToItem={index => {
               setProgress('');
-              setActiveDotIndex(index);
-              // setCurrentSessionId(
-              //   memberClassData &&
-              //     memberClassData?.filter(
-              //       item => item?.enrolledStatus === 'ENROLLED',
-              //     )[index].session._id,
-              // );
-              // const attendance =
-              //   currentSessionId &&
-              //   (await fetchAttendanceOfMemberInSession({
-              //     token,
-              //     data: {
-              //       sessionId: currentSessionId,
-              //       memberId: currentMember._id,
-              //     },
-              //   }));
-              // setCurrentSessionAttendance(attendance.attendance);
+              setactivedotIndex(index);
+              setBusinessId(progress.docs[index].businessId);
+              setcurrentEvaluationId(progress.docs[index].evaluationSchemeId);
             }}
           />
         ) : (
@@ -284,14 +236,14 @@ const ActivityProgress = () => {
             }}>
             <TouchableOpacity>
               <Text style={{fontSize: wp('6%'), color: 'white'}}>
-                Please add a Class
+                Progress will be added soon
               </Text>
             </TouchableOpacity>
           </View>
         )}
       </View>
       <View style={{marginTop: 30, marginRight: 20}}>
-        <ProgressBarWithStar />
+        <ProgressBarWithStar value={value} />
       </View>
       <View
         style={{
@@ -311,7 +263,13 @@ const ActivityProgress = () => {
       </View>
 
       <View style={{marginTop: 10, paddingVertical: 20}}>
-        <Timelines />
+        <Timelines
+          data={
+            progress && progress.docs.length > 0
+              ? progress.docs[activedotIndex].levels
+              : null
+          }
+        />
       </View>
     </ScrollView>
   );

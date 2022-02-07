@@ -22,6 +22,8 @@ import {
   currentMemberData,
   currentMemberAttendance,
   currentMemberActivity,
+  businessData,
+  evaluationData,
 } from './reducer/home';
 
 const rootReducer = combineReducers({
@@ -31,6 +33,7 @@ const rootReducer = combineReducers({
   clubname,
   classname,
   sessionlist,
+  businessData,
   Postcode,
   Postcodedata,
   RegisterData,
@@ -42,6 +45,7 @@ const rootReducer = combineReducers({
   ResetPasswordData,
   currentMemberData,
   currentMemberAttendance,
+  evaluationData,
   enrollChild,
 });
 
