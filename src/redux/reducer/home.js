@@ -111,3 +111,72 @@ export const currentMemberAttendance = (
       return state;
   }
 };
+
+const currentMemberActivityState = {
+  activity: '',
+  error: '',
+};
+
+export const currentMemberActivity = (
+  state = currentMemberActivityState,
+  action,
+) => {
+  switch (action.type) {
+    case Action.USER_GET_CURRENT_MEMBER_ACTIVITY_SUCCESS:
+      return {
+        ...state,
+        activity: action.data,
+      };
+    case Action.USER_GET_CURRENT_MEMBER_ACTIVITY_FAILURE:
+      return {
+        ...state,
+        error: action.error,
+      };
+    default:
+      return state;
+  }
+};
+
+const businessstate = {
+  businessData: '',
+  error: '',
+};
+
+export const businessData = (state = businessstate, action) => {
+  switch (action.type) {
+    case Action.USER_GET_CURRENT_BUSINESS_NAME_SUCCESS:
+      return {
+        ...state,
+        businessData: action.data,
+      };
+    case Action.USER_GET_CURRENT_BUSINESS_NAME_FAILED:
+      return {
+        ...state,
+        error: action.error,
+      };
+    default:
+      return state;
+  }
+};
+
+const evaluationstate = {
+  evaluationData: '',
+  error: '',
+};
+
+export const evaluationData = (state = evaluationstate, action) => {
+  switch (action.type) {
+    case Action.USER_GET_CURRENT_EVALUATION_NAME_SUCCESS:
+      return {
+        ...state,
+        evaluationData: action.data,
+      };
+    case Action.USER_GET_CURRENT_EVALUATION_NAME_FAILED:
+      return {
+        ...state,
+        error: action.error,
+      };
+    default:
+      return state;
+  }
+};
