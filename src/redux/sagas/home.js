@@ -1,4 +1,4 @@
-import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
+import {call, put, takeEvery} from 'redux-saga/effects';
 
 import * as Action from '../action-types';
 
@@ -6,6 +6,9 @@ import {
   fetchMemberData,
   fetchMemberClassData,
   fetchClasses,
+  fetchActivityOfMemberInSession,
+  fetchParticularBusiness,
+  fetchEvaluationById,
 } from '../service/request';
 
 function* handleGetMember(action) {
@@ -18,6 +21,24 @@ function* handleGetMember(action) {
 }
 export function* watcherMemberSaga() {
   yield takeEvery(Action.USER_GET_MEMBER, handleGetMember);
+}
+
+function* handleGetBusinessName(action) {
+  try {
+    const business = yield call(fetchParticularBusiness, action.payload);
+    yield put({
+      type: Action.USER_GET_CURRENT_BUSINESS_NAME_SUCCESS,
+      data: business,
+    });
+  } catch (error) {
+    yield put({
+      type: Action.USER_GET_CURRENT_BUSINESS_NAME_FAILED,
+      error: error,
+    });
+  }
+}
+export function* watcherBusinessNameSaga() {
+  yield takeEvery(Action.USER_GET_CURRENT_BUSINESS_NAME, handleGetBusinessName);
 }
 
 function* handleGetMemberClass(action) {
@@ -44,4 +65,45 @@ function* handleGetMemberClasses(action) {
 
 export function* watcherMemberClasses() {
   yield takeEvery(Action.USER_GET_CLASSES, handleGetMemberClasses);
+}
+
+function* handleGetMemberActivity(action) {
+  try {
+    const classes = yield call(fetchActivityOfMemberInSession, action.payload);
+    yield put({
+      type: Action.USER_GET_CURRENT_MEMBER_ACTIVITY_SUCCESS,
+      data: classes,
+    });
+  } catch (error) {
+    yield put({
+      type: Action.USER_GET_CURRENT_MEMBER_ACTIVITY_FAILURE,
+      error: error,
+    });
+  }
+}
+
+export function* watcherMemberActivity() {
+  yield takeEvery(
+    Action.USER_GET_CURRENT_MEMBER_ACTIVITY,
+    handleGetMemberActivity,
+  );
+}
+
+function* handleGetEvaluation(action) {
+  try {
+    const classes = yield call(fetchEvaluationById, action.payload);
+    yield put({
+      type: Action.USER_GET_CURRENT_EVALUATION_NAME_SUCCESS,
+      data: classes,
+    });
+  } catch (error) {
+    yield put({
+      type: Action.USER_GET_CURRENT_EVALUATION_NAME_FAILURE,
+      error: error,
+    });
+  }
+}
+
+export function* watcherGetEvaluation() {
+  yield takeEvery(Action.USER_GET_CURRENT_EVALUATION_NAME, handleGetEvaluation);
 }
