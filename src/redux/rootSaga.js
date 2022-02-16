@@ -19,6 +19,9 @@ import {
   watcherMemberSaga,
   watcherMemberClassSaga,
   watcherMemberClasses,
+  watcherGetEvaluation,
+  watcherMemberActivity,
+  watcherBusinessNameSaga,
 } from './sagas/home';
 
 export default function* rootSaga() {
@@ -29,6 +32,9 @@ export default function* rootSaga() {
     watcherClassSaga(),
     watcherSessionSaga(),
     watcherPostcode(),
+    watcherGetEvaluation(),
+    watcherMemberActivity(),
+    watcherBusinessNameSaga(),
     watcherRegister(),
     watcherClubfinance(),
     watcherMemberSaga(),

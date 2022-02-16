@@ -108,6 +108,7 @@ export function fetchRegister(payload) {
       addressLine1: payload.addressLine1,
       addressLine2: payload.addressLine2,
       city: payload.cityTown,
+      isNewsletter: payload.notification,
       country: payload.country,
     }),
   })
@@ -179,6 +180,18 @@ export function fetchClubFinanc(id) {
       throw error;
     });
 }
+
+export function fetchParticularBusiness(id) {
+  console.log(id.id);
+  return fetch(`${heroku_url}/businesses/${id.id}`, {
+    method: 'GET',
+  })
+    .then(response => response.json())
+    .catch(error => {
+      alert(error);
+    });
+}
+
 //enroll to class
 export function regularEnrollment(payload) {
   return fetch(`${heroku_url}/enrolments`, {
@@ -320,6 +333,33 @@ export function fetchAttendanceOfMemberInSession(payload) {
       Authorization: `Bearer ${payload.token}`,
     },
     body: JSON.stringify(payload.data),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      throw error;
+    });
+}
+
+export function fetchActivityOfMemberInSession(payload) {
+  return fetch(`${heroku_url}/members/${payload.id}/progress`, {
+    method: 'GET',
+    headers: {
+      //Authorization: `Bearer ${payload.token}`,
+    },
+    body: JSON.stringify(payload.data),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      throw error;
+    });
+}
+
+export function fetchEvaluationById(payload) {
+  return fetch(`${heroku_url}/evaluations/${payload.id}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${payload.token}`,
+    },
   })
     .then(response => response.json())
     .catch(error => {

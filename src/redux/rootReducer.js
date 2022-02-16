@@ -21,17 +21,23 @@ import {
   memberClassData,
   currentMemberData,
   currentMemberAttendance,
+  currentMemberActivity,
+  evaluationData,
+  businessData,
 } from './reducer/home';
 
 const rootReducer = combineReducers({
   LoginData,
   childData,
   clubname,
+  businessData,
+  evaluationData,
   classname,
   sessionlist,
   Postcode,
   Postcodedata,
   RegisterData,
+  currentMemberActivity,
   clubfinance,
   addProvidedata,
   memberData,

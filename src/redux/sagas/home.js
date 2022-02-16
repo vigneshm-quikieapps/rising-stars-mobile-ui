@@ -25,6 +25,7 @@ export function* watcherMemberSaga() {
 
 function* handleGetBusinessName(action) {
   try {
+    console.log('action', action.payload);
     const business = yield call(fetchParticularBusiness, action.payload);
     yield put({
       type: Action.USER_GET_CURRENT_BUSINESS_NAME_SUCCESS,

@@ -145,9 +145,10 @@ const businessstate = {
 export const businessData = (state = businessstate, action) => {
   switch (action.type) {
     case Action.USER_GET_CURRENT_BUSINESS_NAME_SUCCESS:
+      console.log('reducre: ', action);
       return {
         ...state,
-        businessData: action.data,
+        businessData: action.data.business,
       };
     case Action.USER_GET_CURRENT_BUSINESS_NAME_FAILED:
       return {

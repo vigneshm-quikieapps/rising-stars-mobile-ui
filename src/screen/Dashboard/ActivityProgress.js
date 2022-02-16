@@ -18,6 +18,7 @@ import {WheelPicker} from 'react-native-wheel-picker-android';
 import {ProgressBarWithStar, Timelines, WheelDropdown} from '../../components';
 import {useDispatch, useSelector} from 'react-redux';
 import * as Action from '../../redux/action-types';
+import {getLocalData} from '../../utils/LocalStorage';
 const ActivityProgress = () => {
   const itemWidth = Dimensions.get('window').width;
   const membersdata = useSelector(state => state.memberData.memberData);
@@ -29,23 +30,30 @@ const ActivityProgress = () => {
     state => state.currentMemberActivity.activity,
   );
   const evaluationName = useSelector(
-    state => state.evaluationData.evaluationData,
+    state => state.evaluationData.evaluationData.evaluationScheme,
   );
-  const businessName = useSelector(
-    state => state.businessData.businessData.business,
-  );
+  const businessName = useSelector(state => state.businessData.businessData);
   const [progress, setProgress] = useState();
   const [currentMemberIndex, setCurrentMemberIndex] = useState(0);
   const [currentBusiness, setBusiness] = useState('');
   const [currentEvaluation, setEvaluation] = useState('');
   const [activedotIndex, setactivedotIndex] = useState(0);
+  const [token, setToken] = useState(0);
   var value;
   var member = [];
   var count = 0;
 
   membersdata && membersdata.map(item => member.push(item.name));
+  const accessToken = async () => {
+    const Token = await getLocalData('accessToken');
+    setToken(Token);
+  };
+  //const assignProgress = () => {};
 
-  const assignProgress = () => {
+  useEffect(() => {
+    progress && progress.docs.length > 0
+      ? console.log('Progress2:', progress.docs[activedotIndex].businessId)
+      : null;
     progress && progress.docs.length > 0
       ? dispatch({
           type: Action.USER_GET_CURRENT_BUSINESS_NAME,
@@ -55,7 +63,10 @@ const ActivityProgress = () => {
     progress && progress.docs.length > 0
       ? dispatch({
           type: Action.USER_GET_CURRENT_EVALUATION_NAME,
-          payload: {id: progress.docs[activedotIndex].evaluationSchemeId},
+          payload: {
+            id: progress.docs[activedotIndex].evaluationSchemeId,
+            token,
+          },
         })
       : null;
     progress && progress.docs.length > 0
@@ -71,17 +82,17 @@ const ActivityProgress = () => {
     if (count > 0) {
       value = (count / progress.docs[activedotIndex].levelCount) * 10;
     }
-  };
-
+  }, [progress, activedotIndex]);
   useEffect(() => {
     setProgress(memberActivityProgress);
+    console.log('progress', memberActivityProgress);
     // progress && progress.docs.length > 0
     //   ? setBusinessId(progress.docs[0].businessId)
     //   : null;
     // progress && progress.docs.length > 0
     //   ? setcurrentEvaluationId(progress.docs[0].evaluationSchemeId)
     //   : null;
-    assignProgress();
+    accessToken();
   }, [memberActivityProgress]);
 
   useEffect(() => {
