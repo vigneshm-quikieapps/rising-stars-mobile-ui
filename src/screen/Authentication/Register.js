@@ -13,7 +13,7 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 
-import {TextInput} from 'react-native-paper';
+import {RadioButton, TextInput} from 'react-native-paper';
 import {
   ErrorMessage,
   TextInputField,
@@ -75,6 +75,8 @@ function Register(props) {
   const [main, setMain] = useState(false);
   const [showSuccessalert, setSuccessAlert] = useState(false);
   const [showFailurealert, setFailureAlert] = useState(false);
+  const [letter, setLetter] = useState(false);
+
   const [seconds, setSeconds] = React.useState(10);
   const refRBSheet = useRef();
 
@@ -117,20 +119,24 @@ function Register(props) {
           addressLine1: '',
           addressLine2: '',
           cityTown: '',
-          country: '',
+          country: 'United Kingdom',
         }}
         onSubmit={async values => {
+          console.log(values);
           if (values.mobileNoOTP.length === 0) {
             const otp = await fetchMobileOTP(values.contactNumber);
-
+            console.log(otp);
             timeout();
             refRBSheet.current.open();
-          } else if (postsize !== 0) {
-            values.addressLine1 = postdata.addressline1;
-            values.addressLine2 = postdata.addressline2;
-            values.cityTown = postdata.posttown;
-
+          } else {
+            if (postsize !== 0) {
+              values.addressLine1 = postdata.addressline1;
+              values.addressLine2 = postdata.addressline2;
+              values.cityTown = postdata.posttown;
+            }
+            values.isNewsLetter = letter;
             dispatch(RegisterData(values));
+            console.log(status);
             if (status === 'created successfully') {
               setSuccessAlert(true);
               //POP-UP with message
@@ -347,7 +353,7 @@ function Register(props) {
                   placeholder="Country"
                   onChangeText={handleChange('country')}
                   autoCapitalize="none"
-                  editable={true}
+                  editable={false}
                   autoCorrect={false}
                   onBlur={() => setFieldTouched('country')}
                   value={values.country}
@@ -381,7 +387,66 @@ function Register(props) {
                   </View>
                 </View>
               </PopUp>
-
+              <Text
+                style={{
+                  marginLeft: wp('2%'),
+                  fontSize: Fontsize,
+                  color: colors.grey,
+                  marginTop: hp('2%'),
+                  // justifyContent: 'center',
+                  // alignContent: 'center',
+                  // alignItems: 'center',
+                }}>
+                I would like to recieve
+                <Text style={{color: colors.orange}}> Rising Stars </Text>{' '}
+                newspaper and{' '}
+              </Text>
+              <View
+                style={{
+                  alignContent: 'center',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Text
+                  style={{
+                    color: colors.grey,
+                    marginLeft: wp('2%'),
+                    fontSize: Fontsize,
+                  }}>
+                  other communications
+                </Text>
+              </View>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View style={{flexDirection: 'row', marginLeft: wp('10%')}}>
+                  <RadioButton
+                    status={letter ? 'checked' : 'unchecked'}
+                    onPress={() => setLetter(true)}
+                  />
+                  <Text
+                    style={{
+                      fontSize: Fontsize,
+                      color: letter ? colors.black : colors.grey,
+                      marginTop: hp('0.8%'),
+                    }}>
+                    Yes, Please
+                  </Text>
+                </View>
+                <View style={{flexDirection: 'row', marginRight: wp('10%')}}>
+                  <RadioButton
+                    status={!letter ? 'checked' : 'unchecked'}
+                    onPress={() => setLetter(false)}
+                  />
+                  <Text
+                    style={{
+                      fontSize: Fontsize,
+                      color: letter ? colors.grey : colors.black,
+                      marginTop: hp('0.8%'),
+                    }}>
+                    No thanks
+                  </Text>
+                </View>
+              </View>
               {error ? (
                 alert({error})
               ) : isloading ? (
@@ -393,7 +458,7 @@ function Register(props) {
                   style={{
                     marginVertical: hp('0%'),
                     fontFamily: 'Nunito-SemiBold',
-                    marginTop: hp('12%'),
+                    marginTop: hp('1%'),
                   }}
                 />
               )}
@@ -426,7 +491,7 @@ function Register(props) {
               <Alert
                 visible={showFailurealert}
                 confirm={'Retry'}
-                success={() => console.log('Retry')}
+                success={() => props.navigation.navigate('Login')}
                 image={'failure'}
                 message={'Something Went Wrong'}
               />

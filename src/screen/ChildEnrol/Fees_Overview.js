@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
 import {
@@ -9,17 +9,18 @@ import {
 } from '../../components';
 import {colors, Fontsize, hp, wp, Stepend} from '../../constants';
 
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {FlatList} from 'react-native-gesture-handler';
 
 const Fees_Overview = props => {
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   // const fullName = useSelector(state => state.childData.fullName)
   // const age = useSelector(state => state.childData.age)
   const child = useSelector(state => state.childData.addchild);
   const club = useSelector(state => state.childData.clubdata);
   const classes = useSelector(state => state.childData.classdata);
-
-  const clubfinance = useSelector(state => state.clubfinance.financedata);
+  console.log('classes', classes);
+  //const clubfinance = useSelector(state => state.clubfinance.financedata);
 
   return (
     <CustomLayout
@@ -43,18 +44,22 @@ const Fees_Overview = props => {
       <Text style={{fontFamily: 'Nunito-SemiBold', fontSize: wp('6%')}}>
         Fee Breakdown
       </Text>
-      {classes.charges.map(item => (
-        <>
-          <Amount
-            head={item.name}
-            body={item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
-            currency={item.amount}
-          />
-          <View
-            style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}}
-          />
-        </>
-      ))}
+      <FlatList
+        data={classes && classes.charges.length > 0 ? classes.charges : null}
+        keyExtractor={item => item.id}
+        renderItem={item => (
+          <>
+            <Amount
+              head={item.item.name}
+              body={item.item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
+              currency={item.item.amount}
+            />
+            <View
+              style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}}
+            />
+          </>
+        )}
+      />
       {/* <Amount
         head={classes.charges[0].name}
         body={

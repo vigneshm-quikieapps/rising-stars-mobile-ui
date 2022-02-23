@@ -29,7 +29,6 @@ import {getmemberClass, getmemberData} from '../../redux/action/home';
 import {
   fetchAttendanceOfMemberInSession,
   fetchCurrentUser,
-  fetchUser,
 } from '../../redux/service/request';
 
 const Home = () => {
@@ -49,6 +48,8 @@ const Home = () => {
     const Token = await getLocalData('accessToken');
     setToken(Token);
   };
+  //console.log('class: ', memberClassData);
+  //console.log('member: ', membersdata);
   const members = [];
   membersdata && membersdata.forEach((item, index) => (item.index = index));
   membersdata && membersdata.map(item => members.push(item.name));

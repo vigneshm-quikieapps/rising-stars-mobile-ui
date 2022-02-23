@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {
   CustomLayout,
@@ -8,20 +8,44 @@ import {
   ForwardButton,
   AtmCard,
 } from '../../components';
+import * as Action from '../../redux/action-types';
+
 import {colors, Fontsize, hp, Stepend, wp} from '../../constants';
 import {RadioButton} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {enrollChildData} from '../../redux/action/enrol';
 import {getLocalData} from '../../utils/LocalStorage';
 import StandingOrder from '../../components/standing-order';
+import {FlatList} from 'react-native-gesture-handler';
 
 const Pay = props => {
   const child = useSelector(state => state.childData.addchild);
   const slot = useSelector(state => state.childData.slotdata);
   const club = useSelector(state => state.childData.clubdata);
+  const clubfinance = useSelector(
+    state => state.clubfinance.financedata.businessFinance,
+  );
+  console.log('club', club);
+  const classes = useSelector(state => state.childData.classdata);
+  const addData = useSelector(state => state.addAdditionaldata.additionalData);
+  const consent = useSelector(state => state.addProvidedata);
   const [showAtm, setShowAtm] = useState(false);
   const [showStandingOrder, setShowStandingOrder] = useState(false);
+  const [totalAmt, setTotalAmt] = useState(0);
 
+  console.log('consent: ', clubfinance);
+  useEffect(() => {
+    dispatch({type: Action.USER_GET_CLUB_FINANCE, payload: club._id});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    classes && classes.charges.length > 0
+      ? classes.charges.forEach(element => {
+          setTotalAmt(totalAmt + element.amount);
+        })
+      : null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [classes]);
   const dispatch = useDispatch();
   const handleforward = async () => {
     console.log(
@@ -36,9 +60,15 @@ const Pay = props => {
           sessionId: slot._id,
           memberId: child.member._id,
           newsletter: {
-            email: 'false',
-            telephone: 'false',
-            sms: 'false',
+            email: addData.email,
+            telephone: addData.telephone,
+            sms: addData.sms,
+          },
+          consent: {
+            allergies: consent.allergie,
+            condition: consent.condition,
+            photographConsent: consent.photograhConsent,
+            signedByParent: consent.signedByParent,
           },
         },
         token: await getLocalData('accessToken'),
@@ -66,54 +96,70 @@ const Pay = props => {
       headertext={'Pay'}
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={6} />}>
-      <Amount head={'Club Membership'} currency={'6'} />
-      <Amount head={`Pre School Gym Class${'\n'}(Monthly)`} currency={'25'} />
-      <Amount
-        head={'Scottish Gymnastics Insuarance Premium (Annual)'}
-        currency={'25'}
+      <FlatList
+        data={classes && classes.charges.length > 0 ? classes.charges : null}
+        keyExtractor={item => item.id}
+        renderItem={item => (
+          <>
+            <Amount
+              head={item.item.name}
+              body={item.item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
+              currency={item.item.amount}
+            />
+            {/* <View
+              style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}}
+            /> */}
+          </>
+        )}
       />
       <Amount
         head={'Total Payable'}
         stylehead={{fontSize: wp('5%')}}
-        currency={'123'}
+        currency={totalAmt}
         stylecurrency={{fontSize: wp('7%s')}}
       />
       <View style={styles.breaks} />
       <Text style={styles.optional}>Payment Options</Text>
-      <StandingOrder
-        onPress={() => {
-          setShowAtm(false);
-          setShowStandingOrder(!showStandingOrder);
-        }}
-        visible={showStandingOrder}
-      />
-      <AtmCard
-        onPress={() => {
-          setShowAtm(!showAtm);
-          setShowStandingOrder(false);
-        }}
-        visible={showAtm}
-      />
-      <View style={styles.bottom}>
-        <RadioButton />
-        <Text
-          style={{
-            fontFamily: 'Nunito-SemiBold',
-            fontSize: wp('5%'),
-          }}>
-          Net Banking
-        </Text>
-      </View>
-      <View style={styles.bottom}>
-        <RadioButton />
-        <Text
-          style={{
-            fontFamily: 'Nunito-SemiBold',
-            fontSize: wp('5%'),
-          }}>
-          Wallets
-        </Text>
-      </View>
+      {clubfinance.paymentChannels.manual === true ? (
+        <StandingOrder
+          onPress={() => {
+            setShowAtm(false);
+            setShowStandingOrder(!showStandingOrder);
+          }}
+          visible={showStandingOrder}
+        />
+      ) : null}
+      {clubfinance.paymentChannels.online === true ? (
+        <>
+          <AtmCard
+            onPress={() => {
+              setShowAtm(!showAtm);
+              setShowStandingOrder(false);
+            }}
+            visible={showAtm}
+          />
+          <View style={styles.bottom}>
+            <RadioButton />
+            <Text
+              style={{
+                fontFamily: 'Nunito-SemiBold',
+                fontSize: wp('5%'),
+              }}>
+              Net Banking
+            </Text>
+          </View>
+          <View style={styles.bottom}>
+            <RadioButton />
+            <Text
+              style={{
+                fontFamily: 'Nunito-SemiBold',
+                fontSize: wp('5%'),
+              }}>
+              Wallets
+            </Text>
+          </View>
+        </>
+      ) : null}
       <ForwardButton
         style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
         onPress={() => handleforward()}
@@ -126,8 +172,17 @@ const Amount = props => {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={[styles.head, props.stylehead]}>{props.head}</Text>
-        <Text style={[styles.body, props.stylebody]}>{props.body}</Text>
+        <Text style={[styles.head, props.stylehead]}>
+          {props.head}
+          {props.body && (
+            <>
+              <Text> (</Text>
+              <Text>{props.body}</Text>
+              <Text>)</Text>
+            </>
+          )}
+        </Text>
+        <Text style={[styles.body, props.stylebody]}></Text>
       </View>
       <Text style={[styles.currency, props.stylecurrency]}>
         £{props.currency}

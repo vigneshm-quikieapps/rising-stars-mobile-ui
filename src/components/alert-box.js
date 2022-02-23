@@ -14,38 +14,40 @@ import {hp, colors, wp, Fontsize} from '../constants';
 function Alert(props) {
   const ref = useRef();
   return (
-    <Modal transparent={false} visible={props.visible} tra>
-      <View style={styles.container}>
-        <View style={{alignContent: 'center', alignItems: 'center'}}>
-          {props.image === 'success' ? (
-            <Image
-              style={styles.image}
-              source={require('../assets/images/successIcon.png')}
-            />
-          ) : (
-            <Image
-              style={styles.image}
-              source={require('../assets/images/cancelIcon.png')}
+    <Modal transparent={true} visible={props.visible}>
+      <View style={styles.mainContainer}>
+        <View style={styles.container}>
+          <View style={{alignContent: 'center', alignItems: 'center'}}>
+            {props.image === 'success' ? (
+              <Image
+                style={styles.image}
+                source={require('../assets/images/successIcon.png')}
+              />
+            ) : (
+              <Image
+                style={styles.image}
+                source={require('../assets/images/cancelIcon.png')}
+              />
+            )}
+            <Text style={styles.message}>{props.message}</Text>
+          </View>
+          {props.confirm && (
+            <AppButton
+              title={props.confirm}
+              onPress={props.success}
+              style={{
+                width: wp('85%'),
+                marginLeft: wp('2.5%'),
+                marginBottom: wp('2%'),
+              }}
             />
           )}
-          <Text style={styles.message}>{props.message}</Text>
+          {props.cancel && (
+            <TouchableOpacity onPress={props.failure} style={styles.text}>
+              <Text style={styles.cancel}>{props.cancel}</Text>
+            </TouchableOpacity>
+          )}
         </View>
-        {props.confirm && (
-          <AppButton
-            title={props.confirm}
-            onPress={props.success}
-            style={{
-              width: wp('85%'),
-              marginLeft: wp('2.5%'),
-              marginBottom: wp('2%'),
-            }}
-          />
-        )}
-        {props.cancel && (
-          <TouchableOpacity onPress={props.failure} style={styles.text}>
-            <Text style={styles.cancel}>{props.cancel}</Text>
-          </TouchableOpacity>
-        )}
       </View>
     </Modal>
   );
@@ -54,6 +56,12 @@ function Alert(props) {
 export default Alert;
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    padding: wp('1%'),
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'center',
+  },
   cancel: {
     color: colors.reddish,
     fontSize: Fontsize + wp('0.5%'),

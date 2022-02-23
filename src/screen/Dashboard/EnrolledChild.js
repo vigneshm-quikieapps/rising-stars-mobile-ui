@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {Text, StyleSheet} from 'react-native';
+import {Text, StyleSheet, View, FlatList} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import * as Action from '../../redux/action-types';
 import {
@@ -10,10 +10,12 @@ import {
   AppButton,
 } from '../../components';
 import Alert from '../../components/alert-box';
-import {colors, Fontsize} from '../../constants';
+import {colors, Fontsize, hp, wp} from '../../constants';
 import {getClubdata, getSessiondata} from '../../redux/action/enrol';
 import {dropClass} from '../../redux/service/request';
 import {getLocalData} from '../../utils/LocalStorage';
+import Carousel from 'react-native-snap-carousel';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default function EnrolledChild(props) {
   // const [modalVisible, setModalVisible] = useState(false);
@@ -24,22 +26,112 @@ export default function EnrolledChild(props) {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showFailureAlert, setShowFailureAlert] = useState(false);
   const [enrollmentId, setEnrollmentId] = useState('');
+  const [activeDotIndex, setActiveDotIndex] = useState(0);
+  const [groupedData, setGroupedData] = useState('');
+  const [businessList, setBusinessList] = useState('');
 
   const [token, setToken] = useState('');
   const dispatch = useDispatch();
 
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const currentMember = useSelector(state => state.currentMemberData.data);
-
-  // const handlesubmit = () => {
-  //   setModalVisible(!modalVisible);
-  //   setModalVisible2(!modalVisible2);
-  // };
-  // const submithandle = () => {
-  //   setModalVisible3(!modalVisible3);
-  //   setModalVisible4(!modalVisible4);
-  // };
-
+  //console.log('member: ', memberClassData);
+  // memberClassData &&
+  //   console.log(
+  //     memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED'),
+  //   );
+  const renderItem = item => {
+    var temp =
+      memberClassData &&
+      memberClassData?.filter(item1 => item1.business._id === item.item.id);
+    return (
+      <LinearGradient
+        style={{
+          height: hp('25%'),
+          borderRadius: 20,
+          marginTop: hp('5%'),
+        }}
+        colors={['#ffa300', '#ff7e00']}>
+        <View style={{marginLeft: wp('2%'), marginTop: hp('2%')}}>
+          <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
+            Student Name
+          </Text>
+          <Text
+            style={{
+              color: colors.white,
+              fontSize: Fontsize + wp('1%'),
+              //fontWeight: 'bold',
+            }}>
+            {currentMember.name}
+          </Text>
+          <Text style={{color: '#f7cf79', fontSize: Fontsize}}>Club Name</Text>
+          <Text
+            style={{
+              color: colors.white,
+              fontSize: Fontsize + wp('1%'),
+              //fontWeight: 'bold',
+            }}>
+            {temp[0].business.name}
+          </Text>
+          <Text style={{color: '#f7cf79', fontSize: Fontsize}}>Club Id</Text>
+          <Text
+            style={{
+              color: colors.white,
+              fontSize: Fontsize + wp('1%'),
+              //fontWeight: 'bold',
+            }}>
+            {temp[0].clubMembershipId}
+          </Text>
+        </View>
+      </LinearGradient>
+    );
+  };
+  const time = (start, end) => {
+    var sHr =
+      start.getHours().toString().length === 1
+        ? '0' + start.getHours()
+        : start.getHours();
+    var sMin =
+      start.getMinutes().toString().length === 1
+        ? '0' + start.getMinutes()
+        : start.getMinutes();
+    var eHr =
+      end.getHours().toString().length === 1
+        ? '0' + end.getHours()
+        : end.getHours();
+    var eMin =
+      end.getMinutes().toString().length === 1
+        ? '0' + end.getMinutes()
+        : end.getMinutes();
+    return sHr + ':' + sMin + '-' + eHr + ':' + eMin;
+  };
+  const groupBy = objectArray => {
+    let groupData = {};
+    objectArray.forEach(element => {
+      if (element.business._id in groupData) {
+        groupData[element.business._id].push(element);
+      } else {
+        groupData[element.business._id] = [];
+        groupData[element.business._id].push(element);
+      }
+    });
+    return groupData;
+  };
+  //var businesses = [];
+  useEffect(() => {
+    setGroupedData(
+      groupBy(
+        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED'),
+      ),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    var businesses = [];
+    for (const [key, value] of Object.entries(groupedData)) {
+      businesses.push({id: key});
+    }
+    setBusinessList(businesses);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [memberClassData]);
   const accessToken = async () => {
     const Token = await getLocalData('accessToken');
     setToken(Token);
@@ -47,223 +139,66 @@ export default function EnrolledChild(props) {
 
   useEffect(() => {
     accessToken();
-  });
+  }, []);
   return (
     <CustomLayout
       names={'Enrolled Classes'}
       Customchildren={
-        <LinearStudentCard
-          colors={['#FCDD8C', '#FCDD8C']}
-          name={currentMember.name}
-          style={{backgroundColor: colors.orange}}
-          activityRequired
-          activity={'Zippy Totz Pre-school Gymnastics'}
-          subActivity={'Childhood Joy Classes'}
-          className={'Childhood Joy Classes'}
-          clubId={'PDPS4212'}
+        <Carousel
+          data={businessList}
+          renderItem={renderItem}
+          sliderWidth={wp('95%')}
+          itemWidth={wp('90%')}
+          onSnapToItem={index => setActiveDotIndex(index)}
         />
       }
+      back
       backbutton={() => props.navigation.goBack()}>
-      {/* <View style={styles.centeredView}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible3}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible3(!modalVisible3);
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Image
-                style={{
-                  height: 70,
-                  width: 70,
-                  marginVertical: 20,
-                }}
-                source={require('../../assets/images/cancelIcon.png')}
-              />
-              <Text style={styles.modalText}>
-                Are you sure you want to change the Session?
-              </Text>
-              <AppButton
-                title="Yes,Change Session"
-                onPress={() => submithandle()}
-              />
-
-              <Buttons
-                onPress={() => setModalVisible3(!modalVisible3)}
-                style={{marginBottom: hp('1%')}}>
-                <Text
-                  style={{
-                    color: colors.reddish,
-                    fontFamily: 'Nunito-SemiBold',
-                    marginBottom: hp('2%'),
-                  }}>
-                  No,Don't change
-                </Text>
-              </Buttons>
-            </View>
-          </View>
-        </Modal>
-      </View> */}
-      {/* <View style={styles.centeredView}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible4}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible4(!modalVisible4);
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Image
-                style={{
-                  height: 70,
-                  width: 70,
-                  marginVertical: 20,
-                }}
-                source={require('../../assets/images/successIcon.png')}
-              />
-              <Text style={styles.modalText}>Session Changed successfully</Text>
-              <View>
-                <AppButton
-                  title="Done"
-                  style={{
-                    paddingLeft: 130,
-                    paddingRight: 130,
-                    marginBottom: wp('5%'),
-                  }}
-                  onPress={() => setModalVisible4(!modalVisible4)}
-                />
-              </View>
-            </View>
-          </View>
-        </Modal>
-      </View> */}
-
       <Text style={{fontFamily: 'Nunito-Regular', fontSize: Fontsize}}>
         Current Classes
       </Text>
-      {memberClassData &&
-        memberClassData?.map(
-          classes =>
-            classes.enrolledStatus === 'ENROLLED' && (
-              <ClassCard
-                className={classes.class.name}
-                title={'Change Session'}
-                day={classes.session.pattern[0].day}
-                time={
-                  '10-11'
-                  // ""classes.session.pattern[0].startTime.getTime() +
-                  // '-' +
-                  // classes.session.pattern[0].endTime.getTime()"
-                }
-                facility={classes.session.facility}
-                coach={'Henry Itondo'}
-                class
-                classbutton={() => {
-                  dispatch(getSessiondata(classes.class._id));
-                  props.navigation.navigate('ChangeClass', {classes});
-                }}
-                member
-                memberbutton={() => {
-                  setEnrollmentId(classes._id);
-                  setShowAlert(true);
-                }}
-              />
-            ),
-        )}
-      {/* <View style={styles.centeredView}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Image
-                style={{
-                  height: 70,
-                  width: 70,
-                  marginVertical: 20,
-                }}
-                source={require('../../assets/images/cancelIcon.png')}
-              />
-              <Text style={styles.modalText}>
-                Are you sure you want to drop the class?
-              </Text>
-              <AppButton
-                title="No, I have changed my mind"
-                onPress={() => setModalVisible(!modalVisible)}
-              />
-
-              <Buttons
-                onPress={() => handlesubmit()}
-                style={{marginBottom: hp('1%')}}>
-                <Text
-                  style={{
-                    color: colors.reddish,
-                    fontFamily: 'Nunito-SemiBold',
-                    marginBottom: hp('2%'),
-                  }}>
-                  Yes,Drop Class
-                </Text>
-              </Buttons>
-            </View>
-          </View>
-        </Modal>
-      </View> */}
-      {/* <View style={styles.centeredView}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible2}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible2(!modalVisible2);
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Image
-                style={{
-                  height: 70,
-                  width: 70,
-                  marginVertical: 20,
-                }}
-                source={require('../../assets/images/successIcon.png')}
-              />
-              <Text style={styles.modalText}>Class dropped successfully</Text>
-              <View>
-                <AppButton
-                  title="Done"
-                  style={{
-                    paddingLeft: 130,
-                    paddingRight: 130,
-                    marginBottom: wp('5%'),
-                  }}
-                  onPress={() => setModalVisible2(!modalVisible2)}
-                />
-              </View>
-            </View>
-          </View>
-        </Modal>
-      </View> */}
-
-      {/* <ClassCard
-        className={'Pre-school gymnastics (Age 1-3)'}
-        title={'Change Session'}
-        day={'Monday'}
-        time="9:30 am - 11:30 am"
-        facility={'Gym Hall'}
-        coach={'Henry Itondo'}
-        class
-        member
-      /> */}
+      <FlatList
+        data={
+          memberClassData && businessList && businessList.length > 0
+            ? memberClassData.filter(
+                item =>
+                  item.enrolledStatus === 'ENROLLED' &&
+                  item.business._id === businessList[activeDotIndex].id,
+              )
+            : null
+        }
+        key={item => item._id}
+        renderItem={classes => {
+          console.log('classes: ', classes.item);
+          return (
+            <ClassCard
+              className={classes.item.class.name}
+              title={'Change Session'}
+              day={classes.item.session.pattern[0].day}
+              time={
+                classes.item.session && classes.item.session.pattern.length > 0
+                  ? time(
+                      new Date(classes.item.session.pattern[0].startTime),
+                      new Date(classes.item.session.pattern[0].endTime),
+                    )
+                  : null
+              }
+              facility={classes.item.session.facility}
+              coach={'Henry Itondo'}
+              class
+              classbutton={() => {
+                dispatch(getSessiondata(classes.item.class._id));
+                props.navigation.navigate('ChangeClass', {classes});
+              }}
+              member
+              memberbutton={() => {
+                setEnrollmentId(classes.item._id);
+                setShowAlert(true);
+              }}
+            />
+          );
+        }}
+      />
       <AppButton
         title={'New Class'}
         onPress={() => {

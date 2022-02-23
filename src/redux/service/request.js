@@ -108,8 +108,8 @@ export function fetchRegister(payload) {
       addressLine1: payload.addressLine1,
       addressLine2: payload.addressLine2,
       city: payload.cityTown,
-      isNewsletter: payload.notification,
-      country: payload.country,
+      isNewsletter: payload.isNewsLetter,
+      country: 'United Kingdom',
     }),
   })
     .then(response => response.json())
@@ -212,7 +212,7 @@ export function regularEnrollment(payload) {
 // --------------------------------------------------------Home
 
 export function fetchMemberData(token) {
-  return fetch(`${heroku_url}/members/of-a-logged-in-parent?limit=50`, {
+  return fetch(`${heroku_url}/members/of-a-logged-in-parent`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
