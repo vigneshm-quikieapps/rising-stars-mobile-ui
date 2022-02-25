@@ -64,40 +64,6 @@ const Additional_Sections = props => {
       }}
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={5} />}>
-      {/* <View style={styles.centeredView}>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-          }}>
-          <View style={styles.modalstyle}>
-            <View style={styles.modalView}>
-              <Text
-                style={{ fontFamily: 'Nunito-SemiBold', marginTop: hp('1.5%'),fontSize:Fontsize }}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since.
-              </Text>
-              <TouchableOpacity
-                onPress={() => setModalVisible(!modalVisible)}
-                style={{
-                  justifyContent: 'center',
-                  backgroundColor: colors.orange,
-                  width: wp('10%'),
-                  alignItems: 'center',
-                  borderRadius: 10,
-                  height: hp('5%'),
-                  alignSelf: 'flex-end',
-                }}>
-                <Text>OK</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-      </View> */}
       <RBSheet
         ref={termref}
         closeOnDragDown={true}

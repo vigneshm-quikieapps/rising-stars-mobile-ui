@@ -1,65 +1,173 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {Text, FlatList, StyleSheet, View} from 'react-native';
+import * as Action from '../../redux/action-types';
+import {Text, FlatList, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel from 'react-native-snap-carousel';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  CustomLayout,
-  LinearStudentCard,
-  ClassCard,
-  PaymentCard,
-  Card,
-} from '../../components';
+import {CustomLayout, ClassCard, PaymentCard, Card} from '../../components';
 import {colors, Fontsize, hp, wp} from '../../constants';
 import {getmemberClass} from '../../redux/action/home';
-
-const data = [
-  {id: 1, name: 'Ayman Mongal'},
-  {id: 2, name: 'Syman Mongal'},
-  {id: 3, name: 'Ryman Mongal'},
-];
-const payment = [
-  {id: 1, amount: 6, condition: true},
-  {id: 2, amount: 23, condition: false},
-  {id: 3, amount: 45, condition: false},
-];
+import moment from 'moment';
+import {date} from 'yup/lib/locale';
 
 export default function EnrolledChild() {
   const dispatch = useDispatch();
   const [activeDotIndex, setActiveDotIndex] = useState(0);
-
+  const [groupedData, setGroupedData] = useState('');
+  const [businessList, setBusinessList] = useState('');
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
   const membersData = useSelector(state => state.memberData.memberData);
   const memberClassData = useSelector(state => state.memberClassData.classData);
-  //console.log('classes: ', memberClassData);
+  const currentMember = useSelector(state => state.currentMemberData.data);
+  const bills = useSelector(state => state.memberBills);
+  console.log('data123: ', bills.data);
 
+  useEffect(() => {
+    businessList && businessList.length > 0
+      ? console.log(currentMember, businessList[activeDotIndex].id)
+      : null;
+    businessList && businessList.length > 0
+      ? dispatch({
+          type: Action.USER_GET_MEMBER_BILLS,
+          payload: {
+            memberId: currentMember._id,
+            businessId: businessList[activeDotIndex].id,
+          },
+          // {
+          //   memberId: ,
+          //   businessId: ,
+          // },
+        })
+      : null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeDotIndex, businessList, currentMember]);
+  useEffect(() => {
+    setGroupedData(
+      groupBy(
+        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED'),
+      ),
+    );
+    var businesses = [];
+    // eslint-disable-next-line no-unused-vars
+    for (const [key, value] of Object.entries(groupedData)) {
+      businesses.push({id: key});
+    }
+    setBusinessList(businesses);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [memberClassData]);
   useEffect(() => {
     membersData && dispatch(getmemberClass(membersData[activeDotIndex]._id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeDotIndex]);
+  const groupBy = objectArray => {
+    let groupData = {};
+    objectArray.forEach(element => {
+      if (element.business._id in groupData) {
+        groupData[element.business._id].push(element);
+      } else {
+        groupData[element.business._id] = [];
+        groupData[element.business._id].push(element);
+      }
+    });
+    return groupData;
+  };
+  const findDate = item => {
+    var month = new Date(item.dueDate).getMonth();
+    var year = new Date(item.generatedAt).getFullYear();
+    if (month === 11) {
+      year = year + 1;
+      month = 0;
+    }
+    console.log(month);
+    return `${months[month]} ${year} fee`;
+  };
+  const time = (start, end) => {
+    var sHr =
+      start.getHours().toString().length === 1
+        ? '0' + start.getHours()
+        : start.getHours();
+    var sMin =
+      start.getMinutes().toString().length === 1
+        ? '0' + start.getMinutes()
+        : start.getMinutes();
+    var eHr =
+      end.getHours().toString().length === 1
+        ? '0' + end.getHours()
+        : end.getHours();
+    var eMin =
+      end.getMinutes().toString().length === 1
+        ? '0' + end.getMinutes()
+        : end.getMinutes();
+    return sHr + ':' + sMin + '-' + eHr + ':' + eMin;
+  };
   const renderItem = item => {
+    var temp =
+      memberClassData &&
+      memberClassData?.filter(item1 => item1.business._id === item.item.id);
     return (
-      <View style={styles.carousel}>
-        <View style={styles.table}>
-          <Text style={styles.title}>Student Name</Text>
-          <Text style={styles.body}>{item.item.name}</Text>
+      <LinearGradient
+        style={{
+          height: hp('25%'),
+          borderRadius: 20,
+          marginTop: hp('5%'),
+        }}
+        colors={['#ffa300', '#ff7e00']}>
+        <View style={{marginLeft: wp('2%'), marginTop: hp('2%')}}>
+          <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
+            Student Name
+          </Text>
+          <Text
+            style={{
+              color: colors.white,
+              fontSize: Fontsize + wp('1%'),
+              //fontWeight: 'bold',
+            }}>
+            {currentMember.name}
+          </Text>
+          <Text style={{color: '#f7cf79', fontSize: Fontsize}}>Club Name</Text>
+          <Text
+            style={{
+              color: colors.white,
+              fontSize: Fontsize + wp('1%'),
+              //fontWeight: 'bold',
+            }}>
+            {temp[0].business.name}
+          </Text>
+          <Text style={{color: '#f7cf79', fontSize: Fontsize}}>Club Id</Text>
+          <Text
+            style={{
+              color: colors.white,
+              fontSize: Fontsize + wp('1%'),
+              //fontWeight: 'bold',
+            }}>
+            {temp[0].clubMembershipId}
+          </Text>
         </View>
-        <View style={styles.table}>
-          <Text style={styles.title}>Student ID</Text>
-          <Text style={styles.body}>{item.item.gender}</Text>
-        </View>
-      </View>
+      </LinearGradient>
     );
   };
-
   return (
     <CustomLayout
       names={'Payment History'}
       Customchildren={
         <>
-          {membersData.length > 0 ? (
+          {businessList.length > 0 ? (
             <Carousel
-              data={membersData}
+              data={businessList}
               renderItem={renderItem}
               sliderWidth={wp('95%')}
               itemWidth={wp('90%')}
@@ -73,8 +181,13 @@ export default function EnrolledChild() {
       <Text style={{fontFamily: 'Nunito-SemiBold'}}>Current Classes </Text>
       <FlatList
         data={
-          memberClassData &&
-          memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')
+          memberClassData && businessList.length > 0
+            ? memberClassData?.filter(
+                item =>
+                  item?.enrolledStatus === 'ENROLLED' &&
+                  item.business._id === businessList[activeDotIndex].id,
+              )
+            : null
         }
         key={item => item._id}
         renderItem={item => {
@@ -85,65 +198,57 @@ export default function EnrolledChild() {
                 id={item.item.clubMembershipId}
                 className={item.item.class.name}
                 //subtitle={"Child's Club Id "}
-                day={'Monday'}
-                time="9:30 am - 11:30 am"
-                facility={'Gym Hall'}
+                day={item.item.session.pattern[0].day}
+                time={
+                  item.item.session && item.item.session.pattern.length > 0
+                    ? time(
+                        new Date(item.item.session.pattern[0].startTime),
+                        new Date(item.item.session.pattern[0].endTime),
+                      )
+                    : null
+                }
+                facility={item.item.session.facility}
                 coach={'Henry Itondo'}
               />
               <PaymentCard>
-                <Card
-                  paystyle={{backgroundColor: colors.reddish}}
-                  notify={'Overdue'}
-                  amount={'25'}
-                  body={'August 2021 fee'}
-                  date={'Due Date 01/08/2021'}
-                  button
-                  title="Pay Now"
-                  paybutton={() => {}}
-                  substyle={{borderColor: colors.reddish, borderWidth: 1}}
-                  style={{backgroundColor: colors.reddish}}
-                />
-                <Card
-                  notify={'Upcoming'}
-                  amount={'25'}
-                  body={'September 2021 fee'}
-                  date={'Due Date 01/09/2021'}
-                  button
-                  title="Pay Now"
-                  paybutton={() => {}}
-                  substyle={{borderColor: colors.orange, borderWidth: 1}}
-                  style={{backgroundColor: colors.reddish}}
-                />
-
                 <FlatList
-                  data={payment}
-                  horizontal={true}
-                  pagingEnabled={true}
-                  keyExtractor={item => item.id}
-                  showsHorizontalScrollIndicator={false}
-                  renderItem={item => {
+                  data={bills.data.docs}
+                  key={item1 => item1._id}
+                  renderItem={item1 => {
+                    //console.log(item1.item.classId, item.item.classId);
                     return (
-                      <Card
-                        notify={item.item.condition ? 'Paid' : 'Future coming'}
-                        amount={item.item.amount}
-                        body={'Pre-school gym fee'}
-                        date={'Due Date 10/08/2021'}
-                        paidtext={'Paid on 12/08/2021'}
-                        substyle={{
-                          backgroundColor: item.item.condition
-                            ? colors.veryLightGreen
-                            : colors.lightgrey,
-                          borderColor: item.item.condition ? 'white' : 'white',
-                          width: wp('82%'),
-                        }}
-                        style={{
-                          backgroundColor: item.item.condition
-                            ? colors.seafoamBlue
-                            : colors.lightgrey,
-                          borderWidth: item.item.condition ? 0 : 1,
-                          borderColor: item.item.condition ? null : 'white',
-                        }}
-                      />
+                      <>
+                        {item1.item.classId === item.item.classId ? (
+                          <>
+                            <Card
+                              paystyle={{backgroundColor: colors.reddish}}
+                              notify={
+                                item1.item.billStatus === 'PAID'
+                                  ? 'Paid'
+                                  : 'Not Paid'
+                              }
+                              amount={item1.item.total}
+                              body={findDate(item1.item)}
+                              date={`Due Date ${moment(
+                                new Date(item1.item.dueDate),
+                              ).format('DD/MM/YYYY')}`}
+                              button
+                              title="Pay Now"
+                              paybutton={() => {}}
+                              substyle={{
+                                borderColor: colors.reddish,
+                                borderWidth: 1,
+                              }}
+                              style={{
+                                backgroundColor:
+                                  item.item.billStatus === 'PAID'
+                                    ? colors.veryLightGreen
+                                    : colors.reddish,
+                              }}
+                            />
+                          </>
+                        ) : null}
+                      </>
                     );
                   }}
                 />
@@ -155,28 +260,3 @@ export default function EnrolledChild() {
     </CustomLayout>
   );
 }
-
-const styles = StyleSheet.create({
-  carousel: {
-    backgroundColor: '#f7c494',
-    height: hp('15%'),
-    margin: 0,
-    borderRadius: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  table: {
-    width: wp('45%'),
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: Fontsize + wp('0.5%'),
-    color: colors.grey,
-  },
-  body: {
-    fontSize: Fontsize + wp('0.75%'),
-    fontWeight: 'bold',
-  },
-});

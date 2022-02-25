@@ -25,7 +25,6 @@ const Pay = props => {
   const clubfinance = useSelector(
     state => state.clubfinance.financedata.businessFinance,
   );
-  console.log('club', club);
   const classes = useSelector(state => state.childData.classdata);
   const addData = useSelector(state => state.addAdditionaldata.additionalData);
   const consent = useSelector(state => state.addProvidedata);
@@ -33,7 +32,6 @@ const Pay = props => {
   const [showStandingOrder, setShowStandingOrder] = useState(false);
   const [totalAmt, setTotalAmt] = useState(0);
 
-  console.log('consent: ', clubfinance);
   useEffect(() => {
     dispatch({type: Action.USER_GET_CLUB_FINANCE, payload: club._id});
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,23 +52,30 @@ const Pay = props => {
       child.member._id,
       await getLocalData('accessToken'),
     );
+    var data = {
+      sessionId: slot._id,
+      memberId: child.member._id,
+      newsletter: {
+        email: addData.email,
+        telephone: addData.telephone,
+        sms: addData.sms,
+      },
+      consent: {},
+    };
+    consent.allergie !== '' ? (data.consent.allergie = consent.allergie) : null;
+    consent.condition !== ''
+      ? (data.consent.condition = consent.condition)
+      : null;
+    consent.photograhConsent !== ''
+      ? (data.consent.photograhConsent = consent.photograhConsent)
+      : null;
+    consent.signedByParent !== ''
+      ? (data.consent.signedByParent = consent.signedByParent)
+      : null;
+
     dispatch(
       enrollChildData({
-        data: {
-          sessionId: slot._id,
-          memberId: child.member._id,
-          newsletter: {
-            email: addData.email,
-            telephone: addData.telephone,
-            sms: addData.sms,
-          },
-          consent: {
-            allergies: consent.allergie,
-            condition: consent.condition,
-            photographConsent: consent.photograhConsent,
-            signedByParent: consent.signedByParent,
-          },
-        },
+        data,
         token: await getLocalData('accessToken'),
       }),
     );
@@ -120,7 +125,7 @@ const Pay = props => {
       />
       <View style={styles.breaks} />
       <Text style={styles.optional}>Payment Options</Text>
-      {clubfinance.paymentChannels.manual === true ? (
+      {clubfinance && clubfinance.paymentChannels.manual === true ? (
         <StandingOrder
           onPress={() => {
             setShowAtm(false);
@@ -129,7 +134,7 @@ const Pay = props => {
           visible={showStandingOrder}
         />
       ) : null}
-      {clubfinance.paymentChannels.online === true ? (
+      {clubfinance && clubfinance.paymentChannels.online === true ? (
         <>
           <AtmCard
             onPress={() => {
@@ -182,7 +187,7 @@ const Amount = props => {
             </>
           )}
         </Text>
-        <Text style={[styles.body, props.stylebody]}></Text>
+        {/* <Text style={[styles.body, props.stylebody]}></Text> */}
       </View>
       <Text style={[styles.currency, props.stylecurrency]}>
         £{props.currency}

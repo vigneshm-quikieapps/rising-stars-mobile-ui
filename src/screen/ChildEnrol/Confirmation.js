@@ -25,10 +25,10 @@ const Confirmation = props => {
       ? setShowAlert(true)
       : null;
   }, [enrollment]);
-  console.log('en: ', enrollment);
+  console.log('en: ', club);
   return (
     <View>
-      {showAlert ? (
+      {enrollment?.message !== 'enrolled successful' ? (
         <Alert
           visible={showAlert}
           confirm={'Done'}
@@ -48,13 +48,25 @@ const Confirmation = props => {
           subheadertext={'Thank you for enroling your child with our club'}
           Customchildren2={<ProgressTracker percent={7} />}
           Customchildren3={
-            <StudentCard
-              name={child.member.name}
-              id={child.member._id}
-              activityrequired
-              activity={club.name}
-              subactivity={classes.name}
-            />
+            // <View
+            //   name={child.member.name}
+            //   id={child.member._id}
+            //   activityrequired
+            //   activity={club.name}
+            //   subactivity={classes.name}
+            // >
+            <View style={styles.containera}>
+              <View style={styles.subContainer}>
+                <View style={{alignContent: 'center', alignItems: 'center'}}>
+                  <Text style={styles.head}>Child Name</Text>
+                  <Text style={styles.body}>{child.member.name}</Text>
+                </View>
+                <View style={{alignContent: 'center', alignItems: 'center'}}>
+                  <Text style={styles.head}>Club Name</Text>
+                  <Text style={styles.body}>{club.name}</Text>
+                </View>
+              </View>
+            </View>
           }
           backbutton={() => props.navigation.goBack()}>
           <View style={styles.bordestyle}>
@@ -64,7 +76,7 @@ const Confirmation = props => {
             <Slot
               white
               required
-              Class={'Pre-school gymnastics (Age 1-3)'}
+              Class={club.name}
               sessions={classes.name}
               day={slot.pattern[0].day}
               time={`${moment(slot.pattern[0].startTime).format(
@@ -97,6 +109,35 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  containera: {
+    flex: 1,
+    marginTop: hp('2%'),
+    backgroundColor: colors.pumpkinorange,
+    borderRadius: 16,
+    paddingHorizontal: wp('8%'),
+    paddingVertical: hp('2%'),
+    width: wp('90%'),
+  },
+  subContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: hp('1%'),
+    alignItems: 'center',
+  },
+  head: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: Fontsize,
+    color: 'grey',
+  },
+  body: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: Fontsize,
+    fontWeight: 'bold',
+  },
+  subbody: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: Fontsize,
   },
   remark: {
     flex: 1,

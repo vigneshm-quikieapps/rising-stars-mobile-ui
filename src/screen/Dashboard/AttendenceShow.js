@@ -158,7 +158,7 @@ const AttendenceShow = () => {
             opacity: 0.8,
             fontFamily: 'Nunito-Regular',
           }}>
-          Activity Name
+          Class Name
         </Text>
         <Text
           style={{

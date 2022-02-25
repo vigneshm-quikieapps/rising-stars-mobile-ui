@@ -1,6 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
+import LinearGradient from 'react-native-linear-gradient';
 import {useSelector} from 'react-redux';
 import {
   CustomLayout,
@@ -10,41 +12,100 @@ import {
   AppButton,
 } from '../../components';
 import Alert from '../../components/alert-box';
-import {hp, colors, wp} from '../../constants';
+import {hp, colors, wp, Fontsize} from '../../constants';
 import {classTransfer} from '../../redux/service/request';
 import {getLocalData} from '../../utils/LocalStorage';
 
 export default function ChangeClass(props) {
   const currentMember = useSelector(state => state.currentMemberData.data);
   const sessionData = useSelector(state => state.sessionlist.sessiondata);
+  console.log('session: ', sessionData);
   const [showAlert, setShowAlert] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showFailureAlert, setShowFailureAlert] = useState(false);
   const [newSessionId, setNewSessionId] = useState('');
   const [token, setToken] = useState('');
-  const currentClass = props.route.params.classes;
+  const currentClass = props.route.params.classes.item;
+  console.log('class: ', currentClass);
 
   const accessToken = async () => {
     const Token = await getLocalData('accessToken');
     setToken(Token);
   };
-
+  // console.log(props.route.params.classes.item);
   useEffect(() => {
     accessToken();
   });
+  const time = (start, end) => {
+    var sHr =
+      start.getHours().toString().length === 1
+        ? '0' + start.getHours()
+        : start.getHours();
+    var sMin =
+      start.getMinutes().toString().length === 1
+        ? '0' + start.getMinutes()
+        : start.getMinutes();
+    var eHr =
+      end.getHours().toString().length === 1
+        ? '0' + end.getHours()
+        : end.getHours();
+    var eMin =
+      end.getMinutes().toString().length === 1
+        ? '0' + end.getMinutes()
+        : end.getMinutes();
+    return sHr + ':' + sMin + '-' + eHr + ':' + eMin;
+  };
+  const sessions = () => {
+    var temp =
+      sessionData &&
+      sessionData.filter(session => currentClass.session._id !== session._id);
+    return temp.length > 0 ? temp : null;
+  };
   return (
     <CustomLayout
       names={currentMember.name}
       Customchildren={
-        <StudentCard
-          name={currentMember.name}
-          id={'KKBK1211'}
-          activityrequired
-          activity={'Pre-school gymnastics(Age1-3)'}
-          subactivity={'Childhood Joy Classes'}
-          clubid={'PDPS4212'}
-          style={{backgroundColor: colors.orange}}
-        />
+        <LinearGradient
+          style={{
+            height: hp('25%'),
+            borderRadius: 20,
+            marginTop: hp('5%'),
+          }}
+          colors={['#ffa300', '#ff7e00']}>
+          <View style={{marginLeft: wp('2%'), marginTop: hp('2%')}}>
+            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
+              Student Name
+            </Text>
+            <Text
+              style={{
+                color: colors.white,
+                fontSize: Fontsize + wp('1%'),
+                //fontWeight: 'bold',
+              }}>
+              {currentMember.name}
+            </Text>
+            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
+              Club Name
+            </Text>
+            <Text
+              style={{
+                color: colors.white,
+                fontSize: Fontsize + wp('1%'),
+                //fontWeight: 'bold',
+              }}>
+              {currentClass.business.name}
+            </Text>
+            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>Club Id</Text>
+            <Text
+              style={{
+                color: colors.white,
+                fontSize: Fontsize + wp('1%'),
+                //fontWeight: 'bold',
+              }}>
+              {currentClass.clubMembershipId}
+            </Text>
+          </View>
+        </LinearGradient>
       }>
       <Text style={{fontFamily: 'Nunito-SemiBold'}}>Current Class/Session</Text>
       <ClassCard
@@ -53,18 +114,31 @@ export default function ChangeClass(props) {
         button
         title={'Change Class'}
         button2
-        day={currentClass.session.pattern[0].day}
-        time="9:30 am - 11:30 am"
+        day={
+          currentClass.session && currentClass.session.pattern.length > 0
+            ? currentClass.session.pattern[0].day
+            : null
+        }
+        time={
+          currentClass.session && currentClass.session.pattern.length > 0
+            ? time(
+                new Date(currentClass.session.pattern[0].startTime),
+                new Date(currentClass.session.pattern[0].endTime),
+              )
+            : null
+        }
         facility={currentClass.session.facility}
         coach={'Henry Itondo'}
       />
       <Text style={{fontFamily: 'Nunito-SemiBold', marginVertical: hp('1%')}}>
         Available Session
       </Text>
-      {sessionData &&
-        sessionData.map(
-          sessions =>
-            currentClass.session._id !== sessions._id && (
+      {sessions() != null ? (
+        <FlatList
+          data={sessions()}
+          key={item => item._id}
+          renderItem={() => {
+            return (
               <>
                 <Slot
                   radio={true}
@@ -81,8 +155,25 @@ export default function ChangeClass(props) {
                 />
                 <View style={{height: hp('1%')}} />
               </>
-            ),
-        )}
+            );
+          }}
+        />
+      ) : (
+        <View
+          style={{
+            width: wp('100%'),
+            alignItems: 'center',
+            marginTop: hp('1%'),
+          }}>
+          <Text
+            style={{
+              fontSize: Fontsize + wp('1%'),
+              color: colors.orange,
+            }}>
+            No Sessions Available
+          </Text>
+        </View>
+      )}
       <AppButton
         title={'Change Class'}
         onPress={() => setShowAlert(true)}

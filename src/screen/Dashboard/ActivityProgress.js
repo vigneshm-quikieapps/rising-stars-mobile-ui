@@ -52,9 +52,6 @@ const ActivityProgress = () => {
 
   useEffect(() => {
     progress && progress.docs.length > 0
-      ? console.log('Progress2:', progress.docs[activedotIndex].businessId)
-      : null;
-    progress && progress.docs.length > 0
       ? dispatch({
           type: Action.USER_GET_CURRENT_BUSINESS_NAME,
           payload: {id: progress.docs[activedotIndex].businessId},
@@ -135,7 +132,7 @@ const ActivityProgress = () => {
             color: colors.white,
             fontFamily: 'Nunito-Regular',
           }}>
-          Business Name
+          Club Name
         </Text>
         <Text
           style={{

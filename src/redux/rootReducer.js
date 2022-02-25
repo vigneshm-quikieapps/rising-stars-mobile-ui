@@ -20,6 +20,7 @@ import {
 import {
   memberData,
   memberClassData,
+  memberBills,
   currentMemberData,
   currentMemberAttendance,
   currentMemberActivity,
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   businessData,
   evaluationData,
   classname,
+  memberBills,
   sessionlist,
   Postcode,
   Postcodedata,

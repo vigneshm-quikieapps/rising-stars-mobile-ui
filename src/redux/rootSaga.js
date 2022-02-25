@@ -22,12 +22,14 @@ import {
   watcherGetEvaluation,
   watcherMemberActivity,
   watcherBusinessNameSaga,
+  watcherMemberBillsSaga,
 } from './sagas/home';
 
 export default function* rootSaga() {
   yield all([
     watcherSessionAttendance(),
     watcherLoginSaga(),
+    watcherMemberBillsSaga(),
     watcherClubSaga(),
     watcherClassSaga(),
     watcherSessionSaga(),

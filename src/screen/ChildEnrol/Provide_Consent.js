@@ -1,9 +1,9 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useRef} from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   Image,
   Switch,
   TouchableOpacity,
@@ -159,7 +159,7 @@ const Provide_Consent = props => {
         </View>
       )}
       <Conset
-        conset={'Signed by Jube Bowman(Parent / Carer)'}
+        conset={'Signed by'}
         value={isEnabled4}
         onValueChange={() => setIsEnabled4(!isEnabled4)}
       />
@@ -177,7 +177,20 @@ const Provide_Consent = props => {
       <ForwardButton
         style={{alignSelf: 'flex-end', marginTop: hp('1%')}}
         onPress={() => {
-          dispatch(setProvide(allergies, condition, photo, sign));
+          var consent = {};
+          if (isEnabled === true) {
+            consent.allergies = allergies;
+          }
+          if (isEnabled2 === true) {
+            consent.condition = condition;
+          }
+          if (isEnabled3 === true) {
+            consent.photo = photo;
+          }
+          if (isEnabled4 === true) {
+            consent.sign = sign;
+          }
+          dispatch(setProvide(consent));
           props.navigation.navigate('Additional_Sections');
         }}
       />

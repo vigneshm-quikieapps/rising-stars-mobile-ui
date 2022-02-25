@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {
   View,
@@ -6,7 +7,6 @@ import {
   Image,
   Pressable,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -21,10 +21,11 @@ import {colors, hp, wp} from '../../constants';
 import {getmemberClass} from '../../redux/action/home';
 import * as Action from '../../redux/action-types/index';
 import {fetchCurrentUser} from '../../redux/service/request';
+import {FlatList} from 'react-native-gesture-handler';
 
 function Profile(props) {
   const membersdata = useSelector(state => state.memberData.memberData);
-  const memberclassdata = useSelector(state => state.memberClassData.classData);
+  //const memberclassdata = useSelector(state => state.memberClassData.classData);
   const parent = useSelector(state => state.LoginData.updatedUser);
 
   // let steps = false;
@@ -41,10 +42,10 @@ function Profile(props) {
     setUser(userData);
   }, []);
 
-  const accessToken = async () => {
-    const Token = await getLocalData('accessToken');
-    setToken(Token);
-  };
+  // const accessToken = async () => {
+  //   const Token = await getLocalData('accessToken');
+  //   setToken(Token);
+  // };
 
   const [fileUri, setfileUri] = useState(null);
 
@@ -58,9 +59,12 @@ function Profile(props) {
     await removeLocalData('accesstoken');
     props.navigation.navigate('AuthStack');
   };
-  const handleMembership = async id => {
+  const handleMembership = async (id, item) => {
     dispatch(getmemberClass(id));
-
+    dispatch({
+      type: Action.USER_GET_CURRENT_MEMBER_DATA,
+      payload: item,
+    });
     props.navigation.navigate('EnrolledChild');
   };
 
@@ -155,41 +159,54 @@ function Profile(props) {
       {/* children card starts here */}
 
       {membersdata && (
-        <View style={styles.profileImageCard}>
-          <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
-            <TouchableOpacity onPress={updateProfilePicture}>
-              {fileUri === null ? (
-                <Image
-                  style={styles.image}
-                  source={require('../../assets/images/children.jpg')}
-                />
-              ) : (
-                <Image style={styles.image} source={{uri: fileUri}} />
-              )}
-            </TouchableOpacity>
-            <View style={{justifyContent: 'center'}}>
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontFamily: 'Nunito-SemiBold',
-                  marginBottom: wp('1%'),
-                }}>
-                {currentMember.name}
-              </Text>
-            </View>
-          </View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => handleMembership(currentMember._id)}>
-            <Text style={styles.cardButton}>Memberships / Classes</Text>
-          </TouchableOpacity>
+        <FlatList
+          data={membersdata}
+          key={item => item._id}
+          renderItem={item => (
+            <View style={styles.profileImageCard}>
+              <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
+                <TouchableOpacity onPress={updateProfilePicture}>
+                  {fileUri === null ? (
+                    <Image
+                      style={styles.image}
+                      source={require('../../assets/images/children.jpg')}
+                    />
+                  ) : (
+                    <Image style={styles.image} source={{uri: fileUri}} />
+                  )}
+                </TouchableOpacity>
+                <View style={{justifyContent: 'center'}}>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontFamily: 'Nunito-SemiBold',
+                      marginBottom: wp('1%'),
+                    }}>
+                    {item.item.name}
+                  </Text>
+                </View>
+              </View>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => handleMembership(currentMember._id, item.item)}>
+                <Text style={styles.cardButton}>Memberships / Classes</Text>
+              </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => props.navigation.navigate('PaymentHistory')}>
-            <Text style={styles.cardButton}>Payment History</Text>
-          </TouchableOpacity>
-        </View>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  dispatch({
+                    type: Action.USER_GET_CURRENT_MEMBER_DATA,
+                    payload: item.item,
+                  });
+                  dispatch(getmemberClass(item.item._id));
+                  props.navigation.navigate('PaymentHistory');
+                }}>
+                <Text style={styles.cardButton}>Payment History</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
       )}
 
       {/* children card ends here */}

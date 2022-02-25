@@ -76,11 +76,13 @@ function* handleSessionAttendance(action) {
       fetchAttendanceOfMemberInSession,
       action.payload,
     );
+    console.log('action:', action);
+    console.log('resp: ', finance);
     yield put({
       type: Action.USER_GET_SESSION_ATTENDANCE_SUCCESS,
       payload: finance,
     });
-    yield call(action.callback);
+    //yield call(action.callback);
   } catch (error) {
     yield put({
       type: Action.USER_GET_SESSION_ATTENDANCE_FAILED,

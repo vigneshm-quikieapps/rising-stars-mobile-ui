@@ -1,14 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {Text, StyleSheet, View, FlatList} from 'react-native';
+import {Text, View, FlatList} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import * as Action from '../../redux/action-types';
-import {
-  CustomLayout,
-  LinearStudentCard,
-  ClassCard,
-  AppButton,
-} from '../../components';
+import {CustomLayout, ClassCard, AppButton} from '../../components';
 import Alert from '../../components/alert-box';
 import {colors, Fontsize, hp, wp} from '../../constants';
 import {getClubdata, getSessiondata} from '../../redux/action/enrol';
@@ -35,11 +30,6 @@ export default function EnrolledChild(props) {
 
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const currentMember = useSelector(state => state.currentMemberData.data);
-  //console.log('member: ', memberClassData);
-  // memberClassData &&
-  //   console.log(
-  //     memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED'),
-  //   );
   const renderItem = item => {
     var temp =
       memberClassData &&
@@ -117,14 +107,12 @@ export default function EnrolledChild(props) {
     });
     return groupData;
   };
-  //var businesses = [];
   useEffect(() => {
     setGroupedData(
       groupBy(
         memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED'),
       ),
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     var businesses = [];
     for (const [key, value] of Object.entries(groupedData)) {
       businesses.push({id: key});
@@ -258,50 +246,3 @@ export default function EnrolledChild(props) {
     </CustomLayout>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {},
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.modalBackgroundColor,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    justifyContent: 'flex-end',
-    height: 450,
-    borderRadius: 20,
-    // padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 65,
-    textAlign: 'center',
-    fontSize: 20,
-    paddingHorizontal: 10,
-  },
-});

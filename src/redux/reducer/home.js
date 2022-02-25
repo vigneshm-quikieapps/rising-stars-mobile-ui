@@ -93,6 +93,28 @@ export const currentMemberData = (state = currentMemberState, action) => {
   }
 };
 
+const memberBillsState = {
+  data: '',
+  error: '',
+};
+
+export const memberBills = (state = memberBillsState, action) => {
+  switch (action.type) {
+    case Action.USER_GET_MEMBER_BILLS_SUCCESS:
+      return {
+        ...state,
+        data: action.data,
+      };
+    case Action.USER_GET_MEMBER_BILLS_FAILURE:
+      return {
+        ...state,
+        error: action.error,
+      };
+    default:
+      return state;
+  }
+};
+
 const currentMemberAttendanceState = {
   attendance: '',
 };

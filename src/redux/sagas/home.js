@@ -9,6 +9,7 @@ import {
   fetchActivityOfMemberInSession,
   fetchParticularBusiness,
   fetchEvaluationById,
+  fetchBillsOfMember,
 } from '../service/request';
 
 function* handleGetMember(action) {
@@ -53,6 +54,19 @@ function* handleGetMemberClass(action) {
 
 export function* watcherMemberClassSaga() {
   yield takeEvery(Action.USER_GET_MEMBER_CLASS_DATA, handleGetMemberClass);
+}
+
+function* handleGetMemberBills(action) {
+  try {
+    const classes = yield call(fetchBillsOfMember, action.payload);
+    yield put({type: Action.USER_GET_MEMBER_BILLS_SUCCESS, data: classes});
+  } catch (error) {
+    yield put({type: Action.USER_GET_MEMBER_BILLS_FAILED, error: error});
+  }
+}
+
+export function* watcherMemberBillsSaga() {
+  yield takeEvery(Action.USER_GET_MEMBER_BILLS, handleGetMemberBills);
 }
 
 function* handleGetMemberClasses(action) {

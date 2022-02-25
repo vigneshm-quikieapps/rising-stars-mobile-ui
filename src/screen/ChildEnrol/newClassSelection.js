@@ -1,16 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, StyleSheet, ActivityIndicator} from 'react-native';
 import moment from 'moment';
 
 import {
   CustomLayout,
   StudentCard,
+  newPopUpClass,
   ProgressTracker,
   ForwardButton,
   Slot,
@@ -29,6 +25,7 @@ import {getLocalData} from '../../utils/LocalStorage';
 
 import {useSelector, useDispatch} from 'react-redux';
 import PopUpClass from '../../components/pop-up-class_selection';
+import NewPopUpClass from '../../components/new- popup-class';
 
 const New_Class_Selection = props => {
   const [business, setBusiness] = useState();
@@ -53,6 +50,8 @@ const New_Class_Selection = props => {
   const memberClassData = useSelector(state => state.memberClassData.classData);
 
   const dispatch = useDispatch();
+  console.log('abc', selectdata);
+  console.log('def', child);
 
   const handleBusiness = async item => {
     setBusiness(item.name);
@@ -83,16 +82,36 @@ const New_Class_Selection = props => {
     props.navigation.navigate('Fees_Overview');
   };
 
-  function checkEnroll(clas) {
-    for (var i = 0; i < memberClassData.length; i++) {
+  // useEffect(() => {
+  //   checkEnroll();
+  // }, []);
+
+  function checkEnroll() {
+    console.log('qwerty');
+    for (
+      var i = 0;
+      i < memberClassData &&
+      memberClassData.filter(item => item.enrolledStatus === 'ENROLLED').length;
+      i++
+    ) {
       if (
-        clas._id === memberClassData[i].classId &&
-        memberClassData[i].enrolledStatus === 'ENROLLED'
+        classData.includes(
+          memberClassData.filter(item => item.enrolledStatus === 'ENROLLED')[i],
+        )
       ) {
-        return false;
+        console.log(
+          memberClassData.filter(item => item.enrolledStatus === 'ENROLLED')[i],
+        );
+        classData.splice(
+          classData.indexOf(
+            memberClassData.filter(item => item.enrolledStatus === 'ENROLLED')[
+              i
+            ],
+          ),
+        );
       }
     }
-    return true;
+    return classData;
   }
 
   return (
@@ -131,91 +150,28 @@ const New_Class_Selection = props => {
           setClubModal(bin);
         }}
       />
-      <PopUpCard
-        headertext={'Class Name*'}
-        text="Select Your Class Name"
-        value={classes}
-        onPress={() => setClassModal(!classmodal)}
-      />
-      <PopUpClass
-        ClosePopUp={() => setClassModal(!classmodal)}
-        visible={classmodal}
-        title={'Available Classes'}
-        data={classData}
-        setClub={classData => {
-          handleClasses(classData);
-        }}
-        setVisibility={bin => {
-          setClassModal(bin);
-        }}
-      />
-      {/* {clubmodal &&
-        clubData.map(item => {
-          return (
-            <TouchableOpacity
-              onPressOut={() => setClubModal(false)}
-              key={item._id}
-              onPress={() => handleBusiness(item)}
-              style={{
-                marginLeft: wp('8%'),
-                justifyContent: 'center',
-                alignContent: 'center',
-                backgroundColor: colors.lightgrey,
-              }}>
-              <Text
-                style={{
-                  margin: wp('0.5%'),
-                  fontFamily: 'Nunito-Regular',
-                  paddingTop: wp('2%'),
-                  fontSize: Fontsize,
-                }}>
-                {item.name}
-              </Text>
-            </TouchableOpacity>
-          );
-        })} */}
-      {/* {showclass ? (
-        classData && classData.length > 0 ? (
-          <>
-            <PopUpCard
-              headertext={'Class Name*'}
-              text="Select Your Class Name"
-              value={classes}
-              onPress={() => setClassModal(!classmodal)}
-            />
-            {classmodal &&
-              classData
-                .map(clas => clas)
-                .filter(checkEnroll)
-                .map(item => {
-                  return (
-                    <TouchableOpacity
-                      onPressOut={() => setClubModal(false)}
-                      key={item._id}
-                      onPress={() => handleClasses(item)}
-                      style={{
-                        marginLeft: wp('8%'),
-                        justifyContent: 'center',
-                        alignContent: 'center',
-                      }}>
-                      <Text
-                        style={{
-                          backgroundColor: colors.lightgrey,
-                          fontFamily: 'Nunito-Regular',
-                          fontSize: Fontsize,
-                          paddingTop: wp('2%'),
-                          margin: wp('0.5%'),
-                        }}>
-                        {item.name}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
-          </>
-        ) : (
-          <ActivityIndicator size="large" color={colors.orange} />
-        )
-      ) : null} */}
+      {showclass ? (
+        <>
+          <PopUpCard
+            headertext={'Class Name*'}
+            text="Select Your Class Name"
+            value={classes}
+            onPress={() => setClassModal(!classmodal)}
+          />
+          <NewPopUpClass
+            ClosePopUp={() => setClassModal(!classmodal)}
+            visible={classmodal}
+            title={'Available Classes'}
+            data={checkEnroll()}
+            setClub={classData1 => {
+              handleClasses(classData1);
+            }}
+            setVisibility={bin => {
+              setClassModal(bin);
+            }}
+          />
+        </>
+      ) : null}
       {showsession ? (
         sessionData && sessionData.length > 0 ? (
           <>

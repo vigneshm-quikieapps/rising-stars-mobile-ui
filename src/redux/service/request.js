@@ -247,6 +247,22 @@ export function fetchClasses(token) {
     });
 }
 
+export function fetchBillsOfMember(payload) {
+  return fetch(`${heroku_url}/bills/of-a-member-in-a-business`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      //Authorization: `Bearer ${payload.token}`,
+    },
+    body: JSON.stringify(payload),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      throw error;
+    });
+}
+
 export function addChild(payload) {
   return fetch(`${heroku_url}/members`, {
     method: 'POST',
