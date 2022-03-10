@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 50,
     margin: wp('1%'),
+    // marginLeft: wp('4%'),
   },
   subContainer: {
     height: hp('2.5%'),

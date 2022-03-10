@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp('5%'),
   },
   slotdetails: {
-    marginLeft: wp('1%'),
+    marginLeft: wp('4%'),
   },
   day: {
     fontFamily: 'Nunito-SemiBold',

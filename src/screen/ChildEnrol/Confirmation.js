@@ -80,8 +80,8 @@ const Confirmation = props => {
               sessions={classes.name}
               day={slot.pattern[0].day}
               time={`${moment(slot.pattern[0].startTime).format(
-                'HH:mm',
-              )} - ${moment(slot.pattern[0].endTime).format('HH:mm')}`}
+                'HH:mm a',
+              )} - ${moment(slot.pattern[0].endTime).format('HH:mm a')}`}
               facility={slot.facility}
               coach={slot.coach.name}
             />

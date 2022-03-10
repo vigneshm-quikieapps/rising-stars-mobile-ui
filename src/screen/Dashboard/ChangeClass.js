@@ -1,4 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
+import moment  from 'moment';
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
@@ -121,10 +122,13 @@ export default function ChangeClass(props) {
         }
         time={
           currentClass.session && currentClass.session.pattern.length > 0
-            ? time(
-                new Date(currentClass.session.pattern[0].startTime),
-                new Date(currentClass.session.pattern[0].endTime),
-              )
+            ? 
+            // time(
+            //     new Date(currentClass.session.pattern[0].startTime),
+            //     new Date(currentClass.session.pattern[0].endTime),
+            //   )
+            `${moment(currentClass.session.pattern[0].startTime).format('HH:mm a',
+            )} - ${moment(currentClass.session.pattern[0].endTime).format('HH:mm a')}`
             : null
         }
         facility={currentClass.session.facility}

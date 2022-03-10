@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightgrey,
     alignItems: 'center',
     borderRadius: wp('5%'),
+    paddingHorizontal: wp('2%'),
   },
   head: {
     fontFamily: 'Nunito-Regular',
