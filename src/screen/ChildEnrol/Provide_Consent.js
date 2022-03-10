@@ -38,6 +38,9 @@ const Provide_Consent = props => {
   const child = useSelector(state => state.childData.addchild);
   const club = useSelector(state => state.childData.clubdata);
 
+  // const membersdata = useSelector(state => state.memberData.memberData);
+  const parent = useSelector(state => state.LoginData.updatedUser);
+  
   return (
     <CustomLayout
       Customchildren={
@@ -166,7 +169,8 @@ const Provide_Consent = props => {
       {isEnabled4 && (
         <View style={styles.textarea}>
           <Input
-            placeholder="Signed by Jube Bowman(Parent / Carer)"
+            // placeholder="Signed by Jube Bowman(Parent / Carer)"
+            placeholder={`Signed by ${parent.name}(Parent / Carer)`}
             placeholderTextColor={colors.grey}
             style={{width: wp('85%')}}
             onChangeText={text => setSign(text)}
