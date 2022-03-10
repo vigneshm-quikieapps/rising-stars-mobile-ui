@@ -185,8 +185,8 @@ const Home = () => {
       payload: {
         token,
         data: {
-          // sessionId: currentSessionId,
-          // memberId: currentMember._id,
+          sessionId: currentSessionId,
+          memberId: currentMember._id,
         },
       },
     });

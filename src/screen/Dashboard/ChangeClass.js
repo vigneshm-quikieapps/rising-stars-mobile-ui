@@ -96,7 +96,7 @@ export default function ChangeClass(props) {
               }}>
               {currentClass.business.name}
             </Text>
-            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>Club Id</Text>
+            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>Child's Club Id</Text>
             <Text
               style={{
                 color: colors.white,
