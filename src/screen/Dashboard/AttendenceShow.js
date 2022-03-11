@@ -143,11 +143,12 @@ const AttendenceShow = () => {
         colors={['#ffa300', '#ff7e00']}
         style={{
           width: '100%',
-          paddingVertical: 30,
+          justifyContent: 'center',
+          // paddingVertical: 30,
           paddingHorizontal: 20,
-          paddingTop: 24,
+          // paddingTop: 24,
           height: hp('15%'),
-          paddingBottom: 20,
+          // paddingBottom: 20,
           backgroundColor: colors.white,
           borderRadius: 16,
         }}>
@@ -168,6 +169,27 @@ const AttendenceShow = () => {
             fontFamily: 'Nunito-SemiBold',
           }}>
           {item.class.name}
+          {/* {item.business.name} */}
+        </Text>
+
+        <Text
+          style={{
+            fontSize: wp('3.5%'),
+            color: colors.white,
+            opacity: 0.8,
+            fontFamily: 'Nunito-Regular',
+            paddingTop: wp('2%'),
+          }}>
+          Club Name
+        </Text>
+        <Text
+          style={{
+            fontSize: wp('4.3%'),
+
+            color: colors.white,
+            fontFamily: 'Nunito-SemiBold',
+          }}>
+          {item.business.name}
         </Text>
       </LinearGradient>
     );
@@ -298,6 +320,7 @@ const AttendenceShow = () => {
       </View>
 
       <View style={{marginTop: 30}}>
+        {/* {console.log('naved attend', currentSessionAttendance.records)} */}
         {currentSessionAttendance &&
         currentSessionAttendance.records !== undefined ? (
           <FlatList
