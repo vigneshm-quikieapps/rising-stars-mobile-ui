@@ -19,6 +19,7 @@ const StandingOrder = props => {
       ]}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <RadioButton
+          color={colors.orange}
           onPress={props.onPress}
           status={props.visible ? 'checked' : 'unchecked'}
         />
