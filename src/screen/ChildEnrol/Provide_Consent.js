@@ -40,7 +40,7 @@ const Provide_Consent = props => {
 
   // const membersdata = useSelector(state => state.memberData.memberData);
   const parent = useSelector(state => state.LoginData.updatedUser);
-  
+
   return (
     <CustomLayout
       Customchildren={
@@ -148,11 +148,11 @@ const Provide_Consent = props => {
         </View>
       </RBSheet>
       <Conset
-        conset={'Does your child have any allergies we should be aware of'}
+        conset={'I do consent to my child to be photographed for any purpose'}
         value={isEnabled3}
         onValueChange={() => setIsEnabled3(!isEnabled3)}
       />
-      {isEnabled3 && (
+      {/* {isEnabled3 && (
         <View style={styles.textarea}>
           <Input
             placeholder="Allergy details..."
@@ -160,13 +160,13 @@ const Provide_Consent = props => {
             onChangeText={text => setPhoto(text)}
           />
         </View>
-      )}
+      )} */}
       <Conset
-        conset={'Signed by'}
+        conset={`Signed by  ${parent.name} ${'\n'}(Parent / Carer)`}
         value={isEnabled4}
         onValueChange={() => setIsEnabled4(!isEnabled4)}
       />
-      {isEnabled4 && (
+      {/* {isEnabled4 && (
         <View style={styles.textarea}>
           <Input
             // placeholder="Signed by Jube Bowman(Parent / Carer)"
@@ -177,7 +177,7 @@ const Provide_Consent = props => {
             // multiline={true}
           />
         </View>
-      )}
+      )} */}
       <ForwardButton
         style={{alignSelf: 'flex-end', marginTop: hp('1%')}}
         onPress={() => {
