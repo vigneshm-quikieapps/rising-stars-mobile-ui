@@ -129,6 +129,7 @@ const Additional_Sections = props => {
       </Text>
       <View style={styles.container}>
         <RadioButton
+          color={colors.orange}
           onPress={() => selectaddition('email')}
           status={email ? 'checked' : 'unchecked'}
         />
@@ -136,6 +137,7 @@ const Additional_Sections = props => {
       </View>
       <View style={styles.container}>
         <RadioButton
+          color={colors.orange}
           onPress={() => selectaddition('telephone')}
           status={telephone ? 'checked' : 'unchecked'}
         />
@@ -143,6 +145,7 @@ const Additional_Sections = props => {
       </View>
       <View style={styles.container}>
         <RadioButton
+          color={colors.orange}
           onPress={() => selectaddition('sms')}
           status={sms ? 'checked' : 'unchecked'}
         />
