@@ -15,6 +15,8 @@ import PaymentHistory from '../../screen/Dashboard/PaymentHistory';
 import {getLocalData} from '../../utils/LocalStorage';
 import {getmemberData} from '../../redux/action/home';
 import EditProfile from '../../screen/Dashboard/EditProfile';
+import EnrollingFlow from '../../screen/ChildEnrol/EnrollingFlow';
+
 
 const HomeNavigation = props => {
   const [token, setToken] = useState('');
@@ -59,6 +61,11 @@ const HomeNavigation = props => {
         <StackScreen.Screen
           name="HomeTab"
           component={HomeTab}
+          options={{headerShown: false}}
+        />
+         <StackScreen.Screen
+          name="EnrollingFlow"
+          component={EnrollingFlow}
           options={{headerShown: false}}
         />
         <StackScreen.Screen

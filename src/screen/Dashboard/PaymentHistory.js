@@ -8,28 +8,17 @@ import {useDispatch, useSelector} from 'react-redux';
 import {CustomLayout, ClassCard, PaymentCard, Card} from '../../components';
 import {colors, Fontsize, hp, wp} from '../../constants';
 import {getmemberClass} from '../../redux/action/home';
-import moment from 'moment';
 import {date} from 'yup/lib/locale';
+import { useNavigation } from '@react-navigation/native';
+import PayNow from './PayNow';
 
 export default function EnrolledChild() {
   const dispatch = useDispatch();
   const [activeDotIndex, setActiveDotIndex] = useState(0);
   const [groupedData, setGroupedData] = useState('');
   const [businessList, setBusinessList] = useState('');
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
+  const navigation = useNavigation()
+  
   const membersData = useSelector(state => state.memberData.memberData);
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const currentMember = useSelector(state => state.currentMemberData.data);
@@ -55,6 +44,7 @@ export default function EnrolledChild() {
       : null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeDotIndex, businessList, currentMember]);
+
   useEffect(() => {
     setGroupedData(
       groupBy(
@@ -69,10 +59,14 @@ export default function EnrolledChild() {
     setBusinessList(businesses);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberClassData]);
+
+
   useEffect(() => {
     membersData && dispatch(getmemberClass(membersData[activeDotIndex]._id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeDotIndex]);
+
+
   const groupBy = objectArray => {
     let groupData = {};
     objectArray.forEach(element => {
@@ -85,16 +79,10 @@ export default function EnrolledChild() {
     });
     return groupData;
   };
-  const findDate = item => {
-    var month = new Date(item.dueDate).getMonth();
-    var year = new Date(item.generatedAt).getFullYear();
-    if (month === 11) {
-      year = year + 1;
-      month = 0;
-    }
-    console.log(month);
-    return `${months[month]} ${year} fee`;
-  };
+
+
+  
+
   const time = (start, end) => {
     var sHr =
       start.getHours().toString().length === 1
@@ -114,6 +102,7 @@ export default function EnrolledChild() {
         : end.getMinutes();
     return sHr + ':' + sMin + '-' + eHr + ':' + eMin;
   };
+  
   const renderItem = item => {
     var temp =
       memberClassData &&
@@ -217,38 +206,7 @@ export default function EnrolledChild() {
                   renderItem={item1 => {
                     //console.log(item1.item.classId, item.item.classId);
                     return (
-                      <>
-                        {item1.item.classId === item.item.classId ? (
-                          <>
-                            <Card
-                              paystyle={{backgroundColor: colors.reddish}}
-                              notify={
-                                item1.item.billStatus === 'PAID'
-                                  ? 'Paid'
-                                  : 'Not Paid'
-                              }
-                              amount={item1.item.total}
-                              body={findDate(item1.item)}
-                              date={`Due Date ${moment(
-                                new Date(item1.item.dueDate),
-                              ).format('DD/MM/YYYY')}`}
-                              button
-                              title="Pay Now"
-                              paybutton={() => {}}
-                              substyle={{
-                                borderColor: colors.reddish,
-                                borderWidth: 1,
-                              }}
-                              style={{
-                                backgroundColor:
-                                  item.item.billStatus === 'PAID'
-                                    ? colors.veryLightGreen
-                                    : colors.reddish,
-                              }}
-                            />
-                          </>
-                        ) : null}
-                      </>
+                      <PayNow item={item} item1={item1} />
                     );
                   }}
                 />

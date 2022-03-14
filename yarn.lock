@@ -5765,6 +5765,11 @@
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
   "version" "16.13.1"
 
+"react-native-anchor-carousel@^4.0.1":
+  "integrity" "sha512-MF5N7Z4CAg99ojh1EU9BtNJJjBvcHLLjuX8/k/IOLmBasipZfkDx723972OEZZPt1iKJCe1ESOICDLRnZZRtTg=="
+  "resolved" "https://registry.npmjs.org/react-native-anchor-carousel/-/react-native-anchor-carousel-4.0.1.tgz"
+  "version" "4.0.1"
+
 "react-native-animated-progress@^1.0.1":
   "integrity" "sha512-cDnEF4QF8I9StpdayJxhWshggS1PkG4jJ6CsnAARQhhLo1V+gY/tby6MkxUa46zxw27slSC29SX9AjG4ll4JQw=="
   "resolved" "https://registry.npmjs.org/react-native-animated-progress/-/react-native-animated-progress-1.0.1.tgz"
