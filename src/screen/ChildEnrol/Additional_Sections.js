@@ -56,6 +56,7 @@ const Additional_Sections = props => {
       steps
       start={5}
       end={7}
+      back
       header
       headertext={`Additional ${'\n'}Sections`}
       headertextStyle={{

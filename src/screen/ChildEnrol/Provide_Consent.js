@@ -54,6 +54,7 @@ const Provide_Consent = props => {
       steps
       start={4}
       end={Stepend}
+      back
       header
       headertext={`Provide ${'\n'}Consent`}
       headertextStyle={{

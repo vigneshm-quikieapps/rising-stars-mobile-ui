@@ -127,6 +127,7 @@ const New_Class_Selection = props => {
       steps
       start={2}
       end={Stepend}
+      back
       header
       headerTextBigText={true}
       headertext={'Class Selection'}

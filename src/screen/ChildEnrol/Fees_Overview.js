@@ -36,6 +36,7 @@ const Fees_Overview = props => {
       steps
       start={3}
       end={Stepend}
+      back
       header
       headerTextBigText={true}
       headertext={'Fees Overview'}

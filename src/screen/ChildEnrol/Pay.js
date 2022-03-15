@@ -99,6 +99,7 @@ const Pay = props => {
       header
       headerTextBigText={true}
       headertext={'Pay'}
+      back
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={6} />}>
       <FlatList
@@ -165,10 +166,12 @@ const Pay = props => {
           </View>
         </>
       ) : null}
-      <ForwardButton
-        style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
-        onPress={() => handleforward()}
-      />
+      {showStandingOrder && (
+        <ForwardButton
+          style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
+          onPress={() => handleforward()}
+        />
+      )}
     </CustomLayout>
   );
 };
