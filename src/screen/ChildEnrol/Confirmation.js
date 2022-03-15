@@ -41,6 +41,7 @@ const Confirmation = props => {
           steps
           start={Stepend}
           end={Stepend}
+          back
           header
           headerTextBigText={true}
           headertext={'Confirmation'}
@@ -76,6 +77,7 @@ const Confirmation = props => {
             <Slot
               white
               required
+              waitlisted
               Class={club.name}
               sessions={classes.name}
               day={slot.pattern[0].day}
