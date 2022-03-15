@@ -22,333 +22,352 @@ const Timelines = props => {
   const [expand, setExpand] = useState(0);
   console.log('data: ', props.data);
   return (
-    <ScrollView style={{height: hp('70%')}}>
-      <FlatList
-        data={props.data}
-        keyExtractor={item => item.id}
-        renderItem={item => {
-          console.log('item: ', item);
-          console.log('expand:', props.data.length);
-          return (
-            <View style={styles.container}>
-              <View>
-                <View
-                  style={[
-                    styles.circle,
-                    {
-                      borderColor:
-                        item.item.status === 'AWARDED'
-                          ? '#4ec0a0'
-                          : item.item.status === 'IN_PROGRESS'
-                          ? colors.orangeYellow
-                          : '#e3e3e3',
-                      marginTop: item.index === 0 ? hp('8%') : 0,
-                    },
-                  ]}>
-                  {item.item.status === 'AWARDED' ? (
-                    <Image
-                      source={require('../assets/images/icon-check-line.png')}
-                      style={styles.tick}
-                    />
-                  ) : item.item.status === 'IN_PROGRESS' ? (
-                    <LinearGradient
-                      colors={['#ffa300', '#ff7e00']}
-                      style={styles.dot}
-                    />
-                  ) : null}
-                </View>
-                <View
-                  style={[
-                    styles.line,
-                    props.line,
-                    {
-                      borderColor:
-                        item.item.status === 'AWARDED'
-                          ? '#4ec0a0'
-                          : item.item.status === 'IN_PROGRESS'
-                          ? colors.orangeYellow
-                          : '#e3e3e3',
+    <>
+      <ScrollView style={{height: hp('70%')}}>
+        {props.data !== null ? (
+          <FlatList
+            data={props.data}
+            keyExtractor={item => item.id}
+            renderItem={item => {
+              console.log('item: ', item);
+              console.log('expand:', props.data.length);
+              return (
+                <View style={styles.container}>
+                  <View>
+                    <View
+                      style={[
+                        styles.circle,
+                        {
+                          borderColor:
+                            item.item.status === 'AWARDED'
+                              ? '#4ec0a0'
+                              : item.item.status === 'IN_PROGRESS'
+                              ? colors.orangeYellow
+                              : '#e3e3e3',
+                          marginTop: item.index === 0 ? hp('8%') : 0,
+                        },
+                      ]}>
+                      {item.item.status === 'AWARDED' ? (
+                        <Image
+                          source={require('../assets/images/icon-check-line.png')}
+                          style={styles.tick}
+                        />
+                      ) : item.item.status === 'IN_PROGRESS' ? (
+                        <LinearGradient
+                          colors={['#ffa300', '#ff7e00']}
+                          style={styles.dot}
+                        />
+                      ) : null}
+                    </View>
+                    <View
+                      style={[
+                        styles.line,
+                        props.line,
+                        {
+                          borderColor:
+                            item.item.status === 'AWARDED'
+                              ? '#4ec0a0'
+                              : item.item.status === 'IN_PROGRESS'
+                              ? colors.orangeYellow
+                              : '#e3e3e3',
 
-                      height:
-                        item.index !== props.data.length - 1
-                          ? expand === item.index + 1
-                            ? hp('30%')
-                            : hp('20%')
-                          : 0,
-                    },
-                  ]}
-                />
-              </View>
+                          height:
+                            item.index !== props.data.length - 1
+                              ? expand === item.index + 1
+                                ? hp('30%')
+                                : hp('20%')
+                              : 0,
+                        },
+                      ]}
+                    />
+                  </View>
 
-              <LinearGradient
-                style={[
-                  styles.subContainer,
-                  {
-                    // marginTop: hp('1%'),
-                    height: expand === item.index + 1 ? hp('30%') : hp('20%'),
-                    marginTop: item.index !== 0 ? -hp('7%') : 0,
-                  },
-                  props.subcontainer,
-                ]}
-                colors={
-                  item.item.status === 'AWARDED'
-                    ? ['rgb(104,214,171)', 'rgb(51,171,150)']
-                    : item.item.status === 'IN_PROGRESS'
-                    ? ['#ffa300', '#ff7e00']
-                    : ['rgb(242,242,242)', 'rgb(242,242,242)']
-                }>
-                <View
-                  style={{
-                    marginLeft: wp('4%'),
-                    marginTop: -hp('1.5%'),
-                  }}>
-                  {item.item && item.item.skills.length > 0 ? (
-                    <>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          marginTop: -hp('1.5%'),
-                          justifyContent: 'space-between',
-                        }}>
-                        <Text
-                          style={[
-                            styles.insideText,
-                            {
-                              color:
-                                item.item.status === 'AWARDED'
-                                  ? 'white'
-                                  : item.item.status === 'IN_PROGRESS'
-                                  ? 'white'
-                                  : 'black',
-                              marginBottom: -hp('0.5%'),
-                              marginLeft: wp('7%'),
-                              marginTop: hp('2%'),
-                              backgroundColor:
-                                item.item.status === 'NOT_STARTED'
-                                  ? '#dbdbdb'
-                                  : 'rgba(255, 255, 255, 0.3)',
-                              paddingRight: wp('3%'),
-                              paddingLeft: wp('3%'),
-                              paddingTop: wp('1%'),
-                              height: 35,
-                              borderRadius: 10,
-                            },
-                          ]}>
-                          Step {item.index + 1}
-                        </Text>
-                      </View>
-                      {item.item.skills.length > 0 ? (
-                        <View style={{flexDirection: 'row'}}>
-                          {item.item.status !== 'NOT_STARTED' ? (
-                            <FlatList
-                              data={item.item.skills}
-                              keyExtractor={arg => arg.id}
-                              renderItem={arg => {
-                                console.log(arg);
-                                return (
-                                  <View
-                                    style={{
-                                      flexDirection: 'row',
-                                      marginTop: hp('3.5%'),
-                                      marginLeft:
-                                        arg.item.status === 'AWARDED'
-                                          ? wp('2%')
-                                          : wp('8%'),
-                                    }}>
-                                    {arg.item.status === 'AWARDED' ? (
-                                      <View
-                                        style={{
-                                          borderColor: colors.white,
-                                          borderWidth: 2,
-                                          borderRadius: 20,
-                                          height: 22,
-                                          width: 22,
-                                        }}>
-                                        <Image
-                                          source={require('../assets/images/checkmark.png')}
-                                          style={[
-                                            styles.tick,
-                                            {
-                                              height: 10,
-                                              width: 10,
-                                              paddingTop: 17,
-                                              paddingLeft: 17,
-                                            },
-                                          ]}
-                                        />
-                                      </View>
-                                    ) : null}
-                                    <View>
-                                      <Text
-                                        style={[
-                                          styles.insideText,
-                                          {
-                                            color:
-                                              item.item.status === 'AWARDED'
-                                                ? 'white'
-                                                : item.item.status ===
-                                                  'IN_PROGRESS'
-                                                ? 'white'
-                                                : 'black',
-                                          },
-                                          {
-                                            marginTop: -hp('1%'),
-                                            marginLeft: wp('5%'),
-                                            fontSize: Fontsize + 6,
-                                            //fontWeight: 'bold',
-                                          },
-                                        ]}>
-                                        {arg.item.name}
-                                      </Text>
-                                      <Text
-                                        style={[
-                                          styles.insideText,
-                                          {
-                                            color: item.item.status
-                                              ? 'white'
-                                              : item.item.status2
-                                              ? 'white'
-                                              : colors.grey,
-                                          },
-                                          {
-                                            marginLeft: wp('5%'),
-                                            fontSize: Fontsize,
-                                          },
-                                        ]}>
-                                        {arg.item.status === 'AWARDED'
-                                          ? 'Attained'
-                                          : arg.item.status === 'IN_PROGRESS'
-                                          ? 'In progress'
-                                          : 'Upcoming'}
-                                      </Text>
-                                    </View>
-                                  </View>
-                                );
-                              }}
-                            />
-                          ) : (
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                marginTop: hp('3.5%'),
-                                marginLeft:
-                                  item.item.skills[0].status === 'AWARDED'
-                                    ? wp('2%')
-                                    : wp('8%'),
-                              }}>
-                              {item.item.skills[0].status === 'AWARDED' ? (
-                                <View
-                                  style={{
-                                    borderColor: colors.white,
-                                    borderWidth: 2,
-                                    borderRadius: 20,
-                                    height: 22,
-                                    width: 22,
-                                  }}>
-                                  <Image
-                                    source={require('../assets/images/checkmark.png')}
-                                    style={[
-                                      styles.tick,
-                                      {
-                                        height: 10,
-                                        width: 10,
-                                        paddingTop: 17,
-                                        paddingLeft: 17,
-                                      },
-                                    ]}
-                                  />
-                                </View>
-                              ) : null}
-                              <View>
-                                <Text
-                                  style={[
-                                    styles.insideText,
-                                    {
-                                      color:
-                                        item.item.status === 'AWARDED'
-                                          ? 'white'
-                                          : item.item.status === 'IN_PROGRESS'
-                                          ? 'white'
-                                          : 'black',
-                                    },
-                                    {
-                                      marginTop: -hp('1%'),
-                                      marginLeft: wp('5%'),
-                                      fontSize: Fontsize + 6,
-                                      //fontWeight: 'bold',
-                                    },
-                                  ]}>
-                                  {item.item.skills[0].name}
-                                </Text>
-                                <Text
-                                  style={[
-                                    styles.insideText,
-                                    {
-                                      color:
-                                        item.item.status === 'AWARDED'
-                                          ? 'white'
-                                          : item.item.status === 'IN_PROGRESS'
-                                          ? 'white'
-                                          : colors.grey,
-                                    },
-                                    {
-                                      marginLeft: wp('5%'),
-                                      fontSize: Fontsize,
-                                    },
-                                  ]}>
-                                  {item.item.skills[0].status === 'AWARDED'
-                                    ? 'Attained'
-                                    : item.item.skills[0].status ===
-                                      'IN_PROGRESS'
-                                    ? 'In progress'
-                                    : 'Upcoming'}
-                                </Text>
-                              </View>
-                            </View>
-                          )}
+                  <LinearGradient
+                    style={[
+                      styles.subContainer,
+                      {
+                        // marginTop: hp('1%'),
+                        height:
+                          expand === item.index + 1 ? hp('30%') : hp('20%'),
+                        marginTop: item.index !== 0 ? -hp('7%') : 0,
+                      },
+                      props.subcontainer,
+                    ]}
+                    colors={
+                      item.item.status === 'AWARDED'
+                        ? ['rgb(104,214,171)', 'rgb(51,171,150)']
+                        : item.item.status === 'IN_PROGRESS'
+                        ? ['#ffa300', '#ff7e00']
+                        : ['rgb(242,242,242)', 'rgb(242,242,242)']
+                    }>
+                    <View
+                      style={{
+                        marginLeft: wp('4%'),
+                        marginTop: -hp('1.5%'),
+                      }}>
+                      {item.item && item.item.skills.length > 0 ? (
+                        <>
                           <View
                             style={{
-                              marginLeft: wp('30%'),
+                              flexDirection: 'row',
+                              marginTop: -hp('1.5%'),
+                              justifyContent: 'space-between',
                             }}>
-                            {item.item.status !== 'NOT_STARTED' ? (
-                              <TouchableOpacity
-                                onPress={() => {
-                                  setExpand(expand === 0 ? item.index + 1 : 0);
-                                  console.log('123');
-                                }}>
-                                <LinearGradient
-                                  colors={[
-                                    'rgba(255, 255, 255, 0.3)',
-                                    'rgba(255, 255, 255, 0.3)',
-                                  ]}
-                                  style={{
-                                    marginRight: 20,
-                                    marginTop: 20,
-                                    height: 32,
-                                    width: 32,
-                                    borderRadius: 8,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                  }}>
-                                  <Image
-                                    style={{height: 14, width: 18}}
-                                    source={Images.dropDown_white}
-                                  />
-                                </LinearGradient>
-                              </TouchableOpacity>
-                            ) : null}
+                            <Text
+                              style={[
+                                styles.insideText,
+                                {
+                                  color:
+                                    item.item.status === 'AWARDED'
+                                      ? 'white'
+                                      : item.item.status === 'IN_PROGRESS'
+                                      ? 'white'
+                                      : 'black',
+                                  marginBottom: -hp('0.5%'),
+                                  marginLeft: wp('7%'),
+                                  marginTop: hp('2%'),
+                                  backgroundColor:
+                                    item.item.status === 'NOT_STARTED'
+                                      ? '#dbdbdb'
+                                      : 'rgba(255, 255, 255, 0.3)',
+                                  paddingRight: wp('3%'),
+                                  paddingLeft: wp('3%'),
+                                  paddingTop: wp('1%'),
+                                  height: 35,
+                                  borderRadius: 10,
+                                },
+                              ]}>
+                              Step {item.index + 1}
+                            </Text>
                           </View>
-                        </View>
+                          {item.item.skills.length > 0 ? (
+                            <View style={{flexDirection: 'row'}}>
+                              {item.item.status !== 'NOT_STARTED' ? (
+                                <FlatList
+                                  data={item.item.skills}
+                                  keyExtractor={arg => arg.id}
+                                  renderItem={arg => {
+                                    console.log(arg);
+                                    return (
+                                      <View
+                                        style={{
+                                          flexDirection: 'row',
+                                          marginTop: hp('3.5%'),
+                                          marginLeft:
+                                            arg.item.status === 'AWARDED'
+                                              ? wp('2%')
+                                              : wp('8%'),
+                                        }}>
+                                        {arg.item.status === 'AWARDED' ? (
+                                          <View
+                                            style={{
+                                              borderColor: colors.white,
+                                              borderWidth: 2,
+                                              borderRadius: 20,
+                                              height: 22,
+                                              width: 22,
+                                            }}>
+                                            <Image
+                                              source={require('../assets/images/checkmark.png')}
+                                              style={[
+                                                styles.tick,
+                                                {
+                                                  height: 10,
+                                                  width: 10,
+                                                  paddingTop: 17,
+                                                  paddingLeft: 17,
+                                                },
+                                              ]}
+                                            />
+                                          </View>
+                                        ) : null}
+                                        <View>
+                                          <Text
+                                            style={[
+                                              styles.insideText,
+                                              {
+                                                color:
+                                                  item.item.status === 'AWARDED'
+                                                    ? 'white'
+                                                    : item.item.status ===
+                                                      'IN_PROGRESS'
+                                                    ? 'white'
+                                                    : 'black',
+                                              },
+                                              {
+                                                marginTop: -hp('1%'),
+                                                marginLeft: wp('5%'),
+                                                fontSize: Fontsize + 6,
+                                                //fontWeight: 'bold',
+                                              },
+                                            ]}>
+                                            {arg.item.name}
+                                          </Text>
+                                          <Text
+                                            style={[
+                                              styles.insideText,
+                                              {
+                                                color: item.item.status
+                                                  ? 'white'
+                                                  : item.item.status2
+                                                  ? 'white'
+                                                  : colors.grey,
+                                              },
+                                              {
+                                                marginLeft: wp('5%'),
+                                                fontSize: Fontsize,
+                                              },
+                                            ]}>
+                                            {arg.item.status === 'AWARDED'
+                                              ? 'Attained'
+                                              : arg.item.status ===
+                                                'IN_PROGRESS'
+                                              ? 'In progress'
+                                              : 'Upcoming'}
+                                          </Text>
+                                        </View>
+                                      </View>
+                                    );
+                                  }}
+                                />
+                              ) : (
+                                <View
+                                  style={{
+                                    flexDirection: 'row',
+                                    marginTop: hp('3.5%'),
+                                    marginLeft:
+                                      item.item.skills[0].status === 'AWARDED'
+                                        ? wp('2%')
+                                        : wp('8%'),
+                                  }}>
+                                  {item.item.skills[0].status === 'AWARDED' ? (
+                                    <View
+                                      style={{
+                                        borderColor: colors.white,
+                                        borderWidth: 2,
+                                        borderRadius: 20,
+                                        height: 22,
+                                        width: 22,
+                                      }}>
+                                      <Image
+                                        source={require('../assets/images/checkmark.png')}
+                                        style={[
+                                          styles.tick,
+                                          {
+                                            height: 10,
+                                            width: 10,
+                                            paddingTop: 17,
+                                            paddingLeft: 17,
+                                          },
+                                        ]}
+                                      />
+                                    </View>
+                                  ) : null}
+                                  <View>
+                                    <Text
+                                      style={[
+                                        styles.insideText,
+                                        {
+                                          color:
+                                            item.item.status === 'AWARDED'
+                                              ? 'white'
+                                              : item.item.status ===
+                                                'IN_PROGRESS'
+                                              ? 'white'
+                                              : 'black',
+                                        },
+                                        {
+                                          marginTop: -hp('1%'),
+                                          marginLeft: wp('5%'),
+                                          fontSize: Fontsize + 6,
+                                          //fontWeight: 'bold',
+                                        },
+                                      ]}>
+                                      {item.item.skills[0].name}
+                                    </Text>
+                                    <Text
+                                      style={[
+                                        styles.insideText,
+                                        {
+                                          color:
+                                            item.item.status === 'AWARDED'
+                                              ? 'white'
+                                              : item.item.status ===
+                                                'IN_PROGRESS'
+                                              ? 'white'
+                                              : colors.grey,
+                                        },
+                                        {
+                                          marginLeft: wp('5%'),
+                                          fontSize: Fontsize,
+                                        },
+                                      ]}>
+                                      {item.item.skills[0].status === 'AWARDED'
+                                        ? 'Attained'
+                                        : item.item.skills[0].status ===
+                                          'IN_PROGRESS'
+                                        ? 'In progress'
+                                        : 'Upcoming'}
+                                    </Text>
+                                  </View>
+                                </View>
+                              )}
+                              <View
+                                style={{
+                                  marginLeft: wp('30%'),
+                                }}>
+                                {item.item.status !== 'NOT_STARTED' ? (
+                                  <TouchableOpacity
+                                    onPress={() => {
+                                      setExpand(
+                                        expand === 0 ? item.index + 1 : 0,
+                                      );
+                                      console.log('123');
+                                    }}>
+                                    <LinearGradient
+                                      colors={[
+                                        'rgba(255, 255, 255, 0.3)',
+                                        'rgba(255, 255, 255, 0.3)',
+                                      ]}
+                                      style={{
+                                        marginRight: 20,
+                                        marginTop: 20,
+                                        height: 32,
+                                        width: 32,
+                                        borderRadius: 8,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                      }}>
+                                      <Image
+                                        style={{height: 14, width: 18}}
+                                        source={Images.dropDown_white}
+                                      />
+                                    </LinearGradient>
+                                  </TouchableOpacity>
+                                ) : null}
+                              </View>
+                            </View>
+                          ) : null}
+                        </>
                       ) : null}
-                    </>
-                  ) : null}
+                    </View>
+                  </LinearGradient>
                 </View>
-              </LinearGradient>
+              );
+            }}
+          />
+        ) : (
+          <View style={styles.remark}>
+            <View style={styles.mark}>
+              <Image source={require('../assets/images/icon-info.png')} />
             </View>
-          );
-        }}
-      />
-    </ScrollView>
+            <Text style={styles.marktext}>
+              Record not available at this time
+            </Text>
+          </View>
+        )}
+      </ScrollView>
+    </>
   );
 };
 
@@ -418,6 +437,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: wp('2%'),
+  },
+  remark: {
+    borderRadius: 10,
+    height: hp('12%'),
+    paddingHorizontal: wp('1%'),
+    paddingTop: hp('.1%'),
+    flexDirection: 'row',
+    backgroundColor: '#fff2e6',
+    marginVertical: hp('1%'),
+  },
+  mark: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: hp('3%'),
+    width: hp('3%'),
+    marginRight: wp('2%'),
+  },
+  marktext: {
+    color: '#d26800',
+    alignSelf: 'center',
+    flex: 1,
+    fontSize: Fontsize,
+    fontFamily: 'Nunito-Regular',
   },
 });
 

@@ -426,7 +426,7 @@ const Home = () => {
             backgroundColor: colors.lightgrey,
           }}
         />
-        <Timelines />
+        <Timelines data={null} />
       </View>
     </ScrollView>
   );
