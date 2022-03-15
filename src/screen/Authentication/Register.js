@@ -251,7 +251,7 @@ function Register(props) {
                     <EvilIcons name="search" size={30} color={'#ff7e00'} />
                   )}
                   onPress={() => {
-                    if (values.postCode.length <= 6) {
+                    if (values.postCode.length < 6) {
                       alert('Please Enter a Valid PostCode');
                     } else {
                       const data = {};

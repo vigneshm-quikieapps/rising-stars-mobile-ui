@@ -132,12 +132,13 @@ const Home = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMember]);
+
   useEffect(() => {
-    memberClassData.length > 1 &&
+    memberClassData.length > 0 &&
       setCurrentSessionId(
         memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
           activeDotIndex
-        ].session._id,
+        ]?.session._id,
       );
 
     // currentSessionId &&

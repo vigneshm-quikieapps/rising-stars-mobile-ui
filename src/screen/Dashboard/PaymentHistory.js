@@ -27,7 +27,7 @@ export default function EnrolledChild() {
 
   useEffect(() => {
     businessList && businessList.length > 0
-      ? console.log(currentMember, businessList[activeDotIndex].id)
+      ? console.log("====>",currentMember, businessList[activeDotIndex].id)
       : null;
     businessList && businessList.length > 0
       ? dispatch({
