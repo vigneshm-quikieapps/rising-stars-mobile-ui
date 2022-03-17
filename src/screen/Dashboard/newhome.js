@@ -190,8 +190,8 @@ const Home = () => {
         subtitle={item.business.name}
         day={item.session.pattern[0].day}
         time={`${moment(item.session.pattern[0].startTime).format(
-          'HH:SS',
-        )} -${moment(item.session.pattern[0].endTime).format('HH:SS')} `}
+          'HH:mm a',
+        )} -${moment(item.session.pattern[0].endTime).format('HH:mm a')} `}
         facility={item.session.facility}
         coach={'-- --'}
         style={{backgroundColor: 'white', borderRadius: 20}}

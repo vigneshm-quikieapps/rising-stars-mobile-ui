@@ -127,6 +127,7 @@ const New_Class_Selection = props => {
       steps
       start={2}
       end={Stepend}
+      back
       header
       headerTextBigText={true}
       headertext={'Class Selection'}
@@ -195,8 +196,8 @@ const New_Class_Selection = props => {
                   status={selectdata === item && 'checked'}
                   day={item.pattern[0].day}
                   time={`${moment(item.pattern[0].startTime).format(
-                    'HH:mm',
-                  )} - ${moment(item.pattern[0].endTime).format('HH:mm')}`}
+                    'HH:mm a',
+                  )} - ${moment(item.pattern[0].endTime).format('HH:mm a')}`}
                   facility={item.name}
                   coach={item.coach.name}
                   key={item._id}

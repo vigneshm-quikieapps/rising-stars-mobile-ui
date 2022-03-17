@@ -39,7 +39,7 @@ export default function StudentCard(props) {
       {props.clubid && (
         <View style={styles.subContainer}>
           <View>
-            <Text style={styles.head}>Club ID</Text>
+            <Text style={styles.head}>Child's Club ID</Text>
             <Text style={styles.body}>{props.clubid}</Text>
             {/* <Text style={styles.subbody}>{props.subactivity}</Text> */}
           </View>

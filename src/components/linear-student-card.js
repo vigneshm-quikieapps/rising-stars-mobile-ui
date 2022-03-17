@@ -66,7 +66,7 @@ export default function LinearStudentCard({
                 alignContent: 'center',
                 justifyContent: 'center',
               }}>
-              <Text style={styles.head}>Club ID</Text>
+              <Text style={styles.head}>Child's Club ID</Text>
               <Text style={styles.body}>{clubId}</Text>
               {/* <Text style={styles.subBody}>{subactivity}</Text> */}
             </View>

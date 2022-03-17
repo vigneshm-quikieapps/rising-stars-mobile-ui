@@ -38,7 +38,7 @@ function Alert(props) {
               style={{
                 width: wp('85%'),
                 marginLeft: wp('2.5%'),
-                marginBottom: wp('2%'),
+                marginBottom: wp('5%'),
               }}
             />
           )}
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     fontSize: hp('4%'),
     // marginLeft: wp('15%'),
     paddingBottom: hp('15%'),
+    textAlign: 'center'
     //paddingTop: hp('15%'),
   },
 });

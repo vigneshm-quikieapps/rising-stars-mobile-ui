@@ -19,16 +19,18 @@ const Confirmation = props => {
   const classes = useSelector(state => state.childData.classdata);
   const enrollment = useSelector(state => state.enrollChild.enrollstate);
   const [showAlert, setShowAlert] = useState(false);
+  const memberClassData = useSelector(state => state.memberClassData.classData);
 
   useEffect(() => {
-    enrollment && enrollment?.message !== 'enrolled successful'
+    enrollment && enrollment?.message == 'enrolled successful'
       ? setShowAlert(true)
       : null;
   }, [enrollment]);
-  console.log('en: ', club);
+  console.log('enrollment msg', enrollment)
+  console.log('session Start date & end date ', memberClassData[0].session.term.startDate, memberClassData[0].session.term.endDate);
   return (
     <View>
-      {enrollment?.message !== 'enrolled successful' ? (
+      {enrollment?.message == 'enrolled successful' ? (
         <Alert
           visible={showAlert}
           confirm={'Done'}
@@ -41,6 +43,7 @@ const Confirmation = props => {
           steps
           start={Stepend}
           end={Stepend}
+          back
           header
           headerTextBigText={true}
           headertext={'Confirmation'}
@@ -76,12 +79,13 @@ const Confirmation = props => {
             <Slot
               white
               required
+              waitlisted={enrollment.status == 'WAITLISTED'}
               Class={club.name}
               sessions={classes.name}
               day={slot.pattern[0].day}
               time={`${moment(slot.pattern[0].startTime).format(
-                'HH:mm',
-              )} - ${moment(slot.pattern[0].endTime).format('HH:mm')}`}
+                'HH:mm a',
+              )} - ${moment(slot.pattern[0].endTime).format('HH:mm a')}`}
               facility={slot.facility}
               coach={slot.coach.name}
             />
