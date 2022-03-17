@@ -57,6 +57,20 @@ const AttendenceShow = () => {
     'Friday',
     'Saturday',
   ];
+  const month = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
   var member = [];
   const accessToken = async () => {
     const Token = await getLocalData('accessToken');
@@ -195,227 +209,343 @@ const AttendenceShow = () => {
     );
   };
   return (
-    <View style={styles.container}>
-      <View style={{marginTop: 30}}>
-        <Text
-          style={{
-            fontSize: wp('7%'),
-            fontFamily: 'Nunito-SemiBold',
-          }}>
-          Attendance
-        </Text>
-      </View>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={{marginTop: 30}}>
+          <Text
+            style={{
+              fontSize: wp('7%'),
+              fontFamily: 'Nunito-SemiBold',
+            }}>
+            Attendance
+          </Text>
+        </View>
 
-      <View style={{marginTop: 4, flexDirection: 'row', alignItems: 'center'}}>
-        <Text style={{fontSize: wp('4.5%'), fontFamily: 'Nunito-SemiBold'}}>
-          {currentMember.name}
-        </Text>
-        <TouchableOpacity onPress={() => setShowModal(true)}>
+        <View
+          style={{marginTop: 4, flexDirection: 'row', alignItems: 'center'}}>
+          <Text style={{fontSize: wp('4.5%'), fontFamily: 'Nunito-SemiBold'}}>
+            {currentMember.name}
+          </Text>
+          <TouchableOpacity onPress={() => setShowModal(true)}>
+            <View
+              style={{
+                backgroundColor: '#ffe49c',
+                marginLeft: 6,
+                marginRight: 20,
+                height: 32,
+                width: 32,
+                borderRadius: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Image
+                style={{height: 14, width: 18}}
+                source={require('../../assets/images/icon-forward2-line-black.png')}
+              />
+            </View>
+          </TouchableOpacity>
+        </View>
+        <WheelDropdown
+          title="child"
+          visible={showModal}
+          setVisibility={modal => setShowModal(modal)}
+          cancel={() => setShowModal(false)}
+          confirm={() => {
+            setCurrentMemberIndex(wheelitem);
+            setCurrentMember(membersdata[wheelitem]);
+            setShowModal(false);
+          }}>
           <View
             style={{
-              backgroundColor: '#ffe49c',
-              marginLeft: 6,
-              marginRight: 20,
-              height: 32,
-              width: 32,
-              borderRadius: 10,
+              alignContent: 'center',
               justifyContent: 'center',
               alignItems: 'center',
+              marginRight: wp('8%'),
+              marginBottom: -hp('3%'),
             }}>
-            <Image
-              style={{height: 14, width: 18}}
-              source={require('../../assets/images/icon-forward2-line-black.png')}
+            <WheelPicker
+              data={member}
+              isCyclic={true}
+              onItemSelected={item => setItem(item)}
+              selectedItemTextColor={'black'}
+              selectedItemTextSize={Fontsize}
+              itemTextFontFamily="Nunito-Regular"
+              selectedItemTextFontFamily="Nunito-Regular"
             />
           </View>
-        </TouchableOpacity>
-      </View>
-      <WheelDropdown
-        title="child"
-        visible={showModal}
-        setVisibility={modal => setShowModal(modal)}
-        cancel={() => setShowModal(false)}
-        confirm={() => {
-          setCurrentMemberIndex(wheelitem);
-          setCurrentMember(membersdata[wheelitem]);
-          setShowModal(false);
-        }}>
-        <View
-          style={{
-            alignContent: 'center',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginRight: wp('8%'),
-            marginBottom: -hp('3%'),
-          }}>
-          <WheelPicker
-            data={member}
-            isCyclic={true}
-            onItemSelected={item => setItem(item)}
-            selectedItemTextColor={'black'}
-            selectedItemTextSize={Fontsize}
-            itemTextFontFamily="Nunito-Regular"
-            selectedItemTextFontFamily="Nunito-Regular"
-          />
-        </View>
-      </WheelDropdown>
-      <View style={{marginTop: 14}}>
-        <Carousel
-          style={{width: 350}}
-          layout={'default'}
-          data={
-            memberClassData &&
-            memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')
-          }
-          sliderWidth={itemWidth - 30}
-          itemWidth={itemWidth * 0.88}
-          renderItem={renderItem}
-          onSnapToItem={async index => {
-            setActiveDotIndex(index);
-            id =
+        </WheelDropdown>
+        <View style={{marginTop: 14}}>
+          <Carousel
+            style={{width: 350}}
+            layout={'default'}
+            data={
               memberClassData &&
               memberClassData?.filter(
                 item => item?.enrolledStatus === 'ENROLLED',
-              )[index].session._id;
-            dispatchValues();
-            // setCurrentSessionAttendance(
-            //   currentSessionId &&
-            //     (await fetchAttendanceOfMemberInSession({
-            //       token,
-            //       data: {
-            //         sessionId: currentSessionId,
-            //         memberId: currentMember._id,
-            //       },
-            //     })),
-            // );
+              )
+            }
+            sliderWidth={itemWidth - 30}
+            itemWidth={itemWidth * 0.88}
+            renderItem={renderItem}
+            onSnapToItem={async index => {
+              setActiveDotIndex(index);
+              id =
+                memberClassData &&
+                memberClassData?.filter(
+                  item => item?.enrolledStatus === 'ENROLLED',
+                )[index].session._id;
+              dispatchValues();
+              // setCurrentSessionAttendance(
+              //   currentSessionId &&
+              //     (await fetchAttendanceOfMemberInSession({
+              //       token,
+              //       data: {
+              //         sessionId: currentSessionId,
+              //         memberId: currentMember._id,
+              //       },
+              //     })),
+              // );
+            }}
+          />
+        </View>
+        <View style={{marginTop: 20}}>
+          <AttendanceOverview
+            linearGradient1={['#ffa300', '#ff7e00']}
+            linearGradient2={['#68D6AB', '#33AB96']}
+            linearGradient3={['#EA5C5C', '#AB3333']}
+            backgroundColor1="rgba(255,244,231,1)"
+            backgroundColor2="rgba(192,248,232,1)"
+            backgroundColor3="rgba(255,229,229,1)"
+            label1={'Total'}
+            label2={'Attended'}
+            label3={'No Show'}
+            value1={(currentSessionAttendance?.totalCount
+              ? currentSessionAttendance.totalCount
+              : 0
+            ).toString()}
+            value2={
+              currentSessionAttendance?.attendedCount
+                ? currentSessionAttendance.attendedCount
+                : 0
+            }
+            value3={
+              currentSessionAttendance?.attendedCount !== undefined
+                ? currentSessionAttendance.totalCount -
+                  currentSessionAttendance.attendedCount
+                : 0
+            }
+          />
+        </View>
+        <ScrollView>
+          <View style={{marginTop: 30}}>
+            {currentSessionAttendance &&
+            currentSessionAttendance.records !== undefined ? (
+              <>
+                <View style={{marginLeft: wp('2%')}}>
+                  <Text
+                    style={{
+                      marginBottom: wp('5%'),
+                      fontSize: wp('5%'),
+                      fontFamily: 'Nunito-SemiBold',
+                    }}>
+                    {month[new Date().getMonth()]}, {new Date().getFullYear()}
+                  </Text>
+                </View>
+                <FlatList
+                  data={currentSessionAttendance.records}
+                  keyExtractor={item => item._id}
+                  renderItem={item => {
+                    return (
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          paddingBottom: 20,
+                        }}>
+                        <View
+                          style={{
+                            width: '20%',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: wp('4%'),
+                              fontFamily: 'Nunito-Regular',
+                              color: colors.blackOpacity,
+                            }}>
+                            {days[new Date(item.item.date).getDay()]}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: wp('8%'),
+                              fontFamily: 'Nunito-SemiBold',
+                            }}>
+                            {new Date(item.item.date).getDate()}
+                          </Text>
+                        </View>
+                        <View style={{justifyContent: 'center'}}>
+                          <LinearGradient
+                            colors={
+                              item.item.attended === true
+                                ? ['#68D6AB', '#33AB96']
+                                : ['#EA5C5C', '#AB3333']
+                              // : item.status === 'Tardy'
+                              // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
+                              // : item.status === 'Upcoming'
+                              // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
+                              // : ['#ffa300', '#ff7e00']
+                            }
+                            style={{height: 1.5, width: 30}}
+                          />
+                        </View>
+                        <View style={{justifyContent: 'center', width: '100%'}}>
+                          <LinearGradient
+                            colors={
+                              item.item.attended === true
+                                ? ['#68D6AB', '#33AB96']
+                                : ['#EA5C5C', '#AB3333']
+                              // : item.status === 'Tardy'
+                              // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
+                              // : item.status === 'Upcoming'
+                              // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
+                              // : ['#ffa300', '#ff7e00']
+                            }
+                            style={{
+                              padding: 20,
+                              width: '100%',
+                              borderTopLeftRadius: 16,
+                              borderBottomLeftRadius: 16,
+                              borderColor: '#d2d2d2',
+                              borderWidth: item.status === 'Upcoming' ? 0.5 : 0,
+                            }}>
+                            <Text
+                              style={{
+                                color: colors.white,
+                                fontSize: wp('4.5%'),
+                                fontFamily: 'Naunito-SemiBold',
+                              }}>
+                              {item.item.attended ? 'Attended' : 'No Show'}
+                            </Text>
+                          </LinearGradient>
+                        </View>
+                      </View>
+                    );
+                  }}
+                />
+              </>
+            ) : (
+              <View style={styles.remark}>
+                <View style={styles.mark}>
+                  <Image
+                    source={require('../../assets/images/icon-info.png')}
+                  />
+                </View>
+                <Text style={styles.marktext}>
+                  No Attendance records available at this time
+                </Text>
+              </View>
+            )}
+          </View>
+        </ScrollView>
+        <View
+          style={{
+            flex: 1,
+            borderBottomWidth: 1,
+            borderBottomColor: colors.lightgrey,
+            marginTop: hp('1%'),
+            marginBottom: hp('3%'),
           }}
         />
-      </View>
-      <View style={{marginTop: 20}}>
-        <AttendanceOverview
-          linearGradient1={['#ffa300', '#ff7e00']}
-          linearGradient2={['#68D6AB', '#33AB96']}
-          linearGradient3={['#EA5C5C', '#AB3333']}
-          backgroundColor1="rgba(255,244,231,1)"
-          backgroundColor2="rgba(192,248,232,1)"
-          backgroundColor3="rgba(255,229,229,1)"
-          label1={'Total'}
-          label2={'Attended'}
-          label3={'No Show'}
-          value1={(currentSessionAttendance?.totalCount
-            ? currentSessionAttendance.totalCount
-            : 0
-          ).toString()}
-          value2={
-            currentSessionAttendance?.attendedCount
-              ? currentSessionAttendance.attendedCount
-              : 0
-          }
-          value3={
-            currentSessionAttendance?.attendedCount !== undefined
-              ? currentSessionAttendance.totalCount -
-                currentSessionAttendance.attendedCount
-              : 0
-          }
-        />
-      </View>
-
-      <View style={{marginTop: 30}}>
-        {currentSessionAttendance &&
-        currentSessionAttendance.records !== undefined ? (
-          <FlatList
-            data={currentSessionAttendance.records}
-            keyExtractor={item => item._id}
-            renderItem={item => {
-              return (
+        {/* UPCOMING SESSIONS */}
+        <FlatList
+          data={currentSessionAttendance.records}
+          keyExtractor={item => item._id}
+          renderItem={item => {
+            return (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingBottom: 20,
+                }}>
                 <View
                   style={{
-                    flexDirection: 'row',
+                    width: '20%',
+                    justifyContent: 'center',
                     alignItems: 'center',
-                    paddingBottom: 20,
                   }}>
-                  <View
+                  <Text
                     style={{
-                      width: '20%',
-                      justifyContent: 'center',
-                      alignItems: 'center',
+                      fontSize: wp('4%'),
+                      fontFamily: 'Nunito-Regular',
+                      color: colors.blackOpacity,
+                    }}>
+                    {days[new Date(item.item.date).getDay()]}
+                  </Text>
+                  <Text
+                    style={{
+                      color: colors.lightgrey,
+                      fontSize: wp('8%'),
+                      fontFamily: 'Nunito-SemiBold',
+                    }}>
+                    {new Date(item.item.date).getDate()}
+                  </Text>
+                </View>
+                <View style={{justifyContent: 'center'}}>
+                  <LinearGradient
+                    colors={['rgb(255,255,255)', 'rgb(255,255,255)']}
+                    // {
+                    //   item.item.attended === true
+                    //     ? ['#68D6AB', '#33AB96']
+                    //     : ['#EA5C5C', '#AB3333']
+                    //   // : item.status === 'Tardy'
+                    //   // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
+                    //   // : item.status === 'Upcoming'
+                    //   // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
+                    //   // : ['#ffa300', '#ff7e00']
+                    // }
+                    style={{height: 1.5, width: 30}}
+                  />
+                </View>
+                <View style={{justifyContent: 'center', width: '100%'}}>
+                  <LinearGradient
+                    colors={['rgb(255,255,255)', 'rgb(255,255,255)']}
+                    // {
+                    // item.item.attended === true
+                    //   ? ['#68D6AB', '#33AB96']
+                    //   : ['#EA5C5C', '#AB3333']
+                    // : item.status === 'Tardy'
+                    // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
+                    // : item.status === 'Upcoming'
+                    // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
+                    // : ['#ffa300', '#ff7e00']
+                    // }
+                    style={{
+                      padding: 20,
+                      width: '100%',
+                      borderTopLeftRadius: 16,
+                      borderBottomLeftRadius: 16,
+                      borderColor: '#d2d2d2',
+                      borderWidth: 1,
                     }}>
                     <Text
                       style={{
-                        fontSize: wp('4%'),
-                        fontFamily: 'Nunito-Regular',
-                        color: colors.blackOpacity,
+                        color: colors.lightgrey,
+                        fontSize: wp('4.5%'),
+                        fontFamily: 'Naunito-SemiBold',
                       }}>
-                      {days[new Date(item.item.date).getDay()]}
+                      {/* {item.item.attended ? 'Attended' : 'No Show'} */}
+                      Upcoming
                     </Text>
-                    <Text
-                      style={{
-                        fontSize: wp('8%'),
-                        fontFamily: 'Nunito-SemiBold',
-                      }}>
-                      {new Date(item.item.date).getDate()}
-                    </Text>
-                  </View>
-                  <View style={{justifyContent: 'center'}}>
-                    <LinearGradient
-                      colors={
-                        item.item.attended === true
-                          ? ['#68D6AB', '#33AB96']
-                          : ['#EA5C5C', '#AB3333']
-                        // : item.status === 'Tardy'
-                        // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
-                        // : item.status === 'Upcoming'
-                        // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
-                        // : ['#ffa300', '#ff7e00']
-                      }
-                      style={{height: 1.5, width: 30}}
-                    />
-                  </View>
-                  <View style={{justifyContent: 'center', width: '100%'}}>
-                    <LinearGradient
-                      colors={
-                        item.item.attended === true
-                          ? ['#68D6AB', '#33AB96']
-                          : ['#EA5C5C', '#AB3333']
-                        // : item.status === 'Tardy'
-                        // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
-                        // : item.status === 'Upcoming'
-                        // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
-                        // : ['#ffa300', '#ff7e00']
-                      }
-                      style={{
-                        padding: 20,
-                        width: '100%',
-                        borderTopLeftRadius: 16,
-                        borderBottomLeftRadius: 16,
-                        borderColor: '#d2d2d2',
-                        borderWidth: item.status === 'Upcoming' ? 0.5 : 0,
-                      }}>
-                      <Text
-                        style={{
-                          color: colors.white,
-                          fontSize: wp('4.5%'),
-                          fontFamily: 'Naunito-SemiBold',
-                        }}>
-                        {item.item.attended ? 'Attended' : 'No Show'}
-                      </Text>
-                    </LinearGradient>
-                  </View>
+                  </LinearGradient>
                 </View>
-              );
-            }}
-          />
-        ) : (
-          <View style={styles.remark}>
-            <View style={styles.mark}>
-              <Image source={require('../../assets/images/icon-info.png')} />
-            </View>
-            <Text style={styles.marktext}>
-              No Attendance records available at this time
-            </Text>
-          </View>
-        )}
+              </View>
+            );
+          }}
+        />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
