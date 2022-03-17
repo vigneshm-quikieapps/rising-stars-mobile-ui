@@ -3,8 +3,9 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import AppButton from './app-button';
 import {hp, colors, wp} from '../constants';
-
-export const PaymentCard = props => {
+let border;
+export const PaymentCard = props => {4
+  border = props.border?true:false;
   return (
     <View style={styles.container}>
       <Text style={{marginVertical: hp('1%')}}>Payment History</Text>
@@ -45,13 +46,13 @@ export const Card = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    elevation: 1,
+   // elevation: 1,
     shadowColor: colors.lightgrey,
     shadowOffset: {width: 1, height: 1},
     shadowOpacity: 0.4,
     overflow: 'hidden',
     shadowRadius: 5,
-    borderRadius: 5,
+    borderRadius:border? 5:0,
     padding: wp('5%'),
   },
   subContainer: {

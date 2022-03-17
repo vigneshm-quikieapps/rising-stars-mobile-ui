@@ -30,6 +30,8 @@ const Pay = props => {
   const consent = useSelector(state => state.addProvidedata);
   const [showAtm, setShowAtm] = useState(false);
   const [showStandingOrder, setShowStandingOrder] = useState(false);
+  const [standingOrderValue, setStandingOrderValue] = useState(false);
+
   const [totalAmt, setTotalAmt] = useState(0);
 
   useEffect(() => {
@@ -45,6 +47,19 @@ const Pay = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classes]);
   const dispatch = useDispatch();
+
+  const isStandingOrderHandler = (value) => {
+
+    if(value===1)
+    {
+      setStandingOrderValue(true)
+    }
+    else if(value===2)
+    {
+      setStandingOrderValue(false)
+    }
+  }
+
   const handleforward = async () => {
     console.log(
       'Details: ',
@@ -60,6 +75,7 @@ const Pay = props => {
         telephone: addData.telephone,
         sms: addData.sms,
       },
+      isStandingOrder:standingOrderValue,
       consent: {},
     };
     consent.allergie !== '' ? (data.consent.allergie = consent.allergie) : null;
@@ -99,6 +115,7 @@ const Pay = props => {
       header
       headerTextBigText={true}
       headertext={'Pay'}
+      back
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={6} />}>
       <FlatList
@@ -131,6 +148,7 @@ const Pay = props => {
             setShowAtm(false);
             setShowStandingOrder(!showStandingOrder);
           }}
+          isStandingOrderHandler={isStandingOrderHandler}
           visible={showStandingOrder}
         />
       ) : null}
@@ -144,7 +162,7 @@ const Pay = props => {
             visible={showAtm}
           />
           <View style={styles.bottom}>
-            <RadioButton />
+            <RadioButton color={colors.orange} />
             <Text
               style={{
                 fontFamily: 'Nunito-SemiBold',
@@ -165,10 +183,12 @@ const Pay = props => {
           </View>
         </>
       ) : null}
-      <ForwardButton
-        style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
-        onPress={() => handleforward()}
-      />
+      {showStandingOrder && (
+        <ForwardButton
+          style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
+          onPress={() => handleforward()}
+        />
+      )}
     </CustomLayout>
   );
 };

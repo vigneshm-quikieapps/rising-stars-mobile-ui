@@ -47,6 +47,9 @@ const Home = () => {
   const sessionAttendance = useSelector(
     state => state.sessionlist.sessionAttendance,
   );
+  const memberActivityProgress = useSelector(
+    state => state.currentMemberActivity.activity,
+  );
   const accessToken = async () => {
     const Token = await getLocalData('accessToken');
     setToken(Token);
@@ -57,7 +60,8 @@ const Home = () => {
   const parent = useSelector(state => state.LoginData.updatedUser);
 
   const [currentMember, setCurrentMember] = useState('');
-
+  var count = 0;
+  var value;
   const getLocalUserData = useCallback(async () => {
     const userData = await getLocalData('user', true);
     setUser(userData);
@@ -100,6 +104,7 @@ const Home = () => {
   };
 
   accessToken();
+
   useEffect(() => {
     getLocalUserData();
 
@@ -130,6 +135,10 @@ const Home = () => {
         type: Action.USER_GET_CURRENT_MEMBER_DATA,
         payload: currentMember,
       });
+      currentMember && dispatch({
+        type: Action.USER_GET_CURRENT_MEMBER_ACTIVITY,
+        payload: {id: currentMember._id},
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMember]);
 
@@ -140,6 +149,20 @@ const Home = () => {
           activeDotIndex
         ]?.session._id,
       );
+
+      memberClassData.length > 0 &&
+      dispatch({
+        type: Action.USER_GET_SESSION_ATTENDANCE,
+        payload: {
+          token,
+          data: {
+            sessionId:  memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
+              activeDotIndex
+            ]?.session._id,
+            memberId: currentMember._id,
+          },
+        },
+      });
 
     // currentSessionId &&
     //   fetchAttendanceOfMemberInSession({
@@ -179,18 +202,25 @@ const Home = () => {
   useEffect(() => {
     setCurrentSessionAttendance(sessionAttendance.attendance);
   }, [sessionAttendance]);
+
+
   useEffect(() => {
     setCurrentSessionAttendance('');
-    dispatch({
-      type: Action.USER_GET_SESSION_ATTENDANCE,
-      payload: {
-        token,
-        data: {
-          sessionId: currentSessionId,
-          memberId: currentMember._id,
-        },
-      },
-    });
+    
+
+    memberActivityProgress && memberActivityProgress.docs.length > 0
+    ? memberActivityProgress.docs.levels &&
+    memberActivityProgress.docs.levels.forEach(levels => {
+        if (levels.status === 'AWARDED') {
+          count += 1;
+        } else if (levels.status === 'IN_PROGRESS') {
+          count += 0.5;
+        }
+      })
+    : null;
+  if (count > 0) {
+    value = (count / memberActivityProgress.docs[activeDotIndex].levelCount) * 10;
+  }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeDotIndex, currentMember]);
   return (
@@ -417,7 +447,7 @@ const Home = () => {
 
       <View style={[styles.ProgressReports, styles.timeline]}>
         <View style={{paddingRight: wp('4%'), paddingTop: wp('3%')}}>
-          <ProgressBarWithStar />
+          <ProgressBarWithStar value={value} />
         </View>
         <View
           style={{
@@ -427,7 +457,11 @@ const Home = () => {
             backgroundColor: colors.lightgrey,
           }}
         />
-        <Timelines />
+        <Timelines  data={
+            memberActivityProgress && memberActivityProgress.docs.length > 0
+              ? memberActivityProgress.docs[activeDotIndex].levels
+              : null
+          } />
       </View>
     </ScrollView>
   );

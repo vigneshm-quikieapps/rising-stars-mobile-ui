@@ -14,6 +14,7 @@ import {
   ProgressTracker,
   Input,
   ForwardButton,
+  ErrorMessage
 } from '../../components';
 import {colors, hp, wp, Fontsize, Stepend} from '../../constants';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -34,6 +35,7 @@ const Provide_Consent = props => {
   const [photo, setPhoto] = useState('');
   const [isEnabled4, setIsEnabled4] = useState(false);
   const [sign, setSign] = useState('');
+  const [errorFlag, setErrorFlag] = useState(false);
 
   const child = useSelector(state => state.childData.addchild);
   const club = useSelector(state => state.childData.clubdata);
@@ -174,6 +176,7 @@ const Provide_Consent = props => {
           />
         </View>
       )}
+       <ErrorMessage visible={errorFlag} error={'Sign is required*'} />
       <ForwardButton
         style={{alignSelf: 'flex-end', marginTop: hp('1%')}}
         onPress={() => {
@@ -190,9 +193,12 @@ const Provide_Consent = props => {
           if (isEnabled4 === true) {
             consent.sign = sign;
           }
+          if (sign.trim() === '') {
+            setErrorFlag(true);
+          } else {
           dispatch(setProvide(consent));
           props.navigation.navigate('Additional_Sections');
-        }}
+        }}}
       />
     </CustomLayout>
   );

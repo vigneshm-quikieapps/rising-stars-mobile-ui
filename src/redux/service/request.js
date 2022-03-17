@@ -92,6 +92,7 @@ export function updateUser(payload) {
 }
 
 export function fetchRegister(payload) {
+  console.log("in fetchregister",payload)
   return fetch(`${heroku_url}/sign-up`, {
     method: 'POST',
     headers: {
@@ -112,13 +113,16 @@ export function fetchRegister(payload) {
       country: 'United Kingdom',
     }),
   })
-    .then(response => response.json())
+    .then(response => {let d=  response.json()
+    console.log("Auth",d)
+  return d})
     .catch(error => {
       throw error;
     });
 }
 
 export function fetchLogin(payload) {
+  
   return fetch(`${heroku_url}/sign-in`, {
     method: 'POST',
     headers: {
@@ -130,7 +134,9 @@ export function fetchLogin(payload) {
       password: payload.password,
     }),
   })
-    .then(response => response.json())
+    .then(response =>{let d = response.json()
+      console.log("insise Fectch login",d)
+    return d;})
     .catch(error => {
       throw error;
     });
@@ -256,6 +262,22 @@ export function fetchBillsOfMember(payload) {
       //Authorization: `Bearer ${payload.token}`,
     },
     body: JSON.stringify(payload),
+  })
+    .then(response => response.json())
+    .catch(error => {
+      throw error;
+    });
+}
+
+export function updateTransaction(payload) {
+  return fetch(`${heroku_url}/bills/update-bill-as-standing-order`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      //Authorization: `Bearer ${payload.token}`,
+    },
+    body: JSON.stringify({billId:payload}),
   })
     .then(response => response.json())
     .catch(error => {

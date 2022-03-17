@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
 import {
   CustomLayout,
   StudentCard,
@@ -16,14 +16,39 @@ import * as Action from '../../redux/action-types';
 import {colors, Fontsize, hp, Stepend, wp} from '../../constants';
 import {RadioButton} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
-import {enrollChildData} from '../../redux/action/enrol';
-import {getLocalData} from '../../utils/LocalStorage';
-import StandingOrder from '../../components/standing-order';
-import {FlatList} from 'react-native-gesture-handler';
 import moment from 'moment';
 import NewAppButton from '../../components/new-app-button';
+import { updateTransaction } from '../../redux/service/request';
+
 
 const StandingOrderPayNow = props => {
+
+  const bills = useSelector(state => state.memberBills);
+  const dispatch = useDispatch()
+  const [loading,setLoading] = useState(false)
+  const currentMember = useSelector(state => state.currentMemberData.data);
+
+ // console.log("inside standing order",props.item1.item.id)
+
+  const handlerPayment = async () => {
+    setLoading(true)
+    let request = await updateTransaction(props.item1.item.id);
+    if(request.message==="Transaction updated.") {
+        console.log("update redux state",request,props.item1.item.id);
+        dispatch({
+          type: Action.USER_GET_MEMBER_BILLS,
+          payload: {
+            memberId: currentMember._id,
+            businessId: props.item.item.businessId,
+          },
+        })
+           setLoading(false)
+    }
+    else{
+      setLoading(false)
+      alert("something went Wrong!")
+    }
+  }
     return (
       <View
         style={[
@@ -50,10 +75,18 @@ const StandingOrderPayNow = props => {
           </View>
         </View>
         <View style={{display: props.visible ? 'flex' : 'none'}}>
+          {loading ? 
+          <ActivityIndicator
+          size="large"
+          color={colors.orange}
+          style={{marginVertical: hp('2%')}}
+        />
+          :
+          <>
           <AppButton
             title={"I've setup Standing Order"}
             onPress={() => {
-              
+              handlerPayment()
             }}
             style={{width: wp('72%')}}
           />
@@ -62,7 +95,7 @@ const StandingOrderPayNow = props => {
             onPress={() => {props.onPress()  }}
             style={{width: wp('72%')}}
             emptyContainer={true}
-          />
+          /></>}
         </View>
       </View>
     );
@@ -109,26 +142,30 @@ const findDate = item => {
         <Card
           paystyle={{backgroundColor: colors.reddish}}
           notify={
-            item1.item.billStatus === 'PAID'
+            item1.item.billStatus
               ? 'Paid'
               : 'Not Paid'
           }
+          paid={item1.item.paid}
+          paidtext={`Paid on ${moment(new Date(item1.item.paidAt)).format('DD/MM/YYYY')}`}
           amount={item1.item.total}
           body={findDate(item1.item)}
           date={`Due Date ${moment(
             new Date(item1.item.dueDate),
           ).format('DD/MM/YYYY')}`}
-          button
+          button={!item1.item.paid}
+          //button
           title="Pay Now"
           paybutton={() => {setShowStandingOrder(true)}}
           substyle={{
-            borderColor: colors.reddish,
+            borderColor:item1.item.billStatus? colors.seafoamBlue:colors.reddish,
             borderWidth: 1,
+            backgroundColor:item1.item.billStatus? colors.limeGreen:colors.white,
           }}
           style={{
             backgroundColor:
-              item.item.billStatus === 'PAID'
-                ? colors.veryLightGreen
+              item1.item.billStatus
+                ? colors.seafoamBlue
                 : colors.reddish,
           }}
         /> :
@@ -136,7 +173,10 @@ const findDate = item => {
         onPress={() => {
             setShowStandingOrder(!showStandingOrder);
           }}
-          visible={showStandingOrder} />
+          visible={showStandingOrder}
+          item1={item1}
+          item={item}
+           />
 }
       </>
     ) : null}

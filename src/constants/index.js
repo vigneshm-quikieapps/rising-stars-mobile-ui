@@ -32,6 +32,7 @@ export const colors = {
   buttonBorder: 'rgb (227 ,227 ,227)',
   modalBackgroundColor: 'rgba( 0, 0, 0, 0.8)',
   cancelMembership: 'rgb( 204, 66, 66)',
+  limeGreen: 'rgb(221,255,236)'
 };
 
 export const Fontsize = wp('4%');

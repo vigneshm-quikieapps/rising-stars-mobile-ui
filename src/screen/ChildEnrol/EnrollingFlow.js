@@ -44,7 +44,7 @@ function EnrollingFlow(props) {
       />
       <AppButton
         title="Let's Start"
-        onPress={() => props.navigation.navigate('AddChild')}
+        onPress={() => props.navigation.navigate('Addchildren')}
         style={{fontFamily: 'Nunito-SemiBold', marginTop: hp('6%')}}
       />
     </CustomLayout>

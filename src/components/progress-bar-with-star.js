@@ -4,7 +4,8 @@ import Slider from 'react-native-slider';
 import {Images} from '../constants';
 
 export default function ProgressBarWithStar(props) {
-  const [value, setValue] = React.useState(0.2);
+  const [value, setValue] = React.useState(props.value);
+  
   return (
     <Slider
       value={value}

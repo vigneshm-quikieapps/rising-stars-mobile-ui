@@ -76,8 +76,8 @@ function* handleSessionAttendance(action) {
       fetchAttendanceOfMemberInSession,
       action.payload,
     );
-    console.log('action:', action);
-    console.log('resp: ', finance);
+    console.log('action: handleSessionAttendance', action);
+    console.log('resp: handleSessionAttendance ', finance);
     yield put({
       type: Action.USER_GET_SESSION_ATTENDANCE_SUCCESS,
       payload: finance,
@@ -85,7 +85,7 @@ function* handleSessionAttendance(action) {
     //yield call(action.callback);
   } catch (error) {
     yield put({
-      type: Action.USER_GET_SESSION_ATTENDANCE_FAILED,
+      type: Action.USER_GET_SESSION_ATTENDANCE_FAILURE,
       error: error.message,
     });
   }
@@ -115,7 +115,7 @@ export function* watcherAddChild() {
 function* handleEnrollChild(action) {
   try {
     const enrolledChild = yield call(regularEnrollment, action.payload);
-    console.log('enroll', enrolledChild);
+    console.log('enroll', enrolledChild,action.payload);
     yield put({
       type: Action.USER_ENROLL_CHILD_SUCCEDED,
       payload: enrolledChild,

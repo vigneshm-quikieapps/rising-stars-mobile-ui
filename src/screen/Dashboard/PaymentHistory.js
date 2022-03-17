@@ -23,7 +23,7 @@ export default function EnrolledChild() {
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const currentMember = useSelector(state => state.currentMemberData.data);
   const bills = useSelector(state => state.memberBills);
-  console.log('data123: ', bills.data);
+  //console.log('data123: ', bills);
 
   useEffect(() => {
     businessList && businessList.length > 0
@@ -169,6 +169,18 @@ export default function EnrolledChild() {
       }>
       <Text style={{fontFamily: 'Nunito-SemiBold'}}>Current Classes </Text>
       <FlatList
+      style={{
+        borderWidth:1,
+        borderColor:colors.lightgrey,
+        elevation:5,
+        borderRadius:8,
+        shadowColor: colors.lightgrey,
+        shadowOffset: {width: 1, height: 1},
+        shadowOpacity: 0.4,
+        overflow: 'hidden',
+        shadowRadius: 5,
+        backgroundColor:colors.white
+      }}
         data={
           memberClassData && businessList.length > 0
             ? memberClassData?.filter(
@@ -180,10 +192,11 @@ export default function EnrolledChild() {
         }
         key={item => item._id}
         renderItem={item => {
-          console.log('item: ', item);
+         // console.log('item: ', item);
           return (
             <>
               <ClassCard
+              //border={true}
                 id={item.item.clubMembershipId}
                 className={item.item.class.name}
                 //subtitle={"Child's Club Id "}
@@ -199,7 +212,8 @@ export default function EnrolledChild() {
                 facility={item.item.session.facility}
                 coach={'Henry Itondo'}
               />
-              <PaymentCard>
+              <View style={{flex:1,borderBottomWidth:1,borderBottomColor:colors.lightgrey}}  />
+              <PaymentCard border={true}>
                 <FlatList
                   data={bills.data.docs}
                   key={item1 => item1._id}
