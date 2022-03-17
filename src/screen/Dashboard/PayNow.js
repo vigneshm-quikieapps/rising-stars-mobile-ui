@@ -19,22 +19,28 @@ import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 import NewAppButton from '../../components/new-app-button';
 import { updateTransaction } from '../../redux/service/request';
+import { useNavigation } from '@react-navigation/native';
+import Alert from '../../components/alert-box';
 
 
 const StandingOrderPayNow = props => {
 
   const bills = useSelector(state => state.memberBills);
   const dispatch = useDispatch()
+  const navigation = useNavigation();
   const [loading,setLoading] = useState(false)
+  
+  const [showSuccessalert, setSuccessAlert] = useState(false);
+  const [showFailurealert, setFailureAlert] = useState(false);
   const currentMember = useSelector(state => state.currentMemberData.data);
 
- // console.log("inside standing order",props.item1.item.id)
+  //console.log("inside standing order",props.item1)
 
   const handlerPayment = async () => {
     setLoading(true)
     let request = await updateTransaction(props.item1.item.id);
     if(request.message==="Transaction updated.") {
-        console.log("update redux state",request,props.item1.item.id);
+        //console.log("update redux state",request,props.item1.item.id);
         dispatch({
           type: Action.USER_GET_MEMBER_BILLS,
           payload: {
@@ -42,11 +48,19 @@ const StandingOrderPayNow = props => {
             businessId: props.item.item.businessId,
           },
         })
-           setLoading(false)
+        
+        setLoading(false)
+        setSuccessAlert(true)
+        props.onPress()
+        alert("Sucessful")
+      navigation.navigate('Acount');
+
     }
     else{
       setLoading(false)
-      alert("something went Wrong!")
+      setFailureAlert(true)
+      alert("something wnet wrong!");
+      navigation.navigate('Acount');
     }
   }
     return (
@@ -83,7 +97,7 @@ const StandingOrderPayNow = props => {
         />
           :
           <>
-          <AppButton
+          <NewAppButton
             title={"I've setup Standing Order"}
             onPress={() => {
               handlerPayment()
@@ -91,12 +105,13 @@ const StandingOrderPayNow = props => {
             style={{width: wp('72%')}}
           />
           <NewAppButton
-            title={"I'll setup Standing Order late"}
+            title={"I'll setup Standing Order later"}
             onPress={() => {props.onPress()  }}
             style={{width: wp('72%')}}
             emptyContainer={true}
           /></>}
         </View>
+       
       </View>
     );
   };
@@ -122,7 +137,6 @@ const PayNow = props => {
   const [showAtm, setShowAtm] = useState(false);
   const [showStandingOrder, setShowStandingOrder] = useState(false);
   const [totalAmt, setTotalAmt] = useState(0);
-
 const findDate = item => {
     var month = new Date(item.dueDate).getMonth();
     var year = new Date(item.generatedAt).getFullYear();
@@ -142,7 +156,7 @@ const findDate = item => {
         <Card
           paystyle={{backgroundColor: colors.reddish}}
           notify={
-            item1.item.billStatus
+            item1.item.paid
               ? 'Paid'
               : 'Not Paid'
           }
@@ -158,13 +172,13 @@ const findDate = item => {
           title="Pay Now"
           paybutton={() => {setShowStandingOrder(true)}}
           substyle={{
-            borderColor:item1.item.billStatus? colors.seafoamBlue:colors.reddish,
+            borderColor:item1.item.paid? colors.seafoamBlue:colors.reddish,
             borderWidth: 1,
-            backgroundColor:item1.item.billStatus? colors.limeGreen:colors.white,
+            backgroundColor:item1.item.paid? colors.limeGreen:colors.white,
           }}
           style={{
             backgroundColor:
-              item1.item.billStatus
+              item1.item.paid
                 ? colors.seafoamBlue
                 : colors.reddish,
           }}

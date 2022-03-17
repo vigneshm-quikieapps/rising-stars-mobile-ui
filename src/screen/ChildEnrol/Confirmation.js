@@ -26,8 +26,19 @@ const Confirmation = props => {
       ? setShowAlert(true)
       : null;
   }, [enrollment]);
-  console.log('enrollment msg', enrollment)
-  console.log('session Start date & end date ', memberClassData[0].session.term.startDate, memberClassData[0].session.term.endDate);
+
+  const DateDiff = () => {
+    const start = new Date(memberClassData[0].session.term.startDate);
+    const today   = new Date();
+    const range = start.getDate()-today.getDate() + (start.getMonth()-today.getMonth())*30
+  // const range = today.getDate()-start.getDate() + (start.getMonth()-today.getMonth())*30
+
+    console.log('enrollment msg', range)
+    //console.log('session Start date & end date ', memberClassData[0].session.term.startDate, memberClassData[0].session.term.endDate);
+    return range;
+  }
+ 
+
   return (
     <View>
       {enrollment?.message == 'enrolled successful' ? (
@@ -74,7 +85,7 @@ const Confirmation = props => {
           backbutton={() => props.navigation.goBack()}>
           <View style={styles.bordestyle}>
             <Text style={styles.classtext}>
-              Class will begin from 20 days from now
+              Class will begin from { DateDiff()} days from now
             </Text>
             <Slot
               white
