@@ -16,7 +16,7 @@ import {
 } from '../../components';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {useDispatch} from 'react-redux';
-import {colors, hp, wp, Stepend, Fontsize} from '../../constants';
+import {colors, hp, wp, Stepend, Fontsize, genderOfChild} from '../../constants';
 import {setChildData, getClubdata} from '../../redux/action/enrol';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
@@ -84,7 +84,7 @@ const AddChild = props => {
 
   // const [relationData, setRelationData] = useState('');
 
-  const [gender, setGender] = useState('MALE');
+  const [gender, setGender] = useState('BOY');
   const [relation, setRelation] = useState('PARENT');
 
   const [gendererror, setGenderError] = useState(false);
@@ -296,7 +296,7 @@ const AddChild = props => {
               <PopUpCard
                 text={'Gender'}
                 textColor={colors.grey}
-                value={values.gender}
+                value={genderOfChild[genders.indexOf(values.gender)]}
                 onBlur={() => setFieldTouched('gender')}
                 onPress={() => genderef.current.open()}
               />
@@ -312,9 +312,9 @@ const AddChild = props => {
                   },
                 }}>
                 <WheelPicker
-                  selectedItem={genders.indexOf(gender)}
+                  selectedItem={genderOfChild.indexOf(gender)}
                   isCyclic={true}
-                  data={genders}
+                  data={genderOfChild}
                   onItemSelected={item => {
                     values.gender = genders[item];
                     setGender(genders[item]);
@@ -332,7 +332,7 @@ const AddChild = props => {
                   <TouchableOpacity
                     onPress={() => {
                       genderef.current.close();
-                      setGender('MALE');
+                      setGender('BOY');
                     }}>
                     <Text
                       style={{

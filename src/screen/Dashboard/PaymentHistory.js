@@ -58,7 +58,7 @@ export default function EnrolledChild() {
     }
     setBusinessList(businesses);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memberClassData]);
+  }, [memberClassData,bills]);
 
 
   useEffect(() => {

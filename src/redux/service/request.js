@@ -295,7 +295,11 @@ export function addChild(payload) {
     },
     body: JSON.stringify(payload.data),
   })
-    .then(response => response.json())
+    .then(response => {
+      let d= response.json();
+      console.log("inside add child api call",d)
+      return d;
+    })
     .catch(error => {
       throw error;
     });
