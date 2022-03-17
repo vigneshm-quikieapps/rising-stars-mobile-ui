@@ -199,7 +199,7 @@ const Provide_Consent = props => {
           if (isEnabled4 === true) {
             consent.sign = sign;
           }
-          if (sign.trim() === '') {
+          if (isEnabled4 === false) {
             setErrorFlag(true);
           } else {
           dispatch(setProvide(consent));
