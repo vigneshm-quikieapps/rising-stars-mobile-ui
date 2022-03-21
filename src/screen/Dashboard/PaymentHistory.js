@@ -9,7 +9,7 @@ import {CustomLayout, ClassCard, PaymentCard, Card} from '../../components';
 import {colors, Fontsize, hp, wp} from '../../constants';
 import {getmemberClass} from '../../redux/action/home';
 import {date} from 'yup/lib/locale';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import PayNow from './PayNow';
 
 export default function EnrolledChild() {
@@ -17,8 +17,8 @@ export default function EnrolledChild() {
   const [activeDotIndex, setActiveDotIndex] = useState(0);
   const [groupedData, setGroupedData] = useState('');
   const [businessList, setBusinessList] = useState('');
-  const navigation = useNavigation()
-  
+  const navigation = useNavigation();
+
   const membersData = useSelector(state => state.memberData.memberData);
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const currentMember = useSelector(state => state.currentMemberData.data);
@@ -26,9 +26,9 @@ export default function EnrolledChild() {
   //console.log('data123: ', bills);
 
   useEffect(() => {
-    businessList && businessList.length > 0
-      ? console.log("====>",currentMember, businessList[activeDotIndex].id)
-      : null;
+    // businessList && businessList.length > 0
+    //   ? console.log('====>', currentMember, businessList[activeDotIndex].id)
+    //   : null;
     businessList && businessList.length > 0
       ? dispatch({
           type: Action.USER_GET_MEMBER_BILLS,
@@ -58,14 +58,12 @@ export default function EnrolledChild() {
     }
     setBusinessList(businesses);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memberClassData,bills]);
-
+  }, [memberClassData, bills]);
 
   useEffect(() => {
     membersData && dispatch(getmemberClass(membersData[activeDotIndex]._id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeDotIndex]);
-
 
   const groupBy = objectArray => {
     let groupData = {};
@@ -79,9 +77,6 @@ export default function EnrolledChild() {
     });
     return groupData;
   };
-
-
-  
 
   const time = (start, end) => {
     var sHr =
@@ -102,7 +97,7 @@ export default function EnrolledChild() {
         : end.getMinutes();
     return sHr + ':' + sMin + '-' + eHr + ':' + eMin;
   };
-  
+
   const renderItem = item => {
     var temp =
       memberClassData &&
@@ -117,7 +112,7 @@ export default function EnrolledChild() {
         colors={['#ffa300', '#ff7e00']}>
         <View style={{marginLeft: wp('2%'), marginTop: hp('2%')}}>
           <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
-            Student Name
+            Child's Name
           </Text>
           <Text
             style={{
@@ -127,7 +122,7 @@ export default function EnrolledChild() {
             }}>
             {currentMember.name}
           </Text>
-          <Text style={{color: '#f7cf79', fontSize: Fontsize}}>Club Name</Text>
+          {/* <Text style={{color: '#f7cf79', fontSize: Fontsize}}>Club Name</Text>
           <Text
             style={{
               color: colors.white,
@@ -144,7 +139,7 @@ export default function EnrolledChild() {
               //fontWeight: 'bold',
             }}>
             {temp[0].clubMembershipId}
-          </Text>
+          </Text> */}
         </View>
       </LinearGradient>
     );
@@ -152,6 +147,8 @@ export default function EnrolledChild() {
   return (
     <CustomLayout
       names={'Payment History'}
+      back
+      backbutton={() => navigation.goBack()}
       Customchildren={
         <>
           {businessList.length > 0 ? (
@@ -169,18 +166,18 @@ export default function EnrolledChild() {
       }>
       <Text style={{fontFamily: 'Nunito-SemiBold'}}>Current Classes </Text>
       <FlatList
-      style={{
-        borderWidth:1,
-        borderColor:colors.lightgrey,
-        elevation:5,
-        borderRadius:8,
-        shadowColor: colors.lightgrey,
-        shadowOffset: {width: 1, height: 1},
-        shadowOpacity: 0.4,
-        overflow: 'hidden',
-        shadowRadius: 5,
-        backgroundColor:colors.white
-      }}
+        style={{
+          borderWidth: 1,
+          borderColor: colors.lightgrey,
+          elevation: 5,
+          borderRadius: 8,
+          shadowColor: colors.lightgrey,
+          shadowOffset: {width: 1, height: 1},
+          shadowOpacity: 0.4,
+          overflow: 'hidden',
+          shadowRadius: 5,
+          backgroundColor: colors.white,
+        }}
         data={
           memberClassData && businessList.length > 0
             ? memberClassData?.filter(
@@ -192,11 +189,11 @@ export default function EnrolledChild() {
         }
         key={item => item._id}
         renderItem={item => {
-         // console.log('item: ', item);
+          // console.log('item: ', item);
           return (
             <>
               <ClassCard
-              //border={true}
+                //border={true}
                 id={item.item.clubMembershipId}
                 className={item.item.class.name}
                 //subtitle={"Child's Club Id "}
@@ -212,16 +209,20 @@ export default function EnrolledChild() {
                 facility={item.item.session.facility}
                 coach={'Henry Itondo'}
               />
-              <View style={{flex:1,borderBottomWidth:1,borderBottomColor:colors.lightgrey}}  />
+              <View
+                style={{
+                  flex: 1,
+                  borderBottomWidth: 1,
+                  borderBottomColor: colors.lightgrey,
+                }}
+              />
               <PaymentCard border={true}>
                 <FlatList
                   data={bills.data.docs}
                   key={item1 => item1._id}
                   renderItem={item1 => {
                     //console.log(item1.item.classId, item.item.classId);
-                    return (
-                      <PayNow item={item} item1={item1} />
-                    );
+                    return <PayNow item={item} item1={item1} />;
                   }}
                 />
               </PaymentCard>

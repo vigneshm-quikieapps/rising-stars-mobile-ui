@@ -45,7 +45,7 @@ export default function EnrolledChild(props) {
         colors={['#ffa300', '#ff7e00']}>
         <View style={{marginLeft: wp('2%'), marginTop: hp('2%')}}>
           <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
-            Student Name
+            Child's Name
           </Text>
           <Text
             style={{
@@ -64,7 +64,9 @@ export default function EnrolledChild(props) {
             }}>
             {temp[0].business.name}
           </Text>
-          <Text style={{color: '#f7cf79', fontSize: Fontsize}}>Child's Club ID</Text>
+          <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
+            Child's Club ID
+          </Text>
           <Text
             style={{
               color: colors.white,
@@ -166,14 +168,15 @@ export default function EnrolledChild(props) {
               day={classes.item.session.pattern[0].day}
               time={
                 classes.item.session && classes.item.session.pattern.length > 0
-                  ? 
-                  // time(
-                  //   new Date(classes.item.session.pattern[0].startTime),
-                  //   new Date(classes.item.session.pattern[0].endTime),
-                  // )
-                  `${moment(classes.item.session.pattern[0].startTime).format(
-                    'HH:mm a',
-                  )} - ${moment(classes.item.session.pattern[0].endTime).format('HH:mm a')}`
+                  ? // time(
+                    //   new Date(classes.item.session.pattern[0].startTime),
+                    //   new Date(classes.item.session.pattern[0].endTime),
+                    // )
+                    `${moment(classes.item.session.pattern[0].startTime).format(
+                      'HH:mm A',
+                    )} - ${moment(
+                      classes.item.session.pattern[0].endTime,
+                    ).format('HH:mm A')}`
                   : null
               }
               facility={classes.item.session.facility}

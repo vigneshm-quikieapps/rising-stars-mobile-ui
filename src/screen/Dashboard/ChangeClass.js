@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import moment  from 'moment';
+import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
@@ -75,7 +75,7 @@ export default function ChangeClass(props) {
           colors={['#ffa300', '#ff7e00']}>
           <View style={{marginLeft: wp('2%'), marginTop: hp('2%')}}>
             <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
-              Student Name
+              Child's Name
             </Text>
             <Text
               style={{
@@ -96,7 +96,9 @@ export default function ChangeClass(props) {
               }}>
               {currentClass.business.name}
             </Text>
-            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>Child's Club Id</Text>
+            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
+              Child's Club Id
+            </Text>
             <Text
               style={{
                 color: colors.white,
@@ -122,13 +124,15 @@ export default function ChangeClass(props) {
         }
         time={
           currentClass.session && currentClass.session.pattern.length > 0
-            ? 
-            // time(
-            //     new Date(currentClass.session.pattern[0].startTime),
-            //     new Date(currentClass.session.pattern[0].endTime),
-            //   )
-            `${moment(currentClass.session.pattern[0].startTime).format('HH:mm a',
-            )} - ${moment(currentClass.session.pattern[0].endTime).format('HH:mm a')}`
+            ? // time(
+              //     new Date(currentClass.session.pattern[0].startTime),
+              //     new Date(currentClass.session.pattern[0].endTime),
+              //   )
+              `${moment(currentClass.session.pattern[0].startTime).format(
+                'HH:mm A',
+              )} - ${moment(currentClass.session.pattern[0].endTime).format(
+                'HH:mm A',
+              )}`
             : null
         }
         facility={currentClass.session.facility}
