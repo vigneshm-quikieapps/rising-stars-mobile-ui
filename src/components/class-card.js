@@ -6,7 +6,7 @@ import AppButton from './app-button';
 let border;
 
 export default function ClassCard(props) {
-  border = props.border?true:false;
+  border = props.border ? true : false;
   return (
     <View style={[styles.container, props.style]}>
       {props.subtitle && <Text style={styles.subtitle}>{props.subtitle}</Text>}
@@ -71,16 +71,15 @@ const Data = props => {
 
 const styles = StyleSheet.create({
   container: {
-    
     flex: 1,
     marginTop: hp('2%'),
-    elevation: border? 1:0,
+    elevation: border ? 1 : 0,
     shadowColor: colors.lightgrey,
     shadowOffset: {width: 1, height: 1},
     shadowOpacity: 0.4,
     overflow: 'hidden',
     shadowRadius: 5,
-    borderRadius:border? 5:0,
+    borderRadius: border ? 5 : 0,
     padding: wp('5%'),
   },
   className: {
@@ -92,7 +91,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Regular',
     fontSize: Fontsize - wp('0.4%'),
     marginBottom: hp('1%'),
-    marginLeft: wp('1%'),
+    // marginLeft: wp('1%'),
   },
   smallContainer: {
     flex: 1,

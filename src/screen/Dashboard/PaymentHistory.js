@@ -11,6 +11,7 @@ import {getmemberClass} from '../../redux/action/home';
 import {date} from 'yup/lib/locale';
 import {useNavigation} from '@react-navigation/native';
 import PayNow from './PayNow';
+import moment from 'moment';
 
 export default function EnrolledChild() {
   const dispatch = useDispatch();
@@ -164,18 +165,20 @@ export default function EnrolledChild() {
           ) : null}
         </>
       }>
-      <Text style={{fontFamily: 'Nunito-SemiBold'}}>Current Classes </Text>
+      <Text style={{fontFamily: 'Nunito-SemiBold', marginBottom: hp('2%')}}>
+        Current Classes
+      </Text>
       <FlatList
         style={{
           borderWidth: 1,
-          borderColor: colors.lightgrey,
+          borderColor: colors.white,
           elevation: 5,
           borderRadius: 8,
-          shadowColor: colors.lightgrey,
-          shadowOffset: {width: 1, height: 1},
-          shadowOpacity: 0.4,
+          // shadowColor: colors.lightgrey,
+          // shadowOffset: {width: 1, height: 1},
+          // shadowOpacity: 0.9,
           overflow: 'hidden',
-          shadowRadius: 5,
+          // shadowRadius: 5,
           backgroundColor: colors.white,
         }}
         data={
@@ -192,7 +195,7 @@ export default function EnrolledChild() {
           // console.log('item: ', item);
           return (
             <>
-              <ClassCard
+              {/* <ClassCard
                 //border={true}
                 id={item.item.clubMembershipId}
                 className={item.item.class.name}
@@ -208,6 +211,20 @@ export default function EnrolledChild() {
                 }
                 facility={item.item.session.facility}
                 coach={'Henry Itondo'}
+              /> */}
+              <ClassCard
+                id={item.item.clubMembershipId}
+                className={item.item.class.name}
+                subtitle={item.item.business.name}
+                day={item.item.session.pattern[0].day}
+                time={`${moment(item.item.session.pattern[0].startTime).format(
+                  'HH:mm A',
+                )} -${moment(item.item.session.pattern[0].endTime).format(
+                  'HH:mm A',
+                )} `}
+                facility={item.item.session.facility}
+                coach={'Henry Itondo'}
+                style={{backgroundColor: 'white', borderRadius: 20}}
               />
               <View
                 style={{
