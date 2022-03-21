@@ -218,9 +218,9 @@ export default function EnrolledChild() {
                 subtitle={item.item.business.name}
                 day={item.item.session.pattern[0].day}
                 time={`${moment(item.item.session.pattern[0].startTime).format(
-                  'HH:mm A',
+                  'hh:mm A',
                 )} -${moment(item.item.session.pattern[0].endTime).format(
-                  'HH:mm A',
+                  'hh:mm A',
                 )} `}
                 facility={item.item.session.facility}
                 coach={'Henry Itondo'}

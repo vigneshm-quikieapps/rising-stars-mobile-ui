@@ -173,10 +173,10 @@ export default function EnrolledChild(props) {
                     //   new Date(classes.item.session.pattern[0].endTime),
                     // )
                     `${moment(classes.item.session.pattern[0].startTime).format(
-                      'HH:mm A',
+                      'hh:mm A',
                     )} - ${moment(
                       classes.item.session.pattern[0].endTime,
-                    ).format('HH:mm A')}`
+                    ).format('hh:mm A')}`
                   : null
               }
               facility={classes.item.session.facility}

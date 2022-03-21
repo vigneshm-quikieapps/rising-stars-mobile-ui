@@ -129,9 +129,9 @@ export default function ChangeClass(props) {
               //     new Date(currentClass.session.pattern[0].endTime),
               //   )
               `${moment(currentClass.session.pattern[0].startTime).format(
-                'HH:mm A',
+                'hh:mm A',
               )} - ${moment(currentClass.session.pattern[0].endTime).format(
-                'HH:mm A',
+                'hh:mm A',
               )}`
             : null
         }
