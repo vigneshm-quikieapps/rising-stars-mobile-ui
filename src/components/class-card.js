@@ -1,12 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {colors, Fontsize, hp, wp} from '../constants';
+import {colors, Fontsize, fullDays, hp, wp} from '../constants';
 import AppButton from './app-button';
 let border;
 
 export default function ClassCard(props) {
-  border = props.border?true:false;
+  border = props.border ? true : false;
+
   return (
     <View style={[styles.container, props.style]}>
       {props.subtitle && <Text style={styles.subtitle}>{props.subtitle}</Text>}
@@ -21,7 +22,7 @@ export default function ClassCard(props) {
 
       <Data
         calendar
-        head={props.day}
+        head={fullDays[props.day]}
         body={props.time}
         stylebody={{color: colors.grey}}
       />
@@ -71,16 +72,15 @@ const Data = props => {
 
 const styles = StyleSheet.create({
   container: {
-    
     flex: 1,
     marginTop: hp('2%'),
-    elevation: border? 1:0,
+    elevation: border ? 1 : 0,
     shadowColor: colors.lightgrey,
     shadowOffset: {width: 1, height: 1},
     shadowOpacity: 0.4,
     overflow: 'hidden',
     shadowRadius: 5,
-    borderRadius:border? 5:0,
+    borderRadius: border ? 5 : 0,
     padding: wp('5%'),
   },
   className: {

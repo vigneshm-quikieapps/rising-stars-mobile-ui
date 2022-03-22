@@ -218,7 +218,7 @@ const AddChild = props => {
           return (
             <>
               <TextInputField
-                placeholder="Full Name"
+                placeholder="Full Name*"
                 onChangeText={handleChange('fullName')}
                 value={values.fullName}
                 onBlur={() => setFieldTouched('fullName')}
@@ -231,19 +231,19 @@ const AddChild = props => {
               />
 
               <PopUpCard
-                text={'Date of Birth'}
+                text={'Date of Birth*'}
                 textColor={colors.grey}
                 value={
                   moment(values.dob).format('DD-MM-YYYY') ===
                   moment(new Date()).format('DD-MM-YYYY')
-                    ? 'Date of Birth'
+                    ? 'Date of Birth*'
                     : moment(values.dob).format('DD-MM-YYYY')
                 }
                 onPress={() => setBirthModal(!birthModal)}
                 onBlur={() => setBirthError(true)}
               />
               <WheelDropdown
-                title=" Date of Birth"
+                title=" Date of Birth*"
                 visible={birthModal}
                 setVisibility={setBirthModal}
                 confirmbutton={false}
@@ -294,7 +294,7 @@ const AddChild = props => {
             /> */}
 
               <PopUpCard
-                text={'Gender'}
+                text={'Gender*'}
                 textColor={colors.grey}
                 value={genderOfChild[genders.indexOf(values.gender)]}
                 onBlur={() => setFieldTouched('gender')}
@@ -317,7 +317,7 @@ const AddChild = props => {
                   data={genderOfChild}
                   onItemSelected={item => {
                     values.gender = genders[item];
-                    setGender(genders[item]);
+                    setGender(genderOfChild[item]);
                   }}
                   indicatorWidth={1}
                   //hideIndicator={true}

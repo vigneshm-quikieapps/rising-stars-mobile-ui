@@ -42,6 +42,15 @@ const Additional_Sections = props => {
     way === 'telephone' ? setTelephone(!telephone) : null;
     way === 'sms' ? setSms(!sms) : null;
   };
+
+  const clubRulesText =
+    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standarddummy text ever since. Lorem Ipsum is simply dummy text of theprinting and typesetting industry. Lorem Ipsum has been theindustry's standard dummy text ever since.Lorem Ipsum is simplydummy text of the printing and typesetting industry. Lorem Ipsum hasbeen the industry's standard dummy text ever since. Lorem Ipsum issimply dummy text of the printing and typesetting industry. LoremIpsum has been the industry's standard dummy text ever since. LoremIpsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text eversince.Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standarddummy text ever since. Lorem Ipsum is simply dummy text of theprinting and typesetting industry. Lorem Ipsum has been theindustry's standard dummy text ever since. Lorem Ipsum is simplydummy text of the printing and typesetting industry. Lorem Ipsum hasbeen the industry's standard dummy text ever since. Lorem Ipsum issimply dummy text of the printing and typesetting industry. LoremIpsum has been the industry's standard dummy text ever since.";
+
+  const clubRulesPopUPHeigth = text => {
+    let lines = text.split(' ').length / 10;
+    return lines * 5 < 75 ? `${lines * 5}%` : '75%';
+  };
+
   return (
     <CustomLayout
       Customchildren={
@@ -74,7 +83,7 @@ const Additional_Sections = props => {
             backgroundColor: colors.blackOpacity,
           },
           container: {
-            height: '25%',
+            height: clubRulesPopUPHeigth(clubRulesText),
             borderTopRightRadius: 16,
             borderTopLeftRadius: 16,
           },
@@ -87,7 +96,7 @@ const Additional_Sections = props => {
                 fontSize: Fontsize,
                 color: '#ff7e00',
               }}>
-              Club Rule
+              Club Rules
             </Text>
             <TouchableOpacity onPress={() => termref.current.close()}>
               <LinearGradient
@@ -100,13 +109,11 @@ const Additional_Sections = props => {
           <Text
             style={{
               fontFamily: 'Nunito-Regular',
-              marginTop: hp('1.5%'),
+              marginVertical: hp('1.5%'),
               fontSize: Fontsize,
               alignSelf: 'center',
             }}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since.
+            {clubRulesText}
           </Text>
         </View>
       </RBSheet>
@@ -159,10 +166,9 @@ const Additional_Sections = props => {
           marginTop: hp('1.5%'),
           fontSize: Fontsize,
           paddingRight: wp('4%'),
-        }}>
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since.
+        }}
+        numberOfLines={3}>
+        {clubRulesText}
       </Text>
       <TouchableOpacity onPress={() => termref.current.open()}>
         <Text style={styles.bottom}>Read more about Club Rule</Text>

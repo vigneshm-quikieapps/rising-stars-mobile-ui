@@ -10,7 +10,7 @@ import {
 import {useSelector} from 'react-redux';
 import moment from 'moment';
 
-import {colors, Fontsize, hp, wp, Stepend} from '../../constants';
+import {colors, Fontsize, hp, wp, Stepend, fullDays} from '../../constants';
 import Alert from '../../components/alert-box';
 const Confirmation = props => {
   const child = useSelector(state => state.childData.addchild);
@@ -29,15 +29,17 @@ const Confirmation = props => {
 
   const DateDiff = () => {
     const start = new Date(memberClassData[0].session.term.startDate);
-    const today   = new Date();
-    const range = start.getDate()-today.getDate() + (start.getMonth()-today.getMonth())*30
-  // const range = today.getDate()-start.getDate() + (start.getMonth()-today.getMonth())*30
+    const today = new Date();
+    const range =
+      start.getDate() -
+      today.getDate() +
+      (start.getMonth() - today.getMonth()) * 30;
+    // const range = today.getDate()-start.getDate() + (start.getMonth()-today.getMonth())*30
 
-    console.log('enrollment msg', range)
+    //console.log('enrollment msg', range);
     //console.log('session Start date & end date ', memberClassData[0].session.term.startDate, memberClassData[0].session.term.endDate);
     return range;
-  }
- 
+  };
 
   return (
     <View>
@@ -84,16 +86,18 @@ const Confirmation = props => {
           }
           backbutton={() => props.navigation.goBack()}>
           <View style={styles.bordestyle}>
-            <Text style={styles.classtext}>
-              Class will begin from { DateDiff()} days from now
-            </Text>
+            {DateDiff() > 0 ? (
+              <Text style={styles.classtext}>
+                Class will begin {DateDiff()} days from now
+              </Text>
+            ) : null}
             <Slot
               white
               required
               waitlisted={enrollment.status == 'WAITLISTED'}
               Class={club.name}
               sessions={classes.name}
-              day={slot.pattern[0].day}
+              day={fullDays[slot.pattern[0].day]}
               time={`${moment(slot.pattern[0].startTime).format(
                 'HH:mm a',
               )} - ${moment(slot.pattern[0].endTime).format('HH:mm a')}`}
@@ -101,14 +105,17 @@ const Confirmation = props => {
               coach={slot.coach.name}
             />
           </View>
-          <View style={styles.remark}>
-            <View style={styles.mark}>
-              <Image source={require('../../assets/images/icon-info.png')} />
+          {enrollment.status == 'WAITLISTED' && (
+            <View style={styles.remark}>
+              <View style={styles.mark}>
+                <Image source={require('../../assets/images/icon-info.png')} />
+              </View>
+
+              <Text style={styles.marktext}>
+                waitlisted enrolments, pay charges offline
+              </Text>
             </View>
-            <Text style={styles.marktext}>
-              waitlisted enrolments, pay charges offline
-            </Text>
-          </View>
+          )}
           <View style={{height: hp('0%')}} />
           <AppButton
             title={'Done'}

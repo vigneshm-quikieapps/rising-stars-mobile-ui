@@ -18,8 +18,11 @@ const Input = props => {
       onFocus={props.onFocus}
       placeholderTextColor={props.placeholderTextColor}
       returnKeyType={props.returnKeyType}
+      onSubmitEditing={props.onSubmitEditing}
+      blurOnSubmit={props.blurOnSubmit}
       editable={props.editable}
       onBlur={props.onBlur}
+      ref={props.ref}
       style={[styles.textarea, props.style]}
     />
   );

@@ -14,7 +14,7 @@ import {
   ProgressTracker,
   Input,
   ForwardButton,
-  ErrorMessage
+  ErrorMessage,
 } from '../../components';
 import {colors, hp, wp, Fontsize, Stepend} from '../../constants';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -23,6 +23,7 @@ import EntIcon from 'react-native-vector-icons/Entypo';
 import {setProvide} from '../../redux/action/enrol';
 
 import {useSelector, useDispatch} from 'react-redux';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Provide_Consent = props => {
   const termref = useRef();
@@ -42,6 +43,14 @@ const Provide_Consent = props => {
 
   // const membersdata = useSelector(state => state.memberData.memberData);
   const parent = useSelector(state => state.LoginData.updatedUser);
+
+  // const clubRulesText =
+  //   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standarddummy text ever since. Lorem Ipsum is simply dummy text of theprinting and typesetting industry. Lorem Ipsum has been theindustry's standard dummy text ever since.Lorem Ipsum is simplydummy text of the printing and typesetting industry. Lorem Ipsum hasbeen the industry's standard dummy text ever since. Lorem Ipsum issimply dummy text of the printing and typesetting industry. LoremIpsum has been the industry's standard dummy text ever since. LoremIpsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text eversince.Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standarddummy text ever since. Lorem Ipsum is simply dummy text of theprinting and typesetting industry. Lorem Ipsum has been theindustry's standard dummy text ever since. Lorem Ipsum is simplydummy text of the printing and typesetting industry. Lorem Ipsum hasbeen the industry's standard dummy text ever since. Lorem Ipsum issimply dummy text of the printing and typesetting industry. LoremIpsum has been the industry's standard dummy text ever since.";
+
+  // const clubRulesPopUPHeigth = text => {
+  //   let lines = text.split(' ').length / 10;
+  //   return lines * 5 < 75 ? `${lines * 5}%` : '75%';
+  // };
 
   return (
     <CustomLayout
@@ -102,11 +111,12 @@ const Provide_Consent = props => {
           {club.name} is the Business Trade Name
         </Text>
       </View>
-      <TouchableOpacity onPress={() => termref.current.open()}>
+      {/* <TouchableOpacity onPress={() => termref.current.open()}>
         <Text style={styles.bottom}>Read more about Club Rule</Text>
-      </TouchableOpacity>
-      <RBSheet
+      </TouchableOpacity> */}
+      {/* <RBSheet
         ref={termref}
+        animationType="slide"
         closeOnDragDown={true}
         closeOnPressMask={false}
         customStyles={{
@@ -114,7 +124,7 @@ const Provide_Consent = props => {
             backgroundColor: colors.blackOpacity,
           },
           container: {
-            height: '25%',
+            height: clubRulesPopUPHeigth(clubRulesText),
             borderTopRightRadius: 16,
             borderTopLeftRadius: 16,
           },
@@ -137,19 +147,18 @@ const Provide_Consent = props => {
               </LinearGradient>
             </TouchableOpacity>
           </View>
+
           <Text
             style={{
               fontFamily: 'Nunito-Regular',
-              marginTop: hp('1.5%'),
+              marginVertical: hp('1.5%'),
               fontSize: Fontsize,
               alignSelf: 'center',
             }}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since.
+            {clubRulesText}
           </Text>
         </View>
-      </RBSheet>
+      </RBSheet> */}
       <Conset
         conset={'I do consent to my child to be photographed for any purpose'}
         value={isEnabled3}
@@ -181,8 +190,8 @@ const Provide_Consent = props => {
           />
         </View>
       )} */}
-       <ErrorMessage visible={errorFlag} error={'Sign is required*'} />
-      
+      <ErrorMessage visible={errorFlag} error={'Sign is required*'} />
+
       <ForwardButton
         style={{alignSelf: 'flex-end', marginTop: hp('1%')}}
         onPress={() => {
@@ -202,9 +211,10 @@ const Provide_Consent = props => {
           if (isEnabled4 === false) {
             setErrorFlag(true);
           } else {
-          dispatch(setProvide(consent));
-          props.navigation.navigate('Additional_Sections');
-        }}}
+            dispatch(setProvide(consent));
+            props.navigation.navigate('Additional_Sections');
+          }
+        }}
       />
     </CustomLayout>
   );

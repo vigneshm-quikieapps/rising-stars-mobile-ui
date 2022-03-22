@@ -135,7 +135,8 @@ const Home = () => {
         type: Action.USER_GET_CURRENT_MEMBER_DATA,
         payload: currentMember,
       });
-      currentMember && dispatch({
+    currentMember &&
+      dispatch({
         type: Action.USER_GET_CURRENT_MEMBER_ACTIVITY,
         payload: {id: currentMember._id},
       });
@@ -150,15 +151,15 @@ const Home = () => {
         ]?.session._id,
       );
 
-      memberClassData.length > 0 &&
+    memberClassData.length > 0 &&
       dispatch({
         type: Action.USER_GET_SESSION_ATTENDANCE,
         payload: {
           token,
           data: {
-            sessionId:  memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
-              activeDotIndex
-            ]?.session._id,
+            sessionId: memberClassData?.filter(
+              item => item?.enrolledStatus === 'ENROLLED',
+            )[activeDotIndex]?.session._id,
             memberId: currentMember._id,
           },
         },
@@ -183,6 +184,7 @@ const Home = () => {
   }, [memberClassData]);
 
   const renderItem = ({item, index}) => {
+    console.log('inside class card', item.session.pattern[0].day);
     return (
       <ClassCard
         id={item.clubMembershipId}
@@ -200,27 +202,28 @@ const Home = () => {
   };
 
   useEffect(() => {
+    //console.log("inside Attendence card",sessionAttendance)
+
     setCurrentSessionAttendance(sessionAttendance.attendance);
   }, [sessionAttendance]);
 
-
   useEffect(() => {
     setCurrentSessionAttendance('');
-    
 
     memberActivityProgress && memberActivityProgress.docs.length > 0
-    ? memberActivityProgress.docs.levels &&
-    memberActivityProgress.docs.levels.forEach(levels => {
-        if (levels.status === 'AWARDED') {
-          count += 1;
-        } else if (levels.status === 'IN_PROGRESS') {
-          count += 0.5;
-        }
-      })
-    : null;
-  if (count > 0) {
-    value = (count / memberActivityProgress.docs[activeDotIndex].levelCount) * 10;
-  }
+      ? memberActivityProgress.docs.levels &&
+        memberActivityProgress.docs.levels.forEach(levels => {
+          if (levels.status === 'AWARDED') {
+            count += 1;
+          } else if (levels.status === 'IN_PROGRESS') {
+            count += 0.5;
+          }
+        })
+      : null;
+    if (count > 0) {
+      value =
+        (count / memberActivityProgress.docs[activeDotIndex].levelCount) * 10;
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeDotIndex, currentMember]);
   return (
@@ -364,6 +367,8 @@ const Home = () => {
           </View>
         </LinearGradient>
       </View>
+
+      {/* /////////////////////class Overview/////////// */}
       <View style={styles.attendance}>
         <View>
           <Image source={Images.calendarOrange} />
@@ -457,11 +462,13 @@ const Home = () => {
             backgroundColor: colors.lightgrey,
           }}
         />
-        <Timelines  data={
+        <Timelines
+          data={
             memberActivityProgress && memberActivityProgress.docs.length > 0
               ? memberActivityProgress.docs[activeDotIndex].levels
               : null
-          } />
+          }
+        />
       </View>
     </ScrollView>
   );

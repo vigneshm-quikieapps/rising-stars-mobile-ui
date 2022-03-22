@@ -12,7 +12,7 @@ import {
   Slot,
   PopUpCard,
 } from '../../components';
-import {colors, Fontsize, hp, wp, Stepend} from '../../constants';
+import {colors, Fontsize, hp, wp, Stepend, fullDays} from '../../constants';
 import {
   getClassdata,
   getSessiondata,
@@ -194,7 +194,7 @@ const New_Class_Selection = props => {
                   sessions={item.name}
                   onPress={() => setSelectdata(item)}
                   status={selectdata === item && 'checked'}
-                  day={item.pattern[0].day}
+                  day={fullDays[item.pattern[0].day]}
                   time={`${moment(item.pattern[0].startTime).format(
                     'HH:mm a',
                   )} - ${moment(item.pattern[0].endTime).format('HH:mm a')}`}

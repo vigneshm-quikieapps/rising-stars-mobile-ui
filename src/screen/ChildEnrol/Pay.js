@@ -48,17 +48,13 @@ const Pay = props => {
   }, [classes]);
   const dispatch = useDispatch();
 
-  const isStandingOrderHandler = (value) => {
-
-    if(value===1)
-    {
-      setStandingOrderValue(true)
+  const isStandingOrderHandler = value => {
+    if (value === 1) {
+      setStandingOrderValue(true);
+    } else if (value === 2) {
+      setStandingOrderValue(false);
     }
-    else if(value===2)
-    {
-      setStandingOrderValue(false)
-    }
-  }
+  };
 
   const handleforward = async () => {
     console.log(
@@ -75,7 +71,7 @@ const Pay = props => {
         telephone: addData.telephone,
         sms: addData.sms,
       },
-      isStandingOrder:standingOrderValue,
+      isStandingOrder: standingOrderValue,
       consent: {},
     };
     consent.allergie !== '' ? (data.consent.allergie = consent.allergie) : null;

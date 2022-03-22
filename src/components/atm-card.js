@@ -1,11 +1,19 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
-import {hp, wp, colors} from '../constants';
+import React, {useRef, useState} from 'react';
+import {Text, View, StyleSheet, TextInput} from 'react-native';
+import {hp, wp, colors, Fontsize} from '../constants';
 import {RadioButton} from 'react-native-paper';
 import Input from './input';
 
 const AtmCard = props => {
+  const yearRef = useRef();
+  const monthRef = useRef();
+  const cvvRef = useRef();
+
+  const [cardNumber, setCardNumber] = useState('');
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('');
+
   return (
     <View
       style={[
@@ -38,13 +46,57 @@ const AtmCard = props => {
           styles.cardDetails,
           {display: !props.visible ? 'none' : 'flex'},
         ]}>
-        <Input placeholder="Card Number" placeholderTextColor={'black'} />
+        {/* <Input
+          placeholder="Card Number"
+          maxLength={16}
+          placeholderTextColor={'black'}
+        /> */}
+
+        <TextInput
+          placeholder="Card Number"
+          maxLength={16}
+          returnKeyType="next"
+          value={cardNumber}
+          keyboardType="numeric"
+          onChangeText={text => setCardNumber(text)}
+          onSubmitEditing={() => {
+            monthRef.current.focus();
+          }}
+          blurOnSubmit={false}
+          style={styles.textareaForCard}
+        />
         <View style={styles.breaks} />
         <Text style={styles.valid}>Valid thru</Text>
 
         <View style={{flexDirection: 'row'}}>
           <View>
-            <Input placeholder={'MM'} style={{width: wp('11%')}} />
+            {/* <Input
+              placeholder={'MM'}
+              maxLength={2}
+              style={{width: wp('11%')}}
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                yearRef.current.focus();
+              }}
+              blurOnSubmit={false}
+            /> */}
+            <TextInput
+              placeholder={'MM'}
+              maxLength={2}
+              style={styles.textareaForCardDetails}
+              returnKeyType="next"
+              value={month}
+              ref={monthRef}
+              onChangeText={text => {
+                setMonth(text);
+                text.length === 2 && yearRef.current.focus();
+              }}
+              keyboardType="numeric"
+              // onSubmitEditing={() => {
+              //   yearRef.current.focus();
+              // }}
+              blurOnSubmit={false}
+            />
             <View
               style={{
                 borderWidth: 1,
@@ -54,7 +106,24 @@ const AtmCard = props => {
             />
           </View>
           <View style={{marginLeft: wp('2%')}}>
-            <Input placeholder={'YY'} style={{width: wp('11%')}} />
+            {/* <Input
+              placeholder={'YY'}
+              maxLength={2}
+              style={{width: wp('11%')}}
+              ref={yearRef}
+            /> */}
+            <TextInput
+              placeholder={'YY'}
+              value={year}
+              onChangeText={text => setYear(text)}
+              maxLength={2}
+              style={styles.textareaForCardDetails}
+              ref={yearRef}
+              keyboardType="numeric"
+              onSubmitEditing={() => {
+                cvvRef.current.focus();
+              }}
+            />
             <View
               style={{
                 borderWidth: 1,
@@ -64,7 +133,19 @@ const AtmCard = props => {
             />
           </View>
           <View style={{marginLeft: wp('4%')}}>
-            <Input placeholder={'CVV'} style={{width: wp('12%')}} />
+            {/* <Input
+              placeholder={'CVV'}
+              maxLength={3}
+              style={{width: wp('12%')}}
+              ref={cvvRef}
+            /> */}
+            <TextInput
+              placeholder={'CVV'}
+              maxLength={3}
+              keyboardType="numeric"
+              style={styles.textareaForCardDetails}
+              ref={cvvRef}
+            />
             <View
               style={{
                 borderWidth: 1,
@@ -115,6 +196,18 @@ const styles = StyleSheet.create({
     marginTop: hp('1%'),
     color: colors.grey,
     marginLeft: wp('1%'),
+  },
+  textareaForCard: {
+    fontFamily: 'Nunito-Regular',
+    width: wp('70%'),
+    fontSize: Fontsize,
+    color: colors.grey,
+  },
+  textareaForCardDetails: {
+    fontFamily: 'Nunito-Regular',
+    width: wp('11%'),
+    fontSize: Fontsize,
+    color: colors.grey,
   },
 });
 

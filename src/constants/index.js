@@ -32,7 +32,7 @@ export const colors = {
   buttonBorder: 'rgb (227 ,227 ,227)',
   modalBackgroundColor: 'rgba( 0, 0, 0, 0.8)',
   cancelMembership: 'rgb( 204, 66, 66)',
-  limeGreen: 'rgb(221,255,236)'
+  limeGreen: 'rgb(221,255,236)',
 };
 
 export const Fontsize = wp('4%');
@@ -50,8 +50,7 @@ export const Stepend = '6';
 //   {id: 3, title: 'other'},
 // ];
 
-
-export const genderOfChild = ['Boy','Girl','other'];
+export const genderOfChild = ['Boy', 'Girl', 'other'];
 
 export const EnrollData = [
   {id: 1, title: 'Step 1', description: 'Add Child and Emergency Contact'},
@@ -75,3 +74,13 @@ export const Images = {
   dropDown_white: require('../assets/images/dropDown.png'),
 };
 export {wp, hp};
+
+export const fullDays = {
+  mon: 'Monday',
+  tue: 'Tuesday',
+  wed: 'Wednesday',
+  thu: 'Thursday',
+  fri: 'Friday',
+  sat: 'Saturday',
+  sun: 'Sunday',
+};

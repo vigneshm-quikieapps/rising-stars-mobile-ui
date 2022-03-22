@@ -24,6 +24,7 @@ export default function NewPopUpClass(props) {
   var classData = [];
   var x = props.data;
   memberClassData &&
+    x &&
     x.forEach(item => {
       var flag = 0;
       memberClassData
