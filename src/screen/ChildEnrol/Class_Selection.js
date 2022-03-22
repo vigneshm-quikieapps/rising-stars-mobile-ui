@@ -214,8 +214,8 @@ const Class_Selection = props => {
                   status={selectdata === item && 'checked'}
                   day={fullDays[item.pattern[0].day]}
                   time={`${moment(item.pattern[0].startTime).format(
-                    'HH:mm a',
-                  )} - ${moment(item.pattern[0].endTime).format('HH:mm a')}`}
+                    'hh:mm A',
+                  )} - ${moment(item.pattern[0].endTime).format('hh:mm A')}`}
                   facility={item.name}
                   coach={item.coach.name}
                   key={item._id}

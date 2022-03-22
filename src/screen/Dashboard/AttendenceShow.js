@@ -159,52 +159,83 @@ const AttendenceShow = () => {
           width: '100%',
           justifyContent: 'center',
           // paddingVertical: 30,
-          paddingHorizontal: 20,
+          // paddingHorizontal: 10,
           // paddingTop: 24,
-          height: hp('15%'),
+          height: hp('20%'),
           // paddingBottom: 20,
           backgroundColor: colors.white,
           borderRadius: 16,
         }}>
-        <Text
+        <View
           style={{
-            fontSize: wp('3.5%'),
-            color: colors.white,
-            opacity: 0.8,
-            fontFamily: 'Nunito-Regular',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            // alignItems: 'center',
+            // backgroundColor: 'gray',
           }}>
-          Class Name
-        </Text>
-        <Text
-          style={{
-            fontSize: wp('4.3%'),
+          <View>
+            <Text
+              style={{
+                fontSize: wp('3.5%'),
+                color: colors.white,
+                opacity: 0.8,
+                fontFamily: 'Nunito-Regular',
+              }}>
+              Class Name
+            </Text>
+            <Text
+              style={{
+                fontSize: wp('4.3%'),
 
-            color: colors.white,
-            fontFamily: 'Nunito-SemiBold',
-          }}>
-          {item.class.name}
-          {/* {item.business.name} */}
-        </Text>
+                color: colors.white,
+                fontFamily: 'Nunito-SemiBold',
+              }}>
+              {item.class.name}
+              {/* {item.business.name} */}
+            </Text>
 
-        <Text
-          style={{
-            fontSize: wp('3.5%'),
-            color: colors.white,
-            opacity: 0.8,
-            fontFamily: 'Nunito-Regular',
-            paddingTop: wp('2%'),
-          }}>
-          Club Name
-        </Text>
-        <Text
-          style={{
-            fontSize: wp('4.3%'),
+            <Text
+              style={{
+                fontSize: wp('3.5%'),
+                color: colors.white,
+                opacity: 0.8,
+                fontFamily: 'Nunito-Regular',
+                paddingTop: wp('2%'),
+              }}>
+              Club Name
+            </Text>
+            <Text
+              style={{
+                fontSize: wp('4.3%'),
 
-            color: colors.white,
-            fontFamily: 'Nunito-SemiBold',
-          }}>
-          {item.business.name}
-        </Text>
+                color: colors.white,
+                fontFamily: 'Nunito-SemiBold',
+              }}>
+              {item.business.name}
+              {/* {console.log('item', item.clubMembershipId)} */}
+            </Text>
+          </View>
+          <View>
+            <Text
+              style={{
+                fontSize: wp('3.5%'),
+                color: colors.white,
+                opacity: 0.8,
+                fontFamily: 'Nunito-Regular',
+                // paddingTop: wp('2%'),
+              }}>
+              Child's Club ID
+            </Text>
+            <Text
+              style={{
+                fontSize: wp('4.3%'),
+                color: colors.white,
+                fontFamily: 'Nunito-SemiBold',
+              }}>
+              {item.clubMembershipId}
+            </Text>
+          </View>
+        </View>
       </LinearGradient>
     );
   };

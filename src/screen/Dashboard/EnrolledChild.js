@@ -43,52 +43,38 @@ export default function EnrolledChild(props) {
           marginTop: hp('5%'),
         }}
         colors={['#ffa300', '#ff7e00']}>
-        <View
-          style={{
-            marginHorizontal: wp('4%'),
-            flexDirection: 'row',
-            marginTop: hp('2%'),
-            justifyContent: 'space-between',
-          }}>
-          <View>
-            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
-              Student Name
-            </Text>
-            <Text
-              style={{
-                color: colors.white,
-                fontSize: Fontsize + wp('1%'),
-                //fontWeight: 'bold',
-              }}>
-              {currentMember.name}
-            </Text>
-
-            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
-              Club Name
-            </Text>
-            <Text
-              style={{
-                color: colors.white,
-                fontSize: Fontsize + wp('1%'),
-                //fontWeight: 'bold',
-              }}>
-              {temp[0].business.name}
-            </Text>
-          </View>
-
-          <View>
-            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
-              Child's Club ID
-            </Text>
-            <Text
-              style={{
-                color: colors.white,
-                fontSize: Fontsize + wp('1%'),
-                //fontWeight: 'bold',
-              }}>
-              {temp[0].clubMembershipId}
-            </Text>
-          </View>
+        <View style={{marginLeft: wp('2%'), marginTop: hp('2%')}}>
+          <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
+            Child's Name
+          </Text>
+          <Text
+            style={{
+              color: colors.white,
+              fontSize: Fontsize + wp('1%'),
+              //fontWeight: 'bold',
+            }}>
+            {currentMember.name}
+          </Text>
+          <Text style={{color: '#f7cf79', fontSize: Fontsize}}>Club Name</Text>
+          <Text
+            style={{
+              color: colors.white,
+              fontSize: Fontsize + wp('1%'),
+              //fontWeight: 'bold',
+            }}>
+            {temp[0].business.name}
+          </Text>
+          <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
+            Child's Club ID
+          </Text>
+          <Text
+            style={{
+              color: colors.white,
+              fontSize: Fontsize + wp('1%'),
+              //fontWeight: 'bold',
+            }}>
+            {temp[0].clubMembershipId}
+          </Text>
         </View>
       </LinearGradient>
     );
@@ -187,10 +173,10 @@ export default function EnrolledChild(props) {
                     //   new Date(classes.item.session.pattern[0].endTime),
                     // )
                     `${moment(classes.item.session.pattern[0].startTime).format(
-                      'HH:mm a',
+                      'hh:mm A',
                     )} - ${moment(
                       classes.item.session.pattern[0].endTime,
-                    ).format('HH:mm a')}`
+                    ).format('hh:mm A')}`
                   : null
               }
               facility={classes.item.session.facility}
