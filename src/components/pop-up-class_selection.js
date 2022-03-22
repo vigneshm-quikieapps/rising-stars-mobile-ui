@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   itemName: {
-    marginLeft: wp('5%'),
+    marginLeft: wp('3%'),
     fontSize: wp('4%'),
   },
 });
