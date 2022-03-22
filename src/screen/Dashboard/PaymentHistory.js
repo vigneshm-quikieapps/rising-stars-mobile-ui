@@ -5,7 +5,13 @@ import {Text, FlatList, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel from 'react-native-snap-carousel';
 import {useDispatch, useSelector} from 'react-redux';
-import {CustomLayout, ClassCard, PaymentCard, Card} from '../../components';
+import {
+  CustomLayout,
+  ClassCard,
+  PaymentCard,
+  Card,
+  StudentCard,
+} from '../../components';
 import {colors, Fontsize, hp, wp} from '../../constants';
 import {getmemberClass} from '../../redux/action/home';
 import {date} from 'yup/lib/locale';
@@ -104,14 +110,22 @@ export default function EnrolledChild() {
       memberClassData &&
       memberClassData?.filter(item1 => item1.business._id === item.item.id);
     return (
-      <LinearGradient
-        style={{
-          height: hp('25%'),
-          borderRadius: 20,
-          marginTop: hp('5%'),
-        }}
-        colors={['#ffa300', '#ff7e00']}>
-        <View style={{marginLeft: wp('2%'), marginTop: hp('2%')}}>
+      <StudentCard
+        style={{marginTop: hp('5%')}}
+        name={currentMember.name}
+        // clubid={memberClassData[0].clubMembershipId}
+        // activityrequired
+        // activity={club.name}
+      />
+      // <LinearGradient
+      //   style={{
+      //     height: hp('25%'),
+      //     borderRadius: 20,
+      //     marginTop: hp('5%'),
+      //   }}
+      //   colors={['#ffa300', '#ff7e00']}>
+
+      /* <View style={{marginLeft: wp('2%'), marginTop: hp('2%')}}>
           <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
             Child's Name
           </Text>
@@ -122,8 +136,8 @@ export default function EnrolledChild() {
               //fontWeight: 'bold',
             }}>
             {currentMember.name}
-          </Text>
-          {/* <Text style={{color: '#f7cf79', fontSize: Fontsize}}>Club Name</Text>
+          </Text> */
+      /* <Text style={{color: '#f7cf79', fontSize: Fontsize}}>Club Name</Text>
           <Text
             style={{
               color: colors.white,
@@ -140,9 +154,9 @@ export default function EnrolledChild() {
               //fontWeight: 'bold',
             }}>
             {temp[0].clubMembershipId}
-          </Text> */}
-        </View>
-      </LinearGradient>
+          </Text> */
+      /* </View> */
+      // </LinearGradient>
     );
   };
   return (
@@ -156,8 +170,8 @@ export default function EnrolledChild() {
             <Carousel
               data={businessList}
               renderItem={renderItem}
-              sliderWidth={wp('95%')}
-              itemWidth={wp('90%')}
+              sliderWidth={wp('100%')}
+              itemWidth={wp('100%')}
               onSnapToItem={async index => {
                 setActiveDotIndex(index);
               }}
@@ -223,9 +237,11 @@ export default function EnrolledChild() {
                   'hh:mm A',
                 )} `}
                 facility={item.item.session.facility}
-                coach={'Henry Itondo'}
+                // coach={'Henry Itondo'}
+                coach={item.item.session.coachId.name}
                 style={{backgroundColor: 'white', borderRadius: 20}}
               />
+              {/* {console.log('item.item.session.coachId.name', item.item.session.coachId.name)} */}
               <View
                 style={{
                   flex: 1,
