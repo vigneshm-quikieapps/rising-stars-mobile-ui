@@ -194,7 +194,7 @@ const Home = () => {
           'hh:mm A',
         )} -${moment(item.session.pattern[0].endTime).format('hh:mm A')} `}
         facility={item.session.facility}
-        coach={'-- --'}
+        coach={item.session.coachId.name}
         style={{backgroundColor: 'white', borderRadius: 20}}
       />
     );
