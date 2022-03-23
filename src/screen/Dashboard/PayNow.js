@@ -136,6 +136,7 @@ const PayNow = props => {
   const [showAtm, setShowAtm] = useState(false);
   const [showStandingOrder, setShowStandingOrder] = useState(false);
   const [totalAmt, setTotalAmt] = useState(0);
+  console.log('inside pay now', item, item1);
   const findDate = item => {
     var month = new Date(item.dueDate).getMonth();
     var year = new Date(item.generatedAt).getFullYear();

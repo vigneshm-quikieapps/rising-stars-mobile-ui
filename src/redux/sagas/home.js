@@ -59,6 +59,8 @@ export function* watcherMemberClassSaga() {
 function* handleGetMemberBills(action) {
   try {
     const classes = yield call(fetchBillsOfMember, action.payload);
+    console.log('bills', enrolledChild, action.payload);
+
     yield put({type: Action.USER_GET_MEMBER_BILLS_SUCCESS, data: classes});
   } catch (error) {
     yield put({type: Action.USER_GET_MEMBER_BILLS_FAILED, error: error});

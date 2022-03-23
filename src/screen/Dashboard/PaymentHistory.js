@@ -11,6 +11,7 @@ import {
   PaymentCard,
   Card,
   StudentCard,
+  ErrorMessage,
 } from '../../components';
 import {colors, Fontsize, hp, wp} from '../../constants';
 import {getmemberClass} from '../../redux/action/home';
@@ -53,6 +54,7 @@ export default function EnrolledChild() {
   }, [activeDotIndex, businessList, currentMember]);
 
   useEffect(() => {
+    console.log('Member class Data', memberClassData);
     setGroupedData(
       groupBy(
         memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED'),
@@ -253,6 +255,13 @@ export default function EnrolledChild() {
                 <FlatList
                   data={bills.data.docs}
                   key={item1 => item1._id}
+                  ListEmptyComponent={() => (
+                    <ErrorMessage
+                      error={'No history, Please add a class'}
+                      visible={true}
+                      style={{fontSize: wp('3%')}}
+                    />
+                  )}
                   renderItem={item1 => {
                     //console.log(item1.item.classId, item.item.classId);
                     return <PayNow item={item} item1={item1} />;
