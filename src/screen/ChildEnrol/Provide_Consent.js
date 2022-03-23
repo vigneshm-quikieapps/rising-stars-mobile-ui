@@ -52,12 +52,13 @@ const Provide_Consent = props => {
   //   return lines * 5 < 75 ? `${lines * 5}%` : '75%';
   // };
 
+  const memberClassData = useSelector(state => state.memberClassData.classData);
   return (
     <CustomLayout
       Customchildren={
         <StudentCard
           name={child.member.name}
-          id={child.member._id}
+          clubid={memberClassData[0].clubMembershipId}
           activityrequired
           activity={club.name}
         />

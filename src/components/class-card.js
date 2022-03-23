@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     padding: wp('5%'),
   },
   className: {
-    fontFamily: 'Nunito-Regular',
+    fontFamily: 'Nunito-SemiBold',
     fontSize: hp('3%'),
     color: '#ff7e00',
   },

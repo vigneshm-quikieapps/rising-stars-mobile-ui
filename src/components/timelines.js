@@ -20,15 +20,15 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 const Timelines = props => {
   const [expand, setExpand] = useState(0);
- // console.log('data: ', props.data);
+  // console.log('data: ', props.data);
   return (
     <ScrollView style={{height: hp('70%')}}>
       <FlatList
         data={props.data}
         keyExtractor={item => item.id}
         renderItem={item => {
-         // console.log('item: ', item);
-         // console.log('expand:', props.data.length);
+          // console.log('item: ', item);
+          // console.log('expand:', props.data.length);
           return (
             <View style={styles.container}>
               <View>
@@ -134,7 +134,7 @@ const Timelines = props => {
                               borderRadius: 10,
                             },
                           ]}>
-                          Step {item.index + 1}
+                          Level {item.index + 1}
                         </Text>
                       </View>
                       {item.item.skills.length > 0 ? (
@@ -311,31 +311,31 @@ const Timelines = props => {
                               marginLeft: wp('30%'),
                             }}>
                             {/* {item.item.status !== 'NOT_STARTED' ? ( */}
-                              <TouchableOpacity
-                                onPress={() => {
-                                  setExpand(expand === 0 ? item.index + 1 : 0);
-                                  console.log('123');
+                            <TouchableOpacity
+                              onPress={() => {
+                                setExpand(expand === 0 ? item.index + 1 : 0);
+                                console.log('123');
+                              }}>
+                              <LinearGradient
+                                colors={[
+                                  'rgba(255, 255, 255, 0.3)',
+                                  'rgba(255, 255, 255, 0.3)',
+                                ]}
+                                style={{
+                                  marginRight: 50,
+                                  marginTop: 20,
+                                  height: 32,
+                                  width: 32,
+                                  borderRadius: 8,
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
                                 }}>
-                                <LinearGradient
-                                  colors={[
-                                    'rgba(255, 255, 255, 0.3)',
-                                    'rgba(255, 255, 255, 0.3)',
-                                  ]}
-                                  style={{
-                                    marginRight: 50,
-                                    marginTop: 20,
-                                    height: 32,
-                                    width: 32,
-                                    borderRadius: 8,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                  }}>
-                                  <Image
-                                    style={{height: 14, width: 18}}
-                                    source={Images.dropDown_white}
-                                  />
-                                </LinearGradient>
-                              </TouchableOpacity>
+                                <Image
+                                  style={{height: 14, width: 18}}
+                                  source={Images.dropDown_white}
+                                />
+                              </LinearGradient>
+                            </TouchableOpacity>
                             {/* ) : null} */}
                           </View>
                         </View>

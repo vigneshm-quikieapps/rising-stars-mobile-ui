@@ -1,17 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
+import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import {useSelector} from 'react-redux';
-import {
-  CustomLayout,
-  StudentCard,
-  ClassCard,
-  Slot,
-  AppButton,
-} from '../../components';
+import {CustomLayout, ClassCard, Slot, AppButton} from '../../components';
 import Alert from '../../components/alert-box';
 import {hp, colors, wp, Fontsize} from '../../constants';
 import {classTransfer} from '../../redux/service/request';
@@ -28,7 +23,8 @@ export default function ChangeClass(props) {
   const [token, setToken] = useState('');
   const currentClass = props.route.params.classes.item;
   console.log('class: ', currentClass);
-
+  const navigation = useNavigation();
+  const getSession = sessions();
   const accessToken = async () => {
     const Token = await getLocalData('accessToken');
     setToken(Token);
@@ -56,15 +52,17 @@ export default function ChangeClass(props) {
         : end.getMinutes();
     return sHr + ':' + sMin + '-' + eHr + ':' + eMin;
   };
-  const sessions = () => {
+  function sessions() {
     var temp =
       sessionData &&
       sessionData.filter(session => currentClass.session._id !== session._id);
     return temp.length > 0 ? temp : null;
-  };
+  }
   return (
     <CustomLayout
       names={currentMember.name}
+      back
+      backbutton={() => navigation.goBack()}
       Customchildren={
         <LinearGradient
           style={{
@@ -124,11 +122,7 @@ export default function ChangeClass(props) {
         }
         time={
           currentClass.session && currentClass.session.pattern.length > 0
-            ? // time(
-              //     new Date(currentClass.session.pattern[0].startTime),
-              //     new Date(currentClass.session.pattern[0].endTime),
-              //   )
-              `${moment(currentClass.session.pattern[0].startTime).format(
+            ? `${moment(currentClass.session.pattern[0].startTime).format(
                 'hh:mm A',
               )} - ${moment(currentClass.session.pattern[0].endTime).format(
                 'hh:mm A',
@@ -136,30 +130,39 @@ export default function ChangeClass(props) {
             : null
         }
         facility={currentClass.session.facility}
-        coach={'Henry Itondo'}
+        coach={currentClass.session.coachId.name}
       />
       <Text style={{fontFamily: 'Nunito-SemiBold', marginVertical: hp('1%')}}>
         Available Session
       </Text>
       {sessions() != null ? (
         <FlatList
-          data={sessions()}
+          data={getSession}
           key={item => item._id}
-          renderItem={() => {
+          renderItem={session => {
             return (
               <>
+                {console.log('session', session)}
                 <Slot
                   radio={true}
                   onPress={() => {
-                    setNewSessionId(sessions._id);
+                    setNewSessionId(session.item._id);
                   }}
                   status={
-                    newSessionId === sessions._id ? 'checked' : 'unchecked'
+                    newSessionId === session.item._id ? 'checked' : 'unchecked'
                   }
-                  day={sessions.pattern[0].day}
-                  time="9:30 am - 11:30 am"
-                  facility={sessions.facility}
-                  coach={sessions.coach.name}
+                  day={session.item.pattern[0].day}
+                  time={
+                    session.item && session.item.pattern.length > 0
+                      ? `${moment(session.item.pattern[0].startTime).format(
+                          'hh:mm A',
+                        )} - ${moment(session.item.pattern[0].endTime).format(
+                          'hh:mm A',
+                        )}`
+                      : null
+                  }
+                  facility={session.item.facility}
+                  coach={session.item.coach.name}
                 />
                 <View style={{height: hp('1%')}} />
               </>
