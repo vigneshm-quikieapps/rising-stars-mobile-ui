@@ -129,6 +129,7 @@ const AddChild = props => {
       steps
       start={1}
       end={Stepend}
+      back
       header
       headerTextBigText={true}
       headertext={`Add Child and ${'\n'}Emergency${'\n'}Contact `}
