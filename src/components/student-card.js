@@ -13,7 +13,7 @@ export default function StudentCard(props) {
             <Text style={styles.body}>{props.name}</Text>
           </View>
           {props.age ? (
-            <View style={{alignItems: 'center'}}>
+            <View style={{alignItems: 'center', marginLeft: wp('28%')}}>
               <Text style={styles.head}>Child Age</Text>
               <Text style={styles.body}>{props.age}</Text>
             </View>
