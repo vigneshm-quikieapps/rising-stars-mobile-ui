@@ -379,7 +379,18 @@ const AttendenceShow = () => {
                       fontSize: wp('5%'),
                       fontFamily: 'Nunito-SemiBold',
                     }}>
-                    {month[new Date().getMonth()]}, {new Date().getFullYear()}
+                    {/* {console.log('currentSessionAttendance.records', )} */}
+                    {
+                      month[
+                        new Date(
+                          currentSessionAttendance.records[0].date,
+                        ).getMonth()
+                      ]
+                    }
+                    ,{' '}
+                    {new Date(
+                      currentSessionAttendance.records[0].date,
+                    ).getFullYear()}
                   </Text>
                 </View>
                 <FlatList
