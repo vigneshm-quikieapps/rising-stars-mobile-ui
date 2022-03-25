@@ -10,6 +10,7 @@ import {
   fetchClubFinanc,
   regularEnrollment,
   fetchAttendanceOfMemberInSession,
+  fetchSessionById,
 } from '../service/request';
 
 function* handleGetClub(params) {
@@ -91,8 +92,31 @@ function* handleSessionAttendance(action) {
   }
 }
 
+function* handleSessionUpcomingAttendance(action) {
+  try {
+    const finance = yield call(fetchSessionById, action.payload);
+    yield put({
+      type: Action.USER_GET_SESSION_UPCOMING_ATTENDANCE_SUCCESS,
+      payload: finance,
+    });
+    //yield call(action.callback);
+  } catch (error) {
+    yield put({
+      type: Action.USER_GET_SESSION_UPCOMING_ATTENDANCE_FAILURE,
+      error: error.message,
+    });
+  }
+}
+
 export function* watcherSessionAttendance() {
   yield takeEvery(Action.USER_GET_SESSION_ATTENDANCE, handleSessionAttendance);
+}
+
+export function* watcherSessionUpcomingAttendance() {
+  yield takeEvery(
+    Action.USER_GET_SESSION_UPCOMING_ATTENDANCE,
+    handleSessionUpcomingAttendance,
+  );
 }
 
 function* handleAddChild(action) {

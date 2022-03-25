@@ -92,7 +92,7 @@ export function updateUser(payload) {
 }
 
 export function fetchRegister(payload) {
-  console.log("in fetchregister",payload)
+  console.log('in fetchregister', payload);
   return fetch(`${heroku_url}/sign-up`, {
     method: 'POST',
     headers: {
@@ -113,16 +113,17 @@ export function fetchRegister(payload) {
       country: 'United Kingdom',
     }),
   })
-    .then(response => {let d=  response.json()
-    console.log("Auth",d)
-  return d})
+    .then(response => {
+      let d = response.json();
+      console.log('Auth', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
 }
 
 export function fetchLogin(payload) {
-  
   return fetch(`${heroku_url}/sign-in`, {
     method: 'POST',
     headers: {
@@ -134,9 +135,11 @@ export function fetchLogin(payload) {
       password: payload.password,
     }),
   })
-    .then(response =>{let d = response.json()
-      console.log("insise Fectch login",d)
-    return d;})
+    .then(response => {
+      let d = response.json();
+      console.log('insise Fectch login', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
@@ -277,7 +280,7 @@ export function updateTransaction(payload) {
       'Content-Type': 'application/json',
       //Authorization: `Bearer ${payload.token}`,
     },
-    body: JSON.stringify({billId:payload}),
+    body: JSON.stringify({billId: payload}),
   })
     .then(response => response.json())
     .catch(error => {
@@ -296,8 +299,8 @@ export function addChild(payload) {
     body: JSON.stringify(payload.data),
   })
     .then(response => {
-      let d= response.json();
-      console.log("inside add child api call",d)
+      let d = response.json();
+      console.log('inside add child api call', d);
       return d;
     })
     .catch(error => {
@@ -380,6 +383,28 @@ export function fetchAttendanceOfMemberInSession(payload) {
     .catch(error => {
       throw error;
     });
+}
+
+// fetch session by term id and class id for ATTENDANCE
+export async function fetchSessionById(payload) {
+  console.error(payload);
+  try {
+    const response = await fetch(
+      `${heroku_url}/sessions/in-a-class/of-a-particular-term`,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${payload.token}`,
+        },
+        body: JSON.stringify(payload.data),
+      },
+    );
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
 }
 
 export function fetchActivityOfMemberInSession(payload) {
