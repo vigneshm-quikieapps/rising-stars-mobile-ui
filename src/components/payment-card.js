@@ -21,7 +21,7 @@ export const Card = props => {
         <Text style={{fontSize: hp('2%'), fontFamily: 'Nunito-SemiBold'}}>
           £{props.amount}
         </Text>
-        <View style={[styles.notify, props.style]}>
+        <View style={[styles.notify, props.batchstyle]}>
           <Text style={{color: colors.white, fontFamily: 'Nunito-SemiBold'}}>
             {props.notify}
           </Text>
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: hp('2%'),
     marginBottom: hp('1%'),
+    borderWidth: 1,
   },
   notify: {
     fontFamily: 'Nunito-SemiBold',

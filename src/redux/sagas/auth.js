@@ -24,10 +24,10 @@ export function* watcherPostcode() {
 }
 
 function* handleRegister(action) {
-  console.log("payload in auth",action.payload)
+  // console.log('payload in auth', action.payload);
   // try {
   //   const register = yield call(fetchRegister, action.payload);
-  //   if (register.message === 'created successfully') {
+  //   if (register.message === 'created successfully.') {
   //     yield put({type: Action.USER_REGISTER_SUCCESS, payload: register});
   //   } else {
   //     throw new Error(register.message);
@@ -47,7 +47,7 @@ const save = async login => {
 function* handleLogin(action) {
   try {
     const login = yield call(fetchLogin, action.payload.data);
-    console.log("Login saga",login)
+    console.log('Login saga', login);
     save(login);
     yield put({type: Action.USER_LOGIN_SUCCESS, payload: login});
   } catch (error) {

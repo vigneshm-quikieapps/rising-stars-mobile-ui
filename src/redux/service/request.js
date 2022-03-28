@@ -113,11 +113,7 @@ export function fetchRegister(payload) {
       country: 'United Kingdom',
     }),
   })
-    .then(response => {
-      let d = response.json();
-      console.log('Auth', d);
-      return d;
-    })
+    .then(response => response.json())
     .catch(error => {
       throw error;
     });

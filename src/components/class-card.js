@@ -3,10 +3,10 @@ import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {colors, Fontsize, fullDays, hp, wp} from '../constants';
 import AppButton from './app-button';
-let border;
+let border = true;
 
 export default function ClassCard(props) {
-  border = props.border ? true : false;
+  //border = props.border ? true : false;
   return (
     <View style={[styles.container, props.style]}>
       {props.subtitle && <Text style={styles.subtitle}>{props.subtitle}</Text>}
@@ -73,13 +73,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: hp('2%'),
-    elevation: border ? 1 : 0,
+    elevation: 1,
     shadowColor: colors.lightgrey,
     shadowOffset: {width: 1, height: 1},
     shadowOpacity: 0.4,
     overflow: 'hidden',
     shadowRadius: 5,
-    borderRadius: border ? 5 : 0,
+    borderRadius: 5,
     padding: wp('5%'),
   },
   className: {

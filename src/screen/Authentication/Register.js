@@ -26,8 +26,7 @@ import {PostCode, PostDataPass, RegisterData} from '../../redux/action/auth';
 import PostComponent from './components/Postcode';
 import {fetchMobileOTP, fetchRegister} from '../../redux/service/request';
 import Alert from '../../components/alert-box';
-import * as Action from "../../redux/action-types"
-
+import * as Action from '../../redux/action-types';
 
 const CELL_COUNT = 6;
 const validationSchema = Yup.object().shape({
@@ -124,7 +123,7 @@ function Register(props) {
           country: 'United Kingdom',
         }}
         onSubmit={async values => {
-         // console.log(values);
+          // console.log(values);
           if (values.mobileNoOTP.length === 0) {
             const otp = await fetchMobileOTP(values.contactNumber);
             console.log(otp);
@@ -137,27 +136,38 @@ function Register(props) {
               values.cityTown = postdata.posttown;
             }
             values.isNewsLetter = letter;
-            
+
             dispatch(RegisterData(values));
-
-            const register = await fetchRegister(values)
-            if (register.message === 'created successfully') {
-              dispatch({type: Action.USER_REGISTER_SUCCESS, payload: values});
-            } else {
-              dispatch({type: Action.USER_REGISTER_ERROR, error: register.error.message})
-              alert(register.message)
+            try {
+              const register = await fetchRegister(values);
+              console.log('register', register);
+              if (register?.message === 'Created successfully.') {
+                dispatch({type: Action.USER_REGISTER_SUCCESS, payload: values});
+                console.log('success');
+                setSuccessAlert(true);
+              } else {
+                // dispatch({
+                //   type: Action.USER_REGISTER_ERROR,
+                //   error: register?.error.message,
+                // });
+                console.log('failure');
+                setFailureAlert(true);
+                throw new Error(register.errors);
+              }
+            } catch (error) {
+              console.log('errors', error);
             }
 
-            console.log("status",status,register.message);
-            if (register.message === 'created successfully') {
-              setSuccessAlert(true);
-              //POP-UP with message
-              //Navigate to Login Screen
-            } else {
-              setFailureAlert(true);
-              //POP-UP with error message
-              //navigate to register
-            }
+            // console.log('status', status, register?.message);
+            // if (register?.message === 'created successfully') {
+
+            //   //POP-UP with message
+            //   //Navigate to Login Screen
+            // } else {
+
+            //   //POP-UP with error message
+            //   //navigate to register
+            // }
           }
         }}
         validationSchema={validationSchema}>

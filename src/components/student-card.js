@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: hp('1%'),
+    //backgroundColor: 'red',
   },
   head: {
     fontFamily: 'Nunito-Regular',

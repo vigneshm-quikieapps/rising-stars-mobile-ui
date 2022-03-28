@@ -58,7 +58,7 @@ const Provide_Consent = props => {
       Customchildren={
         <StudentCard
           name={child.member.name}
-          clubid={memberClassData[0].clubMembershipId}
+          clubid={memberClassData[0]?.clubMembershipId}
           activityrequired
           activity={club.name}
         />

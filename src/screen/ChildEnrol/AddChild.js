@@ -16,7 +16,14 @@ import {
 } from '../../components';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {useDispatch} from 'react-redux';
-import {colors, hp, wp, Stepend, Fontsize, genderOfChild} from '../../constants';
+import {
+  colors,
+  hp,
+  wp,
+  Stepend,
+  Fontsize,
+  genderOfChild,
+} from '../../constants';
 import {setChildData, getClubdata} from '../../redux/action/enrol';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
@@ -197,7 +204,7 @@ const AddChild = props => {
                   dispatch(
                     getClubdata({
                       callback: () => {
-                        props.navigation.navigate('Class_Selection');
+                        props.navigation.navigate('AddPayment');
                       },
                     }),
                   );

@@ -36,14 +36,14 @@ const StandingOrderPayNow = props => {
 
   const handlerPayment = async () => {
     setLoading(true);
-    let request = await updateTransaction(props.item1.item.id);
+    let request = await updateTransaction(props.item1.id);
     if (request.message === 'Transaction updated.') {
-      //console.log("update redux state",request,props.item1.item.id);
+      //console.log("update redux state",request,props.item1.id);
       dispatch({
         type: Action.USER_GET_MEMBER_BILLS,
         payload: {
           memberId: currentMember._id,
-          businessId: props.item.item.businessId,
+          businessId: props.business.businessId,
         },
       });
 
@@ -130,13 +130,14 @@ const PayNow = props => {
     'November',
     'December',
   ];
-  const {item, item1} = props;
+  const {business, item1} = props;
   const child = useSelector(state => state.currentMemberData.data);
 
   const [showAtm, setShowAtm] = useState(false);
   const [showStandingOrder, setShowStandingOrder] = useState(false);
   const [totalAmt, setTotalAmt] = useState(0);
-  console.log('inside pay now', item, item1);
+  // console.log('inside pay now', business, item1);
+
   const findDate = item => {
     var month = new Date(item.dueDate).getMonth();
     var year = new Date(item.generatedAt).getFullYear();
@@ -148,56 +149,43 @@ const PayNow = props => {
     return `${months[month]} ${year} fee`;
   };
 
+  //console.log('items', business, item1);
+
   return (
     <>
-      {item1.item.classId === item.item.classId ? (
-        <>
-          {!showStandingOrder ? (
-            <Card
-              paystyle={{backgroundColor: colors.reddish}}
-              notify={item1.item.paid ? 'Paid' : 'Not Paid'}
-              paid={item1.item.paid}
-              paidtext={`Paid on ${moment(new Date(item1.item.paidAt)).format(
-                'DD/MM/YYYY',
-              )}`}
-              amount={item1.item.total}
-              body={findDate(item1.item)}
-              date={`Due Date ${moment(new Date(item1.item.dueDate)).format(
-                'DD/MM/YYYY',
-              )}`}
-              button={!item1.item.paid}
-              //button
-              title="Pay Now"
-              paybutton={() => {
-                setShowStandingOrder(true);
-              }}
-              substyle={{
-                borderColor: item1.item.paid
-                  ? colors.seafoamBlue
-                  : colors.reddish,
-                borderWidth: 1,
-                backgroundColor: item1.item.paid
-                  ? colors.limeGreen
-                  : colors.white,
-              }}
-              style={{
-                backgroundColor: item1.item.paid
-                  ? colors.seafoamBlue
-                  : colors.reddish,
-              }}
-            />
-          ) : (
-            <StandingOrderPayNow
-              onPress={() => {
-                setShowStandingOrder(!showStandingOrder);
-              }}
-              visible={showStandingOrder}
-              item1={item1}
-              item={item}
-            />
-          )}
-        </>
-      ) : null}
+      {item1.classId === business.classId ? (
+        <Card
+          paystyle={{backgroundColor: colors.reddish}}
+          notify={props.notify}
+          paid={item1.paid}
+          paidtext={`Paid on ${moment(new Date(item1.paidAt)).format(
+            'DD/MM/YYYY',
+          )}`}
+          amount={item1.total}
+          body={findDate(item1)}
+          date={`Due Date ${moment(new Date(item1.dueDate)).format(
+            'DD/MM/YYYY',
+          )}`}
+          button={props.button}
+          //button
+          title="Pay Now"
+          paybutton={() => {
+            setShowStandingOrder(true);
+          }}
+          substyle={props.subStyle}
+          batchstyle={props.batchstyle}
+        />
+      ) : // {/*
+      //             <StandingOrderPayNow
+      //               onPress={() => {
+      //                 setShowStandingOrder(!showStandingOrder);
+      //               }}
+      //               visible={showStandingOrder}
+      //               item1={item1}
+      //               business={business}
+      //             /> */}
+
+      null}
     </>
   );
 };

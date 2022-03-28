@@ -28,7 +28,7 @@ const Confirmation = props => {
   }, [enrollment]);
 
   const DateDiff = () => {
-    const start = new Date(memberClassData[0].session.term.startDate);
+    const start = new Date(memberClassData[0]?.session.term.startDate);
     const today = new Date();
     const range =
       start.getDate() -
