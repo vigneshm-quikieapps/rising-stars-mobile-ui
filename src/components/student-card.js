@@ -14,7 +14,7 @@ export default function StudentCard(props) {
           </View>
           {props.age ? (
             <View style={{alignItems: 'center'}}>
-              <Text style={styles.head}>Child Age</Text>
+              <Text style={styles.head}> Child Age</Text>
               <Text style={styles.body}>{props.age}</Text>
             </View>
           ) : null}
@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: hp('1%'),
+    //backgroundColor: 'red',
   },
   head: {
     fontFamily: 'Nunito-Regular',

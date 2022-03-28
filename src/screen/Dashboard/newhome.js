@@ -184,7 +184,7 @@ const Home = () => {
   }, [memberClassData]);
 
   const renderItem = ({item, index}) => {
-    console.log('inside class card', item.session.pattern[0].day);
+    // console.log('inside class card', item.session.pattern[0].day);
     return (
       <ClassCard
         id={item.clubMembershipId}
@@ -233,7 +233,7 @@ const Home = () => {
         <LinearGradient
           colors={[colors.orangeYellow, colors.pumpkinOrange]}
           style={styles.linearGradient}>
-          <Text style={styles.welcome}>{`Hi ${parent.name}, your child`}</Text>
+          <Text style={styles.welcome}>{`Hi ${parent.name}`}</Text>
           <View style={styles.containerMember}>
             <View style={{marginTop: hp('1%')}}>
               <Image
