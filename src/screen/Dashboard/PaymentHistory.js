@@ -13,6 +13,7 @@ import {
   StudentCard,
   ErrorMessage,
 } from '../../components';
+import {clubfinance} from '../../redux/action/enrol';
 import {colors, Fontsize, hp, wp} from '../../constants';
 import {getmemberClass} from '../../redux/action/home';
 import {date} from 'yup/lib/locale';
@@ -30,13 +31,14 @@ export default function EnrolledChild() {
   const [currentPaidBills, setCurrentPaidBills] = useState([]);
   const [currentDueBills, setCurrentDueBills] = useState([]);
   const [currentUpcomigBills, setCurrentUpcomingBills] = useState([]);
-
+  const [paymentChannels, setpaymentChannels] = useState([]);
   const navigation = useNavigation();
 
   const membersData = useSelector(state => state.memberData.memberData);
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const currentMember = useSelector(state => state.currentMemberData.data);
   const bills = useSelector(state => state.memberBills);
+  const clubfinance2 = useSelector(state => state.clubfinance.financedata.businessFinance);
   // console.log('data123: ', bills);
 
   useEffect(() => {
@@ -56,7 +58,10 @@ export default function EnrolledChild() {
           // },
         })
       : null;
-
+    // console.log('new ===', businessList[activeDotIndex].businessId);
+    businessList && businessList.length > 0
+      ? dispatch(clubfinance(businessList[activeDotIndex].businessId))
+      : null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeDotIndex, businessList, currentMember]);
 
@@ -100,6 +105,11 @@ export default function EnrolledChild() {
       memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED');
     setBusinessList(businessesTemp);
   }, []);
+
+  useEffect(() => {
+    setpaymentChannels(clubfinance2);
+    // console.log('clubfinance2 ===', clubfinance2);
+  }, [clubfinance2]);
 
   const groupBy = objectArray => {
     let groupData = {};
@@ -317,6 +327,7 @@ export default function EnrolledChild() {
         }}>
         {pagination()}
       </View>
+      {/* {console.log('======club fincanc', paymentChannels)} */}
       <PaymentCard border={true}>
         {/* //////////////////////////////////////////Over Due bills/// */}
 
@@ -332,7 +343,7 @@ export default function EnrolledChild() {
                 backgroundColor: colors.white,
                 borderColor: colors.reddish,
               }}
-              button={true}
+              button={paymentChannels.paymentChannels.online}
             />
           );
         })}
@@ -351,7 +362,7 @@ export default function EnrolledChild() {
                   backgroundColor: colors.white,
                   borderColor: colors.reddish,
                 }}
-                button={true}
+                button={paymentChannels.paymentChannels.online}
               />
             );
           }
