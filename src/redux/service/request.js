@@ -381,6 +381,28 @@ export function fetchAttendanceOfMemberInSession(payload) {
     });
 }
 
+// fetch session by term id and class id for ATTENDANCE
+export async function fetchSessionById(payload) {
+  console.error(payload);
+  try {
+    const response = await fetch(
+      `${heroku_url}/sessions/in-a-class/of-a-particular-term`,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${payload.token}`,
+        },
+        body: JSON.stringify(payload.data),
+      },
+    );
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+}
+
 export function fetchActivityOfMemberInSession(payload) {
   return fetch(`${heroku_url}/members/${payload.id}/progress`, {
     method: 'GET',

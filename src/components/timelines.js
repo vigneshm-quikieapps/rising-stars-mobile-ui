@@ -330,10 +330,17 @@ const Timelines = props => {
                                   justifyContent: 'center',
                                   alignItems: 'center',
                                 }}>
+                                {item.item.skills[0].status === 'NOT_STARTED' ?
+                                <Image
+                                    style={{height: 14, width: 18}}
+                                    source={Images.dropDown_black}
+                                  />
+                                :
                                 <Image
                                   style={{height: 14, width: 18}}
-                                  source={Images.dropDown_white}
+                                    source={Images.dropDown_white}
                                 />
+                              }
                               </LinearGradient>
                             </TouchableOpacity>
                             {/* ) : null} */}

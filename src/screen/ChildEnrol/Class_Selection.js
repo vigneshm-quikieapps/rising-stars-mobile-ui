@@ -95,6 +95,7 @@ const Class_Selection = props => {
       header
       headerTextBigText={true}
       headertext={'Class Selection'}
+      back
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={2} />}>
       <PopUpCard

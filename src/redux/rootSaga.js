@@ -14,6 +14,7 @@ import {
   watcherAddChild,
   watcherEnrollChild,
   watcherSessionAttendance,
+  watcherSessionUpcomingAttendance,
 } from './sagas/enrol';
 import {
   watcherMemberSaga,
@@ -28,6 +29,7 @@ import {
 export default function* rootSaga() {
   yield all([
     watcherSessionAttendance(),
+    watcherSessionUpcomingAttendance(),
     watcherLoginSaga(),
     watcherMemberBillsSaga(),
     watcherClubSaga(),

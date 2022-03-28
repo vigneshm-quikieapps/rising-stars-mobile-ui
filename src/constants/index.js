@@ -72,6 +72,7 @@ export const Images = {
   completed: require('../assets/images/icon-check-line.png'),
   completed_white: require('../assets/images/checkmark.png'),
   dropDown_white: require('../assets/images/dropDown.png'),
+  dropDown_black: require('../assets/images/dropDown_black.png'),
 };
 export {wp, hp};
 

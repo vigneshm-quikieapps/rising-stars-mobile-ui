@@ -19,7 +19,10 @@ import {colors, Fontsize, hp, wp} from '../../constants';
 import {getmemberClass, getmemberData} from '../../redux/action/home';
 import * as Action from '../../redux/action-types';
 import {getLocalData} from '../../utils/LocalStorage';
-import {fetchAttendanceOfMemberInSession} from '../../redux/service/request';
+import {
+  fetchAttendanceOfMemberInSession,
+  fetchSessionById,
+} from '../../redux/service/request';
 import {FlatList} from 'react-native-gesture-handler';
 
 const itemWidth = Dimensions.get('window').width;
@@ -41,7 +44,10 @@ const AttendenceShow = () => {
   const [currentSessionId, setCurrentSessionId] = useState('');
   const [activeDotIndex, setActiveDotIndex] = React.useState(0);
   const [currentSessionAttendance, setCurrentSessionAttendance] = useState('');
-
+  const [currentTermId, setCurrentTermId] = useState('');
+  const [currentClassId, setCurrentClassId] = useState('');
+  const [upcomingAttendance, setUpcomingAttendance] = useState('');
+  const [dayPattern, setDayPattern] = useState(null);
   // const Item = ({title}) => (
   //   <View style={styles.item}>
   //     <Text style={styles.title}>{title}</Text>
@@ -57,6 +63,7 @@ const AttendenceShow = () => {
     'Friday',
     'Saturday',
   ];
+  const newDays = ['sun', 'mon', 'tue', 'wed', 'Thu', 'Fri', 'Sat'];
   const month = [
     'January',
     'February',
@@ -134,6 +141,32 @@ const AttendenceShow = () => {
           activeDotIndex
         ].session._id,
       );
+    memberClassData.length > 1 &&
+      setCurrentTermId(
+        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
+          activeDotIndex
+        ].session.term._id,
+      );
+    console.log('termID>>>>', currentTermId);
+    memberClassData.length > 1 &&
+      setCurrentClassId(
+        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
+          activeDotIndex
+        ].session.classId,
+      );
+    console.log('classID -- >>>>', currentClassId);
+
+    currentTermId &&
+      fetchSessionById({
+        token,
+        data: {
+          termId: currentTermId,
+          classId: currentClassId,
+        },
+      }).then(resp => {
+        setUpcomingAttendance(resp.docs);
+      });
+
     currentSessionId &&
       fetchAttendanceOfMemberInSession({
         token,
@@ -166,6 +199,8 @@ const AttendenceShow = () => {
           backgroundColor: colors.white,
           borderRadius: 16,
         }}>
+        {/* {console.log('UPCOMING=============', upcomingAttendance)} */}
+        {/* {console.log('membersdata', memberClassData)} */}
         <View
           style={{
             flexDirection: 'row',
@@ -379,7 +414,18 @@ const AttendenceShow = () => {
                       fontSize: wp('5%'),
                       fontFamily: 'Nunito-SemiBold',
                     }}>
-                    {month[new Date().getMonth()]}, {new Date().getFullYear()}
+                    {/* {console.log('currentSessionAttendance.records', )} */}
+                    {
+                      month[
+                        new Date(
+                          currentSessionAttendance.records[0].date,
+                        ).getMonth()
+                      ]
+                    }
+                    ,{' '}
+                    {new Date(
+                      currentSessionAttendance.records[0].date,
+                    ).getFullYear()}
                   </Text>
                 </View>
                 <FlatList
@@ -489,87 +535,216 @@ const AttendenceShow = () => {
           }}
         />
         {/* UPCOMING SESSIONS */}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingBottom: 20,
+          }}>
+          <View
+            style={{
+              width: '20%',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{
+                fontSize: wp('4%'),
+                fontFamily: 'Nunito-Regular',
+                color: colors.blackOpacity,
+              }}>
+              {/* {days[new Date(item.item.date).getDay()]} */}
+              Saturday
+            </Text>
+            <Text
+              style={{
+                color: colors.lightgrey,
+                fontSize: wp('8%'),
+                fontFamily: 'Nunito-SemiBold',
+              }}>
+              {/* {new Date(item.item.date).getDate()} */}
+              26
+            </Text>
+          </View>
+          <View style={{justifyContent: 'center'}}>
+            <LinearGradient
+              colors={['rgb(255,255,255)', 'rgb(255,255,255)']}
+              // {
+              //   item.item.attended === true
+              //     ? ['#68D6AB', '#33AB96']
+              //     : ['#EA5C5C', '#AB3333']
+              //   // : item.status === 'Tardy'
+              //   // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
+              //   // : item.status === 'Upcoming'
+              //   // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
+              //   // : ['#ffa300', '#ff7e00']
+              // }
+              style={{height: 1.5, width: 30}}
+            />
+          </View>
+          <View style={{justifyContent: 'center', width: '100%'}}>
+            <LinearGradient
+              colors={['rgb(255,255,255)', 'rgb(255,255,255)']}
+              // {
+              // item.item.attended === true
+              //   ? ['#68D6AB', '#33AB96']
+              //   : ['#EA5C5C', '#AB3333']
+              // : item.status === 'Tardy'
+              // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
+              // : item.status === 'Upcoming'
+              // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
+              // : ['#ffa300', '#ff7e00']
+              // }
+              style={{
+                padding: 20,
+                width: '100%',
+                borderTopLeftRadius: 16,
+                borderBottomLeftRadius: 16,
+                borderColor: '#d2d2d2',
+                borderWidth: 1,
+              }}>
+              <Text
+                style={{
+                  color: colors.lightgrey,
+                  fontSize: wp('4.5%'),
+                  fontFamily: 'Naunito-SemiBold',
+                }}>
+                {/* {item.item.attended ? 'Attended' : 'No Show'} */}
+                Upcoming
+              </Text>
+            </LinearGradient>
+          </View>
+        </View>
         <FlatList
-          data={currentSessionAttendance.records}
+          data={upcomingAttendance}
           keyExtractor={item => item._id}
           renderItem={item => {
+            function getDatesInRange(startDate, endDate) {
+              const date = new Date(startDate.getTime());
+
+              const dates = [];
+              // });
+              // console.log('pattern', item.item.pattern[0].day, dayPattern);
+              while (date <= endDate) {
+                // console.log('*****', items.day);
+                item.item.pattern.map(items => {
+                  // setDayPattern(items.day);
+                  console.log('get pattern --- ', items.day);
+                  if (
+                    newDays[date.getDay()] == items.day
+                    // days[date.getDay()] == 'Tuesday' ||
+                    // days[date.getDay()] == 'Thusday' ||
+                    // days[date.getDay()] == 'Saturday'
+                  ) {
+                    dates.push(new Date(date));
+                    date.setDate(date.getDate() + 1);
+                    // console.log(date);
+                  } else {
+                    date.setDate(date.getDate() + 1);
+                  }
+                });
+              }
+              // });
+              return dates;
+            }
+
+            const d1 = new Date(item.item.term.startDate);
+            const d2 = new Date(item.item.term.endDate);
+            const dates = getDatesInRange(d1, d2);
+            // console.log('hello', getDatesInRange(d1, d2));
             return (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  paddingBottom: 20,
-                }}>
+              // <View>
+              <View>
+                <Text>Hello</Text>
+                {/* hello */}
+                {/* {console.log('dates', dates)} */}
+                {/* {console.log('>>>Term Start & End date>>>', item.item.term.startDate, item.item.term.endDate)} */}
+                {/* </View> */}
+                {/* {console.log('>>>Term Pattern>>>', item.item.pattern)} */}
+
+                {/* only getting first index i.e tuesday */}
+                {dates.map(date => {
+                  console.log('MAPPING FILTERED DATES', date);
+                })}
                 <View
                   style={{
-                    width: '20%',
-                    justifyContent: 'center',
+                    flexDirection: 'row',
                     alignItems: 'center',
+                    paddingBottom: 20,
                   }}>
-                  <Text
+                  <View
                     style={{
-                      fontSize: wp('4%'),
-                      fontFamily: 'Nunito-Regular',
-                      color: colors.blackOpacity,
-                    }}>
-                    {days[new Date(item.item.date).getDay()]}
-                  </Text>
-                  <Text
-                    style={{
-                      color: colors.lightgrey,
-                      fontSize: wp('8%'),
-                      fontFamily: 'Nunito-SemiBold',
-                    }}>
-                    {new Date(item.item.date).getDate()}
-                  </Text>
-                </View>
-                <View style={{justifyContent: 'center'}}>
-                  <LinearGradient
-                    colors={['rgb(255,255,255)', 'rgb(255,255,255)']}
-                    // {
-                    //   item.item.attended === true
-                    //     ? ['#68D6AB', '#33AB96']
-                    //     : ['#EA5C5C', '#AB3333']
-                    //   // : item.status === 'Tardy'
-                    //   // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
-                    //   // : item.status === 'Upcoming'
-                    //   // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
-                    //   // : ['#ffa300', '#ff7e00']
-                    // }
-                    style={{height: 1.5, width: 30}}
-                  />
-                </View>
-                <View style={{justifyContent: 'center', width: '100%'}}>
-                  <LinearGradient
-                    colors={['rgb(255,255,255)', 'rgb(255,255,255)']}
-                    // {
-                    // item.item.attended === true
-                    //   ? ['#68D6AB', '#33AB96']
-                    //   : ['#EA5C5C', '#AB3333']
-                    // : item.status === 'Tardy'
-                    // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
-                    // : item.status === 'Upcoming'
-                    // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
-                    // : ['#ffa300', '#ff7e00']
-                    // }
-                    style={{
-                      padding: 20,
-                      width: '100%',
-                      borderTopLeftRadius: 16,
-                      borderBottomLeftRadius: 16,
-                      borderColor: '#d2d2d2',
-                      borderWidth: 1,
+                      width: '20%',
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}>
                     <Text
                       style={{
-                        color: colors.lightgrey,
-                        fontSize: wp('4.5%'),
-                        fontFamily: 'Naunito-SemiBold',
+                        fontSize: wp('4%'),
+                        fontFamily: 'Nunito-Regular',
+                        color: colors.blackOpacity,
                       }}>
-                      {/* {item.item.attended ? 'Attended' : 'No Show'} */}
-                      Upcoming
+                      {/* {days[new Date(date).getDay()]} */}
                     </Text>
-                  </LinearGradient>
+                    <Text
+                      style={{
+                        color: colors.lightgrey,
+                        fontSize: wp('8%'),
+                        fontFamily: 'Nunito-SemiBold',
+                      }}>
+                      {/* {console.log('NAVED IS HERE WHY ARE YOU SAD', date)} */}
+                      {/* {new Date(date).getDate()} */}
+                      hhelo
+                    </Text>
+                  </View>
+                  <View style={{justifyContent: 'center'}}>
+                    <LinearGradient
+                      colors={['rgb(255,255,255)', 'rgb(255,255,255)']}
+                      // {
+                      //   item.item.attended === true
+                      //     ? ['#68D6AB', '#33AB96']
+                      //     : ['#EA5C5C', '#AB3333']
+                      //   // : item.status === 'Tardy'
+                      //   // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
+                      //   // : item.status === 'Upcoming'
+                      //   // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
+                      //   // : ['#ffa300', '#ff7e00']
+                      // }
+                      style={{height: 1.5, width: 30}}
+                    />
+                  </View>
+                  <View style={{justifyContent: 'center', width: '100%'}}>
+                    <LinearGradient
+                      colors={['rgb(255,255,255)', 'rgb(255,255,255)']}
+                      // {
+                      // item.item.attended === true
+                      //   ? ['#68D6AB', '#33AB96']
+                      //   : ['#EA5C5C', '#AB3333']
+                      // : item.status === 'Tardy'
+                      // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
+                      // : item.status === 'Upcoming'
+                      // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
+                      // : ['#ffa300', '#ff7e00']
+                      // }
+                      style={{
+                        padding: 20,
+                        width: '100%',
+                        borderTopLeftRadius: 16,
+                        borderBottomLeftRadius: 16,
+                        borderColor: '#d2d2d2',
+                        borderWidth: 1,
+                      }}>
+                      <Text
+                        style={{
+                          color: colors.lightgrey,
+                          fontSize: wp('4.5%'),
+                          fontFamily: 'Naunito-SemiBold',
+                        }}>
+                        {/* {item.item.attended ? 'Attended' : 'No Show'} */}
+                        Upcoming
+                      </Text>
+                    </LinearGradient>
+                  </View>
                 </View>
               </View>
             );
