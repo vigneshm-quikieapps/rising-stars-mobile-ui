@@ -5,6 +5,7 @@ import SetPassword from '../../screen/Authentication/set-password';
 import Login from '../../screen/Authentication/Login';
 import Register from '../../screen/Authentication/Register';
 import CreateNewPassword from './../../screen/Authentication/CreateNewPassword';
+import InputOTPScreen from '../../screen/Authentication/InputOTPScreen';
 
 export const AuthStack = props => {
   return (
@@ -27,6 +28,11 @@ export const AuthStack = props => {
       <StackScreen.Screen
         name="CreateNewPassword"
         component={CreateNewPassword}
+        options={{headerShown: false}}
+      />
+      <StackScreen.Screen
+        name="InputOTPScreen"
+        component={InputOTPScreen}
         options={{headerShown: false}}
       />
     </Stack>

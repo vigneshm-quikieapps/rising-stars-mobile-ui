@@ -36,9 +36,9 @@ function Alert(props) {
               title={props.confirm}
               onPress={props.success}
               style={{
-                width: wp('85%'),
-                marginLeft: wp('2.5%'),
-                marginBottom: wp('5%'),
+                // width: wp('85%'),
+                // marginLeft: wp('1.5%'),
+                marginBottom: wp('2%'),
               }}
             />
           )}
@@ -79,12 +79,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     //borderColor: colors.orangeYellow,
     padding: wp('1%'),
-    marginTop: hp('11%'),
+    // marginTop: hp('11%'),
     paddingHorizontal: wp('3%'),
     backgroundColor: colors.white,
     justifyContent: 'center',
-    width: wp('95%'),
-    marginLeft: wp('2%'),
+    // width: wp('95%'),
+    marginHorizontal: wp('2%'),
   },
   image: {
     marginTop: hp('10%'),

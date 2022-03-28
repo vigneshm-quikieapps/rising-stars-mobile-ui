@@ -1,11 +1,12 @@
 import React, {useState, useRef} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {CustomLayout, TextInputField, AppButton} from './../../components';
 import {colors, hp, wp} from './../../constants';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import InputOTPScreen from './InputOTPScreen';
 import {forgetPasswordData} from '../../redux/action/auth';
+import {ScrollView} from 'react-native-gesture-handler';
 
 function CreateNewPassword(props) {
   const refRBSheet = useRef();
@@ -33,34 +34,53 @@ function CreateNewPassword(props) {
       mobileNo: number,
     };
     dispatch(forgetPasswordData(body));
-    refRBSheet.current.open();
+    // refRBSheet.current.open();
+    props.navigation.navigate('InputOTPScreen');
   };
   return (
+    // <CustomLayout
+    //   style={styles.container}
+    //   backbutton={() => props.navigation.goBack()}
+    //   header
+    //   headerTextBigText
+    //   headertext={`Forgot Password`}>
     <CustomLayout
       style={styles.container}
+      back
       backbutton={() => props.navigation.goBack()}
       header
-      headerTextBigText
-      headertext={`Forgot Password`}>
-      <View>
-        {/* <Text style={styles.title}>Forget Password</Text> */}
-        {/* <Text style={styles.subTitle}>
+      headertextStyle={{
+        width: wp('90%'),
+        fontSize: wp('8%'),
+      }}
+      headertext={`Forgot Password`}
+      subheader
+      subheadertext={'Enter your details to get OTP'}
+      subheadertextstyle={{
+        opacity: 0.5,
+        width: wp('90%'),
+      }}>
+      {/* <ScrollView style={{paddingTop: hp('3%')}}> */}
+      <View style={{paddingTop: hp('3%')}}>
+          {/* <Text style={styles.title}>Forget Password</Text> */}
+          {/* <Text style={styles.subTitle}>
           Enter the Email associated with your account we will send an OTP to
           that Email.
         </Text> */}
-        <TextInputField
-          keyboardType="email"
-          placeholder="Email"
-          onChangeText={setEmail}
-        />
-        {/* <AppButton title="Send OTP" style={styles.buttonStyle} />
+          <TextInputField
+            keyboardType="email"
+            placeholder="Email"
+            onChangeText={setEmail}
+          />
+          <Text style={styles.orText}>Or</Text>
+          {/* <AppButton title="Send OTP" style={styles.buttonStyle} />
         <TextInputField
           keyboardType="numeric"
           placeholder="OTP"
           onChangeText={setOTP1}
         /> */}
 
-        {/* <AppButton
+          {/* <AppButton
           title={button1 && email !== '' && OTP1 !== '' ? 'Verified' : 'Verify'}
           style={[
             styles.buttonStyle,
@@ -80,16 +100,16 @@ function CreateNewPassword(props) {
           }}
         /> */}
 
-        {/* <Text style={styles.subTitle}>
+          {/* <Text style={styles.subTitle}>
           Enter the Contact Number associated with your account we will send an
           OTP to that Number.
         </Text> */}
-        <TextInputField
-          keyboardType="numeric"
-          placeholder="Contact Number"
-          onChangeText={setNumber}
-        />
-        {/* <AppButton title="Send OTP" style={styles.buttonStyle} />
+          <TextInputField
+            keyboardType="numeric"
+            placeholder="Contact Number"
+            onChangeText={setNumber}
+          />
+          {/* <AppButton title="Send OTP" style={styles.buttonStyle} />
 
         <TextInputField
           keyboardType="numeric"
@@ -97,7 +117,7 @@ function CreateNewPassword(props) {
           onChangeText={SetOTP2}
         /> */}
 
-        {/* <AppButton
+          {/* <AppButton
           title={
             button2 && number !== '' && OTP2 !== '' ? 'Verified' : 'Verify'
           }
@@ -113,13 +133,15 @@ function CreateNewPassword(props) {
             }
           }}
         /> */}
-        {/* <Text style={styles.subTitle}>
+          {/* <Text style={styles.subTitle}>
           Your new passowrd must be different from previous used password.
         </Text> */}
-        {/* <TextInputField placeholder="Password" style={{marginTop: hp('2%')}} />
+          {/* <TextInputField placeholder="Password" style={{marginTop: hp('2%')}} />
         <TextInputField placeholder="Confirm Password" /> */}
-      </View>
-      <View style={{height: hp('50%')}} />
+        </View>
+      {/* </ScrollView> */}
+      {/* <View style={{height: hp('50%')}} /> */}
+      <View style={{height: hp('35%')}} />
       <AppButton
         title="Send OTP"
         style={[styles.generateButton, {backgroundColor: colors.orange}]}
@@ -176,5 +198,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.modalBackgroundColor,
+  },
+  orText: {
+    opacity: 0.5,
+    textAlign: 'center',
+    paddingVertical: 10,
   },
 });
