@@ -30,7 +30,7 @@ const Pay = props => {
   const consent = useSelector(state => state.addProvidedata);
   const [showAtm, setShowAtm] = useState(false);
   const [showStandingOrder, setShowStandingOrder] = useState(false);
-  const [standingOrderValue, setStandingOrderValue] = useState(false);
+  const [standingOrderValue, setStandingOrderValue] = useState(true);
 
   const [totalAmt, setTotalAmt] = useState(0);
 

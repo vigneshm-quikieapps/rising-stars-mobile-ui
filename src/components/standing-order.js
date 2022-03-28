@@ -6,7 +6,7 @@ import {RadioButton} from 'react-native-paper';
 import NewAppButton from './new-app-button';
 
 const StandingOrder = props => {
-  const  [selected,setSelected] = useState(0);
+  const  [selected,setSelected] = useState(1);
   return (
     <View
       style={[
