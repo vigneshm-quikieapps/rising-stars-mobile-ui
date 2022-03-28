@@ -64,11 +64,12 @@ function InputOTPScreen(props) {
     if (value1 < 6) {
       alert('Please Enter a Valid OTP');
     } else {
-      if (props.twoInputField) {
-        props.navigation.navigate('SetPassword');
-      } else {
-        props.navigation.navigate('EnrollStack');
-      }
+      props.navigation.navigate('SetPassword');
+      // if (props.twoInputField) {
+      //   props.navigation.navigate('SetPassword');
+      // } else {
+      //   props.navigation.navigate('EnrollStack');
+      // }
     }
   };
   return (
