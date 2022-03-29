@@ -1,7 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect, useRef} from 'react';
-import {View, StyleSheet, Text, ActivityIndicator} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
 import {Formik} from 'formik';
+import EntIcon from 'react-native-vector-icons/Entypo';
 import * as Yup from 'yup';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -28,6 +35,7 @@ import {fetchMobileOTP, fetchRegister} from '../../redux/service/request';
 import Alert from '../../components/alert-box';
 import * as Action from '../../redux/action-types';
 import {ScrollView} from 'react-native-gesture-handler';
+import LinearGradient from 'react-native-linear-gradient';
 
 const CELL_COUNT = 6;
 const validationSchema = Yup.object().shape({
@@ -82,7 +90,7 @@ function Register(props) {
   const [invalidPostcodeAlert, setInvalidPostcodeAlert] = useState(false);
   const [seconds, setSeconds] = React.useState(10);
   const refRBSheet = useRef();
-
+  const termref = useRef();
   const star = <Text style={styles.star}>Rising Star</Text>;
 
   const callPopUp = () => setTerm(!term);
@@ -118,6 +126,13 @@ function Register(props) {
       }
     }
   }, [status]);
+  const clubRulesText =
+    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since. Lorem Ipsum is simply dummy text of the printing and typesetting indust printing andtypesetting industry. Lorem Ipsum has been the industry's standarddummy text ever since. Lorem Ipsum is simply dummy text of theprinting and typesetting industry. Lorem Ipsum has been theindustry's standard dummy text ever since. Lorem Ipsum is simplydummy text of the printing and typesetting industry. Lorem Ipsum hasbeen the industry's standard dummy text ever since. Lorem Ipsum issimply dummy text of the printing and typesetting industry. LoremIpsum has been the industry's standard dummy text ever since.";
+
+  const clubRulesPopUPHeigth = text => {
+    let lines = text.split(' ').length / 10;
+    return lines * 5 < 75 ? `${lines * 5}%` : '75%';
+  };
   return (
     <CustomLayout
       header
@@ -132,6 +147,53 @@ function Register(props) {
       back
       backbutton={() => props.navigation.goBack()}>
       <ScrollView>
+        <RBSheet
+          ref={termref}
+          closeOnDragDown={true}
+          closeOnPressMask={false}
+          customStyles={{
+            wrapper: {
+              backgroundColor: colors.blackOpacity,
+            },
+            container: {
+              paddingBottom: hp('10%'),
+              height: clubRulesPopUPHeigth(clubRulesText),
+              borderTopRightRadius: 16,
+              borderTopLeftRadius: 16,
+            },
+          }}>
+          <View style={{paddingHorizontal: wp('5%')}}>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text
+                style={{
+                  fontFamily: 'Nunito-Regular',
+                  fontSize: Fontsize,
+                  color: '#ff7e00',
+                }}>
+                Terms and Conditions
+              </Text>
+              <TouchableOpacity onPress={() => termref.current.close()}>
+                <LinearGradient
+                  style={styles.closePopUp}
+                  colors={['#ffa300', '#ff7e00']}>
+                  <EntIcon name="cross" size={15} color="white" />
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
+            <ScrollView>
+              <Text
+                style={{
+                  fontFamily: 'Nunito-Regular',
+                  marginVertical: hp('1.5%'),
+                  fontSize: Fontsize,
+                  alignSelf: 'center',
+                }}>
+                {clubRulesText}
+              </Text>
+            </ScrollView>
+          </View>
+        </RBSheet>
         <Formik
           initialValues={{
             fullName: '',
@@ -546,7 +608,9 @@ function Register(props) {
                     color: '#7f7f7f',
                   }}>
                   By registering you are agreed to our{' '}
-                  <Text style={{color: colors.orange}} onPress={callPopUp}>
+                  <Text
+                    style={{color: colors.orange}}
+                    onPress={() => termref.current.open()}>
                     Terms and Conditions
                   </Text>
                 </Text>
@@ -814,5 +878,14 @@ const styles = StyleSheet.create({
     // fontSize: Fontsize + wp('1.5%'),
     // alignSelf: 'center',
     // textDecorationLine: 'underline',
+  },
+  closePopUp: {
+    height: hp('3%'),
+    width: hp('3%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 50,
+    alignSelf: 'flex-end',
+    marginTop: -hp('1%'),
   },
 });
