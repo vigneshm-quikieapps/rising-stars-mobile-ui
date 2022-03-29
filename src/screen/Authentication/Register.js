@@ -88,6 +88,7 @@ function Register(props) {
   const [showFailurealert, setFailureAlert] = useState(false);
   const [letter, setLetter] = useState(false);
   const [invalidPostcodeAlert, setInvalidPostcodeAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [seconds, setSeconds] = React.useState(10);
   const refRBSheet = useRef();
   const termref = useRef();
@@ -581,9 +582,22 @@ function Register(props) {
                     </Text>
                   </View>
                 </View>
+                {showAlert ? (
+                  <Alert
+                    image={'failure'}
+                    message="Please Enter Valid OTP"
+                    confirm={'Retry'}
+                    success={() => {
+                      setShowAlert(false);
+                      // console.log('XYZ', props);
+                      // props.navigation.navigate('Login');
+                    }}
+                  />
+                ) : null}
                 {error ? (
                   alert({error})
-                ) : isloading ? (
+                ) : // setShowAlert(true)
+                isloading ? (
                   <ActivityIndicator size="large" color={colors.orange} />
                 ) : (
                   <AppButton
@@ -633,7 +647,7 @@ function Register(props) {
                     values.mobileNoOTP = '';
                   }}
                   image={'failure'}
-                  message={message}
+                  message={message ? message : 'Something Went Wrong'}
                   // success={() => props.navigation.navigate('Login')}
                   // image={'failure'}
                   // message={'Something Went Wrong'}
@@ -648,13 +662,13 @@ function Register(props) {
                     backgroundColor: colors.blackOpacity,
                   },
                   draggableIcon: {
-                    backgroundColor: colors.lightgrey,
+                    backgroundColor: 'white',
                   },
                   container: {
-                    height: hp('100%'),
+                    height: hp('50%'),
                     borderTopRightRadius: 16,
                     borderTopLeftRadius: 16,
-                    marginBottom: hp('10%'),
+                    // marginBottom: hp('10%'),
                   },
                 }}>
                 <View style={{paddingHorizontal: wp('5%')}}>
@@ -692,7 +706,8 @@ function Register(props) {
                     style={{margin: 0}}
                     onPress={() => {
                       if (value.length < 6) {
-                        alert('Please Enter Valid OTP');
+                        // alert('Please Enter Valid OTP');
+                        setShowAlert(true);
                       } else {
                         values.mobileNoOTP = value;
                         setMain(!main);
@@ -709,11 +724,20 @@ function Register(props) {
                     }}>
                     Resend OTP{' '}
                     {seconds === 0 ? (
-                      <Text
-                        style={{color: colors.orange}}
-                        onPress={() => fetchMobileOTP(values.contactNumber)}>
-                        Press
-                      </Text>
+                      <TouchableOpacity
+                        onPress={async () =>
+                          await fetchMobileOTP(values.contactNumber)
+                        }>
+                        <Text
+                          style={{
+                            color: colors.orange,
+                            // fontFamily: 'Nunito-Regular',
+                            // alignSelf: 'center',
+                            // marginTop: hp('1%'),
+                          }}>
+                          Press
+                        </Text>
+                      </TouchableOpacity>
                     ) : (
                       <Text>in {seconds} sec</Text>
                     )}
