@@ -18,13 +18,14 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
+import Alert from '../../components/alert-box';
 
 const CELL_COUNT = 6;
 
 function InputOTPScreen(props) {
   const navigation = useNavigation();
   const [value1, setValue1] = useState('');
-
+  const [showFailurealert, setFailureAlert] = useState(false);
   const ref = useBlurOnFulfill({value1, cellCount: CELL_COUNT});
   const [propss1, getCellOnLayoutHandler1] = useClearByFocusCell({
     value1,
@@ -62,7 +63,8 @@ function InputOTPScreen(props) {
 
   const OTPValidation = () => {
     if (value1 < 6) {
-      alert('Please Enter a Valid OTP');
+      // alert('Please Enter a Valid OTP');
+      setFailureAlert(true);
     } else {
       props.navigation.navigate('SetPassword');
       // if (props.twoInputField) {
@@ -75,6 +77,7 @@ function InputOTPScreen(props) {
   return (
     <CustomLayout
       // style={styles.container}
+      back
       backbutton={() => props.navigation.goBack()}
       header
       headertextStyle={{
@@ -108,6 +111,20 @@ function InputOTPScreen(props) {
           )}
         />
       </View>
+      {showFailurealert ? (
+        <Alert
+          visible={showFailurealert}
+          confirm={'Retry'}
+          success={() => {
+            setFailureAlert(false);
+          }}
+          image={'failure'}
+          message={'Please Enter a Valid OTP'}
+          // success={() => props.navigation.navigate('Login')}
+          // image={'failure'}
+          // message={'Something Went Wrong'}
+        />
+      ) : null}
       <View style={{height: hp('48%')}} />
       <AppButton
         title={props.twoInputField ? 'Verify' : 'Verify Account'}

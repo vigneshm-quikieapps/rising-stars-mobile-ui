@@ -79,7 +79,7 @@ function Register(props) {
   const [showSuccessalert, setSuccessAlert] = useState(false);
   const [showFailurealert, setFailureAlert] = useState(false);
   const [letter, setLetter] = useState(false);
-
+  const [invalidPostcodeAlert, setInvalidPostcodeAlert] = useState(false);
   const [seconds, setSeconds] = React.useState(10);
   const refRBSheet = useRef();
 
@@ -301,7 +301,8 @@ function Register(props) {
                     )}
                     onPress={() => {
                       if (values.postCode.length < 6) {
-                        alert('Please Enter a Valid PostCode');
+                        setInvalidPostcodeAlert(true);
+                        // alert('Please Enter a Valid PostCode');
                       } else {
                         const data = {};
                         setPostCodeshow(!postcodeshow);
@@ -312,7 +313,17 @@ function Register(props) {
                   />
                 }
               />
-
+              {invalidPostcodeAlert ? (
+                <Alert
+                  visible={invalidPostcodeAlert}
+                  confirm={'Retry'}
+                  success={() => {
+                    setInvalidPostcodeAlert(false);
+                  }}
+                  image={'failure'}
+                  message={'Please Enter a Valid PostCode'}
+                />
+              ) : null}
               <PostComponent
                 data={postcodeData}
                 visible={postcodeshow}

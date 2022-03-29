@@ -39,6 +39,8 @@ function SetPassword(props) {
   return (
     <CustomLayout
       // style={{height: '100%'}}
+      back
+      backbutton={() => props.navigation.goBack()}
       header
       headertext={'Set password'}
       headertextStyle={{
@@ -62,7 +64,7 @@ function SetPassword(props) {
           confirm={'Done'}
           success={() => props.navigation.navigate('Login')}
           image={'success'}
-          message={'Profile Changed Successfully'}
+          message={`Profile Changed ${'\n'} Successfully`}
         />
         <Formik
           initialValues={{
