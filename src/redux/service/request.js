@@ -131,11 +131,7 @@ export function fetchLogin(payload) {
       password: payload.password,
     }),
   })
-    .then(response => {
-      let d = response.json();
-      console.log('insise Fectch login', d);
-      return d;
-    })
+    .then(response => response.json())
     .catch(error => {
       throw error;
     });
@@ -208,7 +204,11 @@ export function regularEnrollment(payload) {
     },
     body: JSON.stringify(payload.data),
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside enrolment api', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
@@ -223,7 +223,11 @@ export function fetchMemberData(token) {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside fecth member data', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
@@ -296,7 +300,7 @@ export function addChild(payload) {
   })
     .then(response => {
       let d = response.json();
-      console.log('inside add child api call', d);
+      console.log('inside add child api', d);
       return d;
     })
     .catch(error => {
@@ -329,7 +333,11 @@ export function dropClass(payload) {
       Authorization: `Bearer ${payload.token}`,
     },
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside drop class api', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });

@@ -77,7 +77,7 @@ const Class_Selection = props => {
 
   const handleforward = () => {
     dispatch(setSlotData(selectdata));
-    props.navigation.navigate('Fees_Overview');
+    props.navigation.navigate('Fees_Overview', {from: 'profile'});
   };
   return (
     <CustomLayout
@@ -213,7 +213,7 @@ const Class_Selection = props => {
                   sessions={item.name}
                   onPress={() => setSelectdata(item)}
                   status={selectdata === item && 'checked'}
-                  day={fullDays[item.pattern[0].day]}
+                  day={fullDays[item.pattern[0]?.day]}
                   time={`${moment(item.pattern[0].startTime).format(
                     'hh:mm A',
                   )} - ${moment(item.pattern[0].endTime).format('hh:mm A')}`}

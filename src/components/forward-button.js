@@ -5,7 +5,9 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const ForwardButton = props => {
   return (
-    <TouchableOpacity onPress={props.onPress}>
+    <TouchableOpacity
+      disabled={props.disabled ? true : false}
+      onPress={props.onPress}>
       <LinearGradient
         colors={['#ffa300', '#ff7e00']}
         style={[styles.backButton, props.style]}>

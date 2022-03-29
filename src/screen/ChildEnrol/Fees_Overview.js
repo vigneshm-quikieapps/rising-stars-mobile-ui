@@ -19,7 +19,9 @@ const Fees_Overview = props => {
   const child = useSelector(state => state.childData.addchild);
   const club = useSelector(state => state.childData.clubdata);
   const classes = useSelector(state => state.childData.classdata);
-  console.log('classes', classes);
+  const {from} = props.route.params;
+
+  //console.log('classes', from);
   //const clubfinance = useSelector(state => state.clubfinance.financedata);
 
   return (
@@ -87,7 +89,9 @@ const Fees_Overview = props => {
       <View style={{marginVertical: hp('1.8%')}} /> */}
       <ForwardButton
         style={{alignSelf: 'flex-end', marginTop: hp('-1.7%')}}
-        onPress={() => props.navigation.navigate('Provide_Consent')}
+        onPress={() =>
+          props.navigation.navigate('Provide_Consent', {from: from})
+        }
       />
     </CustomLayout>
   );

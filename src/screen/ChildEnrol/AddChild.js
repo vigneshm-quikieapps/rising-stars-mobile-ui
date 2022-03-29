@@ -82,7 +82,7 @@ const AddChild = props => {
   const [birthModal, setBirthModal] = useState(false);
   const [birth, setBirth] = useState(new Date());
   const [birtherror, setBirthError] = useState(false);
-
+  const [disabled, setDisabled] = useState(false);
   // const [age, setAge] = useState('');
   // const [open, setOpen] = useState(false);
 
@@ -157,6 +157,7 @@ const AddChild = props => {
           esname: '',
         }}
         onSubmit={values => {
+          setDisabled(true);
           var valuesForDispatch = {
             token: token,
             data: {
@@ -632,7 +633,9 @@ const AddChild = props => {
                     </EmergencyCard>
                   );
                 })} */}
+
               <ForwardButton
+                disabled={disabled}
                 style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
                 title="Submit"
                 onPress={() => {

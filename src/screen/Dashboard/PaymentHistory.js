@@ -87,7 +87,7 @@ export default function EnrolledChild() {
     if (bills.data) {
       let currentBills =
         bills &&
-        bills.data.docs.filter(item => {
+        bills.data.docs?.filter(item => {
           return item.classId === businessList[activeDotIndex]?.classId;
         });
       handlePayments(currentBills);
@@ -244,11 +244,12 @@ export default function EnrolledChild() {
   };
 
   const handlePayments = currentBills => {
-    currentBills.sort(function (a, b) {
-      // Turn your strings into dates, and then subtract them
-      // to get a value that is either negative, positive, or zero.
-      return new Date(a.dueDate) - new Date(b.dueDate);
-    });
+    currentBills &&
+      currentBills.sort(function (a, b) {
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+        return new Date(a.dueDate) - new Date(b.dueDate);
+      });
 
     let paid = currentBills.filter(item => {
       return item.paid === true;
@@ -386,10 +387,10 @@ export default function EnrolledChild() {
                 item1={bill}
                 key={index}
                 notify={'Upcoming'}
-                batchstyle={{backgroundColor: colors.reddish}}
+                batchstyle={{backgroundColor: colors.lightRed}}
                 subStyle={{
                   backgroundColor: colors.white,
-                  borderColor: colors.reddish,
+                  borderColor: colors.orange,
                 }}
                 button={false}
               />

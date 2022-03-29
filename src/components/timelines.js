@@ -138,13 +138,17 @@ const Timelines = props => {
                         </Text>
                       </View>
                       {item.item.skills.length > 0 ? (
-                        <View style={{flexDirection: 'row'}}>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}>
                           {item.item.status !== 'NOT_STARTED' ? (
                             <FlatList
                               data={item.item.skills}
                               keyExtractor={arg => arg.id}
                               renderItem={arg => {
-                                console.log(arg);
+                                // console.log(arg);
                                 return (
                                   <View
                                     style={{
@@ -308,13 +312,13 @@ const Timelines = props => {
                           )}
                           <View
                             style={{
-                              marginLeft: wp('30%'),
+                              marginLeft: wp('24%'),
                             }}>
                             {/* {item.item.status !== 'NOT_STARTED' ? ( */}
                             <TouchableOpacity
                               onPress={() => {
                                 setExpand(expand === 0 ? item.index + 1 : 0);
-                                console.log('123');
+                                //console.log('123');
                               }}>
                               <LinearGradient
                                 colors={[
@@ -322,25 +326,33 @@ const Timelines = props => {
                                   'rgba(255, 255, 255, 0.3)',
                                 ]}
                                 style={{
-                                  marginRight: 50,
+                                  // marginRight: 50,
                                   marginTop: 20,
                                   height: 32,
                                   width: 32,
                                   borderRadius: 8,
                                   justifyContent: 'center',
                                   alignItems: 'center',
+                                  backgroundColor:
+                                    item.item.skills[0].status === 'NOT_STARTED'
+                                      ? '#dbdbdb'
+                                      : null,
                                 }}>
-                                {item.item.skills[0].status === 'NOT_STARTED' ?
-                                <Image
-                                    style={{height: 14, width: 18}}
+                                {item.item.skills[0].status ===
+                                'NOT_STARTED' ? (
+                                  <Image
+                                    style={{
+                                      height: 14,
+                                      width: 18,
+                                    }}
                                     source={Images.dropDown_black}
                                   />
-                                :
-                                <Image
-                                  style={{height: 14, width: 18}}
+                                ) : (
+                                  <Image
+                                    style={{height: 14, width: 18}}
                                     source={Images.dropDown_white}
-                                />
-                              }
+                                  />
+                                )}
                               </LinearGradient>
                             </TouchableOpacity>
                             {/* ) : null} */}

@@ -28,9 +28,11 @@ export default function EnrolledChild(props) {
 
   const [token, setToken] = useState('');
   const dispatch = useDispatch();
+  const {from} = props.route.params;
 
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const currentMember = useSelector(state => state.currentMemberData.data);
+
   const renderItem = item => {
     var temp =
       memberClassData &&
@@ -172,7 +174,7 @@ export default function EnrolledChild(props) {
         }
         key={item => item._id}
         renderItem={classes => {
-          console.log('classes: ', classes.item);
+          //console.log('classes: ', classes.item);
           return (
             <ClassCard
               className={classes.item.class.name}
@@ -217,7 +219,7 @@ export default function EnrolledChild(props) {
           dispatch(
             getClubdata({
               callback: () => {
-                props.navigation.navigate('New_Class_Selection');
+                props.navigation.navigate('New_Class_Selection', {from: from});
               },
             }),
           );
@@ -233,7 +235,7 @@ export default function EnrolledChild(props) {
               enrollmentId,
             });
 
-            if (response.message === 'cancellation successfull') {
+            if (response.message === 'Cancellation successful.') {
               setShowSuccessAlert(true);
             } else {
               setShowFailureAlert(true);

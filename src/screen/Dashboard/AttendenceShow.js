@@ -629,7 +629,7 @@ const AttendenceShow = () => {
                 // console.log('*****', items.day);
                 item.item.pattern.map(items => {
                   // setDayPattern(items.day);
-                  console.log('get pattern --- ', items.day);
+                  //console.log('get pattern --- ', items.day);
                   if (
                     newDays[date.getDay()] == items.day
                     // days[date.getDay()] == 'Tuesday' ||
@@ -664,7 +664,7 @@ const AttendenceShow = () => {
 
                 {/* only getting first index i.e tuesday */}
                 {dates.map(date => {
-                  console.log('MAPPING FILTERED DATES', date);
+                  //console.log('MAPPING FILTERED DATES', date);
                 })}
                 <View
                   style={{

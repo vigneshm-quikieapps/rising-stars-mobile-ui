@@ -21,6 +21,7 @@ export const colors = {
   veryLightPink: 'rgba(255,244,231,1)',
   veryLightGreen: 'rgba(192,248,232,1)',
   veryLightRed: 'rgba(255,229,229,1)',
+  lightRed: '#D56B6B',
   titleOrange: '#FCDD8C',
   orangeYellow: 'rgba(255,163,0,1)',
   pumpkinOrange: 'rgba(255,126,0,1)',

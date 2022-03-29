@@ -40,7 +40,9 @@ const Provide_Consent = props => {
 
   const child = useSelector(state => state.childData.addchild);
   const club = useSelector(state => state.childData.clubdata);
+  const {from} = props.route.params;
 
+  //console.log('classes', from);
   // const membersdata = useSelector(state => state.memberData.memberData);
   const parent = useSelector(state => state.LoginData.updatedUser);
 
@@ -213,7 +215,7 @@ const Provide_Consent = props => {
             setErrorFlag(true);
           } else {
             dispatch(setProvide(consent));
-            props.navigation.navigate('Additional_Sections');
+            props.navigation.navigate('Additional_Sections', {from: from});
           }
         }}
       />
