@@ -39,7 +39,8 @@ const ActivityProgress = () => {
   const [currentEvaluation, setEvaluation] = useState('');
   const [activedotIndex, setactivedotIndex] = useState(0);
   const [token, setToken] = useState(0);
-  var value;
+  const [value, setValue] = useState(0);
+
   var member = [];
   var count = 0;
 
@@ -67,8 +68,8 @@ const ActivityProgress = () => {
         })
       : null;
     progress && progress.docs.length > 0
-      ? progress.docs.levels &&
-        progress.docs.levels.forEach(levels => {
+      ? progress.docs[activedotIndex].levels &&
+        progress.docs[activedotIndex].levels.forEach(levels => {
           if (levels.status === 'AWARDED') {
             count += 1;
           } else if (levels.status === 'IN_PROGRESS') {
@@ -77,7 +78,9 @@ const ActivityProgress = () => {
         })
       : null;
     if (count > 0) {
-      value = (count / progress.docs[activedotIndex].levelCount) * 10;
+      setValue(count / progress.docs[activedotIndex].levelCount);
+    } else {
+      setValue(count);
     }
   }, [progress, activedotIndex]);
   useEffect(() => {

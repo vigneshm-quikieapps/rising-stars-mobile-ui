@@ -122,9 +122,11 @@ export function* watcherSessionUpcomingAttendance() {
 function* handleAddChild(action) {
   try {
     const child = yield call(addChild, action.payload.data);
+    console.log('enroll', child, action.payload);
     yield put({type: Action.USER_ADD_CHILD_SUCCEDED, payload: child});
     yield call(action.payload.callback);
   } catch (error) {
+    console.log('inside enroll saga', error);
     yield put({
       type: Action.USER_ADD_CHILD_FAILED,
       error: error.message,
@@ -139,7 +141,7 @@ export function* watcherAddChild() {
 function* handleEnrollChild(action) {
   try {
     const enrolledChild = yield call(regularEnrollment, action.payload);
-    console.log('enroll', enrolledChild,action.payload);
+    // console.log('enroll', enrolledChild, action.payload);
     yield put({
       type: Action.USER_ENROLL_CHILD_SUCCEDED,
       payload: enrolledChild,

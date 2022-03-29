@@ -65,7 +65,7 @@ function Profile(props) {
       type: Action.USER_GET_CURRENT_MEMBER_DATA,
       payload: item,
     });
-    props.navigation.navigate('EnrolledChild');
+    props.navigation.navigate('EnrolledChild', {from: 'profile'});
   };
 
   const choosePhotoFromLibrary = () => {
@@ -100,7 +100,7 @@ function Profile(props) {
       fetchCurrentUser({
         token: token,
       }).then(response => {
-        console.log(response.user);
+        console.log('fetch current user', response.user);
         dispatch({
           type: Action.USER_UPDATE_SUCCESS,
           payload: response.user,
@@ -113,6 +113,7 @@ function Profile(props) {
     currentMember && dispatch(getmemberClass(currentMember._id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  //console.log('inside profile', membersdata);
 
   return (
     <CustomLayout

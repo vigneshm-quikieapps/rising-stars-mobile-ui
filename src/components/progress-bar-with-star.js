@@ -4,11 +4,11 @@ import Slider from 'react-native-slider';
 import {Images} from '../constants';
 
 export default function ProgressBarWithStar(props) {
-  const [value, setValue] = React.useState(props.value);
-  
+  // const [value, setValue] = React.useState(props.value);
+  // console.log('inside progrss bar', props.value);
   return (
     <Slider
-      value={value}
+      value={props.value}
       //   onValueChange={value => setValue(value)}
       disabled={true}
       thumbImage={Images.star}

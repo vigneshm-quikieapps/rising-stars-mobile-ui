@@ -30,8 +30,10 @@ const Pay = props => {
   const consent = useSelector(state => state.addProvidedata);
   const [showAtm, setShowAtm] = useState(false);
   const [showStandingOrder, setShowStandingOrder] = useState(false);
-  const [standingOrderValue, setStandingOrderValue] = useState(true);
+  const [standingOrderValue, setStandingOrderValue] = useState(false);
+  const {from} = props.route.params;
 
+  // console.log('pay', from);
   const [totalAmt, setTotalAmt] = useState(0);
 
   useEffect(() => {
@@ -91,7 +93,7 @@ const Pay = props => {
         token: await getLocalData('accessToken'),
       }),
     );
-    props.navigation.navigate('Confirmation');
+    props.navigation.navigate('Confirmation', {from: from});
   };
   return (
     <CustomLayout

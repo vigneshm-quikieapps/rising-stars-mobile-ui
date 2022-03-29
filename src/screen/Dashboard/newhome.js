@@ -30,6 +30,8 @@ import {
   fetchAttendanceOfMemberInSession,
   fetchCurrentUser,
 } from '../../redux/service/request';
+import {getClubdata} from '../../redux/action/enrol';
+import {useNavigation} from '@react-navigation/native';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -44,6 +46,8 @@ const Home = () => {
   const [currentSessionAttendance, setCurrentSessionAttendance] = useState('');
   const membersdata = useSelector(state => state.memberData.memberData);
   const memberClassData = useSelector(state => state.memberClassData.classData);
+  const [value, setValue] = useState(0);
+  const [classList, setClassList] = useState([]);
   const sessionAttendance = useSelector(
     state => state.sessionlist.sessionAttendance,
   );
@@ -54,6 +58,7 @@ const Home = () => {
     const Token = await getLocalData('accessToken');
     setToken(Token);
   };
+  const navigation = useNavigation();
   const members = [];
   membersdata && membersdata.forEach((item, index) => (item.index = index));
   membersdata && membersdata.map(item => members.push(item.name));
@@ -61,7 +66,7 @@ const Home = () => {
 
   const [currentMember, setCurrentMember] = useState('');
   var count = 0;
-  var value;
+  //var value;
   const getLocalUserData = useCallback(async () => {
     const userData = await getLocalData('user', true);
     setUser(userData);
@@ -129,12 +134,12 @@ const Home = () => {
 
   useEffect(() => {
     currentMember && dispatch(getmemberClass(currentMember._id));
-
     currentMember &&
       dispatch({
         type: Action.USER_GET_CURRENT_MEMBER_DATA,
         payload: currentMember,
       });
+
     currentMember &&
       dispatch({
         type: Action.USER_GET_CURRENT_MEMBER_ACTIVITY,
@@ -181,6 +186,11 @@ const Home = () => {
     //   });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    memberClassData &&
+      setClassList(
+        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED'),
+      );
   }, [memberClassData]);
 
   const renderItem = ({item, index}) => {
@@ -206,13 +216,16 @@ const Home = () => {
 
     setCurrentSessionAttendance(sessionAttendance.attendance);
   }, [sessionAttendance]);
-
+  console.log('memberClassData length', memberClassData);
   useEffect(() => {
     setCurrentSessionAttendance('');
 
-    memberActivityProgress && memberActivityProgress.docs.length > 0
-      ? memberActivityProgress.docs.levels &&
-        memberActivityProgress.docs.levels.forEach(levels => {
+    memberActivityProgress &&
+    memberActivityProgress.docs.length > 0 &&
+    memberActivityProgress.docs[activeDotIndex]
+      ? memberActivityProgress.docs[activeDotIndex].levels &&
+        memberActivityProgress.docs[activeDotIndex].levels.forEach(levels => {
+          // console.log('levels ', levels);
           if (levels.status === 'AWARDED') {
             count += 1;
           } else if (levels.status === 'IN_PROGRESS') {
@@ -220,12 +233,19 @@ const Home = () => {
           }
         })
       : null;
+    //console.log('count', count);
     if (count > 0) {
-      value =
-        (count / memberActivityProgress.docs[activeDotIndex].levelCount) * 10;
+      // console.log(
+      //   'inside if ',
+      //   count / memberActivityProgress.docs[activeDotIndex].levelCount,
+      //   memberActivityProgress.docs[activeDotIndex].levelCount,
+      // );
+      setValue(count / memberActivityProgress.docs[activeDotIndex].levelCount);
+    } else {
+      setValue(count);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeDotIndex, currentMember]);
+  }, [activeDotIndex, currentMember, memberActivityProgress]);
   return (
     <ScrollView style={{backgroundColor: colors.white}}>
       <StatusBar backgroundColor="rgb(255,163,0)" />
@@ -233,7 +253,9 @@ const Home = () => {
         <LinearGradient
           colors={[colors.orangeYellow, colors.pumpkinOrange]}
           style={styles.linearGradient}>
-          <Text style={styles.welcome}>{`Hi ${parent.name}`}</Text>
+          <Text style={styles.welcome}>{`Hi ${
+            parent.name ? parent.name : 'Parent'
+          }`}</Text>
           <View style={styles.containerMember}>
             <View style={{marginTop: hp('1%')}}>
               <Image
@@ -308,7 +330,7 @@ const Home = () => {
             </View>
           </WheelDropdown>
           <View style={styles.courosoul} />
-          {memberClassData.length > 0 ? (
+          {classList.length > 0 ? (
             <Carousel
               data={
                 memberClassData &&
@@ -350,7 +372,27 @@ const Home = () => {
                 height: hp('15%'),
                 marginRight: wp('3%'),
               }}>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch({
+                    type: Action.USER_ADD_CHILD_SUCCEDED,
+                    payload: {member: currentMember},
+                  });
+                  dispatch(
+                    getClubdata({
+                      callback: () => {
+                        navigation.navigate('New_Class_Selection', {
+                          from: 'homeTab',
+                        });
+                      },
+                    }),
+                  );
+                  // dispatch({
+                  //   type: Action.USER_GET_CURRENT_MEMBER_DATA,
+                  //   payload: currentMember,
+                  // });
+                  // navigation.navigate('EnrolledChild' );
+                }}>
                 <Text style={{fontSize: wp('6%'), color: colors.orange}}>
                   Please add a Class
                 </Text>
@@ -464,8 +506,10 @@ const Home = () => {
         />
         <Timelines
           data={
-            memberActivityProgress && memberActivityProgress.docs.length > 0
-              ? memberActivityProgress.docs[activeDotIndex].levels
+            memberActivityProgress &&
+            memberActivityProgress.docs.length > 0 &&
+            memberActivityProgress.docs[activeDotIndex]
+              ? memberActivityProgress.docs[activeDotIndex]?.levels
               : null
           }
         />

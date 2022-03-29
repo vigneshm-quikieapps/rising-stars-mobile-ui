@@ -14,6 +14,17 @@ const AtmCard = props => {
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
 
+  const handleCardNumber = text => {
+    let formattedText = text.split(' ').join('');
+
+    if (formattedText.length > 0) {
+      formattedText = formattedText.match(new RegExp('.{1,4}', 'g')).join(' ');
+    }
+    //this.setState({ cardNumber: text });
+    setCardNumber(text.split(' ').join(''));
+    return formattedText;
+  };
+
   return (
     <View
       style={[
@@ -54,11 +65,11 @@ const AtmCard = props => {
 
         <TextInput
           placeholder="Card Number"
-          maxLength={16}
+          maxLength={19}
           returnKeyType="next"
           value={cardNumber}
           keyboardType="numeric"
-          onChangeText={text => setCardNumber(text)}
+          onChangeText={text => handleCardNumber(text)}
           onSubmitEditing={() => {
             monthRef.current.focus();
           }}
@@ -123,6 +134,7 @@ const AtmCard = props => {
               onSubmitEditing={() => {
                 cvvRef.current.focus();
               }}
+              blurOnSubmit={false}
             />
             <View
               style={{

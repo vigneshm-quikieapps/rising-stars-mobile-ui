@@ -20,7 +20,9 @@ const Confirmation = props => {
   const enrollment = useSelector(state => state.enrollChild.enrollstate);
   const [showAlert, setShowAlert] = useState(false);
   const memberClassData = useSelector(state => state.memberClassData.classData);
+  const {from} = props.route.params;
 
+  //console.log('confirmation', from);
   useEffect(() => {
     enrollment && enrollment?.message == 'enrolled successful'
       ? setShowAlert(true)
@@ -30,6 +32,7 @@ const Confirmation = props => {
   const DateDiff = () => {
     const start = new Date(memberClassData[0]?.session.term.startDate);
     const today = new Date();
+
     const range =
       start.getDate() -
       today.getDate() +
@@ -47,7 +50,11 @@ const Confirmation = props => {
         <Alert
           visible={showAlert}
           confirm={'Done'}
-          success={() => props.navigation.navigate('Profile')}
+          success={() => {
+            from === 'homeTab'
+              ? props.navigation.navigate('HomeTab')
+              : props.navigation.navigate('Profile');
+          }}
           image={'failure'}
           message={'Something went Wrong'}
         />
@@ -119,7 +126,11 @@ const Confirmation = props => {
           <View style={{height: hp('0%')}} />
           <AppButton
             title={'Done'}
-            onPress={() => props.navigation.navigate('Profile')}
+            onPress={() => {
+              from === 'homeTab'
+                ? props.navigation.navigate('HomeTab')
+                : props.navigation.navigate('Profile');
+            }}
           />
         </CustomLayout>
       )}

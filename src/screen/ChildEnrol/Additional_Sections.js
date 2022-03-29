@@ -28,6 +28,9 @@ const Additional_Sections = props => {
   const [sms, setSms] = useState(false);
   const fullName = useSelector(state => state.childData.fullName);
   const age = useSelector(state => state.childData.age);
+  const {from} = props.route.params;
+
+  //console.log('Additional sec', from);
   const handleSubmit = () => {
     var det = {
       email: email,
@@ -35,7 +38,7 @@ const Additional_Sections = props => {
       sms: sms,
     };
     dispatch(setAdditionDetails(det));
-    props.navigation.navigate('Pay');
+    props.navigation.navigate('Pay', {from: from});
   };
   const selectaddition = way => {
     way === 'email' ? setEmail(!email) : null;

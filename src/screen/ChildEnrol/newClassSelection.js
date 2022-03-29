@@ -50,8 +50,9 @@ const New_Class_Selection = props => {
   const memberClassData = useSelector(state => state.memberClassData.classData);
 
   const dispatch = useDispatch();
-  console.log('abc', selectdata);
-  console.log('def', child);
+  //console.log('abc', selectdata);
+  //console.log('def', child);
+  const {from} = props.route.params;
 
   const handleBusiness = async item => {
     setBusiness(item.name);
@@ -79,7 +80,7 @@ const New_Class_Selection = props => {
 
   const handleforward = () => {
     dispatch(setSlotData(selectdata));
-    props.navigation.navigate('Fees_Overview');
+    props.navigation.navigate('Fees_Overview', {from: from});
   };
 
   // useEffect(() => {
