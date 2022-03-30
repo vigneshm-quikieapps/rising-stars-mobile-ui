@@ -8,7 +8,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useSelector} from 'react-redux';
 import {CustomLayout, ClassCard, Slot, AppButton} from '../../components';
 import Alert from '../../components/alert-box';
-import {hp, colors, wp, Fontsize} from '../../constants';
+import {hp, colors, wp, Fontsize, fullDays} from '../../constants';
 import {classTransfer} from '../../redux/service/request';
 import {getLocalData} from '../../utils/LocalStorage';
 
@@ -20,6 +20,8 @@ export default function ChangeClass(props) {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showFailureAlert, setShowFailureAlert] = useState(false);
   const [newSessionId, setNewSessionId] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+
   const [token, setToken] = useState('');
   const currentClass = props.route.params.classes.item;
   console.log('class: ', currentClass);
@@ -66,45 +68,55 @@ export default function ChangeClass(props) {
       Customchildren={
         <LinearGradient
           style={{
-            height: hp('25%'),
+            height: hp('18%'),
             borderRadius: 20,
             marginTop: hp('5%'),
           }}
           colors={['#ffa300', '#ff7e00']}>
-          <View style={{marginLeft: wp('2%'), marginTop: hp('2%')}}>
-            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
-              Child's Name
-            </Text>
-            <Text
-              style={{
-                color: colors.white,
-                fontSize: Fontsize + wp('1%'),
-                //fontWeight: 'bold',
-              }}>
-              {currentMember.name}
-            </Text>
-            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
-              Club Name
-            </Text>
-            <Text
-              style={{
-                color: colors.white,
-                fontSize: Fontsize + wp('1%'),
-                //fontWeight: 'bold',
-              }}>
-              {currentClass.business.name}
-            </Text>
-            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
-              Child's Club Id
-            </Text>
-            <Text
-              style={{
-                color: colors.white,
-                fontSize: Fontsize + wp('1%'),
-                //fontWeight: 'bold',
-              }}>
-              {currentClass.clubMembershipId}
-            </Text>
+          <View
+            style={{
+              marginHorizontal: wp('4%'),
+              marginTop: hp('2%'),
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <View>
+              <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
+                Child's Name
+              </Text>
+              <Text
+                style={{
+                  color: colors.white,
+                  fontSize: Fontsize + wp('1%'),
+                  //fontWeight: 'bold',
+                }}>
+                {currentMember.name}
+              </Text>
+              <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
+                Club Name
+              </Text>
+              <Text
+                style={{
+                  color: colors.white,
+                  fontSize: Fontsize + wp('1%'),
+                  //fontWeight: 'bold',
+                }}>
+                {currentClass.business.name}
+              </Text>
+            </View>
+            <View>
+              <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
+                Child's Club ID
+              </Text>
+              <Text
+                style={{
+                  color: colors.white,
+                  fontSize: Fontsize + wp('1%'),
+                  //fontWeight: 'bold',
+                }}>
+                {currentClass.clubMembershipId}
+              </Text>
+            </View>
           </View>
         </LinearGradient>
       }>
@@ -151,7 +163,7 @@ export default function ChangeClass(props) {
                   status={
                     newSessionId === session.item._id ? 'checked' : 'unchecked'
                   }
-                  day={session.item.pattern[0].day}
+                  day={fullDays[session.item.pattern[0].day]}
                   time={
                     session.item && session.item.pattern.length > 0
                       ? `${moment(session.item.pattern[0].startTime).format(
@@ -209,6 +221,7 @@ export default function ChangeClass(props) {
             if (response.message === 'Transfer successful') {
               setShowSuccessAlert(true);
             } else {
+              setErrorMsg(response.errors[0]['newSessionId']);
               setShowFailureAlert(true);
             }
           }}
@@ -233,7 +246,7 @@ export default function ChangeClass(props) {
           confirm={'Go Back'}
           success={() => props.navigation.navigate('Profile')}
           image={'failure'}
-          message={'OOPS!! Something Went Wrong!!'}
+          message={errorMsg}
         />
       ) : null}
       {/* <Slot

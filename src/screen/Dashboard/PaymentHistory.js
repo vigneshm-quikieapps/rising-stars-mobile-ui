@@ -15,13 +15,14 @@ import {
 } from '../../components';
 import {clubfinance} from '../../redux/action/enrol';
 import {colors, Fontsize, hp, wp} from '../../constants';
-import {getmemberClass} from '../../redux/action/home';
+import {getmemberClass, getmemberData} from '../../redux/action/home';
 import {date} from 'yup/lib/locale';
 import {useNavigation} from '@react-navigation/native';
 import PayNow from './PayNow';
 import moment from 'moment';
 import {Pagination} from 'react-native-snap-carousel';
 import {ActivityIndicator} from 'react-native-paper';
+import {getLocalData} from '../../utils/LocalStorage';
 
 export default function EnrolledChild() {
   const dispatch = useDispatch();
@@ -33,12 +34,15 @@ export default function EnrolledChild() {
   const [currentUpcomigBills, setCurrentUpcomingBills] = useState([]);
   const [paymentChannels, setpaymentChannels] = useState([]);
   const navigation = useNavigation();
+  const [token, setToken] = useState();
 
   const membersData = useSelector(state => state.memberData.memberData);
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const currentMember = useSelector(state => state.currentMemberData.data);
   const bills = useSelector(state => state.memberBills);
-  const clubfinance2 = useSelector(state => state.clubfinance.financedata.businessFinance);
+  const clubfinance2 = useSelector(
+    state => state.clubfinance.financedata.businessFinance,
+  );
   // console.log('data123: ', bills);
 
   useEffect(() => {
@@ -83,10 +87,19 @@ export default function EnrolledChild() {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [memberClassData, bills]);
 
-  // useEffect(() => {
-  //   membersData && dispatch(getmemberClass(membersData[activeDotIndex]._id));
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [activeDotIndex]);
+  const accessToken = async () => {
+    const Token = await getLocalData('accessToken');
+    setToken(Token);
+  };
+
+  accessToken();
+
+  useEffect(() => {
+    token && dispatch(getmemberData(token));
+    console.log('memberDAta in useEffect', membersData);
+    membersData && dispatch(getmemberClass(membersData[activeDotIndex]._id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [membersData]);
 
   useEffect(() => {
     if (bills.data) {
@@ -102,7 +115,12 @@ export default function EnrolledChild() {
   useEffect(() => {
     let businessesTemp =
       memberClassData &&
-      memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED');
+      memberClassData?.filter(
+        item =>
+          item?.enrolledStatus === 'ENROLLED' ||
+          item?.enrolledStatus === 'WAITLISTED',
+      );
+    console.log('inside payment history', businessesTemp);
     setBusinessList(businessesTemp);
   }, []);
 
@@ -283,7 +301,7 @@ export default function EnrolledChild() {
         return item;
       }
     });
-    console.log('upcoming', upcoming[0]);
+    //console.log('upcoming', upcoming[0]);
     setCurrentUpcomingBills(upcoming);
   };
 
@@ -344,7 +362,9 @@ export default function EnrolledChild() {
                 backgroundColor: colors.white,
                 borderColor: colors.reddish,
               }}
-              button={paymentChannels.paymentChannels.online}
+              button={
+                paymentChannels ? paymentChannels.paymentChannels.online : false
+              }
             />
           );
         })}
@@ -363,7 +383,11 @@ export default function EnrolledChild() {
                   backgroundColor: colors.white,
                   borderColor: colors.reddish,
                 }}
-                button={paymentChannels.paymentChannels.online}
+                button={
+                  paymentChannels
+                    ? paymentChannels.paymentChannels.online
+                    : false
+                }
               />
             );
           }
@@ -371,22 +395,20 @@ export default function EnrolledChild() {
 
         {/* //////////////////////////////////////////Paid bills/// */}
         {currentPaidBills.map((bill, index) => {
-          if (index === 0) {
-            return (
-              <PayNow
-                business={businessList[activeDotIndex]}
-                item1={bill}
-                key={index}
-                notify={'Paid'}
-                batchstyle={{backgroundColor: colors.seafoamBlue}}
-                subStyle={{
-                  backgroundColor: colors.limeGreen,
-                  borderColor: colors.seafoamBlue,
-                }}
-                button={false}
-              />
-            );
-          }
+          return (
+            <PayNow
+              business={businessList[activeDotIndex]}
+              item1={bill}
+              key={index}
+              notify={'Paid'}
+              batchstyle={{backgroundColor: colors.seafoamBlue}}
+              subStyle={{
+                backgroundColor: colors.limeGreen,
+                borderColor: colors.seafoamBlue,
+              }}
+              button={false}
+            />
+          );
         })}
 
         {/* //////////////////////////////////////////Future Upcoming bills/// */}

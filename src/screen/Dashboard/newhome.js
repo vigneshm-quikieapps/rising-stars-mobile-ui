@@ -216,7 +216,7 @@ const Home = () => {
 
     setCurrentSessionAttendance(sessionAttendance.attendance);
   }, [sessionAttendance]);
-  console.log('memberClassData length', memberClassData);
+  //console.log('memberClassData length', memberClassData);
   useEffect(() => {
     setCurrentSessionAttendance('');
 

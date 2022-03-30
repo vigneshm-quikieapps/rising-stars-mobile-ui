@@ -145,6 +145,7 @@ export default function EnrolledChild(props) {
   useEffect(() => {
     accessToken();
   }, []);
+
   return (
     <CustomLayout
       names={'Enrolled Classes'}

@@ -153,7 +153,7 @@ const PayNow = props => {
 
   return (
     <>
-      {item1.classId === business.classId ? (
+      {item1?.classId === business?.classId ? (
         <Card
           paystyle={{backgroundColor: colors.reddish}}
           notify={props.notify}

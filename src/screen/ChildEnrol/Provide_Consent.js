@@ -111,7 +111,8 @@ const Provide_Consent = props => {
           <Image source={require('../../assets/images/icon-info.png')} />
         </View>
         <Text style={styles.marktext}>
-          {club.name} is the Business Trade Name
+          {club.name}'s occasionallu takes videos and photographs for
+          promotional and training purposes and during displays
         </Text>
       </View>
       {/* <TouchableOpacity onPress={() => termref.current.open()}>
@@ -282,6 +283,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: Fontsize,
     fontFamily: 'Nunito-Regular',
+    marginLeft: 6,
   },
   bottom: {
     fontFamily: 'Nunito-Regular',

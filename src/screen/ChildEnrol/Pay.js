@@ -30,7 +30,7 @@ const Pay = props => {
   const consent = useSelector(state => state.addProvidedata);
   const [showAtm, setShowAtm] = useState(false);
   const [showStandingOrder, setShowStandingOrder] = useState(false);
-  const [standingOrderValue, setStandingOrderValue] = useState(false);
+  const [standingOrderValue, setStandingOrderValue] = useState(0);
   const {from} = props.route.params;
 
   // console.log('pay', from);
@@ -51,11 +51,12 @@ const Pay = props => {
   const dispatch = useDispatch();
 
   const isStandingOrderHandler = value => {
-    if (value === 1) {
-      setStandingOrderValue(true);
-    } else if (value === 2) {
-      setStandingOrderValue(false);
-    }
+    // if (value === 1) {
+    //   setStandingOrderValue(false);
+    // } else if (value === 2) {
+    //   setStandingOrderValue(true);
+    // }
+    setStandingOrderValue(value);
   };
 
   const handleforward = async () => {
@@ -73,7 +74,12 @@ const Pay = props => {
         telephone: addData.telephone,
         sms: addData.sms,
       },
-      isStandingOrder: standingOrderValue,
+      isStandingOrder:
+        standingOrderValue === 1
+          ? false
+          : standingOrderValue === 2
+          ? true
+          : null,
       consent: {},
     };
     consent.allergie !== '' ? (data.consent.allergie = consent.allergie) : null;
@@ -165,23 +171,25 @@ const Pay = props => {
               style={{
                 fontFamily: 'Nunito-SemiBold',
                 fontSize: wp('5%'),
+                marginLeft: wp('4%'),
               }}>
               Net Banking
             </Text>
           </View>
           <View style={styles.bottom}>
-            <RadioButton />
+            <RadioButton color={colors.orange} />
             <Text
               style={{
                 fontFamily: 'Nunito-SemiBold',
                 fontSize: wp('5%'),
+                marginLeft: wp('4%'),
               }}>
               Wallets
             </Text>
           </View>
         </>
       ) : null}
-      {showStandingOrder && (
+      {showStandingOrder && standingOrderValue !== 0 && (
         <ForwardButton
           style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
           onPress={() => handleforward()}
@@ -252,6 +260,7 @@ const styles = StyleSheet.create({
     padding: wp('2%'),
     marginTop: hp('2%'),
     backgroundColor: '#f2f2f2',
+    paddingLeft: wp('4%'),
   },
 });
 

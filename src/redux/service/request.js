@@ -237,7 +237,11 @@ export function fetchMemberClassData(id) {
   return fetch(`${heroku_url}/members/${id}/enrolments`, {
     method: 'GET',
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside fetchMemberClassesData APi', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
@@ -318,7 +322,11 @@ export function classTransfer(payload) {
     },
     body: JSON.stringify(payload.data),
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside change class', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });

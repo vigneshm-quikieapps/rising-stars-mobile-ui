@@ -15,7 +15,7 @@ import {
 function* handleGetMember(action) {
   try {
     const member = yield call(fetchMemberData, action.payload);
-    console.log('inside getmember Saga', member, action.payload);
+    console.log('inside get member Saga', member, action.payload);
     yield put({type: Action.USER_GET_MEMBER_SUCCESS, data: member});
   } catch (error) {
     yield put({type: Action.USER_GET_MEMBER_FAILED, error: error});
