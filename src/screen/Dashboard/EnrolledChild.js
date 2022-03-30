@@ -194,7 +194,7 @@ export default function EnrolledChild(props) {
                   : null
               }
               facility={classes.item.session.facility}
-              coach={'Henry Itondo'}
+              coach={classes.item.session.coachId.name}
               class
               classbutton={() => {
                 dispatch(getSessiondata(classes.item.class._id));

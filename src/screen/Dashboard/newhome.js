@@ -491,29 +491,41 @@ const Home = () => {
           </View>
         </View>
       </View>
-
-      <View style={[styles.ProgressReports, styles.timeline]}>
-        <View style={{paddingRight: wp('4%'), paddingTop: wp('3%')}}>
-          <ProgressBarWithStar value={value} />
+      {memberActivityProgress &&
+      memberActivityProgress.docs.length > 0 &&
+      memberActivityProgress.docs[activeDotIndex] ? (
+        <View style={[styles.ProgressReports, styles.timeline]}>
+          <View style={{paddingRight: wp('4%'), paddingTop: wp('3%')}}>
+            <ProgressBarWithStar value={value} />
+          </View>
+          <View
+            style={{
+              height: hp('0.4%'),
+              width: '100%',
+              marginVertical: hp('1%'),
+              backgroundColor: colors.lightgrey,
+            }}
+          />
+          <Timelines
+            data={
+              memberActivityProgress &&
+              memberActivityProgress.docs.length > 0 &&
+              memberActivityProgress.docs[activeDotIndex]
+                ? memberActivityProgress.docs[activeDotIndex]?.levels
+                : null
+            }
+          />
         </View>
-        <View
-          style={{
-            height: hp('0.4%'),
-            width: '100%',
-            marginVertical: hp('1%'),
-            backgroundColor: colors.lightgrey,
-          }}
-        />
-        <Timelines
-          data={
-            memberActivityProgress &&
-            memberActivityProgress.docs.length > 0 &&
-            memberActivityProgress.docs[activeDotIndex]
-              ? memberActivityProgress.docs[activeDotIndex]?.levels
-              : null
-          }
-        />
-      </View>
+      ) : (
+        <View style={styles.remark}>
+          <View style={styles.mark}>
+            <Image source={require('../../assets/images/icon-info.png')} />
+          </View>
+          <Text style={styles.marktext}>
+            No Attendance records available at this time
+          </Text>
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -598,6 +610,32 @@ const styles = StyleSheet.create({
     borderBottomWidth: wp('1%'),
     elevation: 10,
     shadowColor: '#52006A',
+  },
+  remark: {
+    borderRadius: 10,
+    height: hp('12%'),
+    marginHorizontal: wp('4%'),
+    marginVertical: hp('7%'),
+    paddingHorizontal: wp('1.8%'),
+    paddingTop: hp('.1%'),
+    flexDirection: 'row',
+    backgroundColor: '#fff2e6',
+    // marginVertical: hp('1%'),
+  },
+  mark: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: hp('3%'),
+    width: hp('3%'),
+    marginRight: wp('2%'),
+  },
+  marktext: {
+    color: '#d26800',
+    alignSelf: 'center',
+    flex: 1,
+    fontSize: Fontsize,
+    fontFamily: 'Nunito-Regular',
   },
 });
 
