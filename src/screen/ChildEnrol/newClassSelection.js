@@ -187,23 +187,27 @@ const New_Class_Selection = props => {
             </Text>
             {sessionData.map(item => {
               return (
-                <Slot
-                  white
-                  required={true}
-                  Class={classes}
-                  radio
-                  sessions={item.name}
-                  onPress={() => setSelectdata(item)}
-                  status={selectdata === item && 'checked'}
-                  day={fullDays[item.pattern[0].day]}
-                  time={`${moment(item.pattern[0].startTime).format(
-                    'hh:mm A',
-                  )} - ${moment(item.pattern[0].endTime).format('hh:mm A')}`}
-                  facility={item.name}
-                  coach={item.coach.name}
-                  key={item._id}
-                  style={{marginVertical: wp('1%')}}
-                />
+                <>
+                  <Slot
+                    white
+                    required={true}
+                    Class={classes}
+                    radio
+                    sessions={item.name}
+                    onPress={() => setSelectdata(item)}
+                    status={selectdata === item && 'checked'}
+                    day={fullDays[item.pattern[0].day]}
+                    time={`${moment(item.pattern[0].startTime).format(
+                      'hh:mm A',
+                    )} - ${moment(item.pattern[0].endTime).format('hh:mm A')}`}
+                    facility={item.name}
+                    // coach={item.coach.name == null ? '---' : item.coach.name}
+                    coach={item.coach.name}
+                    key={item._id}
+                    style={{marginVertical: wp('1%')}}
+                  />
+                  {console.log('sessionData==>', item.enrolledStatus)}
+                </>
               );
             })}
           </>
