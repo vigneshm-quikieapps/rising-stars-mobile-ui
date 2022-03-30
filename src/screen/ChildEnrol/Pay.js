@@ -100,11 +100,13 @@ const Pay = props => {
       Customchildren={
         <StudentCard
           name={child.member.name}
-          id={child.member._id}
-          activityrequired
-          activity={club.name}
-          subactivity={'Childhood Joy Classes'}
-          // classname={'Childhood Joy Classes'}
+          age={
+            new Date().getFullYear() - parseInt(child.member.dob.slice(0, 4))
+          }
+          // id={child.member._id}
+          // activityrequired
+          // activity={club.name}
+          // subactivity={'Childhood Joy Classes'}
         />
       }
       steps

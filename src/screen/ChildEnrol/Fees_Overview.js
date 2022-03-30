@@ -32,6 +32,9 @@ const Fees_Overview = props => {
           id={child.member._id}
           activityrequired
           activity={club.name}
+          age={
+            new Date().getFullYear() - parseInt(child.member.dob.slice(0, 4))
+          }
           // subactivity={'Childhood Joy Classes'}
         />
       }

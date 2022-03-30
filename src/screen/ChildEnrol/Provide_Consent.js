@@ -60,9 +60,12 @@ const Provide_Consent = props => {
       Customchildren={
         <StudentCard
           name={child.member.name}
-          clubid={memberClassData[0]?.clubMembershipId}
-          activityrequired
-          activity={club.name}
+          age={
+            new Date().getFullYear() - parseInt(child.member.dob.slice(0, 4))
+          }
+          // clubid={memberClassData[0]?.clubMembershipId}
+          // activityrequired
+          // activity={club.name}
         />
       }
       steps
