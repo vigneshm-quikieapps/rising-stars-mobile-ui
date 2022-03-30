@@ -51,7 +51,7 @@ export const Stepend = '6';
 //   {id: 3, title: 'other'},
 // ];
 
-export const genderOfChild = ['Boy', 'Girl', 'other'];
+export const genderOfChild = ['Boy', 'Girl', 'Other'];
 
 export const EnrollData = [
   {id: 1, title: 'Step 1', description: 'Add Child and Emergency Contact'},
