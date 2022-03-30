@@ -47,6 +47,8 @@ const AttendenceShow = () => {
   const [currentTermId, setCurrentTermId] = useState('');
   const [currentClassId, setCurrentClassId] = useState('');
   const [upcomingAttendance, setUpcomingAttendance] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [dayPattern, setDayPattern] = useState(null);
   // const Item = ({title}) => (
   //   <View style={styles.item}>
@@ -181,9 +183,69 @@ const AttendenceShow = () => {
         });
         setCurrentSessionAttendance(attendance.attendance);
       });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberClassData]);
+  // useEffect(() => {
+  // console.log('upcomingAtt', upcomingAttendance[0].startDate);
+  // upcomingAttendance[]
+  // upcomingAttendance.map(item => {
+  //   // console.log('up===', item.startDate, item.endDate);
+  // currentTermId && setStartDate(upcomingAttendance[0].startDate);
+  // currentTermId && setEndDate(upcomingAttendance[0].endDate);
+  // });
+  // const date = new Date(startDate);
+  // console.log('upcomingAtt', date);
+  const dates = [];
+  const date = new Date('2022-03-07T00:00:00.000Z');
+  const eDate = new Date('2022-05-06T00:00:00.000Z');
+  // const date_start = new Date(sDate.getTime());
+  // console.log('first', sDate, eDate);
+  // console.log('date_start', date_start);
+  while (date <= eDate) {
+    // console.log('*****', date);
+    if (
+      // newDays[date.getDay()] == item.item.pattern[i].day
+      days[date.getDay()] == 'Tuesday' ||
+      days[date.getDay()] == 'Thusday' ||
+      days[date.getDay()] == 'Saturday'
+    ) {
+      dates.push(new Date(date));
+      date.setDate(date.getDate() + 1);
+      // console.log("DATE",date);
+    } else {
+      date.setDate(date.getDate() + 1);
+    }
+  }
+  console.log('DATES', dates);
+
+  //   // });
+  //   // console.log('pattern', item.item.pattern[0].day, dayPattern);
+  //   // item.item.pattern.map(items => {
+  //   // setDayPattern(items.day);
+  //   // console.log('GET_PATTERN ONLY', item.item.pattern);
+  //   // for (let i = 0; i < item.item.pattern.length; i++) {
+  //     // console.log('get pattern --- ', item.item.patter[i].day);
+  // while (date <= endDate) {
+  // console.log('*****', items.day);
+  // if (
+  // newDays[date.getDay()] == item.item.pattern[i].day
+  //     days[date.getDay()] == 'Tuesday' ||
+  //     days[date.getDay()] == 'Thusday' ||
+  //     days[date.getDay()] == 'Saturday'
+  //   ) {
+  //     dates.push(new Date(date));
+  //     date.setDate(date.getDate() + 1);
+  //     // console.log(date);
+  //   } else {
+  //     date.setDate(date.getDate() + 1);
+  //   }
+  // }
+  //   // }
+  //   // });
+  //   // });
+  // console.log('dates', dates);
+  // }, [upcomingAttendance]);
+
   const renderItem = ({item, index}) => {
     return (
       <LinearGradient
@@ -441,7 +503,7 @@ const AttendenceShow = () => {
                         }}>
                         <View
                           style={{
-                            width: '20%',
+                            width: wp('22%'),
                             justifyContent: 'center',
                             alignItems: 'center',
                           }}>
@@ -615,141 +677,52 @@ const AttendenceShow = () => {
             </LinearGradient>
           </View>
         </View>
-        <FlatList
-          data={upcomingAttendance}
-          keyExtractor={item => item._id}
-          renderItem={item => {
-            function getDatesInRange(startDate, endDate) {
-              const date = new Date(startDate.getTime());
+        {/* <FlatList
+          // data={upcomingAttendance}
+          // keyExtractor={item => item._id}
+          // renderItem={item => {
+            // console.log('item', item);
+            // function getDatesInRange(startDate, endDate) {
+            //   const date = new Date(startDate.getTime());
 
-              const dates = [];
-              // });
-              // console.log('pattern', item.item.pattern[0].day, dayPattern);
-              while (date <= endDate) {
-                // console.log('*****', items.day);
-                item.item.pattern.map(items => {
-                  // setDayPattern(items.day);
-                  //console.log('get pattern --- ', items.day);
-                  if (
-                    newDays[date.getDay()] == items.day
-                    // days[date.getDay()] == 'Tuesday' ||
-                    // days[date.getDay()] == 'Thusday' ||
-                    // days[date.getDay()] == 'Saturday'
-                  ) {
-                    dates.push(new Date(date));
-                    date.setDate(date.getDate() + 1);
-                    // console.log(date);
-                  } else {
-                    date.setDate(date.getDate() + 1);
-                  }
-                });
-              }
-              // });
-              return dates;
-            }
+            //   const dates = [];
+            //   // });
+            //   // console.log('pattern', item.item.pattern[0].day, dayPattern);
+            //   // item.item.pattern.map(items => {
+            //   // setDayPattern(items.day);
+            //   // console.log('GET_PATTERN ONLY', item.item.pattern);
+            //   // for (let i = 0; i < item.item.pattern.length; i++) {
+            //     // console.log('get pattern --- ', item.item.patter[i].day);
+            //     // while (date <= endDate) {
+            //     //   // console.log('*****', items.day);
+            //     //   if (
+            //     //     newDays[date.getDay()] == item.item.pattern[i].day
+            //     //     // days[date.getDay()] == 'Tuesday' ||
+            //     //     // days[date.getDay()] == 'Thusday' ||
+            //     //     // days[date.getDay()] == 'Saturday'
+            //     //   ) {
+            //     //     dates.push(new Date(date));
+            //     //     date.setDate(date.getDate() + 1);
+            //     //     // console.log(date);
+            //     //   } else {
+            //     //     date.setDate(date.getDate() + 1);
+            //     //   }
+            //     // }
+            //   // }
+            //   // });
+            //   // });
+            //   return dates;
+            // }
 
-            const d1 = new Date(item.item.term.startDate);
-            const d2 = new Date(item.item.term.endDate);
-            const dates = getDatesInRange(d1, d2);
+            // const d1 = new Date(item.item.term.startDate);
+            // const d2 = new Date(item.item.term.endDate);
+            // const dates = getDatesInRange(d1, d2);
+            // console.log('dates', dates);
             // console.log('hello', getDatesInRange(d1, d2));
             return (
-              // <View>
-              <View>
-                <Text>Hello</Text>
-                {/* hello */}
-                {/* {console.log('dates', dates)} */}
-                {/* {console.log('>>>Term Start & End date>>>', item.item.term.startDate, item.item.term.endDate)} */}
-                {/* </View> */}
-                {/* {console.log('>>>Term Pattern>>>', item.item.pattern)} */}
+                      );
 
-                {/* only getting first index i.e tuesday */}
-                {dates.map(date => {
-                  //console.log('MAPPING FILTERED DATES', date);
-                })}
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    paddingBottom: 20,
-                  }}>
-                  <View
-                    style={{
-                      width: '20%',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Text
-                      style={{
-                        fontSize: wp('4%'),
-                        fontFamily: 'Nunito-Regular',
-                        color: colors.blackOpacity,
-                      }}>
-                      {/* {days[new Date(date).getDay()]} */}
-                    </Text>
-                    <Text
-                      style={{
-                        color: colors.lightgrey,
-                        fontSize: wp('8%'),
-                        fontFamily: 'Nunito-SemiBold',
-                      }}>
-                      {/* {console.log('NAVED IS HERE WHY ARE YOU SAD', date)} */}
-                      {/* {new Date(date).getDate()} */}
-                      hhelo
-                    </Text>
-                  </View>
-                  <View style={{justifyContent: 'center'}}>
-                    <LinearGradient
-                      colors={['rgb(255,255,255)', 'rgb(255,255,255)']}
-                      // {
-                      //   item.item.attended === true
-                      //     ? ['#68D6AB', '#33AB96']
-                      //     : ['#EA5C5C', '#AB3333']
-                      //   // : item.status === 'Tardy'
-                      //   // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
-                      //   // : item.status === 'Upcoming'
-                      //   // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
-                      //   // : ['#ffa300', '#ff7e00']
-                      // }
-                      style={{height: 1.5, width: 30}}
-                    />
-                  </View>
-                  <View style={{justifyContent: 'center', width: '100%'}}>
-                    <LinearGradient
-                      colors={['rgb(255,255,255)', 'rgb(255,255,255)']}
-                      // {
-                      // item.item.attended === true
-                      //   ? ['#68D6AB', '#33AB96']
-                      //   : ['#EA5C5C', '#AB3333']
-                      // : item.status === 'Tardy'
-                      // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
-                      // : item.status === 'Upcoming'
-                      // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
-                      // : ['#ffa300', '#ff7e00']
-                      // }
-                      style={{
-                        padding: 20,
-                        width: '100%',
-                        borderTopLeftRadius: 16,
-                        borderBottomLeftRadius: 16,
-                        borderColor: '#d2d2d2',
-                        borderWidth: 1,
-                      }}>
-                      <Text
-                        style={{
-                          color: colors.lightgrey,
-                          fontSize: wp('4.5%'),
-                          fontFamily: 'Naunito-SemiBold',
-                        }}>
-                        {/* {item.item.attended ? 'Attended' : 'No Show'} */}
-                        Upcoming
-                      </Text>
-                    </LinearGradient>
-                  </View>
-                </View>
-              </View>
-            );
-          }}
-        />
+        /> */}
       </View>
     </ScrollView>
   );

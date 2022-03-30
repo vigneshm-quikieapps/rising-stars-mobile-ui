@@ -59,10 +59,13 @@ const Additional_Sections = props => {
       Customchildren={
         <StudentCard
           name={child.member.name}
-          id={age}
-          activityrequired
-          activity={club.name}
-          subactivity={'Childhood Joy Classes'}
+          age={
+            new Date().getFullYear() - parseInt(child.member.dob.slice(0, 4))
+          }
+          // id={age}
+          // activityrequired
+          // activity={club.name}
+          // subactivity={'Childhood Joy Classes'}
         />
       }
       steps

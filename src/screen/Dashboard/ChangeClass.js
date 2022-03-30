@@ -68,7 +68,7 @@ export default function ChangeClass(props) {
       Customchildren={
         <LinearGradient
           style={{
-            height: hp('18%'),
+            height: hp('20%'),
             borderRadius: 20,
             marginTop: hp('5%'),
           }}
@@ -79,10 +79,11 @@ export default function ChangeClass(props) {
               marginTop: hp('2%'),
               flexDirection: 'row',
               justifyContent: 'space-between',
+              paddingHorizontal: wp('5%'),
             }}>
             <View>
               <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
-                Child's Name
+                Child Name
               </Text>
               <Text
                 style={{
@@ -92,7 +93,12 @@ export default function ChangeClass(props) {
                 }}>
                 {currentMember.name}
               </Text>
-              <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
+              <Text
+                style={{
+                  color: '#f7cf79',
+                  fontSize: Fontsize,
+                  paddingTop: hp('1.5%'),
+                }}>
                 Club Name
               </Text>
               <Text
@@ -106,7 +112,7 @@ export default function ChangeClass(props) {
             </View>
             <View>
               <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
-                Child's Club ID
+                Child's Club Id
               </Text>
               <Text
                 style={{

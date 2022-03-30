@@ -47,8 +47,14 @@ const save = async login => {
 function* handleLogin(action) {
   try {
     const login = yield call(fetchLogin, action.payload.data);
+    // console.log('Login saga', login.errors[0].mobileNo);
     console.log('Login saga', login);
-    save(login);
+    // save(login);
+    // if (login.errors[0].mobileNo == 'Please enter a valid mobile number') {
+    //   console.log('object');
+    // } else {
+    //   console.log('not object');
+    // }
     yield put({type: Action.USER_LOGIN_SUCCESS, payload: login});
   } catch (error) {
     yield put({type: Action.USER_LOGIN_ERROR, error: error.message});

@@ -40,7 +40,7 @@ export default function EnrolledChild(props) {
     return (
       <LinearGradient
         style={{
-          height: hp('18%'),
+          height: hp('20%'),
           borderRadius: 20,
           marginTop: hp('5%'),
         }}
@@ -51,10 +51,11 @@ export default function EnrolledChild(props) {
             marginTop: hp('2%'),
             flexDirection: 'row',
             justifyContent: 'space-between',
+            paddingHorizontal: wp('5%'),
           }}>
           <View>
             <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
-              Child's Name
+              Child Name
             </Text>
             <Text
               style={{
@@ -64,7 +65,12 @@ export default function EnrolledChild(props) {
               }}>
               {currentMember.name}
             </Text>
-            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
+            <Text
+              style={{
+                color: '#f7cf79',
+                fontSize: Fontsize,
+                paddingTop: hp('1.5%'),
+              }}>
               Club Name
             </Text>
             <Text
@@ -195,7 +201,7 @@ export default function EnrolledChild(props) {
                   : null
               }
               facility={classes.item.session.facility}
-              coach={'Henry Itondo'}
+              coach={classes.item.session.coachId.name}
               class
               classbutton={() => {
                 dispatch(getSessiondata(classes.item.class._id));
