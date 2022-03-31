@@ -399,7 +399,6 @@ export function fetchAttendanceOfMemberInSession(payload) {
 
 // fetch session by term id and class id for ATTENDANCE
 export async function fetchSessionById(payload) {
-  console.error(payload);
   try {
     const response = await fetch(
       `${heroku_url}/sessions/in-a-class/of-a-particular-term`,
