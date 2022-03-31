@@ -108,7 +108,10 @@ export const LoginData = (state = loginState, action) => {
         accessToken: action.payload.accessToken,
         refreshToken: action.payload.refreshToken,
         user: action.payload.user,
-        networkerror: action.payload.message,
+        // networkerror: action.payload.message,
+        networkerror: action.payload.message
+          ? action.payload.message
+          : action.payload.errors[0].mobileNo,
         isloading: false,
       };
     case Action.USER_LOGIN_ERROR:
