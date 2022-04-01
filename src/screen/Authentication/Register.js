@@ -40,12 +40,13 @@ import LinearGradient from 'react-native-linear-gradient';
 const CELL_COUNT = 6;
 const validationSchema = Yup.object().shape({
   fullName: Yup.string()
-    .min(3, 'Too Short!')
+    // .min(3, 'Too Short!')
+    .min(5, 'Too Short!')
     .max(20, 'Too Long!')
     .required()
     .label('Full Name'),
   email: Yup.string().required().min(4).email().label('Email'),
-  contactNumber: Yup.string().required().label('Mobile Number'),
+  contactNumber: Yup.string().required().label('Mobile Number').min(10),
   password: Yup.string()
     .required('Password is required')
     .min(8)
@@ -111,7 +112,8 @@ function Register(props) {
     if (status === 'created successfully') {
       setSuccessAlert(true);
     } else {
-      if (status.length > 0) {
+      // console.log('failed due to something');
+      if (status !== undefined && status.length > 0) {
         if (status[0].email !== undefined) {
           setMessage('Email is already Taken');
         } else if (status[0].mobileNo !== undefined) {
