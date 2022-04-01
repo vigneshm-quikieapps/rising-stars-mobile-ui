@@ -16,6 +16,7 @@ import {useNavigation} from '@react-navigation/core';
 import {resetPasswordData} from '../../redux/action/auth';
 import {ScrollView} from 'react-native-gesture-handler';
 import Alert from '../../components/alert-box';
+import {useRoute} from '@react-navigation/native';
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -34,7 +35,9 @@ function SetPassword(props) {
   const otp = useSelector(state => state.ForgetPasswordData.otp);
   const email = useSelector(state => state.ForgetPasswordData.email);
   const mobileNo = useSelector(state => state.ForgetPasswordData.mobileNo);
-
+  const route = useRoute();
+  console.log('get data from InputOTP screen', route.params);
+  console.log('otp mobile no', otp, mobileNo, email);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   return (
     <CustomLayout
@@ -124,7 +127,7 @@ function SetPassword(props) {
                   setSuccessModalVisible(true);
                   setTimeout(() => {
                     setSuccessModalVisible(false);
-                    navigation.navigate('Login');
+                    // navigation.navigate('Login');
                   }, 3000);
                 }}
               />

@@ -30,16 +30,16 @@ function InputOTPScreen(props) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const route = useRoute();
-  let body = {
-    email: route.params.email,
-    mobileNo: route.params.contactNumber,
-  };
-  // dispatch(
-  //   forgetPasswordData({
-  //     payload: body,
-  //   }),
-  // );
-  forgetPasswordData(body);
+  console.log('get otp & mobileNo. from fp', route.params);
+  // let body = {
+  //   mobileNo: route.params.mobileNo,
+  //   email: route.params.email,
+  // };
+  // const handleOTP = async () => {
+  //   const getResp = await forgetPassword(body);
+  //   console.log('getResp==>', getResp.message, getResp.otp);
+  // };
+  // handleOTP();
   // console.log('response ==', dispatch(forgetPassword(body)));
   const [value1, setValue1] = useState('');
   const [showFailurealert, setFailureAlert] = useState(false);
@@ -79,16 +79,22 @@ function InputOTPScreen(props) {
   // }, [resendButtonDisabledTime]);
 
   const OTPValidation = () => {
-    if (value1 < 6) {
+    // if (value1 < 6) {
+    if (value1.length < 6) {
       // alert('Please Enter a Valid OTP');
       setFailureAlert(true);
-    } else {
-      props.navigation.navigate('SetPassword');
+    } else if (value1 == route.params.otp) {
+      props.navigation.navigate('SetPassword', {
+        mobileNo: route.params.mobileNo,
+        otp: route.params.otp,
+      });
       // if (props.twoInputField) {
       //   props.navigation.navigate('SetPassword');
       // } else {
       //   props.navigation.navigate('EnrollStack');
       // }
+    } else {
+      alert('Please check OTP.');
     }
   };
   return (

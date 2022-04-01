@@ -352,6 +352,7 @@ export function dropClass(payload) {
 }
 
 export function forgetPassword(payload) {
+  // console.log('checkpayload', payload);
   return fetch(`${heroku_url}/account/password/forgot/using-mobile-no`, {
     method: 'POST',
     headers: {
@@ -376,7 +377,11 @@ export function resetPassword(payload) {
     },
     body: JSON.stringify(payload),
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('reset password response', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });

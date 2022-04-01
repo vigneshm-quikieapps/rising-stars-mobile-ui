@@ -15,6 +15,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {CodeField} from 'react-native-confirmation-code-field';
+import {forgetPassword} from '../../redux/service/request';
 
 function CreateNewPassword(props) {
   const refRBSheet = useRef();
@@ -76,20 +77,28 @@ function CreateNewPassword(props) {
           // fullName: '',
         }}
         onSubmit={async values => {
-          console.log(values.contactNumber, values.email);
-          // let body = {
-          //   email: values.email,
-          //   mobileNo: values.contactNumber,
-          // };
-          // dispatch(forgetPasswordData(body));
-          // refRBSheet.current.open();
-          // props.navigation.navigate('InputOTPScreen', {
-          //   paramKey: 'Some Param from previous Screen',
-          // });
-          props.navigation.navigate('InputOTPScreen', {
+          // console.log(values.contactNumber, values.email);
+          let body = {
+            mobileNo: `+91${values.contactNumber}`,
             email: values.email,
-            mobileNo: values.contactNumber,
-          });
+          };
+          const handleOTP = async () => {
+            const getResp = await forgetPassword(body);
+            console.log('getResp==>', getResp);
+            if (getResp.errors) {
+              alert('Email or Phone No. is incorrect');
+            } else {
+              props.navigation.navigate('InputOTPScreen', {
+                otp: getResp.otp,
+                mobileNo: `+91${values.contactNumber}`,
+              });
+            }
+          };
+          handleOTP();
+          // props.navigation.navigate('InputOTPScreen', {
+          //   email: values.email,
+          //   mobileNo: `+91${values.contactNumber}`,
+          // });
         }}
         validationSchema={validationSchema}>
         {({
@@ -115,7 +124,7 @@ function CreateNewPassword(props) {
               error={errors.email}
               visible={touched.email}
             />
-        <Text style={styles.orText}>Or</Text>
+            <Text style={styles.orText}>Or</Text>
 
             <TextInputField
               placeholder="Mobile Number *"
@@ -131,7 +140,7 @@ function CreateNewPassword(props) {
               error={errors.contactNumber}
               visible={touched.contactNumber}
             />
-      <View style={{height: hp('26%')}} />
+            <View style={{height: hp('26%')}} />
 
             <AppButton
               title="Send OTP"
