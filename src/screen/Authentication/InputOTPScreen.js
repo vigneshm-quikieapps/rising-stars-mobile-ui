@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import {useDispatch} from 'react-redux';
+
 import {
   SafeAreaView,
   Text,
@@ -9,7 +11,7 @@ import {
 } from 'react-native';
 // import {AppButton} from './../../components';
 import {hp, wp} from '../../constants';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {CustomLayout, AppButton} from './../../components';
 
 import {
@@ -19,11 +21,26 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import Alert from '../../components/alert-box';
+import {forgetPassword} from '../../redux/service/request';
+import {forgetPasswordData} from '../../redux/action/auth';
 
 const CELL_COUNT = 6;
 
 function InputOTPScreen(props) {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const route = useRoute();
+  let body = {
+    email: route.params.email,
+    mobileNo: route.params.contactNumber,
+  };
+  // dispatch(
+  //   forgetPasswordData({
+  //     payload: body,
+  //   }),
+  // );
+  forgetPasswordData(body);
+  // console.log('response ==', dispatch(forgetPassword(body)));
   const [value1, setValue1] = useState('');
   const [showFailurealert, setFailureAlert] = useState(false);
   const ref = useBlurOnFulfill({value1, cellCount: CELL_COUNT});
