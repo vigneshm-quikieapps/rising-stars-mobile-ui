@@ -319,7 +319,7 @@ const Home = () => {
               }}>
               <WheelPicker
                 data={members}
-                isCyclic={true}
+                isCyclic={false}
                 onItemSelected={wheelselected}
                 selectedItem={wheelitem}
                 selectedItemTextColor={'black'}
