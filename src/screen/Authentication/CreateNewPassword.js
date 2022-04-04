@@ -16,6 +16,7 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {CodeField} from 'react-native-confirmation-code-field';
 import {forgetPassword} from '../../redux/service/request';
+import Alert from '../../components/alert-box';
 
 function CreateNewPassword(props) {
   const refRBSheet = useRef();
@@ -35,6 +36,7 @@ function CreateNewPassword(props) {
   const [number, setNumber] = useState('');
   const [OTP2, SetOTP2] = useState('');
   const [modalVisible, setModalVisible] = useState(true);
+  const [showFailurealert, setFailureAlert] = useState(false);
 
   const gotoGeneratePassword = () => {
     // props.navigation.navigate('GeneratePassword');
@@ -86,11 +88,13 @@ function CreateNewPassword(props) {
             const getResp = await forgetPassword(body);
             console.log('getResp==>', getResp);
             if (getResp.errors) {
-              alert('Email or Phone No. is incorrect');
+              // alert('Email or Phone No. is incorrect');
+              setFailureAlert(true);
             } else {
               props.navigation.navigate('InputOTPScreen', {
                 otp: getResp.otp,
                 mobileNo: `+91${values.contactNumber}`,
+                email: values.email,
               });
             }
           };
@@ -155,6 +159,21 @@ function CreateNewPassword(props) {
           </>
         )}
       </Formik>
+      {showFailurealert ? (
+        <Alert
+          visible={showFailurealert}
+          confirm={'Retry'}
+          success={() => {
+            setFailureAlert(false);
+          }}
+          image={'failure'}
+          message="Email or Phone No. is incorrect"
+          // success={() => props.navigation.navigate('Login')}
+          // image={'failure'}
+          // message={'Something Went Wrong'}
+        />
+      ) : null}
+
       {/* <View style={{paddingTop: hp('3%')}}>
         <TextInputField
           keyboardType="email"

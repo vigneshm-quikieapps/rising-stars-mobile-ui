@@ -380,6 +380,7 @@ export function forgetPassword(payload) {
 }
 
 export function resetPassword(payload) {
+  // console.log('payload', payload);
   return fetch(`${heroku_url}/account/password/reset/using-mobile-no`, {
     method: 'POST',
     headers: {
