@@ -30,7 +30,7 @@ function InputOTPScreen(props) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const route = useRoute();
-  console.log('get otp & mobileNo. from fp', route.params);
+  console.log('get otp, mobileNo, email. from fp', route.params);
   // let body = {
   //   mobileNo: route.params.mobileNo,
   //   email: route.params.email,
@@ -43,6 +43,7 @@ function InputOTPScreen(props) {
   // console.log('response ==', dispatch(forgetPassword(body)));
   const [value1, setValue1] = useState('');
   const [showFailurealert, setFailureAlert] = useState(false);
+  const [OTPAlert, setOTPAlert] = useState(false);
   const ref = useBlurOnFulfill({value1, cellCount: CELL_COUNT});
   const [propss1, getCellOnLayoutHandler1] = useClearByFocusCell({
     value1,
@@ -87,6 +88,7 @@ function InputOTPScreen(props) {
       props.navigation.navigate('SetPassword', {
         mobileNo: route.params.mobileNo,
         otp: route.params.otp,
+        email: route.params.email,
       });
       // if (props.twoInputField) {
       //   props.navigation.navigate('SetPassword');
@@ -94,7 +96,8 @@ function InputOTPScreen(props) {
       //   props.navigation.navigate('EnrollStack');
       // }
     } else {
-      alert('Please check OTP.');
+      setOTPAlert(true);
+      // alert('OTP must match.Please check OTP.');
     }
   };
   return (
@@ -143,9 +146,17 @@ function InputOTPScreen(props) {
           }}
           image={'failure'}
           message={'Please Enter a Valid OTP'}
-          // success={() => props.navigation.navigate('Login')}
-          // image={'failure'}
-          // message={'Something Went Wrong'}
+        />
+      ) : null}
+      {OTPAlert ? (
+        <Alert
+          visible={OTPAlert}
+          confirm={'Retry'}
+          success={() => {
+            setOTPAlert(false);
+          }}
+          image={'failure'}
+          message="OTP must match.Please check OTP Again"
         />
       ) : null}
       <View style={{height: hp('48%')}} />

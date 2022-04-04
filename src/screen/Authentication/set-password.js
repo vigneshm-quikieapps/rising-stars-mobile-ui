@@ -17,6 +17,7 @@ import {resetPasswordData} from '../../redux/action/auth';
 import {ScrollView} from 'react-native-gesture-handler';
 import Alert from '../../components/alert-box';
 import {useRoute} from '@react-navigation/native';
+import {resetPassword} from '../../redux/service/request';
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -31,13 +32,14 @@ const validationSchema = Yup.object().shape({
 
 function SetPassword(props) {
   const navigation = useNavigation();
+  const [showFailurealert, setFailureAlert] = useState(false);
   const dispatch = useDispatch();
   const otp = useSelector(state => state.ForgetPasswordData.otp);
   const email = useSelector(state => state.ForgetPasswordData.email);
   const mobileNo = useSelector(state => state.ForgetPasswordData.mobileNo);
   const route = useRoute();
   console.log('get data from InputOTP screen', route.params);
-  console.log('otp mobile no', otp, mobileNo, email);
+  // console.log('email',email);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   return (
     <CustomLayout
@@ -74,7 +76,34 @@ function SetPassword(props) {
             password: '',
             passwordConfirmation: '',
           }}
-          onSubmit={values => {}}
+          // onSubmit={values => {
+          // console.log('values', values);
+          onSubmit={async values => {
+            console.log(values);
+            let body = {
+              mobileNo: route.params.mobileNo,
+              email: route.params.email,
+              password: values.password,
+              otp: route.params.otp,
+            };
+            // console.log('body', body);
+            const reset = async () => {
+              const getResp = await resetPassword(body);
+              console.log('getResp==>', getResp);
+              if (getResp.errors) {
+                // alert('OTP has been expired. Please try again');
+                setFailureAlert(true);
+              } else {
+                // alert('password changed successfully');
+                setSuccessModalVisible(true);
+                //   setTimeout(() => {
+                //     setSuccessModalVisible(false);
+                //     navigation.navigate('Login');
+                //   }, 3000);
+              }
+            };
+            reset();
+          }}
           validationSchema={validationSchema}>
           {({
             handleChange,
@@ -115,25 +144,38 @@ function SetPassword(props) {
               <AppButton
                 title="Confirm Password"
                 // style={{marginTop: hp('40%')}}
-                onPress={() => {
-                  dispatch(
-                    resetPasswordData({
-                      mobileNo: mobileNo,
-                      otp: otp,
-                      password: values.password,
-                      email: email,
-                    }),
-                  );
-                  setSuccessModalVisible(true);
-                  setTimeout(() => {
-                    setSuccessModalVisible(false);
-                    // navigation.navigate('Login');
-                  }, 3000);
-                }}
+                onPress={handleSubmit}
+                //   () => {
+                //   dispatch(
+                //     resetPasswordData({
+                //       mobileNo: mobileNo,
+                //       otp: otp,
+                //       password: values.password,
+                //       email: email,
+                //     }),
+                //   );
+                //   setSuccessModalVisible(true);
+                //   setTimeout(() => {
+                //     setSuccessModalVisible(false);
+                //     navigation.navigate('Login');
+                //   }, 3000);
+                // }
+                // }
               />
             </View>
           )}
         </Formik>
+        {showFailurealert ? (
+          <Alert
+            visible={showFailurealert}
+            confirm={'Retry'}
+            success={() => {
+              setFailureAlert(false);
+            }}
+            image={'failure'}
+            message="OTP has been expired. Please try again"
+          />
+        ) : null}
       </ScrollView>
     </CustomLayout>
   );
