@@ -71,12 +71,14 @@ export const EnrollStack = props => {
 };
 
 export const Addchildren = props => {
+  console.log('addChildren', props.route);
   return (
     <Stack>
       <StackScreen.Screen
         name="AddChild"
         component={AddChild}
         options={{headerShown: false}}
+        initialParams={{from: props.route.params.from}}
       />
     </Stack>
   );
