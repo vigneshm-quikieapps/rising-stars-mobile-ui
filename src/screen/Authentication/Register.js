@@ -79,6 +79,7 @@ function Register(props) {
   const Reerror = useSelector(state => state.RegisterData.error);
   const isRegloading = useSelector(state => state.RegisterData.isLoading);
   const [value, setValue] = useState('');
+  const [newOTP, setNewOTP] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [prop, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
@@ -98,6 +99,7 @@ function Register(props) {
   const [seconds, setSeconds] = React.useState(10);
   const refRBSheet = useRef();
   const termref = useRef();
+  const [contactNoForResend, setContactNoForResend] = useState('');
   const star = <Text style={styles.star}>Rising Star</Text>;
 
   const callPopUp = () => setTerm(!term);
@@ -217,10 +219,10 @@ function Register(props) {
             country: 'United Kingdom',
           }}
           onSubmit={async values => {
-            // console.log(values);
             if (values.mobileNoOTP.length === 0) {
               const otp = await fetchMobileOTP(values.contactNumber);
               console.log(otp);
+              setValue(otp.otp);
               //timeout();
               refRBSheet.current.open();
             } else {
@@ -685,6 +687,7 @@ function Register(props) {
                   },
                 }}>
                 <View style={{paddingHorizontal: wp('5%')}}>
+                  {/* {console.log('contactNumber is here', values.contactNumber)} */}
                   <Text style={styles.otptitle}>OTP</Text>
                   <Text
                     style={{
@@ -721,14 +724,35 @@ function Register(props) {
                       if (value.length < 6) {
                         // alert('Please Enter Valid OTP');
                         setShowAlert(true);
-                      } else {
+                      } else if (value == newOTP) {
                         values.mobileNoOTP = value;
                         setMain(!main);
                         refRBSheet.current.close();
+                      } else {
+                        setShowAlert(true);
                       }
                     }}
                   />
-                  <Text
+                  <TouchableOpacity
+                    // onPress={resendOTP}
+                    onPress={async () => {
+                      const newOTP = await fetchMobileOTP(values.contactNumber);
+                      if (newOTP.otp) {
+                        setValue(newOTP.otp);
+                        setNewOTP(newOTP.otp);
+                      } else {
+                        // setOTPError(true);
+                        // alert('wrong OTP');
+                        setFailureAlert(true);
+                      }
+                      console.log('resend otp', newOTP.otp);
+                    }}
+                    style={{alignItems: 'center'}}>
+                    {/* {setContactNoForResend(values.contactNumber)} */}
+                    {/* {console.log('new no---.', contactNoForResend)} */}
+                    <Text style={styles.resendText}>RESEND OTP</Text>
+                  </TouchableOpacity>
+                  {/* <Text
                     style={{
                       fontFamily: 'Nunito-Regular',
                       alignSelf: 'center',
@@ -754,7 +778,7 @@ function Register(props) {
                     ) : (
                       <Text>in {seconds} sec</Text>
                     )}
-                  </Text>
+                  </Text> */}
                 </View>
               </RBSheet>
             </>

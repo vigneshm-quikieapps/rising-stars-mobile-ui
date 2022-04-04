@@ -114,7 +114,7 @@ function InputOTPScreen(props) {
     if (newOTP.otp) {
       setOTP(newOTP.otp);
     } else {
-      setOTPError(false);
+      setOTPError(true);
     }
   };
   return (
