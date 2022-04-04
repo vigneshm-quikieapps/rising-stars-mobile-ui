@@ -146,7 +146,9 @@ function Profile(props) {
         <Text style={styles.yourChild}>Your children</Text>
         <TouchableOpacity
           style={styles.addChild}
-          onPress={() => props.navigation.navigate('Addchildren')}>
+          onPress={() =>
+            props.navigation.navigate('AddChild', {from: 'profile'})
+          }>
           <Entypo
             name="plus"
             size={15}
