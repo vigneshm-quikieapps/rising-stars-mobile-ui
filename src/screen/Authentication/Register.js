@@ -748,8 +748,6 @@ function Register(props) {
                       console.log('resend otp', newOTP.otp);
                     }}
                     style={{alignItems: 'center'}}>
-                    {/* {setContactNoForResend(values.contactNumber)} */}
-                    {/* {console.log('new no---.', contactNoForResend)} */}
                     <Text style={styles.resendText}>RESEND OTP</Text>
                   </TouchableOpacity>
                   {/* <Text
@@ -948,5 +946,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignSelf: 'flex-end',
     marginTop: -hp('1%'),
+  },
+  resendText: {
+    color: colors.orange,
+    fontWeight: 'bold',
   },
 });
