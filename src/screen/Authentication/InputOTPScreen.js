@@ -8,9 +8,11 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
+  Button,
 } from 'react-native';
 // import {AppButton} from './../../components';
-import {hp, wp} from '../../constants';
+import {colors, hp, wp} from '../../constants';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {CustomLayout, AppButton} from './../../components';
 
@@ -44,6 +46,8 @@ function InputOTPScreen(props) {
   const [value1, setValue1] = useState('');
   const [showFailurealert, setFailureAlert] = useState(false);
   const [OTPAlert, setOTPAlert] = useState(false);
+  const [OTPError, setOTPError] = useState(false);
+  const [OTP, setOTP] = useState(route.params.otp);
   const ref = useBlurOnFulfill({value1, cellCount: CELL_COUNT});
   const [propss1, getCellOnLayoutHandler1] = useClearByFocusCell({
     value1,
@@ -81,10 +85,10 @@ function InputOTPScreen(props) {
 
   const OTPValidation = () => {
     // if (value1 < 6) {
-    if (value1.length < 6) {
+    if (OTP.length < 6) {
       // alert('Please Enter a Valid OTP');
       setFailureAlert(true);
-    } else if (value1 == route.params.otp) {
+    } else if (OTP == route.params.otp) {
       props.navigation.navigate('SetPassword', {
         mobileNo: route.params.mobileNo,
         otp: route.params.otp,
@@ -98,6 +102,19 @@ function InputOTPScreen(props) {
     } else {
       setOTPAlert(true);
       // alert('OTP must match.Please check OTP.');
+    }
+  };
+  let body = {
+    mobileNo: route.params.mobileNo,
+    email: route.params.email,
+  };
+  const resendOTP = async () => {
+    const newOTP = await forgetPassword(body);
+    console.log('newotp', newOTP.otp);
+    if (newOTP.otp) {
+      setOTP(newOTP.otp);
+    } else {
+      setOTPError(false);
     }
   };
   return (
@@ -121,8 +138,8 @@ function InputOTPScreen(props) {
         <CodeField
           ref={ref}
           {...props}
-          value={value1}
-          onChangeText={setValue1}
+          value={OTP}
+          onChangeText={setOTP}
           cellCount={CELL_COUNT}
           rootStyle={styles.codeFieldRoot}
           keyboardType="number-pad"
@@ -136,6 +153,9 @@ function InputOTPScreen(props) {
             </Text>
           )}
         />
+        {/* <Text style={{alignSelf: 'center', marginTop: hp('10%')}}>
+          This is otp: <Text style={{color: 'red'}}>{route.params.otp}</Text>
+        </Text> */}
       </View>
       {showFailurealert ? (
         <Alert
@@ -159,12 +179,27 @@ function InputOTPScreen(props) {
           message="OTP must match.Please check OTP Again"
         />
       ) : null}
-      <View style={{height: hp('48%')}} />
+      {OTPError ? (
+        <Alert
+          visible={OTPError}
+          confirm={'Retry'}
+          success={() => {
+            setOTPError(false);
+          }}
+          image={'failure'}
+          message="Something went wrong. Please Try Again"
+        />
+      ) : null}
+      <View style={{height: hp('45%')}} />
+      {/* <View style={{height: hp('32%')}} /> */}
       <AppButton
         title={props.twoInputField ? 'Verify' : 'Verify Account'}
         onPress={OTPValidation}
-        style={{marginVertical: 30}}
+        style={{marginVertical: 10}}
       />
+      <TouchableOpacity onPress={resendOTP} style={{alignItems: 'center'}}>
+        <Text style={styles.resendText}>RESEND OTP</Text>
+      </TouchableOpacity>
     </CustomLayout>
     // <SafeAreaView style={{paddingHorizontal: wp('4%')}}>
     //   <KeyboardAvoidingView
@@ -236,6 +271,10 @@ const styles = StyleSheet.create({
     fontSize: wp('4%'),
     maxWidth: '85%',
     alignSelf: 'center',
+  },
+  resendText: {
+    color: colors.orange,
+    fontWeight: 'bold',
   },
 });
 
