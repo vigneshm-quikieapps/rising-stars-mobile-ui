@@ -393,7 +393,7 @@ const AttendenceShow = () => {
             }}>
             <WheelPicker
               data={member}
-              isCyclic={true}
+              isCyclic={false}
               onItemSelected={item => setItem(item)}
               selectedItemTextColor={'black'}
               selectedItemTextSize={Fontsize}

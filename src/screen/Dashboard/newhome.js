@@ -203,7 +203,7 @@ const Home = () => {
         day={item.session.pattern[0].day}
         time={`${moment(item.session.pattern[0].startTime).format(
           'hh:mm A',
-        )} -${moment(item.session.pattern[0].endTime).format('hh:mm A')} `}
+        )} - ${moment(item.session.pattern[0].endTime).format('hh:mm A')} `}
         facility={item.session.facility}
         coach={item.session.coachId.name}
         style={{backgroundColor: 'white', borderRadius: 20}}
@@ -319,7 +319,7 @@ const Home = () => {
               }}>
               <WheelPicker
                 data={members}
-                isCyclic={true}
+                isCyclic={false}
                 onItemSelected={wheelselected}
                 selectedItem={wheelitem}
                 selectedItemTextColor={'black'}

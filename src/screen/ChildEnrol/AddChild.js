@@ -322,7 +322,7 @@ const AddChild = props => {
                 }}>
                 <WheelPicker
                   selectedItem={genderOfChild.indexOf(gender)}
-                  isCyclic={true}
+                  isCyclic={false}
                   data={genderOfChild}
                   onItemSelected={item => {
                     values.gender = genders[item];
@@ -446,7 +446,7 @@ const AddChild = props => {
                 }}>
                 <WheelPicker
                   selectedItem={relations.indexOf(relation)}
-                  isCyclic={true}
+                  isCyclic={false}
                   data={relationForDisplay}
                   onItemSelected={item => {
                     values.eprelation = relations[item];
