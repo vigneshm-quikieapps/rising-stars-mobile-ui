@@ -52,6 +52,7 @@ const AtmCard = props => {
           <Text style={styles.cardOption}>Credit / Debit / ATM Card</Text>
         </View>
       </View>
+
       <View
         style={[
           styles.cardDetails,
@@ -162,7 +163,7 @@ const AtmCard = props => {
               style={{
                 borderWidth: 1,
                 borderColor: colors.lightgrey,
-                width: wp('35%'),
+                width: wp('28%'),
               }}
             />
           </View>
@@ -178,6 +179,7 @@ const styles = StyleSheet.create({
     height: hp('31.5%'),
     borderWidth: 1,
     padding: hp('2%'),
+    paddingBottom: hp('1%'),
     marginVertical: hp('1%'),
     borderRadius: 10,
   },

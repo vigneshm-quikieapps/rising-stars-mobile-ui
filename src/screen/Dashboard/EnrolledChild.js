@@ -32,7 +32,7 @@ export default function EnrolledChild(props) {
 
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const currentMember = useSelector(state => state.currentMemberData.data);
-
+  console.log('inside enrolled child', currentMember);
   const renderItem = item => {
     var temp =
       memberClassData &&
@@ -79,7 +79,7 @@ export default function EnrolledChild(props) {
                 fontSize: Fontsize + wp('1%'),
                 //fontWeight: 'bold',
               }}>
-              {temp[0].business.name}
+              {/* {temp[0].business?.name} */}Club name
             </Text>
           </View>
           <View>
@@ -92,7 +92,7 @@ export default function EnrolledChild(props) {
                 fontSize: Fontsize + wp('1%'),
                 //fontWeight: 'bold',
               }}>
-              {temp[0].clubMembershipId}
+              {/* {temp[0].clubMembershipId} */}ID
             </Text>
           </View>
         </View>
@@ -118,6 +118,7 @@ export default function EnrolledChild(props) {
         : end.getMinutes();
     return sHr + ':' + sMin + '-' + eHr + ':' + eMin;
   };
+
   const groupBy = objectArray => {
     let groupData = {};
     objectArray.forEach(element => {
@@ -130,34 +131,36 @@ export default function EnrolledChild(props) {
     });
     return groupData;
   };
-  useEffect(() => {
-    setGroupedData(
-      groupBy(
-        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED'),
-      ),
-    );
-    var businesses = [];
-    for (const [key, value] of Object.entries(groupedData)) {
-      businesses.push({id: key});
-    }
-    setBusinessList(businesses);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memberClassData]);
-  const accessToken = async () => {
-    const Token = await getLocalData('accessToken');
-    setToken(Token);
-  };
 
   useEffect(() => {
-    accessToken();
-  }, []);
+    // setGroupedData(
+    //   groupBy(
+    //     memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED'),
+    //   ),
+    // );
+    // var businesses = [];
+    // for (const [key, value] of Object.entries(groupedData)) {
+    //   businesses.push({id: key});
+    // }
+    console.log('Enrolled Child', memberClassData);
+    //setBusinessList(businesses);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [memberClassData]);
+  // const accessToken = async () => {
+  //   const Token = await getLocalData('accessToken');
+  //   setToken(Token);
+  // };
+
+  // useEffect(() => {
+  //   accessToken();
+  // }, []);
 
   return (
     <CustomLayout
       names={'Enrolled Classes'}
       Customchildren={
         <Carousel
-          data={businessList}
+          data={memberClassData}
           renderItem={renderItem}
           sliderWidth={wp('95%')}
           itemWidth={wp('90%')}
@@ -171,13 +174,14 @@ export default function EnrolledChild(props) {
       </Text>
       <FlatList
         data={
-          memberClassData && businessList && businessList.length > 0
-            ? memberClassData.filter(
-                item =>
-                  item.enrolledStatus === 'ENROLLED' &&
-                  item.business._id === businessList[activeDotIndex].id,
-              )
-            : null
+          memberClassData
+          // memberClassData && businessList && businessList.length > 0
+          //   ? memberClassData.filter(
+          //       item =>
+          //         item.enrolledStatus === 'ENROLLED' &&
+          //         item.business._id === businessList[activeDotIndex].id,
+          //     )
+          //   : null
         }
         key={item => item._id}
         renderItem={classes => {

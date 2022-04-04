@@ -30,7 +30,7 @@ const Confirmation = props => {
   }, [enrollment]);
 
   const DateDiff = () => {
-    console.log('inside datediff function ', memberClassData, enrollment);
+    //console.log('inside datediff function ', memberClassData, enrollment);
     const start = new Date(memberClassData[0]?.session.term.startDate);
     const today = new Date();
 

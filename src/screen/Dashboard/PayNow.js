@@ -133,7 +133,6 @@ const PayNow = props => {
   const {business, item1} = props;
   const child = useSelector(state => state.currentMemberData.data);
 
-  const [showAtm, setShowAtm] = useState(false);
   const [showStandingOrder, setShowStandingOrder] = useState(false);
   const [totalAmt, setTotalAmt] = useState(0);
   // console.log('inside pay now', business, item1);
@@ -149,45 +148,48 @@ const PayNow = props => {
     return `${months[month]} ${year} fee`;
   };
 
-  //console.log('items', business, item1);
+  //console.log('items', item1);
 
-  return (
-    <>
-      {item1?.classId === business?.classId ? (
-        <Card
-          paystyle={{backgroundColor: colors.reddish}}
-          notify={props.notify}
-          paid={item1.paid}
-          paidtext={`Paid on ${moment(new Date(item1.paidAt)).format(
-            'DD/MM/YYYY',
-          )}`}
-          amount={item1.total}
-          body={findDate(item1)}
-          date={`Due Date ${moment(new Date(item1.dueDate)).format(
-            'DD/MM/YYYY',
-          )}`}
-          button={props.button}
-          //button
-          title="Pay Now"
-          paybutton={() => {
-            setShowStandingOrder(true);
-          }}
-          substyle={props.subStyle}
-          batchstyle={props.batchstyle}
-        />
-      ) : // {/*
-      //             <StandingOrderPayNow
-      //               onPress={() => {
-      //                 setShowStandingOrder(!showStandingOrder);
-      //               }}
-      //               visible={showStandingOrder}
-      //               item1={item1}
-      //               business={business}
-      //             /> */}
-
-      null}
-    </>
-  );
+  if (props.showAtm === item1?.id) {
+    return (
+      <AtmCard
+        onPress={() => {
+          props.selectAtm('');
+        }}
+        visible={props.showAtm === item1?.id ? true : false}
+      />
+    );
+  } else {
+    return (
+      <>
+        {item1?.classId === business?.classId ? (
+          <Card
+            paystyle={{backgroundColor: colors.reddish}}
+            notify={props.notify}
+            paid={item1.paid}
+            paidtext={`Paid on ${moment(new Date(item1.paidAt)).format(
+              'DD/MM/YYYY',
+            )}`}
+            amount={item1.total}
+            body={findDate(item1)}
+            date={`Due Date ${moment(new Date(item1.dueDate)).format(
+              'DD/MM/YYYY',
+            )}`}
+            button={props.button}
+            //button
+            title="Pay Now"
+            paybutton={() => {
+              props.selectAtm(item1.id);
+            }}
+            substyle={props.subStyle}
+            batchstyle={props.batchstyle}
+            dueDateStyle={props.dueDateStyle}
+            paidOnStyle={props.paidOnStyle}
+          />
+        ) : null}
+      </>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

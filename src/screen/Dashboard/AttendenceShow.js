@@ -216,7 +216,7 @@ const AttendenceShow = () => {
       date.setDate(date.getDate() + 1);
     }
   }
-  console.log('DATES', dates);
+  // console.log('DATES', dates);
 
   //   // });
   //   // console.log('pattern', item.item.pattern[0].day, dayPattern);

@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import * as Action from '../../redux/action-types';
-import {Text, FlatList, View} from 'react-native';
+import {Text, FlatList, View, StyleSheet, Image} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel from 'react-native-snap-carousel';
 import {useDispatch, useSelector} from 'react-redux';
@@ -35,6 +35,7 @@ export default function EnrolledChild() {
   const [paymentChannels, setpaymentChannels] = useState([]);
   const navigation = useNavigation();
   const [token, setToken] = useState();
+  const [showAtm, setShowAtm] = useState('');
 
   const membersData = useSelector(state => state.memberData.memberData);
   const memberClassData = useSelector(state => state.memberClassData.classData);
@@ -43,7 +44,7 @@ export default function EnrolledChild() {
   const clubfinance2 = useSelector(
     state => state.clubfinance.financedata.businessFinance,
   );
-  // console.log('data123: ', bills);
+  console.log('data123: ', bills);
 
   useEffect(() => {
     // businessList && businessList.length > 0
@@ -87,19 +88,19 @@ export default function EnrolledChild() {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [memberClassData, bills]);
 
-  const accessToken = async () => {
-    const Token = await getLocalData('accessToken');
-    setToken(Token);
-  };
+  // const accessToken = async () => {
+  //   const Token = await getLocalData('accessToken');
+  //   setToken(Token);
+  // };
 
-  accessToken();
+  // accessToken();
 
-  useEffect(() => {
-    token && dispatch(getmemberData(token));
-    console.log('memberDAta in useEffect', membersData);
-    membersData && dispatch(getmemberClass(membersData[activeDotIndex]._id));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [membersData]);
+  // useEffect(() => {
+  //   token && dispatch(getmemberData(token));
+  //   console.log('memberDAta in useEffect', membersData);
+  //   membersData && dispatch(getmemberClass(membersData[0]._id));
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   useEffect(() => {
     if (bills.data) {
@@ -115,14 +116,10 @@ export default function EnrolledChild() {
   useEffect(() => {
     let businessesTemp =
       memberClassData &&
-      memberClassData?.filter(
-        item =>
-          item?.enrolledStatus === 'ENROLLED' ||
-          item?.enrolledStatus === 'WAITLISTED',
-      );
-    console.log('inside payment history', businessesTemp);
+      memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED');
+    //console.log('inside payment history', businessesTemp);
     setBusinessList(businessesTemp);
-  }, []);
+  }, [memberClassData]);
 
   useEffect(() => {
     setpaymentChannels(clubfinance2);
@@ -230,7 +227,17 @@ export default function EnrolledChild() {
         )} -${moment(item.session.pattern[0].endTime).format('hh:mm A')} `}
         facility={item.session.facility}
         coach={item.session.coachId.name}
-        style={{backgroundColor: 'white', borderRadius: 20}}
+        style={{
+          backgroundColor: 'white',
+          borderRadius: 20,
+          borderWidth: 1,
+          borderColor: colors.orange,
+          elevation: 1,
+          shadowColor: colors.lightgrey,
+          shadowOffset: {width: 1, height: 1},
+          shadowOpacity: 0.4,
+          overflow: 'hidden',
+        }}
         // border={true}
       />
     );
@@ -264,7 +271,7 @@ export default function EnrolledChild() {
 
   const handleSwipe = index => {
     setActiveDotIndex(index);
-
+    setShowAtm('');
     // let currentBills = bills.data.docs.filter(item => {
     //   return item.classId === businessList[index].classId;
     // });
@@ -282,7 +289,7 @@ export default function EnrolledChild() {
     let paid = currentBills.filter(item => {
       return item.paid === true;
     });
-    setCurrentPaidBills(paid);
+    // setCurrentPaidBills(paid);
     let notPaid = currentBills.filter(item => {
       return item.paid === false;
     });
@@ -303,6 +310,56 @@ export default function EnrolledChild() {
     });
     //console.log('upcoming', upcoming[0]);
     setCurrentUpcomingBills(upcoming);
+    upcoming.shift();
+    setCurrentPaidBills([...paid, ...upcoming]);
+  };
+
+  const renderPaidAndUpcoming = ({item, index}) => {
+    // console.log('inside renderPaidAndUpcoming', item);
+    if (item.paidAt) {
+      return (
+        <PayNow
+          business={businessList[activeDotIndex]}
+          item1={item}
+          key={index}
+          notify={'Paid'}
+          batchstyle={{backgroundColor: colors.seafoamBlue}}
+          subStyle={{
+            backgroundColor: colors.limeGreen,
+            borderColor: colors.white,
+          }}
+          dueDateStyle={{
+            color: colors.grey,
+            fontSize: hp('2%'),
+          }}
+          paidOnStyle={{fontSize: hp('2%')}}
+          button={false}
+        />
+      );
+    } else {
+      return (
+        <PayNow
+          business={businessList[activeDotIndex]}
+          item1={item}
+          key={index}
+          notify={'Upcoming'}
+          batchstyle={{backgroundColor: colors.lightRed}}
+          subStyle={{
+            backgroundColor: colors.lightgrey,
+            borderColor: colors.white,
+          }}
+          dueDateStyle={{
+            color: colors.grey,
+            fontSize: hp('2%'),
+          }}
+          button={false}
+        />
+      );
+    }
+  };
+
+  const selectAtm = id => {
+    setShowAtm(id);
   };
 
   return (
@@ -324,7 +381,12 @@ export default function EnrolledChild() {
       <Text style={{fontFamily: 'Nunito-SemiBold', marginBottom: hp('2%')}}>
         Current Classes
       </Text>
-
+      <View style={styles.remark}>
+        <View style={[styles.mark, {borderWidth: 0}]}>
+          <Image source={require('../../assets/images/icon-info.png')} />
+        </View>
+        <Text style={styles.marktext}>No records available at this time</Text>
+      </View>
       <View style={{paddingVertical: hp('1%'), backgroundColor: 'white'}}>
         {memberClassData.length > 0 ? (
           <Carousel
@@ -347,183 +409,203 @@ export default function EnrolledChild() {
         {pagination()}
       </View>
       {/* {console.log('======club fincanc', paymentChannels)} */}
-      <PaymentCard border={true}>
-        {/* //////////////////////////////////////////Over Due bills/// */}
-
-        {currentDueBills.map((bill, index) => {
-          return (
-            <PayNow
-              business={businessList[activeDotIndex]}
-              item1={bill}
-              key={index}
-              notify={'Over Due'}
-              batchstyle={{backgroundColor: colors.reddish}}
-              subStyle={{
-                backgroundColor: colors.white,
-                borderColor: colors.reddish,
-              }}
-              button={
-                paymentChannels ? paymentChannels.paymentChannels.online : false
-              }
-            />
-          );
-        })}
-
-        {/* ////////////////////////////////////////// Upcoming bill/// */}
-        {currentUpcomigBills.map((bill, index) => {
-          if (index === 0) {
+      {businessList.length > 0 ? (
+        <PaymentCard border={true}>
+          {/* //////////////////////////////////////////Over Due bills/// */}
+          <View style={styles.remark}>
+            <View style={styles.mark}>
+              <Image
+                style={styles.tick}
+                source={require('../../assets/images/checkmark.png')}
+              />
+            </View>
+            <Text style={styles.marktext}>
+              You’ve confirmed Standing Order has been setup
+            </Text>
+          </View>
+          {currentDueBills.map((bill, index) => {
             return (
               <PayNow
                 business={businessList[activeDotIndex]}
                 item1={bill}
                 key={index}
-                notify={'Not Paid'}
+                notify={'Over Due'}
                 batchstyle={{backgroundColor: colors.reddish}}
                 subStyle={{
                   backgroundColor: colors.white,
                   borderColor: colors.reddish,
+                }}
+                dueDateStyle={{
+                  color: colors.reddish,
+                  fontSize: hp('2%'),
                 }}
                 button={
                   paymentChannels
                     ? paymentChannels.paymentChannels.online
                     : false
                 }
+                selectAtm={selectAtm}
+                showAtm={showAtm}
               />
             );
-          }
-        })}
+          })}
 
-        {/* //////////////////////////////////////////Paid bills/// */}
-        {currentPaidBills.map((bill, index) => {
-          return (
-            <PayNow
-              business={businessList[activeDotIndex]}
-              item1={bill}
-              key={index}
-              notify={'Paid'}
-              batchstyle={{backgroundColor: colors.seafoamBlue}}
-              subStyle={{
-                backgroundColor: colors.limeGreen,
-                borderColor: colors.seafoamBlue,
+          {/* ////////////////////////////////////////// Upcoming bill/// */}
+          {currentUpcomigBills.map((bill, index) => {
+            if (index === 0) {
+              return (
+                <PayNow
+                  business={businessList[activeDotIndex]}
+                  item1={bill}
+                  key={index}
+                  notify={'Not Paid'}
+                  batchstyle={{backgroundColor: colors.reddish}}
+                  subStyle={{
+                    backgroundColor: colors.white,
+                    borderColor: colors.reddish,
+                  }}
+                  dueDateStyle={{
+                    color: colors.reddish,
+                    fontSize: hp('2%'),
+                  }}
+                  button={
+                    paymentChannels
+                      ? paymentChannels.paymentChannels.online
+                      : false
+                  }
+                  selectAtm={selectAtm}
+                  showAtm={showAtm}
+                />
+              );
+            }
+          })}
+        </PaymentCard>
+      ) : null}
+      {/* //////////////////////////////////////////Paid bills/// */}
+      {businessList.length > 0 ? (
+        <View
+          style={{
+            paddingVertical: hp('1%'),
+            backgroundColor: 'white',
+            width: wp('100%'),
+          }}>
+          {currentPaidBills.length > 0 ? (
+            <Carousel
+              data={currentPaidBills}
+              renderItem={renderPaidAndUpcoming}
+              sliderWidth={wp('95%')}
+              itemWidth={wp('83%')}
+              onSnapToItem={index => {
+                console.log(index);
               }}
-              button={false}
             />
-          );
-        })}
-
-        {/* //////////////////////////////////////////Future Upcoming bills/// */}
-        {currentUpcomigBills.map((bill, index) => {
-          if (index !== 0) {
-            return (
-              <PayNow
-                business={businessList[activeDotIndex]}
-                item1={bill}
-                key={index}
-                notify={'Upcoming'}
-                batchstyle={{backgroundColor: colors.lightRed}}
-                subStyle={{
-                  backgroundColor: colors.white,
-                  borderColor: colors.orange,
-                }}
-                button={false}
-              />
-            );
-          }
-        })}
-      </PaymentCard>
+          ) : null}
+        </View>
+      ) : null}
     </CustomLayout>
   );
 }
 
+const styles = StyleSheet.create({
+  remark: {
+    borderRadius: 10,
+    height: hp('12%'),
+    // marginHorizontal: wp('4%'),
+    marginVertical: hp('2%'),
+    paddingHorizontal: wp('1.8%'),
+    paddingTop: hp('.1%'),
+    flexDirection: 'row',
+    backgroundColor: '#fff2e6',
+    // marginVertical: hp('1%'),
+  },
+  tick: {
+    height: hp('3%'),
+    width: hp('3%'),
+  },
+  mark: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: hp('4%'),
+    width: hp('4%'),
+    marginRight: wp('2%'),
+    borderColor: '#d26800',
+    borderWidth: 1,
+    borderRadius: 20,
+  },
+  marktext: {
+    color: '#d26800',
+    alignSelf: 'center',
+    flex: 1,
+    fontSize: Fontsize,
+    fontFamily: 'Nunito-Regular',
+  },
+});
 {
-  /* <FlatList
-data={currentUpcomigBills}
-key={item1 => item1._id}
-ListEmptyComponent={() => (
-  <ErrorMessage
-    error={'No history to show'}
-    visible={true}
-    style={{fontSize: wp('3%')}}
-  />
-)}
-renderItem={item1 => {
-  //console.log(item1.item.classId, item.item.classId);
-  return (
-    <PayNow business={businessList[activeDotIndex]} item1={item1} />
-  );
-}}
-/> */
+  /* <View style={{}}>
+          {currentPaidBills.map((bill, index) => {
+            if (bill.paidAt) {
+              return (
+                <PayNow
+                  business={businessList[activeDotIndex]}
+                  item1={bill}
+                  key={index}
+                  notify={'Paid'}
+                  batchstyle={{backgroundColor: colors.seafoamBlue}}
+                  subStyle={{
+                    backgroundColor: colors.limeGreen,
+                    borderColor: colors.white,
+                  }}
+                  dueDateStyle={{
+                    color: colors.grey,
+                    fontSize: hp('2%'),
+                  }}
+                  paidOnStyle={{fontSize: hp('2%')}}
+                  button={false}
+                />
+              );
+            } else {
+              return (
+                <PayNow
+                  business={businessList[activeDotIndex]}
+                  item1={bill}
+                  key={index}
+                  notify={'Upcoming'}
+                  batchstyle={{backgroundColor: colors.lightRed}}
+                  subStyle={{
+                    backgroundColor: colors.lightgrey,
+                    borderColor: colors.white,
+                  }}
+                  dueDateStyle={{
+                    color: colors.grey,
+                    fontSize: hp('2%'),
+                  }}
+                  button={false}
+                />
+              );
+            }
+          })}
+
+          {/* //////////////////////////////////////////Future Upcoming bills/// */
 }
-
-//  <FlatList
-// style={{
-//   borderWidth: 1,
-//   borderColor: colors.white,
-//   elevation: 5,
-//   borderRadius: 8,
-//   // shadowColor: colors.lightgrey,
-//   // shadowOffset: {width: 1, height: 1},
-//   // shadowOpacity: 0.9,
-//   overflow: 'hidden',
-//   // shadowRadius: 5,
-//   backgroundColor: colors.white,
-// }}
-// data={
-//   memberClassData && businessList.length > 0
-//     ? memberClassData?.filter(
-//         item =>
-//           item?.enrolledStatus === 'ENROLLED' &&
-//           item.business._id === businessList[activeDotIndex].id,
-//       )
-//     : null
-// }
-// key={item => item._id}
-// renderItem={item => {
-//   // console.log('item: ', item);
-//   return (
-//     <>
-
-//       <ClassCard
-//         id={item.item.clubMembershipId}
-//         className={item.item.class.name}
-//         subtitle={item.item.business.name}
-//         day={item.item.session.pattern[0].day}
-//         time={`${moment(item.item.session.pattern[0].startTime).format(
-//           'hh:mm A',
-//         )} -${moment(item.item.session.pattern[0].endTime).format(
-//           'hh:mm A',
-//         )} `}
-//         facility={item.item.session.facility}
-//         // coach={'Henry Itondo'}
-//         coach={item.item.session.coachId.name}
-//         style={{backgroundColor: 'white', borderRadius: 20}}
-//       />
-//       {/* {console.log('item.item.session.coachId.name', item.item.session.coachId.name)} */}
-//       <View
-//         style={{
-//           flex: 1,
-//           borderBottomWidth: 1,
-//           borderBottomColor: colors.lightgrey,
-//         }}
-//       />
-//       <PaymentCard border={true}>
-//         <FlatList
-//           data={bills.data.docs}
-//           key={item1 => item1._id}
-//           ListEmptyComponent={() => (
-//             <ErrorMessage
-//               error={'No history to show'}
-//               visible={true}
-//               style={{fontSize: wp('3%')}}
-//             />
-//           )}
-//           renderItem={item1 => {
-//             //console.log(item1.item.classId, item.item.classId);
-//             return <PayNow item={item} item1={item1} />;
-//           }}
-//         />
-//       </PaymentCard>
-//     </>
-//   );
-// }}
-// />
+{
+  /* {currentUpcomigBills.map((bill, index) => {
+            if (index !== 0) {
+              return (
+                <PayNow
+                  business={businessList[activeDotIndex]}
+                  item1={bill}
+                  key={index}
+                  notify={'Upcoming'}
+                  batchstyle={{backgroundColor: colors.lightRed}}
+                  subStyle={{
+                    backgroundColor: colors.lightgrey,
+                    borderColor: colors.white,
+                  }}
+                  button={false}
+                />
+              );
+            }
+          })} */
+}
+// </View> */}

@@ -76,9 +76,9 @@ const Pay = props => {
       },
       isStandingOrder:
         standingOrderValue === 1
-          ? false
-          : standingOrderValue === 2
           ? true
+          : standingOrderValue === 2
+          ? false
           : null,
       consent: {},
     };

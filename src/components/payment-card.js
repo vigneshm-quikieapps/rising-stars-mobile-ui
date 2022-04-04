@@ -28,7 +28,9 @@ export const Card = props => {
         </View>
       </View>
       <Text style={{fontFamily: 'Nunito-SemiBold'}}>{props.body}</Text>
-      <Text style={{fontFamily: 'Nunito-SemiBold'}}>{props.date}</Text>
+      <Text style={[{fontFamily: 'Nunito-SemiBold'}, props.dueDateStyle]}>
+        {props.date}
+      </Text>
       {props.button ? (
         <AppButton
           title={props.title}
@@ -37,7 +39,9 @@ export const Card = props => {
         />
       ) : null}
       {props.paid ? (
-        <Text style={{fontFamily: 'Nunito-SemiBold'}}>{props.paidtext}</Text>
+        <Text style={[{fontFamily: 'Nunito-SemiBold'}, props.paidOnStyle]}>
+          {props.paidtext}
+        </Text>
       ) : null}
     </View>
   );

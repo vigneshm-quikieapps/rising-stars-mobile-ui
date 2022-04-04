@@ -166,7 +166,11 @@ export function fetchSessionList(id) {
   return fetch(`${heroku_url}/classes/${id}/sessions`, {
     method: 'GET',
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside fetch session list', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
@@ -399,7 +403,7 @@ export function fetchAttendanceOfMemberInSession(payload) {
 
 // fetch session by term id and class id for ATTENDANCE
 export async function fetchSessionById(payload) {
-  console.error(payload);
+  //console.error(payload);
   try {
     const response = await fetch(
       `${heroku_url}/sessions/in-a-class/of-a-particular-term`,
