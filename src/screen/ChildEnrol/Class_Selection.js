@@ -51,6 +51,8 @@ const Class_Selection = props => {
 
   const dispatch = useDispatch();
 
+  const {from} = props.route.params;
+
   const handleBusiness = async item => {
     setBusiness(item.name);
     setClubModal(!clubmodal);
@@ -77,7 +79,7 @@ const Class_Selection = props => {
 
   const handleforward = () => {
     dispatch(setSlotData(selectdata));
-    props.navigation.navigate('Fees_Overview', {from: 'profile'});
+    props.navigation.navigate('Fees_Overview', {from: from});
   };
   return (
     <CustomLayout

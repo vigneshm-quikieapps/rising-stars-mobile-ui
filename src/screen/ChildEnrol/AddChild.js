@@ -55,6 +55,8 @@ const AddChild = props => {
     setUser(userId);
   };
 
+  const {from} = props.route.params;
+
   const genders = ['MALE', 'FEMALE', 'OTHERS'];
   const relations = [
     'FRIEND',
@@ -205,7 +207,7 @@ const AddChild = props => {
                   dispatch(
                     getClubdata({
                       callback: () => {
-                        props.navigation.navigate('AddPayment');
+                        props.navigation.navigate('AddPayment', {from: from});
                       },
                     }),
                   );

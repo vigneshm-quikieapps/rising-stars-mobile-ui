@@ -29,7 +29,12 @@ import {
   CustomLayout,
 } from '../../components';
 import {colors, Fontsize, hp, wp, Term_Condition} from '../../constants';
-import {PostCode, PostDataPass, RegisterData} from '../../redux/action/auth';
+import {
+  loginUserData,
+  PostCode,
+  PostDataPass,
+  RegisterData,
+} from '../../redux/action/auth';
 import PostComponent from './components/Postcode';
 import {fetchMobileOTP, fetchRegister} from '../../redux/service/request';
 import Alert from '../../components/alert-box';
@@ -109,7 +114,7 @@ function Register(props) {
 
   useEffect(() => {
     console.log('Status: ', status);
-    if (status === 'created successfully') {
+    if (status === 'Created successfully.') {
       setSuccessAlert(true);
     } else {
       // console.log('failed due to something');
@@ -216,7 +221,7 @@ function Register(props) {
             if (values.mobileNoOTP.length === 0) {
               const otp = await fetchMobileOTP(values.contactNumber);
               console.log(otp);
-              timeout();
+              //timeout();
               refRBSheet.current.open();
             } else {
               if (postsize !== 0) {
@@ -235,6 +240,12 @@ function Register(props) {
                     type: Action.USER_REGISTER_SUCCESS,
                     payload: values,
                   });
+                  dispatch(
+                    loginUserData({
+                      mobileNumber: values.contactNumber,
+                      password: values.password,
+                    }),
+                  );
                   console.log('success');
                   setSuccessAlert(true);
                 } else {
@@ -251,7 +262,7 @@ function Register(props) {
               }
 
               // console.log('status', status, register?.message);
-              // if (register?.message === 'created successfully') {
+              // if (register?.message === 'Created successfully.') {
 
               //   //POP-UP with message
               //   //Navigate to Login Screen

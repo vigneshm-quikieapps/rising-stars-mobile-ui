@@ -113,7 +113,11 @@ export function fetchRegister(payload) {
       country: 'United Kingdom',
     }),
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('registering', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
@@ -131,7 +135,11 @@ export function fetchLogin(payload) {
       password: payload.password,
     }),
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('login api', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
