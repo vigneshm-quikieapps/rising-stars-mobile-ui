@@ -114,7 +114,7 @@ const Provide_Consent = props => {
           <Image source={require('../../assets/images/icon-info.png')} />
         </View>
         <Text style={styles.marktext}>
-          {club.name}'s occasionallu takes videos and photographs for
+          {club.name}'s occasionally takes videos and photographs for
           promotional and training purposes and during displays
         </Text>
       </View>
