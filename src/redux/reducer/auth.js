@@ -111,7 +111,8 @@ export const LoginData = (state = loginState, action) => {
         // networkerror: action.payload.message,
         networkerror: action.payload.message
           ? action.payload.message
-          : action.payload.errors,
+          : action.payload.errors[0].mobileNo,
+        // : action.payload.errors,
         isloading: false,
       };
     case Action.USER_LOGIN_ERROR:

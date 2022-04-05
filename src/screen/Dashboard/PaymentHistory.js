@@ -116,7 +116,10 @@ export default function EnrolledChild() {
   useEffect(() => {
     let businessesTemp =
       memberClassData &&
-      memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED');
+      memberClassData?.filter(
+        // item => item?.enrolledStatus === 'ENROLLED',
+        item => item?.enrolledStatus === 'ENROLLED' || 'WAITLISTED',
+      );
     //console.log('inside payment history', businessesTemp);
     setBusinessList(businessesTemp);
   }, [memberClassData]);
@@ -529,7 +532,7 @@ const styles = StyleSheet.create({
     height: hp('4%'),
     width: hp('4%'),
     marginRight: wp('2%'),
-    borderColor: '#d26800',
+    borderColor: '#ff7e00',
     borderWidth: 1,
     borderRadius: 20,
   },
