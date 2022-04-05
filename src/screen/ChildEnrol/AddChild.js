@@ -43,7 +43,7 @@ import {WheelPicker} from 'react-native-wheel-picker-android';
 const AddChild = props => {
   const genderef = useRef();
   const relationref = useRef();
-  const relationre = useRef();
+  const pRelationref = useRef();
   const dispatch = useDispatch();
   const [user, setUser] = useState('');
   const [token, setToken] = useState('');
@@ -75,6 +75,24 @@ const AddChild = props => {
     'Other',
   ];
 
+  // const secRelations = [
+  //   'FRIEND',
+  //   'GRAND_PARENT',
+  //   'PARENT',
+  //   'UNCLE',
+  //   'AUNT',
+  //   'OTHER',
+  // ];
+
+  // const secRelationForDisplay = [
+  //   'Friend',
+  //   'Grand Parent',
+  //   'Parent',
+  //   'Uncle',
+  //   'Aunt',
+  //   'Other',
+  // ];
+
   useEffect(() => {
     getuser();
   }, []);
@@ -95,6 +113,7 @@ const AddChild = props => {
 
   const [gender, setGender] = useState('BOY');
   const [relation, setRelation] = useState('PARENT');
+  const [relationSec, setRelationSec] = useState('OTHER');
 
   const [gendererror, setGenderError] = useState(false);
 
@@ -234,13 +253,11 @@ const AddChild = props => {
                 value={values.fullName}
                 onBlur={() => setFieldTouched('fullName')}
               />
-
               <ErrorMessage
                 style={styles.errorMessage}
                 error={errors.fullName}
                 visible={touched.fullName}
               />
-
               <PopUpCard
                 text={'Date of Birth*'}
                 textColor={colors.grey}
@@ -303,7 +320,6 @@ const AddChild = props => {
               error={errors.dob}
               visible={touched.dob}
             /> */}
-
               <PopUpCard
                 text={'Gender*'}
                 textColor={colors.grey}
@@ -400,13 +416,11 @@ const AddChild = props => {
               {gendererror && (
                 <Text style={styles.errors}>Gender is a required</Text>
               )}
-
               {/* <ErrorMessage
               style={styles.errorMessage}
               error={errors.gender}
               visible={touched.gender}
             /> */}
-
               <Text style={styles.emergency}>Emergency Contact (Primary)</Text>
               <EmergencyCard
                 disabled={data.length === 1 ? true : false}
@@ -432,10 +446,10 @@ const AddChild = props => {
                 text="Relationship *"
                 onBlur={() => setFieldTouched('eprelation')}
                 value={relationForDisplay[relations.indexOf(values.eprelation)]}
-                onPress={() => relationref.current.open()}
+                onPress={() => pRelationref.current.open()}
               />
               <RBSheet
-                ref={relationref}
+                ref={pRelationref}
                 //closeOnDragDown={true}
                 //closeOnPressMask={false}
                 customStyles={{
@@ -465,7 +479,7 @@ const AddChild = props => {
                   }}>
                   <TouchableOpacity
                     onPress={() => {
-                      relationref.current.close();
+                      pRelationref.current.close();
                       setRelation('PARENT');
                     }}>
                     <Text
@@ -481,7 +495,7 @@ const AddChild = props => {
                   </TouchableOpacity>
                   <AppButton
                     title={'Confirm'}
-                    onPress={() => relationref.current.close()}
+                    onPress={() => pRelationref.current.close()}
                     style={{
                       width: wp('31%'),
                       marginBottom: hp('5%'),
@@ -529,9 +543,9 @@ const AddChild = props => {
                     onBlurContact={() => setFieldTouched('esNumber')}
                     errorContactNumber={errors.esNumber}
                     visibleContactNumber={touched.esNumber}
-                    onChangeRelation={relations =>
-                      setFieldValue('esrelation', relations)
-                    }
+                    onChangeRelation={relations => {
+                      return setFieldValue('esrelation', relations);
+                    }}
                     value={values.esrelation}
                     onBlur={() => setFieldTouched('gender')}
                   />
@@ -539,10 +553,78 @@ const AddChild = props => {
                     text="Relationship *"
                     onBlur={() => setFieldTouched('esrelation')}
                     value={
-                      relationForDisplay[relations.indexOf(values.esrelation)]
+                      // relationForDisplay[relations.indexOf(values.esrelation)]
+                      // secRelationForDisplay[
+                      //   secRelations.indexOf(values.esrelation)
+                      // ]
+                      relationSec
                     }
                     onPress={() => relationref.current.open()}
                   />
+                  {/* <RBSheet
+                    ref={relationref}
+                    //closeOnDragDown={true}
+                    //closeOnPressMask={false}
+                    customStyles={{
+                      container: {
+                        //height: '18%',
+                        alignItems: 'center',
+                        borderTopRightRadius: 16,
+                        borderTopLeftRadius: 16,
+                      },
+                    }}>
+                    <WheelPicker
+                      // selectedItem={relations.indexOf(relation)}
+                      selectedItem={secRelations.indexOf(relationSec)}
+                      isCyclic={true}
+                      data={secRelationForDisplay}
+                      onItemSelected={item => {
+                        values.esrelation = secRelations[item];
+                        setRelationSec(secRelations[item]);
+                      }}
+                      // onItemSelected={item => {
+                      //   values.esrelation = relations[item];
+                      //   setRelation(relations[item]);
+                      // }}
+                      indicatorWidth={1}
+                    />
+                    <View
+                      style={{
+                        width: wp('100%'),
+                        flexDirection: 'row',
+                        justifyContent: 'flex-end',
+                        alignItems: 'flex-end',
+                      }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          relationref.current.close();
+                          setRelation('UNCLE');
+                        }}>
+                        <Text
+                          style={{
+                            color: colors.orangeYellow,
+                            marginBottom: hp('7.5%'),
+                            marginRight: wp('12.5%'),
+                            fontSize: Fontsize + wp('0.7%'),
+                            fontWeight: 'bold',
+                          }}>
+                          Cancel
+                        </Text>
+                      </TouchableOpacity>
+                      <AppButton
+                        title={'Confirm'}
+                        onPress={() => relationref.current.close()}
+                        style={{
+                          width: wp('31%'),
+                          marginBottom: hp('5%'),
+                          marginRight: wp('5%'),
+                          //justifyContent: 'flex-end',
+                        }}
+                      />
+                    </View>
+                  </RBSheet> */}
+
+                  {/* old selector */}
                   <RBSheet
                     ref={relationref}
                     closeOnDragDown={true}
@@ -561,29 +643,32 @@ const AddChild = props => {
                         justifyContent: 'space-between',
                       }}>
                       <AppButton
-                        title="Parents"
+                        title="Parent"
                         style={{width: wp('28%')}}
                         onPress={() => {
-                          values.esrelation = 'Parents';
+                          values.esrelation = 'PARENT';
                           relationref.current.close();
-                          setFieldValue('');
+                          // setFieldValue('');
+                          setRelationSec('PARENT');
                         }}
                       />
                       <AppButton
-                        title="Guardian"
+                        title="Uncle"
                         style={{width: wp('30%')}}
                         onPress={() => {
-                          values.esrelation = 'Guardian';
-                          setFieldValue('');
+                          values.esrelation = 'UNCLE';
+                          // setFieldValue('');
+                          setRelationSec('UNCLE');
                           relationref.current.close();
                         }}
                       />
                       <AppButton
-                        title="Others"
+                        title="Other"
                         style={{width: wp('28%')}}
                         onPress={() => {
-                          values.esrelation = 'Others';
-                          setFieldValue('');
+                          values.esrelation = 'OTHER';
+                          // setFieldValue('');
+                          setRelationSec('OTHER');
                           relationref.current.close();
                         }}
                       />
@@ -635,7 +720,6 @@ const AddChild = props => {
                     </EmergencyCard>
                   );
                 })} */}
-
               <ForwardButton
                 disabled={disabled}
                 style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
