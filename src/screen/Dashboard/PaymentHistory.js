@@ -419,7 +419,7 @@ export default function EnrolledChild() {
             <View style={styles.mark}>
               <Image
                 style={styles.tick}
-                source={require('../../assets/images/checkmark.png')}
+                source={require('../../assets/images/checkmark_orange.png')}
               />
             </View>
             <Text style={styles.marktext}>
