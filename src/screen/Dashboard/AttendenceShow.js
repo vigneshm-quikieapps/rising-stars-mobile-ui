@@ -354,24 +354,26 @@ const AttendenceShow = () => {
           <Text style={{fontSize: wp('4.5%'), fontFamily: 'Nunito-SemiBold'}}>
             {currentMember.name}
           </Text>
-          <TouchableOpacity onPress={() => setShowModal(true)}>
-            <View
-              style={{
-                backgroundColor: '#ffe49c',
-                marginLeft: 6,
-                marginRight: 20,
-                height: 32,
-                width: 32,
-                borderRadius: 10,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Image
-                style={{height: 14, width: 18}}
-                source={require('../../assets/images/icon-forward2-line-black.png')}
-              />
-            </View>
-          </TouchableOpacity>
+          {membersdata && membersdata.length > 1 ? (
+            <TouchableOpacity onPress={() => setShowModal(true)}>
+              <View
+                style={{
+                  backgroundColor: '#ffe49c',
+                  marginLeft: 6,
+                  marginRight: 20,
+                  height: 32,
+                  width: 32,
+                  borderRadius: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  style={{height: 14, width: 18}}
+                  source={require('../../assets/images/icon-forward2-line-black.png')}
+                />
+              </View>
+            </TouchableOpacity>
+          ) : null}
         </View>
         <WheelDropdown
           title="child"
