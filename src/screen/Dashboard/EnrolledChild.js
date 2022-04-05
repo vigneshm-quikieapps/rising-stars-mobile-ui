@@ -33,10 +33,12 @@ export default function EnrolledChild(props) {
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const currentMember = useSelector(state => state.currentMemberData.data);
   console.log('inside enrolled child', currentMember);
+
   const renderItem = item => {
     var temp =
       memberClassData &&
       memberClassData?.filter(item1 => item1.business._id === item.item.id);
+    console.log('insside render Item', temp);
     return (
       <LinearGradient
         style={{
@@ -79,7 +81,7 @@ export default function EnrolledChild(props) {
                 fontSize: Fontsize + wp('1%'),
                 //fontWeight: 'bold',
               }}>
-              {/* {temp[0].business?.name} */}Club name
+              {/* {temp[activeDotIndex].business?.name} */}
             </Text>
           </View>
           <View>
@@ -92,7 +94,7 @@ export default function EnrolledChild(props) {
                 fontSize: Fontsize + wp('1%'),
                 //fontWeight: 'bold',
               }}>
-              {/* {temp[0].clubMembershipId} */}ID
+              {/* {temp[activeDotIndex].clubMembershipId} */}
             </Text>
           </View>
         </View>
@@ -142,7 +144,7 @@ export default function EnrolledChild(props) {
     // for (const [key, value] of Object.entries(groupedData)) {
     //   businesses.push({id: key});
     // }
-    console.log('Enrolled Child', memberClassData);
+    //console.log('Enrolled Child', memberClassData);
     //setBusinessList(businesses);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberClassData]);
@@ -174,14 +176,13 @@ export default function EnrolledChild(props) {
       </Text>
       <FlatList
         data={
-          memberClassData
-          // memberClassData && businessList && businessList.length > 0
-          //   ? memberClassData.filter(
-          //       item =>
-          //         item.enrolledStatus === 'ENROLLED' &&
-          //         item.business._id === businessList[activeDotIndex].id,
-          //     )
-          //   : null
+          memberClassData && businessList && businessList.length > 0
+            ? memberClassData.filter(
+                item =>
+                  item.enrolledStatus === 'ENROLLED' &&
+                  item.business._id === businessList[activeDotIndex].id,
+              )
+            : null
         }
         key={item => item._id}
         renderItem={classes => {

@@ -49,11 +49,14 @@ const Login = props => {
 
   const getToken = useCallback(async () => {
     const refreshToken = await getLocalData('refreshToken');
-    setIsLoggedIn(refreshToken);
+    setIsLoggedIn(refreshToken === undefined ? false : true);
   }, []);
 
   useEffect(() => {
-    isLoggedIn && navigation.navigate('HomeTab');
+    if (isLoggedIn) {
+      setIsLoggedIn(false);
+      navigation.navigate('HomeTab');
+    }
   }, [navigation, isLoggedIn, message]);
 
   useEffect(() => {

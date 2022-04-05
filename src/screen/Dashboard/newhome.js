@@ -296,6 +296,7 @@ const Home = () => {
           <WheelDropdown
             title="child"
             visible={memberModal}
+            isCyclic={false}
             setVisibility={modal => setMemberModal(modal)}
             cancel={() => setMemberModal(false)}
             confirm={() => {
