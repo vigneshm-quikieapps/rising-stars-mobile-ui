@@ -390,78 +390,50 @@ export default function EnrolledChild() {
         </View>
         <Text style={styles.marktext}>No records available at this time</Text>
       </View>
-      <View style={{paddingVertical: hp('1%'), backgroundColor: 'white'}}>
-        {memberClassData.length > 0 ? (
-          <Carousel
-            data={businessList}
-            renderItem={renderItemClassCard}
-            sliderWidth={wp('92%')}
-            itemWidth={wp('90%')}
-            onSnapToItem={index => {
-              handleSwipe(index);
-            }}
-          />
-        ) : null}
-      </View>
-      <View
-        style={{
-          paddingVertical: hp('0.8%'),
-          width: wp('90%'),
-          alignItems: 'center',
-        }}>
-        {pagination()}
-      </View>
-      {/* {console.log('======club fincanc', paymentChannels)} */}
-      {businessList.length > 0 ? (
-        <PaymentCard border={true}>
-          {/* //////////////////////////////////////////Over Due bills/// */}
-          <View style={styles.remark}>
-            <View style={styles.mark}>
-              <Image
-                style={styles.tick}
-                source={require('../../assets/images/checkmark_orange.png')}
-              />
+      <View style={styles.borderedContainer}>
+        <View style={{paddingVertical: hp('1%')}}>
+          {memberClassData.length > 0 ? (
+            <Carousel
+              data={businessList}
+              renderItem={renderItemClassCard}
+              sliderWidth={wp('92%')}
+              itemWidth={wp('83%')}
+              onSnapToItem={index => {
+                handleSwipe(index);
+              }}
+            />
+          ) : null}
+        </View>
+        <View
+          style={{
+            paddingVertical: hp('0.8%'),
+            width: wp('90%'),
+            alignItems: 'center',
+          }}>
+          {pagination()}
+        </View>
+        {/* {console.log('======club fincanc', paymentChannels)} */}
+        {businessList.length > 0 ? (
+          <PaymentCard border={true}>
+            {/* //////////////////////////////////////////Over Due bills/// */}
+            <View style={styles.remark}>
+              <View style={styles.mark}>
+                <Image
+                  style={styles.tick}
+                  source={require('../../assets/images/checkmark_orange.png')}
+                />
+              </View>
+              <Text style={styles.marktext}>
+                You’ve confirmed Standing Order has been setup
+              </Text>
             </View>
-            <Text style={styles.marktext}>
-              You’ve confirmed Standing Order has been setup
-            </Text>
-          </View>
-          {currentDueBills.map((bill, index) => {
-            return (
-              <PayNow
-                business={businessList[activeDotIndex]}
-                item1={bill}
-                key={index}
-                notify={'Over Due'}
-                batchstyle={{backgroundColor: colors.reddish}}
-                subStyle={{
-                  backgroundColor: colors.white,
-                  borderColor: colors.reddish,
-                }}
-                dueDateStyle={{
-                  color: colors.reddish,
-                  fontSize: hp('2%'),
-                }}
-                button={
-                  paymentChannels
-                    ? paymentChannels.paymentChannels.online
-                    : false
-                }
-                selectAtm={selectAtm}
-                showAtm={showAtm}
-              />
-            );
-          })}
-
-          {/* ////////////////////////////////////////// Upcoming bill/// */}
-          {currentUpcomigBills.map((bill, index) => {
-            if (index === 0) {
+            {currentDueBills.map((bill, index) => {
               return (
                 <PayNow
                   business={businessList[activeDotIndex]}
                   item1={bill}
                   key={index}
-                  notify={'Not Paid'}
+                  notify={'Over Due'}
                   batchstyle={{backgroundColor: colors.reddish}}
                   subStyle={{
                     backgroundColor: colors.white,
@@ -480,31 +452,61 @@ export default function EnrolledChild() {
                   showAtm={showAtm}
                 />
               );
-            }
-          })}
-        </PaymentCard>
-      ) : null}
-      {/* //////////////////////////////////////////Paid bills/// */}
-      {businessList.length > 0 ? (
-        <View
-          style={{
-            paddingVertical: hp('1%'),
-            backgroundColor: 'white',
-            width: wp('100%'),
-          }}>
-          {currentPaidBills.length > 0 ? (
-            <Carousel
-              data={currentPaidBills}
-              renderItem={renderPaidAndUpcoming}
-              sliderWidth={wp('95%')}
-              itemWidth={wp('83%')}
-              onSnapToItem={index => {
-                console.log(index);
-              }}
-            />
-          ) : null}
-        </View>
-      ) : null}
+            })}
+
+            {/* ////////////////////////////////////////// Upcoming bill/// */}
+            {currentUpcomigBills.map((bill, index) => {
+              if (index === 0) {
+                return (
+                  <PayNow
+                    business={businessList[activeDotIndex]}
+                    item1={bill}
+                    key={index}
+                    notify={'Not Paid'}
+                    batchstyle={{backgroundColor: colors.reddish}}
+                    subStyle={{
+                      backgroundColor: colors.white,
+                      borderColor: colors.reddish,
+                    }}
+                    dueDateStyle={{
+                      color: colors.reddish,
+                      fontSize: hp('2%'),
+                    }}
+                    button={
+                      paymentChannels
+                        ? paymentChannels.paymentChannels.online
+                        : false
+                    }
+                    selectAtm={selectAtm}
+                    showAtm={showAtm}
+                  />
+                );
+              }
+            })}
+          </PaymentCard>
+        ) : null}
+        {/* //////////////////////////////////////////Paid bills/// */}
+        {businessList.length > 0 ? (
+          <View
+            style={{
+              paddingVertical: hp('1%'),
+              backgroundColor: 'white',
+              // width: wp('100%'),
+            }}>
+            {currentPaidBills.length > 0 ? (
+              <Carousel
+                data={currentPaidBills}
+                renderItem={renderPaidAndUpcoming}
+                sliderWidth={wp('95%')}
+                itemWidth={wp('83%')}
+                onSnapToItem={index => {
+                  console.log(index);
+                }}
+              />
+            ) : null}
+          </View>
+        ) : null}
+      </View>
     </CustomLayout>
   );
 }
@@ -542,6 +544,19 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: Fontsize,
     fontFamily: 'Nunito-Regular',
+  },
+  borderedContainer: {
+    backgroundColor: colors.white,
+    // marginTop: hp('2%'),
+    paddingVertical: hp('2%'),
+    borderRadius: wp('1%'),
+    elevation: 5,
+    justifyContent: 'center',
+    borderColor: colors.white,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
   },
 });
 {
