@@ -82,7 +82,7 @@ const Home = () => {
         dotsLength={
           memberClassData && memberClassData
             ? memberClassData.filter(
-                item => item?.enrolledStatus === 'ENROLLED',
+                item => item?.enrolledStatus === 'ENROLLED' || 'WAITLISTED',
               ).length
             : 1
         }
@@ -151,9 +151,9 @@ const Home = () => {
   useEffect(() => {
     memberClassData.length > 0 &&
       setCurrentSessionId(
-        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
-          activeDotIndex
-        ]?.session._id,
+        memberClassData?.filter(
+          item => item?.enrolledStatus === 'ENROLLED' || 'WAITLISTED',
+        )[activeDotIndex]?.session._id,
       );
 
     memberClassData.length > 0 &&
@@ -189,7 +189,9 @@ const Home = () => {
 
     memberClassData &&
       setClassList(
-        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED'),
+        memberClassData?.filter(
+          item => item?.enrolledStatus === 'ENROLLED' || 'WAITLISTED',
+        ),
       );
   }, [memberClassData]);
 
@@ -213,7 +215,6 @@ const Home = () => {
 
   useEffect(() => {
     //console.log("inside Attendence card",sessionAttendance)
-
     setCurrentSessionAttendance(sessionAttendance.attendance);
   }, [sessionAttendance]);
   //console.log('memberClassData length', memberClassData);
@@ -336,7 +337,7 @@ const Home = () => {
               data={
                 memberClassData &&
                 memberClassData?.filter(
-                  item => item?.enrolledStatus === 'ENROLLED',
+                  item => item?.enrolledStatus === 'ENROLLED' || 'WAITLISTED',
                 )
               }
               renderItem={renderItem}
@@ -347,7 +348,8 @@ const Home = () => {
                 setCurrentSessionId(
                   memberClassData &&
                     memberClassData?.filter(
-                      item => item?.enrolledStatus === 'ENROLLED',
+                      item =>
+                        item?.enrolledStatus === 'ENROLLED' || 'WAITLISTED',
                     )[index].session._id,
                 );
                 // const attendance =
