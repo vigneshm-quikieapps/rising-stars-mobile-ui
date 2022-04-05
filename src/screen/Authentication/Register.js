@@ -648,7 +648,10 @@ function Register(props) {
                 <Alert
                   visible={showSuccessalert}
                   confirm={'Done'}
-                  success={() => props.navigation.navigate('EnrollingFlow')}
+                  success={() => {
+                    setSuccessAlert(false);
+                    props.navigation.navigate('EnrollingFlow');
+                  }}
                   image={'success'}
                   message={'Profile Created Successfully'}
                 />

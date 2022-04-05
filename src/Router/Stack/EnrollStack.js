@@ -84,13 +84,14 @@ export const Addchildren = props => {
   );
 };
 
-export const AddPayment = () => {
+export const AddPayment = props => {
   return (
     <Stack>
       <StackScreen.Screen
         name="Class_Selection"
         component={Class_Selection}
         options={{headerShown: false}}
+        initialParams={{from: props.route.params.from}}
       />
       <StackScreen.Screen
         name="Fees_Overview"
