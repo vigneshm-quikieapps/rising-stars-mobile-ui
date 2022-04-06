@@ -24,6 +24,7 @@ import {
   fetchSessionById,
 } from '../../redux/service/request';
 import {FlatList} from 'react-native-gesture-handler';
+import {isAsyncDebugging} from 'react-native/Libraries/Utilities/DebugEnvironment';
 
 const itemWidth = Dimensions.get('window').width;
 
@@ -46,7 +47,8 @@ const AttendenceShow = () => {
   const [currentSessionAttendance, setCurrentSessionAttendance] = useState('');
   const [currentTermId, setCurrentTermId] = useState('');
   const [currentClassId, setCurrentClassId] = useState('');
-  const [upcomingAttendance, setUpcomingAttendance] = useState('');
+  const [upcomingAttendance, setUpcomingAttendance] = useState();
+  const [upcomingDatesArr, setUpcomingDatesArr] = useState([]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [dayPattern, setDayPattern] = useState(null);
@@ -65,7 +67,7 @@ const AttendenceShow = () => {
     'Friday',
     'Saturday',
   ];
-  const newDays = ['sun', 'mon', 'tue', 'wed', 'Thu', 'Fri', 'Sat'];
+  const newDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
   const month = [
     'January',
     'February',
@@ -107,7 +109,6 @@ const AttendenceShow = () => {
   };
 
   membersdata && membersdata.map(item => member.push(item.name));
-
   accessToken();
 
   useEffect(() => {
@@ -121,10 +122,12 @@ const AttendenceShow = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
+
   useEffect(() => {
     membersdata && setCurrentMember(membersdata[currentMemberIndex]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [membersdata]);
+  }, [membersdata, currentMemberIndex]);
+
   useEffect(() => {
     currentMember && dispatch(getmemberClass(currentMember._id));
 
@@ -135,26 +138,28 @@ const AttendenceShow = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMember]);
+
   var id = '';
+
   useEffect(() => {
     memberClassData.length > 1 &&
       setCurrentSessionId(
         memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
           activeDotIndex
-        ].session._id,
+        ]?.session._id,
       );
     memberClassData.length > 1 &&
       setCurrentTermId(
         memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
           activeDotIndex
-        ].session.term._id,
+        ]?.session.term._id,
       );
     console.log('termID>>>>', currentTermId);
     memberClassData.length > 1 &&
       setCurrentClassId(
         memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
           activeDotIndex
-        ].session.classId,
+        ]?.session.classId,
       );
     console.log('classID -- >>>>', currentClassId);
 
@@ -165,9 +170,12 @@ const AttendenceShow = () => {
           termId: currentTermId,
           classId: currentClassId,
         },
-      }).then(resp => {
-        setUpcomingAttendance(resp.docs);
-      });
+      })
+        .then(resp => {
+          setUpcomingAttendance(resp.docs);
+          return resp.docs;
+        })
+        .then(r => generateUpcomingDates(r));
 
     currentSessionId &&
       fetchAttendanceOfMemberInSession({
@@ -185,6 +193,7 @@ const AttendenceShow = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberClassData]);
+
   // useEffect(() => {
   // console.log('upcomingAtt', upcomingAttendance[0].startDate);
   // upcomingAttendance[]
@@ -245,6 +254,173 @@ const AttendenceShow = () => {
   //   // });
   // console.log('dates', dates);
   // }, [upcomingAttendance]);
+
+  const generateUpcomingDates = dates => {
+    let upcomingDates = [];
+    let today = new Date();
+    let startDate = new Date(dates[0]?.startDate);
+    let endDate = new Date(dates[0]?.endDate);
+    let pattern = dates[0]?.pattern.map(item => item.day);
+
+    while (startDate <= endDate) {
+      // console.log('before includes', pattern, newDays[startDate.getDay()]);
+      if (pattern.includes(newDays[startDate.getDay()])) {
+        // console.log('includes', startDate, newDays[startDate.getDay()]);
+        if (startDate > today) {
+          upcomingDates.push(startDate.toString());
+        }
+      }
+      startDate.setDate(startDate.getDate() + 1);
+      //console.log('after set', upcomingDates);
+    }
+
+    console.log('DATE', upcomingDates);
+
+    let monthWiseData = {};
+
+    let startup = new Date(upcomingDates[0]);
+
+    let mwd = [startup.toString()];
+    for (let i = 1; i < upcomingDates.length; i++) {
+      //upcomingDates.filter(
+      //   item =>
+      //     item.getMonth() === upcomingDates[i].getMonth() &&
+      //     item.getFullYear() === upcomingDates[i].getFullYear(),
+      // );
+      let currup = new Date(upcomingDates[i]);
+      //console.log('inside loop', startup);
+
+      if (
+        startup.getMonth() === currup.getMonth() &&
+        startup.getFullYear() === currup.getFullYear()
+      ) {
+        //console.log('inside if', currup);
+        mwd.push(currup.toString());
+      } else {
+        //console.log('inside else', currup);
+        monthWiseData[startup.toString()] = [...mwd];
+        mwd = [upcomingDates[i]];
+        startup = new Date(upcomingDates[i]);
+      }
+      if (i + 1 === upcomingDates.length) {
+        // console.log('last element', mwd);
+        monthWiseData[startup.toString()] = [...mwd];
+      }
+    }
+    //console.log('mothwise data', monthWiseData);
+    setUpcomingDatesArr(monthWiseData);
+  };
+
+  const UpcomingClasses = () => {
+    // console.log('inside UpComingClass', upcomingDatesArr);
+    let keysOfData = Object.keys(upcomingDatesArr);
+    return (
+      <>
+        <View
+          style={{
+            flex: 1,
+            borderBottomWidth: 1,
+            borderBottomColor: colors.lightgrey,
+            marginTop: hp('1%'),
+            marginBottom: hp('3%'),
+          }}
+        />
+        {keysOfData.map((item, index) => {
+          return (
+            <View key={index}>
+              <View style={{marginLeft: wp('2%')}}>
+                <Text
+                  style={{
+                    marginBottom: wp('5%'),
+                    fontSize: wp('5%'),
+                    fontFamily: 'Nunito-SemiBold',
+                  }}>
+                  {/* {console.log('currentSessionAttendance.records', )} */}
+                  {month[new Date(item).getMonth()]},{' '}
+                  {new Date(item).getFullYear()}
+                </Text>
+              </View>
+              {upcomingDatesArr[item].map((item2, index2) => {
+                return (
+                  <View key={index2}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingBottom: 20,
+                        paddingLeft: wp('2.6%'),
+                      }}>
+                      <View
+                        style={{
+                          width: '20%',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: wp('4%'),
+                            fontFamily: 'Nunito-Regular',
+                            color: colors.blackOpacity,
+                          }}>
+                          {days[new Date(item2).getDay()]}
+                        </Text>
+                        <Text
+                          style={{
+                            color: colors.lightgrey,
+                            fontSize: wp('8%'),
+                            fontFamily: 'Nunito-SemiBold',
+                          }}>
+                          {new Date(item2).getDate()}
+                        </Text>
+                      </View>
+                      <View style={{justifyContent: 'center'}}>
+                        <LinearGradient
+                          colors={['rgb(255,255,255)', 'rgb(255,255,255)']}
+                          // {
+                          //   item.item.attended === true
+                          //     ? ['#68D6AB', '#33AB96']
+                          //     : ['#EA5C5C', '#AB3333']
+                          //   // : item.status === 'Tardy'
+                          //   // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
+                          //   // : item.status === 'Upcoming'
+                          //   // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
+                          //   // : ['#ffa300', '#ff7e00']
+                          // }
+                          style={{height: 1.5, width: 30}}
+                        />
+                      </View>
+                      <View style={{justifyContent: 'center', width: '100%'}}>
+                        <LinearGradient
+                          colors={['rgb(255,255,255)', 'rgb(255,255,255)']}
+                          style={{
+                            padding: 20,
+                            width: '100%',
+                            borderTopLeftRadius: 16,
+                            borderBottomLeftRadius: 16,
+                            borderColor: '#d2d2d2',
+                            borderWidth: 1,
+                            marginLeft: wp('1.5%'),
+                          }}>
+                          <Text
+                            style={{
+                              color: colors.lightgrey,
+                              fontSize: wp('4.5%'),
+                              fontFamily: 'Naunito-SemiBold',
+                            }}>
+                            Upcoming
+                          </Text>
+                        </LinearGradient>
+                      </View>
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          );
+        })}
+      </>
+    );
+  };
 
   const renderItem = ({item, index}) => {
     return (
@@ -466,7 +642,7 @@ const AttendenceShow = () => {
             }
           />
         </View>
-        <ScrollView>
+        <View style={{}}>
           <View style={{marginTop: 30}}>
             {currentSessionAttendance &&
             currentSessionAttendance.records !== undefined ? (
@@ -495,6 +671,7 @@ const AttendenceShow = () => {
                 <FlatList
                   data={currentSessionAttendance.records}
                   keyExtractor={item => item._id}
+                  ListFooterComponent={UpcomingClasses()}
                   renderItem={item => {
                     return (
                       <View
@@ -588,97 +765,8 @@ const AttendenceShow = () => {
               </View>
             )}
           </View>
-        </ScrollView>
-        <View
-          style={{
-            flex: 1,
-            borderBottomWidth: 1,
-            borderBottomColor: colors.lightgrey,
-            marginTop: hp('1%'),
-            marginBottom: hp('3%'),
-          }}
-        />
-        {/* UPCOMING SESSIONS */}
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingBottom: 20,
-          }}>
-          <View
-            style={{
-              width: '20%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text
-              style={{
-                fontSize: wp('4%'),
-                fontFamily: 'Nunito-Regular',
-                color: colors.blackOpacity,
-              }}>
-              {/* {days[new Date(item.item.date).getDay()]} */}
-              Saturday
-            </Text>
-            <Text
-              style={{
-                color: colors.lightgrey,
-                fontSize: wp('8%'),
-                fontFamily: 'Nunito-SemiBold',
-              }}>
-              {/* {new Date(item.item.date).getDate()} */}
-              26
-            </Text>
-          </View>
-          <View style={{justifyContent: 'center'}}>
-            <LinearGradient
-              colors={['rgb(255,255,255)', 'rgb(255,255,255)']}
-              // {
-              //   item.item.attended === true
-              //     ? ['#68D6AB', '#33AB96']
-              //     : ['#EA5C5C', '#AB3333']
-              //   // : item.status === 'Tardy'
-              //   // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
-              //   // : item.status === 'Upcoming'
-              //   // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
-              //   // : ['#ffa300', '#ff7e00']
-              // }
-              style={{height: 1.5, width: 30}}
-            />
-          </View>
-          <View style={{justifyContent: 'center', width: '100%'}}>
-            <LinearGradient
-              colors={['rgb(255,255,255)', 'rgb(255,255,255)']}
-              // {
-              // item.item.attended === true
-              //   ? ['#68D6AB', '#33AB96']
-              //   : ['#EA5C5C', '#AB3333']
-              // : item.status === 'Tardy'
-              // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
-              // : item.status === 'Upcoming'
-              // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
-              // : ['#ffa300', '#ff7e00']
-              // }
-              style={{
-                padding: 20,
-                width: '100%',
-                borderTopLeftRadius: 16,
-                borderBottomLeftRadius: 16,
-                borderColor: '#d2d2d2',
-                borderWidth: 1,
-              }}>
-              <Text
-                style={{
-                  color: colors.lightgrey,
-                  fontSize: wp('4.5%'),
-                  fontFamily: 'Naunito-SemiBold',
-                }}>
-                {/* {item.item.attended ? 'Attended' : 'No Show'} */}
-                Upcoming
-              </Text>
-            </LinearGradient>
-          </View>
         </View>
+
         {/* <FlatList
           // data={upcomingAttendance}
           // keyExtractor={item => item._id}

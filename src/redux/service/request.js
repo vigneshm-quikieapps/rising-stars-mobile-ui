@@ -345,6 +345,7 @@ export function classTransfer(payload) {
 }
 
 export function dropClass(payload) {
+  console.log('paylod in drop class', payload);
   return fetch(`${heroku_url}/enrolments/${payload.enrollmentId}/withdraw`, {
     method: 'POST',
     headers: {

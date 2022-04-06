@@ -103,6 +103,8 @@ const AddChild = props => {
   const [birth, setBirth] = useState(new Date());
   const [birtherror, setBirthError] = useState(false);
   const [disabled, setDisabled] = useState(false);
+
+  const [gendererror, setGenderError] = useState(false);
   // const [age, setAge] = useState('');
   // const [open, setOpen] = useState(false);
 
@@ -114,8 +116,6 @@ const AddChild = props => {
   const [gender, setGender] = useState('BOY');
   const [relation, setRelation] = useState('PARENT');
   const [relationSec, setRelationSec] = useState('OTHER');
-
-  const [gendererror, setGenderError] = useState(false);
 
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required().min(3).label('Full Name'),
@@ -212,12 +212,20 @@ const AddChild = props => {
                     ],
             },
           };
-          if (values.dob === '') {
+          console.log('VAlues', va);
+          if (
+            moment(values.dob).format('DD-MM-YYYY') ===
+            moment(new Date()).format('DD-MM-YYYY')
+          ) {
             setBirthError(true);
+            setDisabled(false);
           } else if (values.gender === '') {
             setGenderError(true);
-          } else if (new Date().getFullYear() - values.dob.getFullYear() <= 2) {
+            setDisabled(false);
+          }
+          if (new Date().getFullYear() - values.dob.getFullYear() <= 2) {
             alert('2 year children not allowed ');
+            setDisabled(false);
           } else {
             dispatch(
               setChildData({
@@ -315,11 +323,11 @@ const AddChild = props => {
               {birtherror && (
                 <Text style={styles.errors}>D.O.B. is a required</Text>
               )}
-              {/* <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.dob}
-              visible={touched.dob}
-            /> */}
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.dob}
+                visible={touched.dob}
+              />
               <PopUpCard
                 text={'Gender*'}
                 textColor={colors.grey}
