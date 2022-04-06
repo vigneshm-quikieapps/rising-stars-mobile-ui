@@ -62,7 +62,8 @@ export default function ChangeClass(props) {
   }
   return (
     <CustomLayout
-      names={currentMember.name}
+      // names={currentMember.name}
+      names="Change Class"
       back
       backbutton={() => navigation.goBack()}
       Customchildren={
@@ -128,6 +129,10 @@ export default function ChangeClass(props) {
       }>
       <Text style={{fontFamily: 'Nunito-SemiBold'}}>Current Class/Session</Text>
       <ClassCard
+        style={{
+          elevation: 5,
+          shadowColor: '#bfafb2',
+        }}
         className={currentClass.class.name}
         // subtitle={"Childhood Joy Classes"}
         button
