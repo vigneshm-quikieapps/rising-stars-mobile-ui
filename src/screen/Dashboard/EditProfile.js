@@ -502,6 +502,17 @@ function EditProfile(props) {
           )}
         </Formik>
       ) : null}
+      {cred == '' ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 120,
+          }}>
+          <ActivityIndicator size="large" color={colors.orange} />
+        </View>
+      ) : null}
     </CustomLayout>
   );
 }
