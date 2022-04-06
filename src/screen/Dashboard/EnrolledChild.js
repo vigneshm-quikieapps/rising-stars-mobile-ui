@@ -37,8 +37,11 @@ export default function EnrolledChild(props) {
   const renderItem = item => {
     var temp =
       memberClassData &&
-      memberClassData?.filter(item1 => item1.business._id === item.item.id);
-    console.log('insside render Item', temp);
+      memberClassData?.filter(
+        item1 => item1.business._id === item.item.businessId,
+      );
+    //console.log('insside render Item', temp);
+
     return (
       <LinearGradient
         style={{
@@ -81,7 +84,7 @@ export default function EnrolledChild(props) {
                 fontSize: Fontsize + wp('1%'),
                 //fontWeight: 'bold',
               }}>
-              {/* {temp[activeDotIndex].business?.name} */}
+              {temp[0].business?.name}
             </Text>
           </View>
           <View>
@@ -94,7 +97,7 @@ export default function EnrolledChild(props) {
                 fontSize: Fontsize + wp('1%'),
                 //fontWeight: 'bold',
               }}>
-              {/* {temp[activeDotIndex].clubMembershipId} */}
+              {temp[0].clubMembershipId}
             </Text>
           </View>
         </View>
@@ -144,10 +147,20 @@ export default function EnrolledChild(props) {
     // for (const [key, value] of Object.entries(groupedData)) {
     //   businesses.push({id: key});
     // }
-    //console.log('Enrolled Child', memberClassData);
+    let businesses =
+      memberClassData &&
+      memberClassData.filter(
+        item =>
+          item.businessId ===
+            currentMember.membership[activeDotIndex].businessId &&
+          item.enrolledStatus === 'ENROLLED',
+      );
+    console.log('Enrolled Child', businesses);
     //setBusinessList(businesses);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memberClassData]);
+
+    setBusinessList(businesses);
+  }, [memberClassData, currentMember]);
   // const accessToken = async () => {
   //   const Token = await getLocalData('accessToken');
   //   setToken(Token);
@@ -162,7 +175,7 @@ export default function EnrolledChild(props) {
       names={'Enrolled Classes'}
       Customchildren={
         <Carousel
-          data={memberClassData}
+          data={currentMember.membership}
           renderItem={renderItem}
           sliderWidth={wp('95%')}
           itemWidth={wp('90%')}
@@ -174,53 +187,45 @@ export default function EnrolledChild(props) {
       <Text style={{fontFamily: 'Nunito-Regular', fontSize: Fontsize}}>
         Current Classes
       </Text>
-      <FlatList
-        data={
-          memberClassData && businessList && businessList.length > 0
-            ? memberClassData.filter(
-                item =>
-                  item.enrolledStatus === 'ENROLLED' &&
-                  item.business._id === businessList[activeDotIndex].id,
-              )
-            : null
-        }
-        key={item => item._id}
-        renderItem={classes => {
-          //console.log('classes: ', classes.item);
-          return (
-            <ClassCard
-              className={classes.item.class.name}
-              title={'Change Session'}
-              day={classes.item.session.pattern[0].day}
-              time={
-                classes.item.session && classes.item.session.pattern.length > 0
-                  ? // time(
-                    //   new Date(classes.item.session.pattern[0].startTime),
-                    //   new Date(classes.item.session.pattern[0].endTime),
-                    // )
-                    `${moment(classes.item.session.pattern[0].startTime).format(
-                      'hh:mm A',
-                    )} - ${moment(
-                      classes.item.session.pattern[0].endTime,
-                    ).format('hh:mm A')}`
-                  : null
-              }
-              facility={classes.item.session.facility}
-              coach={classes.item.session.coachId.name}
-              class
-              classbutton={() => {
-                dispatch(getSessiondata(classes.item.class._id));
-                props.navigation.navigate('ChangeClass', {classes});
-              }}
-              member
-              memberbutton={() => {
-                setEnrollmentId(classes.item._id);
-                setShowAlert(true);
-              }}
-            />
-          );
-        }}
-      />
+      <View>
+        {businessList.length > 0
+          ? businessList.map((item, index) => {
+              return (
+                <ClassCard
+                  className={item.class.name}
+                  title={'Change Session'}
+                  key={index}
+                  day={item.session.pattern[0].day}
+                  time={
+                    item.session && item.session.pattern.length > 0
+                      ? // time(
+                        //   new Date(classes.item.session.pattern[0].startTime),
+                        //   new Date(classes.item.session.pattern[0].endTime),
+                        // )
+                        `${moment(item.session.pattern[0].startTime).format(
+                          'hh:mm A',
+                        )} - ${moment(item.session.pattern[0].endTime).format(
+                          'hh:mm A',
+                        )}`
+                      : null
+                  }
+                  facility={item.session.facility}
+                  coach={item.session.coachId.name}
+                  class
+                  classbutton={() => {
+                    dispatch(getSessiondata(item.class._id));
+                    props.navigation.navigate('ChangeClass', {item});
+                  }}
+                  member
+                  memberbutton={() => {
+                    setEnrollmentId(item._id);
+                    setShowAlert(true);
+                  }}
+                />
+              );
+            })
+          : null}
+      </View>
       <AppButton
         title={'New Class'}
         onPress={() => {
@@ -280,3 +285,43 @@ export default function EnrolledChild(props) {
     </CustomLayout>
   );
 }
+
+// <FlatList
+//         data={businessList}
+//         key={item => item._id}
+//         renderItem={classes => {
+//           //console.log('classes: ', classes.item);
+//           return (
+//             <ClassCard
+//               className={classes.item.class.name}
+//               title={'Change Session'}
+//               day={classes.item.session.pattern[0].day}
+//               time={
+//                 classes.item.session && classes.item.session.pattern.length > 0
+//                   ? // time(
+//                     //   new Date(classes.item.session.pattern[0].startTime),
+//                     //   new Date(classes.item.session.pattern[0].endTime),
+//                     // )
+//                     `${moment(classes.item.session.pattern[0].startTime).format(
+//                       'hh:mm A',
+//                     )} - ${moment(
+//                       classes.item.session.pattern[0].endTime,
+//                     ).format('hh:mm A')}`
+//                   : null
+//               }
+//               facility={classes.item.session.facility}
+//               coach={classes.item.session.coachId.name}
+//               class
+//               classbutton={() => {
+//                 dispatch(getSessiondata(classes.item.class._id));
+//                 props.navigation.navigate('ChangeClass', {classes});
+//               }}
+//               member
+//               memberbutton={() => {
+//                 setEnrollmentId(classes.item._id);
+//                 setShowAlert(true);
+//               }}
+//             />
+//           );
+//         }}
+//       />

@@ -23,7 +23,7 @@ export default function ChangeClass(props) {
   const [errorMsg, setErrorMsg] = useState('');
 
   const [token, setToken] = useState('');
-  const currentClass = props.route.params.classes.item;
+  const currentClass = props.route.params.item;
   console.log('class: ', currentClass);
   const navigation = useNavigation();
   const getSession = sessions();

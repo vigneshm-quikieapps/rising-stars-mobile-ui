@@ -161,12 +161,10 @@ function Profile(props) {
 
       {/* children card starts here */}
 
-      {membersdata && (
-        <FlatList
-          data={membersdata}
-          key={item => item._id}
-          renderItem={item => (
-            <View style={styles.profileImageCard}>
+      {membersdata &&
+        membersdata.map((item, index) => {
+          return (
+            <View key={index} style={styles.profileImageCard}>
               <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
                 <TouchableOpacity onPress={updateProfilePicture}>
                   {fileUri === null ? (
@@ -185,13 +183,13 @@ function Profile(props) {
                       fontFamily: 'Nunito-SemiBold',
                       marginBottom: wp('1%'),
                     }}>
-                    {item.item.name}
+                    {item.name}
                   </Text>
                 </View>
               </View>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleMembership(currentMember._id, item.item)}>
+                onPress={() => handleMembership(currentMember._id, item)}>
                 <Text style={styles.cardButton}>Memberships / Classes</Text>
               </TouchableOpacity>
 
@@ -200,17 +198,16 @@ function Profile(props) {
                 onPress={() => {
                   dispatch({
                     type: Action.USER_GET_CURRENT_MEMBER_DATA,
-                    payload: item.item,
+                    payload: item,
                   });
-                  dispatch(getmemberClass(item.item._id));
+                  dispatch(getmemberClass(item._id));
                   props.navigation.navigate('PaymentHistory');
                 }}>
                 <Text style={styles.cardButton}>Payment History</Text>
               </TouchableOpacity>
             </View>
-          )}
-        />
-      )}
+          );
+        })}
 
       {/* children card ends here */}
 
@@ -257,6 +254,57 @@ function Profile(props) {
 }
 
 export default Profile;
+
+{
+  /* <FlatList
+          data={membersdata}
+          key={item => item._id}
+          renderItem={item => (
+            <View style={styles.profileImageCard}>
+              <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
+                <TouchableOpacity onPress={updateProfilePicture}>
+                  {fileUri === null ? (
+                    <Image
+                      style={styles.image}
+                      source={require('../../assets/images/children.jpg')}
+                    />
+                  ) : (
+                    <Image style={styles.image} source={{uri: fileUri}} />
+                  )}
+                </TouchableOpacity>
+                <View style={{justifyContent: 'center'}}>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontFamily: 'Nunito-SemiBold',
+                      marginBottom: wp('1%'),
+                    }}>
+                    {item.item.name}
+                  </Text>
+                </View>
+              </View>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => handleMembership(currentMember._id, item.item)}>
+                <Text style={styles.cardButton}>Memberships / Classes</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  dispatch({
+                    type: Action.USER_GET_CURRENT_MEMBER_DATA,
+                    payload: item.item,
+                  });
+                  dispatch(getmemberClass(item.item._id));
+                  props.navigation.navigate('PaymentHistory');
+                }}>
+                <Text style={styles.cardButton}>Payment History</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        /> */
+}
 
 const styles = StyleSheet.create({
   container: {},
