@@ -7,7 +7,7 @@ import {
   AppButton,
   ErrorMessage,
 } from './../../components';
-import {colors, Fontsize, hp, wp} from './../../constants';
+import {colors, Country_Code, Fontsize, hp, wp} from './../../constants';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import InputOTPScreen from './InputOTPScreen';
 import {forgetPasswordData} from '../../redux/action/auth';
@@ -81,7 +81,8 @@ function CreateNewPassword(props) {
         onSubmit={async values => {
           // console.log(values.contactNumber, values.email);
           let body = {
-            mobileNo: `+91${values.contactNumber}`,
+            // mobileNo: `+91${values.contactNumber}`,
+            mobileNo: `${Country_Code}${values.contactNumber}`,
             email: values.email,
           };
           const handleOTP = async () => {
@@ -93,7 +94,8 @@ function CreateNewPassword(props) {
             } else {
               props.navigation.navigate('InputOTPScreen', {
                 otp: getResp.otp,
-                mobileNo: `+91${values.contactNumber}`,
+                // mobileNo: `+91${values.contactNumber}`,
+                mobileNo: `${Country_Code}${values.contactNumber}`,
                 email: values.email,
               });
             }
