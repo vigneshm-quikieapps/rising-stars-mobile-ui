@@ -192,6 +192,10 @@ export default function EnrolledChild(props) {
           ? businessList.map((item, index) => {
               return (
                 <ClassCard
+                  style={{
+                    elevation: 5,
+                    shadowColor: '#bfafb2',
+                  }}
                   className={item.class.name}
                   title={'Change Session'}
                   key={index}

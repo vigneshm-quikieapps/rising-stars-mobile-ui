@@ -524,9 +524,9 @@ const styles = StyleSheet.create({
     // marginVertical: hp('1%'),
   },
   tick: {
-    //height: hp('3%'),
-    // width: hp('3%'),
-    color: '#d26800',
+    height: hp('3%'),
+    width: hp('3%'),
+    // color: '#d26800',
   },
   mark: {
     alignSelf: 'center',
