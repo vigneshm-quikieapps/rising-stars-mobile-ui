@@ -365,7 +365,18 @@ const Home = () => {
               }}
             />
           ) : (
-            <View
+            // <View
+            //   style={{
+            //     backgroundColor: 'white',
+            //     borderRadius: 20,
+            //     alignContent: 'center',
+            //     justifyContent: 'center',
+            //     alignItems: 'center',
+            //     height: hp('15%'),
+            //     marginRight: wp('3%'),
+            //   }}>
+            <TouchableOpacity
+              // activeOpacity={3}
               style={{
                 backgroundColor: 'white',
                 borderRadius: 20,
@@ -374,33 +385,32 @@ const Home = () => {
                 alignItems: 'center',
                 height: hp('15%'),
                 marginRight: wp('3%'),
+              }}
+              onPress={() => {
+                dispatch({
+                  type: Action.USER_ADD_CHILD_SUCCEDED,
+                  payload: {member: currentMember},
+                });
+                dispatch(
+                  getClubdata({
+                    callback: () => {
+                      navigation.navigate('New_Class_Selection', {
+                        from: 'homeTab',
+                      });
+                    },
+                  }),
+                );
+                // dispatch({
+                //   type: Action.USER_GET_CURRENT_MEMBER_DATA,
+                //   payload: currentMember,
+                // });
+                // navigation.navigate('EnrolledChild' );
               }}>
-              <TouchableOpacity
-                onPress={() => {
-                  dispatch({
-                    type: Action.USER_ADD_CHILD_SUCCEDED,
-                    payload: {member: currentMember},
-                  });
-                  dispatch(
-                    getClubdata({
-                      callback: () => {
-                        navigation.navigate('New_Class_Selection', {
-                          from: 'homeTab',
-                        });
-                      },
-                    }),
-                  );
-                  // dispatch({
-                  //   type: Action.USER_GET_CURRENT_MEMBER_DATA,
-                  //   payload: currentMember,
-                  // });
-                  // navigation.navigate('EnrolledChild' );
-                }}>
-                <Text style={{fontSize: wp('6%'), color: colors.orange}}>
-                  Please add a Class
-                </Text>
-              </TouchableOpacity>
-            </View>
+              <Text style={{fontSize: wp('6%'), color: colors.orange}}>
+                Please add a Class
+              </Text>
+            </TouchableOpacity>
+            // </View>
           )}
           <View
             style={{

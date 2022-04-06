@@ -11,7 +11,7 @@ import {
 import * as Action from '../../redux/action-types';
 
 import {colors, Fontsize, hp, Stepend, wp} from '../../constants';
-import {RadioButton} from 'react-native-paper';
+import {ActivityIndicator, RadioButton} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {enrollChildData} from '../../redux/action/enrol';
 import {getLocalData} from '../../utils/LocalStorage';
@@ -148,6 +148,9 @@ const Pay = props => {
       />
       <View style={styles.breaks} />
       <Text style={styles.optional}>Payment Options</Text>
+      {!clubfinance ? (
+        <ActivityIndicator size="small" color={colors.orange} />
+      ) : null}
       {clubfinance && clubfinance.paymentChannels.manual === true ? (
         <StandingOrder
           onPress={() => {
