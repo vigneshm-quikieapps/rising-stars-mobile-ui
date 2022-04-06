@@ -78,7 +78,7 @@ const AtmCard = props => {
           style={styles.textareaForCard}
         />
         <View style={styles.breaks} />
-        <Text style={styles.valid}>Valid thru</Text>
+        <Text style={styles.valid}>Valid Thru</Text>
 
         <View style={{flexDirection: 'row'}}>
           <View>
@@ -127,7 +127,10 @@ const AtmCard = props => {
             <TextInput
               placeholder={'YY'}
               value={year}
-              onChangeText={text => setYear(text)}
+              onChangeText={text => {
+                setYear(text);
+                text.length === 2 && cvvRef.current.focus();
+              }}
               maxLength={2}
               style={styles.textareaForCardDetails}
               ref={yearRef}
@@ -176,11 +179,13 @@ const AtmCard = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: hp('31.5%'),
+    // height: hp('31.5%'),
     borderWidth: 1,
-    padding: hp('2%'),
-    paddingBottom: hp('1%'),
-    marginVertical: hp('1%'),
+    // padding: hp('2%'),
+    // paddingBottom: hp('1%'),
+    marginVertical: hp('2%'),
+    paddingVertical: hp('2%'),
+    paddingHorizontal: wp('3%'),
     borderRadius: 10,
   },
   cardText: {
@@ -193,11 +198,18 @@ const styles = StyleSheet.create({
   },
   cardDetails: {
     flex: 1,
-    height: hp('20%'),
+    // height: hp('20%'),
     borderWidth: 1,
     borderRadius: 10,
     borderColor: colors.lightgrey,
-    padding: hp('2%'),
+    // padding: hp('2%'),
+    paddingHorizontal: wp('2.5%'),
+    marginTop: hp('2%'),
+    // paddingTop: hp('1%'),
+    overflow: 'hidden',
+    paddingTop: hp('1%'),
+    paddingBottom: hp('12%'),
+    // marginVertical: hp('1%'),
   },
   breaks: {
     borderWidth: 1,
@@ -207,7 +219,8 @@ const styles = StyleSheet.create({
   valid: {
     fontFamily: 'Nunito-SemiBold',
     fontSize: hp('1.5%'),
-    marginTop: hp('1%'),
+    // marginTop: hp('1%'),
+    paddingTop: hp('2%'),
     color: colors.grey,
     marginLeft: wp('1%'),
   },
