@@ -82,7 +82,9 @@ const Home = () => {
         dotsLength={
           memberClassData && memberClassData
             ? memberClassData.filter(
-                item => item?.enrolledStatus === 'ENROLLED' || 'WAITLISTED',
+                item =>
+                  item?.enrolledStatus === 'ENROLLED' ||
+                  item?.enrolledStatus === 'WAITLISTED',
               ).length
             : 1
         }
@@ -152,7 +154,9 @@ const Home = () => {
     memberClassData.length > 0 &&
       setCurrentSessionId(
         memberClassData?.filter(
-          item => item?.enrolledStatus === 'ENROLLED' || 'WAITLISTED',
+          item =>
+            item?.enrolledStatus === 'ENROLLED' ||
+            item?.enrolledStatus === 'WAITLISTED',
         )[activeDotIndex]?.session._id,
       );
 
@@ -163,7 +167,9 @@ const Home = () => {
           token,
           data: {
             sessionId: memberClassData?.filter(
-              item => item?.enrolledStatus === 'ENROLLED',
+              item =>
+                item?.enrolledStatus === 'ENROLLED' ||
+                item?.enrolledStatus === 'WAITLISTED',
             )[activeDotIndex]?.session._id,
             memberId: currentMember._id,
           },
@@ -190,11 +196,13 @@ const Home = () => {
     memberClassData &&
       setClassList(
         memberClassData?.filter(
-          item => item?.enrolledStatus === 'ENROLLED' || 'WAITLISTED',
+          item =>
+            item?.enrolledStatus === 'ENROLLED' ||
+            item?.enrolledStatus === 'WAITLISTED',
         ),
       );
   }, [memberClassData]);
-
+  //console.log('class list in home', classList);
   const renderItem = ({item, index}) => {
     // console.log('inside class card', item.session.pattern[0].day);
     return (
@@ -337,7 +345,9 @@ const Home = () => {
               data={
                 memberClassData &&
                 memberClassData?.filter(
-                  item => item?.enrolledStatus === 'ENROLLED' || 'WAITLISTED',
+                  item =>
+                    item?.enrolledStatus === 'ENROLLED' ||
+                    item?.enrolledStatus === 'WAITLISTED',
                 )
               }
               renderItem={renderItem}
@@ -349,7 +359,8 @@ const Home = () => {
                   memberClassData &&
                     memberClassData?.filter(
                       item =>
-                        item?.enrolledStatus === 'ENROLLED' || 'WAITLISTED',
+                        item?.enrolledStatus === 'ENROLLED' ||
+                        item?.enrolledStatus === 'WAITLISTED',
                     )[index].session._id,
                 );
                 // const attendance =
@@ -390,11 +401,6 @@ const Home = () => {
                       },
                     }),
                   );
-                  // dispatch({
-                  //   type: Action.USER_GET_CURRENT_MEMBER_DATA,
-                  //   payload: currentMember,
-                  // });
-                  // navigation.navigate('EnrolledChild' );
                 }}>
                 <Text style={{fontSize: wp('6%'), color: colors.orange}}>
                   Please add a Class

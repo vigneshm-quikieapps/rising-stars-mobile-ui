@@ -32,7 +32,7 @@ export default function EnrolledChild(props) {
 
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const currentMember = useSelector(state => state.currentMemberData.data);
-  console.log('inside enrolled child', currentMember);
+  // console.log('inside enrolled child', currentMember);
 
   const renderItem = item => {
     var temp =
@@ -151,24 +151,24 @@ export default function EnrolledChild(props) {
       memberClassData &&
       memberClassData.filter(
         item =>
-          item.businessId ===
-            currentMember.membership[activeDotIndex].businessId &&
+          item?.businessId ===
+            currentMember.membership[activeDotIndex]?.businessId &&
           item.enrolledStatus === 'ENROLLED',
       );
-    console.log('Enrolled Child', businesses);
+    //console.log('Enrolled Child', businesses, currentMember);
     //setBusinessList(businesses);
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
     setBusinessList(businesses);
   }, [memberClassData, currentMember]);
-  // const accessToken = async () => {
-  //   const Token = await getLocalData('accessToken');
-  //   setToken(Token);
-  // };
+  const accessToken = async () => {
+    const Token = await getLocalData('accessToken');
+    setToken(Token);
+  };
 
-  // useEffect(() => {
-  //   accessToken();
-  // }, []);
+  useEffect(() => {
+    accessToken();
+  }, []);
 
   return (
     <CustomLayout

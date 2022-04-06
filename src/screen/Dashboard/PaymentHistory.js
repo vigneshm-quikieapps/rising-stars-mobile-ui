@@ -384,25 +384,29 @@ export default function EnrolledChild() {
       <Text style={{fontFamily: 'Nunito-SemiBold', marginBottom: hp('2%')}}>
         Current Classes
       </Text>
-      <View style={styles.remark}>
-        <View style={[styles.mark, {borderWidth: 0}]}>
-          <Image source={require('../../assets/images/icon-info.png')} />
-        </View>
-        <Text style={styles.marktext}>No records available at this time</Text>
-      </View>
+
       <View style={styles.borderedContainer}>
         <View style={{paddingVertical: hp('1%')}}>
           {memberClassData.length > 0 ? (
             <Carousel
               data={businessList}
               renderItem={renderItemClassCard}
-              sliderWidth={wp('92%')}
+              sliderWidth={wp('91%')}
               itemWidth={wp('83%')}
               onSnapToItem={index => {
                 handleSwipe(index);
               }}
             />
-          ) : null}
+          ) : (
+            <View style={styles.remark}>
+              <View style={[styles.mark, {borderWidth: 0}]}>
+                <Image source={require('../../assets/images/icon-info.png')} />
+              </View>
+              <Text style={styles.marktext}>
+                No records available at this time
+              </Text>
+            </View>
+          )}
         </View>
         <View
           style={{
@@ -524,8 +528,8 @@ const styles = StyleSheet.create({
     // marginVertical: hp('1%'),
   },
   tick: {
-    //height: hp('3%'),
-    // width: hp('3%'),
+    height: hp('3%'),
+    width: hp('3%'),
     color: '#d26800',
   },
   mark: {
