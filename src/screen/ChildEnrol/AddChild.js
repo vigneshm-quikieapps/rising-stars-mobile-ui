@@ -212,20 +212,23 @@ const AddChild = props => {
                     ],
             },
           };
-          console.log('VAlues', va);
-          if (
-            moment(values.dob).format('DD-MM-YYYY') ===
-            moment(new Date()).format('DD-MM-YYYY')
-          ) {
+          // console.log('VAlues', values);
+          // if (
+          //   moment(values.dob).format('DD-MM-YYYY') ===
+          //   moment(new Date()).format('DD-MM-YYYY')
+          // )
+          if (values.dob === '') {
             setBirthError(true);
-            setDisabled(false);
+            // setDisabled(false);
           } else if (values.gender === '') {
             setGenderError(true);
-            setDisabled(false);
+            // setDisabled(false);
           }
-          if (new Date().getFullYear() - values.dob.getFullYear() <= 2) {
-            alert('2 year children not allowed ');
-            setDisabled(false);
+          // if (new Date().getFullYear() - values.dob.getFullYear() <= 2) {
+          else if (new Date().getFullYear() - values.dob.getFullYear() <= 2) {
+            // alert('2 year children not allowed');
+            setBirthError(true);
+            // setDisabled(false);
           } else {
             dispatch(
               setChildData({
@@ -321,13 +324,17 @@ const AddChild = props => {
               }}
             /> */}
               {birtherror && (
-                <Text style={styles.errors}>D.O.B. is a required</Text>
+                <Text style={styles.errors}>
+                  {/* children less then 3 years of age are not allowed */}
+                  child must be 3 years old
+                </Text>
+                // <Text style={styles.errors}>D.O.B. is a required</Text>
               )}
-              <ErrorMessage
+              {/* <ErrorMessage
                 style={styles.errorMessage}
                 error={errors.dob}
                 visible={touched.dob}
-              />
+              /> */}
               <PopUpCard
                 text={'Gender*'}
                 textColor={colors.grey}
@@ -729,7 +736,7 @@ const AddChild = props => {
                   );
                 })} */}
               <ForwardButton
-                disabled={disabled}
+                // disabled={disabled}
                 style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
                 title="Submit"
                 onPress={() => {
