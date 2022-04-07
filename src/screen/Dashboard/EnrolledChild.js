@@ -151,9 +151,10 @@ export default function EnrolledChild(props) {
       memberClassData &&
       memberClassData.filter(
         item =>
-          item?.businessId ===
+          (item?.businessId ===
             currentMember.membership[activeDotIndex]?.businessId &&
-          item.enrolledStatus === 'ENROLLED',
+            item?.enrolledStatus === 'ENROLLED') ||
+          item?.enrolledStatus === 'WAITLISTED',
       );
     //console.log('Enrolled Child', businesses, currentMember);
     //setBusinessList(businesses);

@@ -118,7 +118,9 @@ export default function EnrolledChild() {
       memberClassData &&
       memberClassData?.filter(
         // item => item?.enrolledStatus === 'ENROLLED',
-        item => item?.enrolledStatus === 'ENROLLED' || 'WAITLISTED',
+        item =>
+          item?.enrolledStatus === 'ENROLLED' ||
+          item?.enrolledStatus === 'WAITLISTED',
       );
     //console.log('inside payment history', businessesTemp);
     setBusinessList(businessesTemp);
