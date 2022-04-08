@@ -128,7 +128,7 @@ const Confirmation = props => {
                 <Text style={styles.body}>{child.member.name}</Text>
               </View>
               <View style={{alignContent: 'center', alignItems: 'center'}}>
-                <Text style={styles.head}>Club Name</Text>
+                {/* <Text style={styles.head}>Club Name</Text> */}
                 {/* <Text style={styles.body}>{club.name}</Text> */}
                 <Text style={styles.head}>Child Age</Text>
                 <Text style={styles.body}>
