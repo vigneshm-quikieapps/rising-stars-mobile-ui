@@ -192,8 +192,17 @@ const AttendenceShow = () => {
         });
         setCurrentSessionAttendance(attendance.attendance);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memberClassData]);
+  }, [
+    activeDotIndex,
+    currentClassId,
+    currentMember._id,
+    currentSessionId,
+    currentTermId,
+    dispatch,
+    generateUpcomingDates,
+    memberClassData,
+    token,
+  ]);
 
   // useEffect(() => {
   // console.log('upcomingAtt', upcomingAttendance[0].startDate);
