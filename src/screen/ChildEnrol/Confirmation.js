@@ -21,8 +21,30 @@ const Confirmation = props => {
   const [showAlert, setShowAlert] = useState(false);
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const {from} = props.route.params;
-
-  //console.log('confirmation', from);
+  const newDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+  const days = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thusday',
+    'Friday',
+    'Saturday',
+  ];
+  const month = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
   useEffect(() => {
     enrollment && enrollment?.message == 'enrolled successful'
       ? setShowAlert(true)
@@ -31,23 +53,43 @@ const Confirmation = props => {
 
   const DateDiff = () => {
     //console.log('inside datediff function ', memberClassData, enrollment);
-    const start = new Date(memberClassData[0]?.session.term.startDate);
-    const today = new Date();
+    // const start = new Date(memberClassData[0]?.session.term.startDate);
+    // const today = new Date();
 
-    const range =
-      start.getDate() -
-      today.getDate() +
-      (start.getMonth() - today.getMonth()) * 30;
+    // const range =
+    //   start.getDate() -
+    //   today.getDate() +
+    //   (start.getMonth() - today.getMonth()) * 30;
     // const range = today.getDate()-start.getDate() + (start.getMonth()-today.getMonth())*30
 
-    //console.log('enrollment msg', range);
-    //console.log('session Start date & end date ', memberClassData[0].session.term.startDate, memberClassData[0].session.term.endDate);
-    return range;
+    if (slot) {
+      let upcomingDates = [];
+      let today = new Date();
+      let startDate = new Date(slot.startDate);
+      let endDate = new Date(slot.endDate);
+      let pattern = slot.pattern.map(item => item.day);
+
+      while (startDate <= endDate) {
+        // console.log('before includes', pattern, newDays[startDate.getDay()]);
+        if (pattern.includes(newDays[startDate.getDay()])) {
+          // console.log('includes', startDate, newDays[startDate.getDay()]);
+          if (startDate > today) {
+            upcomingDates.push(startDate.toString());
+            break;
+          }
+        }
+        startDate.setDate(startDate.getDate() + 1);
+      }
+
+      return `${days[new Date(upcomingDates[0]).getDay()]} , ${new Date(
+        upcomingDates[0],
+      ).getDate()} ${month[new Date(upcomingDates[0]).getMonth()]}`;
+    }
   };
 
   return (
     <View>
-      {enrollment?.message == 'enrolled successful' ? (
+      {/* {enrollment?.message == 'enrolled successful' ? (
         <Alert
           visible={showAlert}
           confirm={'Done'}
@@ -59,85 +101,84 @@ const Confirmation = props => {
           image={'failure'}
           message={'Something went Wrong'}
         />
-      ) : (
-        <CustomLayout
-          steps
-          start={Stepend}
-          end={Stepend}
-          back
-          header
-          headerTextBigText={true}
-          headertext={'Confirmation'}
-          subheader
-          subheadertext={'Thank you for enroling your child with our club'}
-          Customchildren2={<ProgressTracker percent={7} />}
-          Customchildren3={
-            // <View
-            //   name={child.member.name}
-            //   id={child.member._id}
-            //   activityrequired
-            //   activity={club.name}
-            //   subactivity={classes.name}
-            // >
-            <View style={styles.containera}>
-              <View style={styles.subContainer}>
-                <View style={{alignContent: 'center', alignItems: 'center'}}>
-                  <Text style={styles.head}>Child Name</Text>
-                  <Text style={styles.body}>{child.member.name}</Text>
-                </View>
-                <View style={{alignContent: 'center', alignItems: 'center'}}>
-                  <Text style={styles.head}>Child Age</Text>
-                  <Text style={styles.body}>
-                    {new Date().getFullYear() -
-                      parseInt(child.member.dob.slice(0, 4))}
-                  </Text>
-                </View>
+      ) : ( */}
+      <CustomLayout
+        steps
+        start={Stepend}
+        end={Stepend}
+        back
+        header
+        headerTextBigText={true}
+        headertext={'Confirmation'}
+        subheader
+        subheadertext={'Thank you for enroling your child with our club'}
+        Customchildren2={<ProgressTracker percent={7} />}
+        Customchildren3={
+          // <View
+          //   name={child.member.name}
+          //   id={child.member._id}
+          //   activityrequired
+          //   activity={club.name}
+          //   subactivity={classes.name}
+          // >
+          <View style={styles.containera}>
+            <View style={styles.subContainer}>
+              <View style={{alignContent: 'center', alignItems: 'center'}}>
+                <Text style={styles.head}>Child Name</Text>
+                <Text style={styles.body}>{child.member.name}</Text>
+              </View>
+              <View style={{alignContent: 'center', alignItems: 'center'}}>
+                <Text style={styles.head}>Club Name</Text>
+                {/* <Text style={styles.body}>{club.name}</Text> */}
+                <Text style={styles.head}>Child Age</Text>
+                <Text style={styles.body}>
+                  {new Date().getFullYear() -
+                    parseInt(child.member.dob.slice(0, 4))}
+                </Text>
               </View>
             </View>
-          }
-          backbutton={() => props.navigation.goBack()}>
-          <View style={styles.bordestyle}>
-            {DateDiff() > 0 ? (
-              <Text style={styles.classtext}>
-                Class will begin {DateDiff()} days from now
-              </Text>
-            ) : null}
-            <Slot
-              white
-              required
-              waitlisted={enrollment.status == 'WAITLISTED'}
-              Class={club.name}
-              sessions={classes.name}
-              day={fullDays[slot.pattern[0].day]}
-              time={`${moment(slot.pattern[0].startTime).format(
-                'hh:mm A',
-              )} - ${moment(slot.pattern[0].endTime).format('hh:mm A')}`}
-              facility={slot.facility}
-              coach={slot.coach.name}
-            />
           </View>
-          {enrollment.status == 'WAITLISTED' && (
-            <View style={styles.remark}>
-              <View style={styles.mark}>
-                <Image source={require('../../assets/images/icon-info.png')} />
-              </View>
+        }
+        backbutton={() => props.navigation.goBack()}>
+        <View style={styles.bordestyle}>
+          <Text style={styles.classtext}>we will see you on {DateDiff()}</Text>
 
-              <Text style={styles.marktext}>
-                waitlisted enrolments, pay charges offline
-              </Text>
-            </View>
-          )}
-          <View style={{height: hp('0%')}} />
-          <AppButton
-            title={'Done'}
-            onPress={() => {
-              from === 'homeTab'
-                ? props.navigation.navigate('HomeTab')
-                : props.navigation.navigate('Profile');
-            }}
+          <Slot
+            white
+            required
+            waitlisted={enrollment.status == 'WAITLISTED'}
+            Class={club.name}
+            sessions={classes.name}
+            day={fullDays[slot.pattern[0].day]}
+            time={`${moment(slot.pattern[0].startTime).format(
+              'hh:mm A',
+            )} - ${moment(slot.pattern[0].endTime).format('hh:mm A')}`}
+            facility={slot.facility}
+            coach={slot.coach.name}
           />
-        </CustomLayout>
-      )}
+        </View>
+        {enrollment.status == 'WAITLISTED' && (
+          <View style={styles.remark}>
+            <View style={styles.mark}>
+              <Image source={require('../../assets/images/icon-info.png')} />
+            </View>
+
+            <Text style={styles.marktext}>
+              waitlisted enrolments, pay charges offline
+            </Text>
+          </View>
+        )}
+        <View style={{height: hp('0%')}} />
+        <AppButton
+          title={'Done'}
+          onPress={() => {
+            from === 'homeTab'
+              ? props.navigation.navigate('HomeTab')
+              : props.navigation.navigate('Profile');
+          }}
+        />
+      </CustomLayout>
+      {/* // )} */}
     </View>
   );
 };

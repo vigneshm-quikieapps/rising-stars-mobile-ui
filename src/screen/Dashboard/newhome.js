@@ -29,6 +29,7 @@ import {getmemberClass, getmemberData} from '../../redux/action/home';
 import {
   fetchAttendanceOfMemberInSession,
   fetchCurrentUser,
+  fetchSessionById,
 } from '../../redux/service/request';
 import {getClubdata} from '../../redux/action/enrol';
 import {useNavigation} from '@react-navigation/native';
@@ -48,12 +49,15 @@ const Home = () => {
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const [value, setValue] = useState(0);
   const [classList, setClassList] = useState([]);
+  const [numberOfSession, setNumberOfSession] = useState('');
   const sessionAttendance = useSelector(
     state => state.sessionlist.sessionAttendance,
   );
   const memberActivityProgress = useSelector(
     state => state.currentMemberActivity.activity,
   );
+  const newDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
   const accessToken = async () => {
     const Token = await getLocalData('accessToken');
     setToken(Token);
@@ -176,6 +180,31 @@ const Home = () => {
         },
       });
 
+    //console.log('checking session', classList[activeDotIndex]?.session);
+    if (classList[activeDotIndex]?.session) {
+      let upcomingDates = [];
+      let today = new Date();
+      let startDate = new Date(classList[activeDotIndex]?.session?.startDate);
+      let endDate = new Date(classList[activeDotIndex]?.session?.endDate);
+      let pattern = classList[activeDotIndex]?.session?.pattern.map(
+        item => item.day,
+      );
+
+      while (startDate <= endDate) {
+        // console.log('before includes', pattern, newDays[startDate.getDay()]);
+        if (pattern.includes(newDays[startDate.getDay()])) {
+          // console.log('includes', startDate, newDays[startDate.getDay()]);
+          if (startDate > today) {
+            upcomingDates.push(startDate.toString());
+          }
+        }
+        startDate.setDate(startDate.getDate() + 1);
+        console.log('after set', upcomingDates);
+      }
+
+      setNumberOfSession(upcomingDates.length);
+    }
+
     // currentSessionId &&
     //   fetchAttendanceOfMemberInSession({
     //     token,
@@ -204,7 +233,7 @@ const Home = () => {
   }, [memberClassData]);
   //console.log('class list in home', classList);
   const renderItem = ({item, index}) => {
-    // console.log('inside class card', item.session.pattern[0].day);
+    // console.log('inside class card', item.session);
     return (
       <ClassCard
         id={item.clubMembershipId}
@@ -456,10 +485,7 @@ const Home = () => {
           <View>
             <AttendanceCard
               color={['rgb(255,163,0)', 'rgb(255,126,0)']}
-              class={(currentSessionAttendance?.totalCount
-                ? currentSessionAttendance.totalCount
-                : 0
-              ).toString()}
+              class={(numberOfSession ? numberOfSession : 0).toString()}
               value={'Total'}
               label={'Classes'}
               style={{backgroundColor: '#fff4e7'}}
