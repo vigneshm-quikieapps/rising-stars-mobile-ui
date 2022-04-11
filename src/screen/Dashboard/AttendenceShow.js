@@ -188,7 +188,7 @@ const AttendenceShow = () => {
       fetchAttendanceOfMemberInSession({
         token,
         data: {
-          sessionId: currentSessionId,
+          sessionId: currsesID,
           memberId: currentMember._id,
         },
       }).then(attendance => {
@@ -627,131 +627,128 @@ const AttendenceShow = () => {
               }
             />
           </View>
-          <View style={{}}>
-            <View style={{marginTop: 30}}>
-              {currentSessionAttendance &&
-              currentSessionAttendance.records !== undefined ? (
-                <>
-                  <View style={{marginLeft: wp('2%')}}>
-                    <Text
-                      style={{
-                        marginBottom: wp('5%'),
-                        fontSize: wp('5%'),
-                        fontFamily: 'Nunito-SemiBold',
-                      }}>
-                      {/* {console.log('currentSessionAttendance.records', )} */}
-                      {
-                        month[
-                          new Date(
-                            currentSessionAttendance.records[0].date,
-                          ).getMonth()
-                        ]
-                      }
-                      ,{' '}
-                      {new Date(
-                        currentSessionAttendance.records[0].date,
-                      ).getFullYear()}
-                    </Text>
-                  </View>
-                  <FlatList
-                    data={currentSessionAttendance.records}
-                    keyExtractor={item => item._id}
-                    ListFooterComponent={UpcomingClasses()}
-                    renderItem={item => {
-                      return (
+
+          <View style={{marginTop: 30}}>
+            {currentSessionAttendance &&
+            currentSessionAttendance.records !== undefined ? (
+              <>
+                <View style={{marginLeft: wp('2%')}}>
+                  <Text
+                    style={{
+                      marginBottom: wp('5%'),
+                      fontSize: wp('5%'),
+                      fontFamily: 'Nunito-SemiBold',
+                    }}>
+                    {/* {console.log('currentSessionAttendance.records', )} */}
+                    {
+                      month[
+                        new Date(
+                          currentSessionAttendance.records[0].date,
+                        ).getMonth()
+                      ]
+                    }
+                    ,{' '}
+                    {new Date(
+                      currentSessionAttendance.records[0].date,
+                    ).getFullYear()}
+                  </Text>
+                </View>
+                <FlatList
+                  data={currentSessionAttendance.records}
+                  keyExtractor={item => item._id}
+                  ListFooterComponent={UpcomingClasses()}
+                  renderItem={item => {
+                    return (
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          paddingBottom: 20,
+                        }}>
                         <View
                           style={{
-                            flexDirection: 'row',
+                            width: wp('22%'),
+                            justifyContent: 'center',
                             alignItems: 'center',
-                            paddingBottom: 20,
                           }}>
-                          <View
+                          <Text
                             style={{
-                              width: wp('22%'),
-                              justifyContent: 'center',
-                              alignItems: 'center',
+                              fontSize: wp('4%'),
+                              fontFamily: 'Nunito-Regular',
+                              color: colors.blackOpacity,
+                            }}>
+                            {days[new Date(item.item.date).getDay()]}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: wp('8%'),
+                              fontFamily: 'Nunito-SemiBold',
+                            }}>
+                            {new Date(item.item.date).getDate()}
+                          </Text>
+                        </View>
+                        <View style={{justifyContent: 'center'}}>
+                          <LinearGradient
+                            colors={
+                              item.item.attended === true
+                                ? ['#68D6AB', '#33AB96']
+                                : ['#EA5C5C', '#AB3333']
+                              // : item.status === 'Tardy'
+                              // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
+                              // : item.status === 'Upcoming'
+                              // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
+                              // : ['#ffa300', '#ff7e00']
+                            }
+                            style={{height: 1.5, width: 30}}
+                          />
+                        </View>
+                        <View style={{justifyContent: 'center', width: '100%'}}>
+                          <LinearGradient
+                            colors={
+                              item.item.attended === true
+                                ? ['#68D6AB', '#33AB96']
+                                : ['#EA5C5C', '#AB3333']
+                              // : item.status === 'Tardy'
+                              // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
+                              // : item.status === 'Upcoming'
+                              // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
+                              // : ['#ffa300', '#ff7e00']
+                            }
+                            style={{
+                              padding: 20,
+                              width: '100%',
+                              borderTopLeftRadius: 16,
+                              borderBottomLeftRadius: 16,
+                              borderColor: '#d2d2d2',
+                              borderWidth: item.status === 'Upcoming' ? 0.5 : 0,
                             }}>
                             <Text
                               style={{
-                                fontSize: wp('4%'),
-                                fontFamily: 'Nunito-Regular',
-                                color: colors.blackOpacity,
+                                color: colors.white,
+                                fontSize: wp('4.5%'),
+                                fontFamily: 'Naunito-SemiBold',
                               }}>
-                              {days[new Date(item.item.date).getDay()]}
+                              {item.item.attended ? 'Attended' : 'No Show'}
                             </Text>
-                            <Text
-                              style={{
-                                fontSize: wp('8%'),
-                                fontFamily: 'Nunito-SemiBold',
-                              }}>
-                              {new Date(item.item.date).getDate()}
-                            </Text>
-                          </View>
-                          <View style={{justifyContent: 'center'}}>
-                            <LinearGradient
-                              colors={
-                                item.item.attended === true
-                                  ? ['#68D6AB', '#33AB96']
-                                  : ['#EA5C5C', '#AB3333']
-                                // : item.status === 'Tardy'
-                                // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
-                                // : item.status === 'Upcoming'
-                                // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
-                                // : ['#ffa300', '#ff7e00']
-                              }
-                              style={{height: 1.5, width: 30}}
-                            />
-                          </View>
-                          <View
-                            style={{justifyContent: 'center', width: '100%'}}>
-                            <LinearGradient
-                              colors={
-                                item.item.attended === true
-                                  ? ['#68D6AB', '#33AB96']
-                                  : ['#EA5C5C', '#AB3333']
-                                // : item.status === 'Tardy'
-                                // ? ['rgb(242,242,242)', 'rgb(242,242,242)']
-                                // : item.status === 'Upcoming'
-                                // ? ['rgb(255,255,255)', 'rgb(255,255,255)']
-                                // : ['#ffa300', '#ff7e00']
-                              }
-                              style={{
-                                padding: 20,
-                                width: '100%',
-                                borderTopLeftRadius: 16,
-                                borderBottomLeftRadius: 16,
-                                borderColor: '#d2d2d2',
-                                borderWidth:
-                                  item.status === 'Upcoming' ? 0.5 : 0,
-                              }}>
-                              <Text
-                                style={{
-                                  color: colors.white,
-                                  fontSize: wp('4.5%'),
-                                  fontFamily: 'Naunito-SemiBold',
-                                }}>
-                                {item.item.attended ? 'Attended' : 'No Show'}
-                              </Text>
-                            </LinearGradient>
-                          </View>
+                          </LinearGradient>
                         </View>
-                      );
-                    }}
+                      </View>
+                    );
+                  }}
+                />
+              </>
+            ) : (
+              <View style={styles.remark}>
+                <View style={styles.mark}>
+                  <Image
+                    source={require('../../assets/images/icon-info.png')}
                   />
-                </>
-              ) : (
-                <View style={styles.remark}>
-                  <View style={styles.mark}>
-                    <Image
-                      source={require('../../assets/images/icon-info.png')}
-                    />
-                  </View>
-                  <Text style={styles.marktext}>
-                    No Attendance records available at this time
-                  </Text>
                 </View>
-              )}
-            </View>
+                <Text style={styles.marktext}>
+                  No Attendance records available at this time
+                </Text>
+              </View>
+            )}
           </View>
         </View>
       ) : (

@@ -168,7 +168,7 @@ const ActivityProgress = () => {
     );
   };
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={{marginTop: 30}}>
         <Text style={{fontSize: 34, fontFamily: 'Nunito-SemiBold'}}>
           Progress
