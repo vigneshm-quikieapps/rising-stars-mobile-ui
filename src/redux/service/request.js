@@ -431,6 +431,8 @@ export async function fetchSessionById(payload) {
         body: JSON.stringify(payload.data),
       },
     );
+
+    //console.log('fetching sessions', payload);
     return await response.json();
   } catch (error) {
     throw error;
