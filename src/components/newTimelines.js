@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {
   View,
@@ -229,11 +230,14 @@ const NewTimelines = props => {
                               style={[
                                 styles.insideText,
                                 {
-                                  color: item.status
-                                    ? 'white'
-                                    : item.status2
-                                    ? 'white'
-                                    : colors.grey,
+                                  color:
+                                    item.status === 'AWARDED' ||
+                                    item.status === 'IN_PROGRESS'
+                                      ? 'white'
+                                      : item.status === 'AWARDED' ||
+                                        item.status === 'IN_PROGRESS'
+                                      ? 'white'
+                                      : colors.grey,
                                 },
                                 {
                                   marginLeft: wp('5%'),
