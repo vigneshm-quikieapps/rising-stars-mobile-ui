@@ -24,7 +24,6 @@ import {
   fetchSessionById,
 } from '../../redux/service/request';
 import {FlatList} from 'react-native-gesture-handler';
-import {isAsyncDebugging} from 'react-native/Libraries/Utilities/DebugEnvironment';
 
 const itemWidth = Dimensions.get('window').width;
 
@@ -47,7 +46,9 @@ const AttendenceShow = () => {
   const [currentSessionAttendance, setCurrentSessionAttendance] = useState('');
   const [currentTermId, setCurrentTermId] = useState('');
   const [currentClassId, setCurrentClassId] = useState('');
-  const [upcomingAttendance, setUpcomingAttendance] = useState();
+  const [upcomingAttendance, setUpcomingAttendance] = useState(0);
+  const [numberOfSession, setNumberOfSession] = useState(0);
+
   const [upcomingDatesArr, setUpcomingDatesArr] = useState([]);
   const [loadingFlag, setLoadingFlag] = useState(false);
   const [endDate, setEndDate] = useState('');
@@ -126,7 +127,7 @@ const AttendenceShow = () => {
   useEffect(() => {
     membersdata && setCurrentMember(membersdata[currentMemberIndex]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    console.log('set current member', membersdata[currentMemberIndex]);
+    //console.log('set current member', membersdata[currentMemberIndex]);
   }, [membersdata, currentMemberIndex]);
 
   useEffect(() => {
@@ -143,33 +144,38 @@ const AttendenceShow = () => {
   var id = '';
 
   useEffect(() => {
-    memberClassData.length > 0 &&
-      setCurrentSessionId(
-        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
-          activeDotIndex
-        ]?.session._id,
-      );
-    memberClassData.length > 0 &&
-      setCurrentTermId(
-        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
-          activeDotIndex
-        ]?.session.term._id,
-      );
-    console.log('termID>>>>', currentTermId);
-    memberClassData.length > 0 &&
-      setCurrentClassId(
-        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
-          activeDotIndex
-        ]?.session.classId,
-      );
-    console.log('classID -- >>>>', currentClassId);
+    let currsesID =
+      memberClassData.length > 0 &&
+      memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
+        activeDotIndex
+      ]?.session._id;
+
+    setCurrentSessionId(currsesID);
+
+    let currTermID =
+      memberClassData.length > 0 &&
+      memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
+        activeDotIndex
+      ]?.session.term._id;
+
+    setCurrentTermId(currTermID);
+    console.log('termID>>>>', currTermID);
+
+    let currClassId =
+      memberClassData.length > 0 &&
+      memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
+        activeDotIndex
+      ]?.session.classId;
+
+    setCurrentClassId(currClassId);
+    console.log('classID -- >>>>', currClassId);
 
     currentTermId &&
       fetchSessionById({
         token,
         data: {
-          termId: currentTermId,
-          classId: currentClassId,
+          termId: currTermID,
+          classId: currClassId,
         },
       })
         .then(resp => {
@@ -192,17 +198,8 @@ const AttendenceShow = () => {
         });
         setCurrentSessionAttendance(attendance.attendance);
       });
-  }, [
-    activeDotIndex,
-    currentClassId,
-    currentMember._id,
-    currentSessionId,
-    currentTermId,
-    dispatch,
-    generateUpcomingDates,
-    memberClassData,
-    token,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [memberClassData, activeDotIndex]);
 
   // useEffect(() => {
   // console.log('upcomingAtt', upcomingAttendance[0].startDate);
@@ -235,35 +232,6 @@ const AttendenceShow = () => {
       date.setDate(date.getDate() + 1);
     }
   }
-  // console.log('DATES', dates);
-
-  //   // });
-  //   // console.log('pattern', item.item.pattern[0].day, dayPattern);
-  //   // item.item.pattern.map(items => {
-  //   // setDayPattern(items.day);
-  //   // console.log('GET_PATTERN ONLY', item.item.pattern);
-  //   // for (let i = 0; i < item.item.pattern.length; i++) {
-  //     // console.log('get pattern --- ', item.item.patter[i].day);
-  // while (date <= endDate) {
-  // console.log('*****', items.day);
-  // if (
-  // newDays[date.getDay()] == item.item.pattern[i].day
-  //     days[date.getDay()] == 'Tuesday' ||
-  //     days[date.getDay()] == 'Thusday' ||
-  //     days[date.getDay()] == 'Saturday'
-  //   ) {
-  //     dates.push(new Date(date));
-  //     date.setDate(date.getDate() + 1);
-  //     // console.log(date);
-  //   } else {
-  //     date.setDate(date.getDate() + 1);
-  //   }
-  // }
-  //   // }
-  //   // });
-  //   // });
-  // console.log('dates', dates);
-  // }, [upcomingAttendance]);
 
   const generateUpcomingDates = dates => {
     let upcomingDates = [];
@@ -271,6 +239,7 @@ const AttendenceShow = () => {
     let startDate = new Date(dates[0]?.startDate);
     let endDate = new Date(dates[0]?.endDate);
     let pattern = dates[0]?.pattern.map(item => item.day);
+    let total = 0;
 
     while (startDate <= endDate) {
       // console.log('before includes', pattern, newDays[startDate.getDay()]);
@@ -279,10 +248,12 @@ const AttendenceShow = () => {
         if (startDate > today) {
           upcomingDates.push(startDate.toString());
         }
+        total += 1;
       }
       startDate.setDate(startDate.getDate() + 1);
-      //console.log('after set', upcomingDates);
     }
+    setNumberOfSession(total);
+    console.log('after set attendence', upcomingDates);
 
     //console.log('DATE', upcomingDates);
 
@@ -642,10 +613,7 @@ const AttendenceShow = () => {
               label1={'Total'}
               label2={'Attended'}
               label3={'No Show'}
-              value1={(currentSessionAttendance?.totalCount
-                ? currentSessionAttendance.totalCount
-                : 0
-              ).toString()}
+              value1={numberOfSession}
               value2={
                 currentSessionAttendance?.attendedCount
                   ? currentSessionAttendance.attendedCount

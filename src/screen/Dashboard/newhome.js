@@ -33,6 +33,7 @@ import {
 } from '../../redux/service/request';
 import {getClubdata} from '../../redux/action/enrol';
 import {useNavigation} from '@react-navigation/native';
+import NewTimelines from '../../components/newTimelines';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -199,7 +200,7 @@ const Home = () => {
           }
         }
         startDate.setDate(startDate.getDate() + 1);
-        console.log('after set', upcomingDates);
+        //console.log('after set', upcomingDates);
       }
 
       setNumberOfSession(upcomingDates.length);
@@ -556,7 +557,16 @@ const Home = () => {
               backgroundColor: colors.lightgrey,
             }}
           />
-          <Timelines
+          {/* <Timelines
+            data={
+              memberActivityProgress &&
+              memberActivityProgress.docs.length > 0 &&
+              memberActivityProgress.docs[activeDotIndex]
+                ? memberActivityProgress.docs[activeDotIndex]?.levels
+                : null
+            }
+          /> */}
+          <NewTimelines
             data={
               memberActivityProgress &&
               memberActivityProgress.docs.length > 0 &&

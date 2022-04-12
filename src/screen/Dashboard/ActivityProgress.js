@@ -19,6 +19,7 @@ import {ProgressBarWithStar, Timelines, WheelDropdown} from '../../components';
 import {useDispatch, useSelector} from 'react-redux';
 import * as Action from '../../redux/action-types';
 import {getLocalData} from '../../utils/LocalStorage';
+import NewTimelines from '../../components/newTimelines';
 const ActivityProgress = () => {
   const itemWidth = Dimensions.get('window').width;
   const membersdata = useSelector(state => state.memberData.memberData);
@@ -289,7 +290,14 @@ const ActivityProgress = () => {
       </View>
 
       <View style={{marginTop: 10, paddingVertical: 20}}>
-        <Timelines
+        {/* <Timelines
+          data={
+            progress && progress.docs.length > 0
+              ? progress.docs[activedotIndex].levels
+              : null
+          }
+        /> */}
+        <NewTimelines
           data={
             progress && progress.docs.length > 0
               ? progress.docs[activedotIndex].levels

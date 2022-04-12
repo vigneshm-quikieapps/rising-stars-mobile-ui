@@ -141,7 +141,9 @@ const Confirmation = props => {
         }
         backbutton={() => props.navigation.goBack()}>
         <View style={styles.bordestyle}>
-          <Text style={styles.classtext}>we will see you on {DateDiff()}</Text>
+          <Text style={styles.classtext}>
+            See you at your first class on {DateDiff()}
+          </Text>
 
           <Slot
             white
