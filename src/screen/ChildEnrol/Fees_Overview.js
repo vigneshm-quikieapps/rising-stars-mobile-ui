@@ -50,22 +50,28 @@ const Fees_Overview = props => {
       <Text style={{fontFamily: 'Nunito-SemiBold', fontSize: wp('6%')}}>
         Fee Breakdown
       </Text>
-      <FlatList
-        data={classes && classes.charges.length > 0 ? classes.charges : null}
-        keyExtractor={item => item.id}
-        renderItem={item => (
-          <>
-            <Amount
-              head={item.item.name}
-              body={item.item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
-              currency={item.item.amount}
-            />
-            <View
-              style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}}
-            />
-          </>
-        )}
-      />
+      {classes && classes.charges.length > 0
+        ? classes.charges.map((item, index) => {
+            return (
+              //  console.log('item==>', item);
+              <>
+                <Amount
+                  head={item.name}
+                  body={item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
+                  currency={item.amount}
+                />
+                <View
+                  style={{
+                    flex: 1,
+                    borderWidth: 1,
+                    borderColor: colors.lightgrey,
+                  }}
+                />
+              </>
+            );
+          })
+        : null}
+
       {/* <Amount
         head={classes.charges[0].name}
         body={
@@ -91,7 +97,7 @@ const Fees_Overview = props => {
       />
       <View style={{marginVertical: hp('1.8%')}} /> */}
       <ForwardButton
-        style={{alignSelf: 'flex-end', marginTop: hp('-1.7%')}}
+        style={{alignSelf: 'flex-end', marginTop: hp('1.7%')}}
         onPress={() =>
           props.navigation.navigate('Provide_Consent', {from: from})
         }
@@ -142,3 +148,22 @@ const styles = StyleSheet.create({
 });
 
 export default Fees_Overview;
+// old code with flatlist
+{
+  /* <FlatList
+        data={classes && classes.charges.length > 0 ? classes.charges : null}
+        keyExtractor={item => item.id}
+        renderItem={item => (
+          <>
+            <Amount
+              head={item.item.name}
+              body={item.item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
+              currency={item.item.amount}
+            />
+            <View
+              style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}}
+            />
+          </>
+        )}
+      /> */
+}
