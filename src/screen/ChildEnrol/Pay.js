@@ -124,22 +124,20 @@ const Pay = props => {
       back
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={6} />}>
-      <FlatList
-        data={classes && classes.charges.length > 0 ? classes.charges : null}
-        keyExtractor={item => item.id}
-        renderItem={item => (
-          <>
-            <Amount
-              head={item.item.name}
-              body={item.item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
-              currency={item.item.amount}
-            />
-            {/* <View
-              style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}}
-            /> */}
-          </>
-        )}
-      />
+      {classes && classes.charges.length > 0
+        ? classes.charges.map((item, index) => {
+            return (
+              //  console.log('item==>', item);
+              <>
+                <Amount
+                  head={item.name}
+                  body={item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
+                  currency={item.amount}
+                />
+              </>
+            );
+          })
+        : null}
       <Amount
         head={'Total Payable'}
         stylehead={{fontSize: wp('5%')}}
@@ -269,4 +267,20 @@ const styles = StyleSheet.create({
   },
 });
 
+{
+  /* old code in place of map
+  <FlatList
+data={classes && classes.charges.length > 0 ? classes.charges : null}
+keyExtractor={item => item.id}
+renderItem={item => (
+  <>
+    <Amount
+      head={item.item.name}
+      body={item.item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
+      currency={item.item.amount}
+    />
+  </>
+)}
+/> */
+}
 export default Pay;
