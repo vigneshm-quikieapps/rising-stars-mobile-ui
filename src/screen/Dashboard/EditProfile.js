@@ -148,7 +148,9 @@ function EditProfile(props) {
               body: values,
             })
               .then(response => {
-                if (response.message === 'updated successfully') {
+                // console.log('response', response);
+                // if (response.message === 'updated successfully') {
+                if (response.message === 'User updated successfully.') {
                   dispatch({
                     type: Action.USER_UPDATE_SUCCESS,
                     payload: response.user,
