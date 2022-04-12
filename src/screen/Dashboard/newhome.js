@@ -252,7 +252,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    console.log('inside Attendence card', sessionAttendance);
+    // console.log('inside Attendence card', sessionAttendance);
     setCurrentSessionAttendance(sessionAttendance.attendance);
   }, [sessionAttendance]);
   //console.log('memberClassData length', memberClassData);

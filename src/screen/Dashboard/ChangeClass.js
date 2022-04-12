@@ -26,7 +26,7 @@ export default function ChangeClass(props) {
   const currentClass = props.route.params.item;
   console.log('class: ', currentClass);
   const navigation = useNavigation();
-  const getSession = sessions();
+  //const getSession = sessions();
   const accessToken = async () => {
     const Token = await getLocalData('accessToken');
     setToken(Token);
@@ -54,12 +54,12 @@ export default function ChangeClass(props) {
         : end.getMinutes();
     return sHr + ':' + sMin + '-' + eHr + ':' + eMin;
   };
-  function sessions() {
+  const getSession = () => {
     var temp =
       sessionData &&
       sessionData.filter(session => currentClass.session._id !== session._id);
     return temp.length > 0 ? temp : null;
-  }
+  };
   return (
     <CustomLayout
       // names={currentMember.name}
@@ -158,40 +158,38 @@ export default function ChangeClass(props) {
       <Text style={{fontFamily: 'Nunito-SemiBold', marginVertical: hp('1%')}}>
         Available Session
       </Text>
-      {sessions() != null ? (
-        <FlatList
-          data={getSession}
-          key={item => item._id}
-          renderItem={session => {
+      {getSession() != null ? (
+        <>
+          {getSession().map((session, index) => {
             return (
-              <>
+              <View key={index}>
                 {console.log('session', session)}
                 <Slot
                   radio={true}
                   onPress={() => {
-                    setNewSessionId(session.item._id);
+                    setNewSessionId(session._id);
                   }}
                   status={
-                    newSessionId === session.item._id ? 'checked' : 'unchecked'
+                    newSessionId === session._id ? 'checked' : 'unchecked'
                   }
-                  day={fullDays[session.item.pattern[0].day]}
+                  day={fullDays[session.pattern[0].day]}
                   time={
-                    session.item && session.item.pattern.length > 0
-                      ? `${moment(session.item.pattern[0].startTime).format(
+                    session && session.pattern.length > 0
+                      ? `${moment(session.pattern[0].startTime).format(
                           'hh:mm A',
-                        )} - ${moment(session.item.pattern[0].endTime).format(
+                        )} - ${moment(session.pattern[0].endTime).format(
                           'hh:mm A',
                         )}`
                       : null
                   }
-                  facility={session.item.facility}
-                  coach={session.item.coach.name}
+                  facility={session.facility}
+                  coach={session.coach.name}
                 />
                 <View style={{height: hp('1%')}} />
-              </>
+              </View>
             );
-          }}
-        />
+          })}
+        </>
       ) : (
         <View
           style={{
