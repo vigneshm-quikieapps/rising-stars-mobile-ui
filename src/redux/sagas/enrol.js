@@ -77,8 +77,8 @@ function* handleSessionAttendance(action) {
       fetchAttendanceOfMemberInSession,
       action.payload,
     );
-    console.log('action: handleSessionAttendance', action);
-    console.log('resp: handleSessionAttendance ', finance);
+    //console.log('action: handleSessionAttendance', action);
+    //console.log('resp: handleSessionAttendance ', finance);
     yield put({
       type: Action.USER_GET_SESSION_ATTENDANCE_SUCCESS,
       payload: finance,
@@ -95,6 +95,8 @@ function* handleSessionAttendance(action) {
 function* handleSessionUpcomingAttendance(action) {
   try {
     const finance = yield call(fetchSessionById, action.payload);
+    // console.log('action: handleSessionAttendance', action.payload);
+    //console.log('resp: handleSessionAttendance ', finance);
     yield put({
       type: Action.USER_GET_SESSION_UPCOMING_ATTENDANCE_SUCCESS,
       payload: finance,

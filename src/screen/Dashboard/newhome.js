@@ -231,7 +231,7 @@ const Home = () => {
             item?.enrolledStatus === 'WAITLISTED',
         ),
       );
-  }, [memberClassData]);
+  }, [memberClassData, activeDotIndex]);
   //console.log('class list in home', classList);
   const renderItem = ({item, index}) => {
     // console.log('inside class card', item.session);
@@ -252,7 +252,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    //console.log("inside Attendence card",sessionAttendance)
+    // console.log('inside Attendence card', sessionAttendance);
     setCurrentSessionAttendance(sessionAttendance.attendance);
   }, [sessionAttendance]);
   //console.log('memberClassData length', memberClassData);

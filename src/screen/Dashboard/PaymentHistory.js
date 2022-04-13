@@ -44,7 +44,7 @@ export default function EnrolledChild() {
   const clubfinance2 = useSelector(
     state => state.clubfinance.financedata.businessFinance,
   );
-  console.log('data123: ', bills);
+  //console.log('data123: ', bills);
 
   useEffect(() => {
     // businessList && businessList.length > 0

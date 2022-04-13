@@ -410,7 +410,11 @@ export function fetchAttendanceOfMemberInSession(payload) {
     },
     body: JSON.stringify(payload.data),
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside fetching attendance', d, payload);
+      return d;
+    })
     .catch(error => {
       throw error;
     });

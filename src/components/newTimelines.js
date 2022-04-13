@@ -15,7 +15,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 const NewTimelines = props => {
   const [expand, setExpand] = useState(0);
-  console.log('data: ', expand);
+  //console.log('data: ', expand);
   return (
     <View style={{marginBottom: hp('10%')}}>
       {props.data &&
