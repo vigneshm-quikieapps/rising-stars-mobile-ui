@@ -22,6 +22,7 @@ import {getmemberClass} from '../../redux/action/home';
 import * as Action from '../../redux/action-types/index';
 import {fetchCurrentUser} from '../../redux/service/request';
 import {FlatList} from 'react-native-gesture-handler';
+import {heroku_url} from '../../constants/config';
 
 function Profile(props) {
   const membersdata = useSelector(state => state.memberData.memberData);
@@ -39,6 +40,8 @@ function Profile(props) {
 
   const getLocalUserData = useCallback(async () => {
     const userData = await getLocalData('user', true);
+    const gettoken = await getLocalData('accessToken');
+    setToken(gettoken);
     setUser(userData);
   }, []);
 
@@ -48,9 +51,12 @@ function Profile(props) {
   // };
 
   const [fileUri, setfileUri] = useState(null);
+  const [imageId, setImageId] = useState('');
 
-  const updateProfilePicture = () => {
-    refRBSheet.current.open();
+  const updateProfilePicture = id => {
+    setImageId(id);
+    // console.log('id', id);
+    refRBSheet.current.open(id);
   };
 
   const SignOut = async () => {
@@ -85,9 +91,39 @@ function Profile(props) {
       cropping: true,
       compressImageQuality: 0.7,
     }).then(image => {
-      setfileUri(image.path);
+      console.log('image path', image);
+      // setfileUri(image.path);
+      imageUpload(image);
       refRBSheet.current.close();
     });
+  };
+  const imageUpload = async imagePath => {
+    const imageData = new FormData();
+    imageData.append('image', {
+      uri: imagePath.path,
+      name: 'image.name',
+      fileName: 'image.jpg',
+      type: imagePath.mime,
+    });
+    // console.log('form data', imageData);
+    // console.log('get id ==>', imageId);
+    fetch(`${heroku_url}/members/${imageId}/image-upload`, {
+      method: 'POST',
+      headers: {
+        Accept: 'multipart/form-data',
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+      body: imageData,
+    })
+      .then(response => {
+        let d = response.json();
+        console.log('upload image msg', d);
+        return d;
+      })
+      .catch(error => {
+        throw error;
+      });
   };
   const takePhotoFromCamera = () => {
     ImagePicker.openCamera({
@@ -176,14 +212,29 @@ function Profile(props) {
           return (
             <View key={index} style={styles.profileImageCard}>
               <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
-                <TouchableOpacity onPress={updateProfilePicture}>
-                  {fileUri === null ? (
+                <TouchableOpacity
+                  onPress={() => updateProfilePicture(item._id)}>
+                  {console.log('image', item)}
+                  {/* old code of image */}
+                  {/* {fileUri === null ? (
                     <Image
                       style={styles.image}
                       source={require('../../assets/images/children.jpg')}
                     />
                   ) : (
                     <Image style={styles.image} source={{uri: fileUri}} />
+                  )} */}
+
+                  {/* new code of image */}
+
+                  {item.imageUrl === undefined ? (
+                    <Image
+                      style={styles.image}
+                      // source={{uri: item.imageUrl}}
+                      source={require('../../assets/images/children.jpg')}
+                    />
+                  ) : (
+                    <Image style={styles.image} source={{uri: item.imageUrl}} />
                   )}
                 </TouchableOpacity>
                 <View style={{justifyContent: 'center'}}>

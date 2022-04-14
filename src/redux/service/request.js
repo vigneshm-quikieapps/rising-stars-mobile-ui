@@ -474,3 +474,24 @@ export function fetchEvaluationById(payload) {
       throw error;
     });
 }
+
+// profile
+// export function uploadImage(payload) {
+//   return fetch(`${heroku_url}/members/${imageId}/image-upload`, {
+//     method: 'POST',
+//     headers: {
+//       Accept: 'multipart/form-data',
+//       'Content-Type': 'multipart/form-data',
+//       Authorization: `Bearer ${token}`,
+//     },
+//     body: imageData,
+//   })
+//     .then(response => {
+//       let d = response.json();
+//       console.log('upload image msg', d);
+//       return d;
+//     })
+//     .catch(error => {
+//       throw error;
+//     });
+// }
