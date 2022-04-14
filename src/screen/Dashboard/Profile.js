@@ -59,13 +59,23 @@ function Profile(props) {
     await removeLocalData('accesstoken');
     props.navigation.navigate('AuthStack');
   };
-  const handleMembership = async (id, item) => {
-    dispatch(getmemberClass(id));
+  const handleMembership = async item => {
+    dispatch(getmemberClass(item._id));
     dispatch({
       type: Action.USER_GET_CURRENT_MEMBER_DATA,
       payload: item,
     });
     props.navigation.navigate('EnrolledChild', {from: 'profile'});
+
+    // dispatch => {
+    //   dispatch(getmemberClass(id)).then(() => {
+    //     dispatch({
+    //       type: Action.USER_GET_CURRENT_MEMBER_DATA,
+    //       payload: item,
+    //     });
+    //   });
+    // };
+    // props.navigation.navigate('EnrolledChild', {from: 'profile'});
   };
 
   const choosePhotoFromLibrary = () => {
@@ -189,7 +199,7 @@ function Profile(props) {
               </View>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleMembership(currentMember._id, item)}>
+                onPress={() => handleMembership(item)}>
                 <Text style={styles.cardButton}>Memberships / Classes</Text>
               </TouchableOpacity>
 

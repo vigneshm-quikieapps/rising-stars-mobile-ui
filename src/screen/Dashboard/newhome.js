@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {getLocalData} from '../../utils/LocalStorage';
+import {getLocalData, removeLocalData} from '../../utils/LocalStorage';
 import * as Action from '../../redux/action-types';
 import {
   View,
@@ -34,6 +34,7 @@ import {
 import {getClubdata} from '../../redux/action/enrol';
 import {useNavigation} from '@react-navigation/native';
 import NewTimelines from '../../components/newTimelines';
+import Alert from '../../components/alert-box';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -47,10 +48,13 @@ const Home = () => {
   const [currentSessionId, setCurrentSessionId] = useState('');
   const [currentSessionAttendance, setCurrentSessionAttendance] = useState('');
   const membersdata = useSelector(state => state.memberData.memberData);
+  const errorMemberData = useSelector(state => state.memberData.error);
   const memberClassData = useSelector(state => state.memberClassData.classData);
   const [value, setValue] = useState(0);
   const [classList, setClassList] = useState([]);
   const [numberOfSession, setNumberOfSession] = useState('');
+  const [signOutFlag, setSignOutFlag] = useState(false);
+
   const sessionAttendance = useSelector(
     state => state.sessionlist.sessionAttendance,
   );
@@ -133,6 +137,17 @@ const Home = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
+  const SignOut = async () => {
+    await removeLocalData('refreshToken');
+    await removeLocalData('usercred');
+    await removeLocalData('accesstoken');
+    navigation.navigate('AuthStack');
+  };
+  useEffect(() => {
+    if (errorMemberData === 'jwt expired') {
+      setSignOutFlag(true);
+    }
+  }, [errorMemberData]);
 
   useEffect(() => {
     membersdata && setCurrentMember(membersdata[currentMemberIndex]);
@@ -293,7 +308,7 @@ const Home = () => {
           colors={[colors.orangeYellow, colors.pumpkinOrange]}
           style={styles.linearGradient}>
           <Text style={styles.welcome}>{`Hi ${
-            parent.name ? parent.name : 'Parent'
+            parent ? parent.name : 'Parent'
           }`}</Text>
           <View style={styles.containerMember}>
             <View style={{marginTop: hp('1%')}}>
@@ -586,6 +601,22 @@ const Home = () => {
           </Text>
         </View>
       )}
+
+      {signOutFlag ? (
+        <Alert
+          visible={signOutFlag}
+          confirm={'Sign In'}
+          success={() => {
+            setSignOutFlag(false);
+            SignOut();
+          }}
+          image={'failure'}
+          message={'Session expired.'}
+          // success={() => props.navigation.navigate('Login')}
+          // image={'failure'}
+          // message={'Something Went Wrong'}
+        />
+      ) : null}
     </ScrollView>
   );
 };
