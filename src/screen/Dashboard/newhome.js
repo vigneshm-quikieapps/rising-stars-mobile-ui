@@ -312,16 +312,30 @@ const Home = () => {
           }`}</Text>
           <View style={styles.containerMember}>
             <View style={{marginTop: hp('1%')}}>
-              <Image
-                style={{
-                  height: 57,
-                  width: 57,
-                  borderRadius: 20,
-                  borderWidth: 2,
-                  borderColor: 'white',
-                }}
-                source={Images.Child}
-              />
+              {currentMember && currentMember.imageUrl ? (
+                <Image
+                  style={{
+                    height: 57,
+                    width: 57,
+                    borderRadius: 20,
+                    borderWidth: 2,
+                    borderColor: 'white',
+                  }}
+                  // source={Images.Child}
+                  source={{uri: currentMember.imageUrl}}
+                />
+              ) : (
+                <Image
+                  style={{
+                    height: 57,
+                    width: 57,
+                    borderRadius: 20,
+                    borderWidth: 2,
+                    borderColor: 'white',
+                  }}
+                  source={Images.Child}
+                />
+              )}
             </View>
             <View style={{marginLeft: 10, justifyContent: 'center'}}>
               <Text style={styles.memberName}>{currentMember?.name}</Text>
