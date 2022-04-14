@@ -303,7 +303,7 @@ export default function EnrolledChild(props) {
             justifyContent: 'center',
             alignItems: 'center',
             height: hp('100%'),
-            backgroundColor: colors.blackOpacity,
+            backgroundColor: colors.white,
           }}>
           <ActivityIndicator size="large" color={colors.orange} />
         </View>
