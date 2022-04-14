@@ -291,9 +291,11 @@ export default function EnrolledChild() {
         return new Date(a.dueDate) - new Date(b.dueDate);
       });
 
-    let paid = currentBills.filter(item => {
-      return item.paid === true;
-    });
+    let paid =
+      currentBills &&
+      currentBills.filter(item => {
+        return item.paid === true;
+      });
     // setCurrentPaidBills(paid);
     let notPaid = currentBills.filter(item => {
       return item.paid === false;

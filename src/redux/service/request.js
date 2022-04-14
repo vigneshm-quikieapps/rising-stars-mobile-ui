@@ -229,10 +229,11 @@ export function regularEnrollment(payload) {
 // --------------------------------------------------------Home
 
 export function fetchMemberData(token) {
-  return fetch(`${heroku_url}/members/of-a-logged-in-parent`, {
+  return fetch(`${heroku_url}/members/of-a-logged-in-parent?limit=100`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
+      limit: 100,
     },
   })
     .then(response => {
@@ -260,13 +261,17 @@ export function fetchMemberClassData(id) {
 }
 
 export function fetchClasses(token) {
-  return fetch(`${heroku_url}/classes/of-logged-in-user`, {
+  return fetch(`${heroku_url}/classes/of-logged-in-user?limit=100`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside /classes/of-logged-in-user?limit=100 APi', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
