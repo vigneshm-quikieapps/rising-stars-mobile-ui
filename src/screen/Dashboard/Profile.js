@@ -129,7 +129,9 @@ function Profile(props) {
       compressImageMaxWidth: 60,
       cropping: true,
     }).then(image => {
-      setfileUri(image.path);
+      // console.log('camera image', image);
+      // setfileUri(image.path);
+      imageUpload(image);
       refRBSheet.current.close();
     });
   };
