@@ -17,12 +17,13 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 
 import {removeLocalData} from '../../utils/LocalStorage';
 import {CustomLayout} from '../../components';
-import {colors, hp, wp} from '../../constants';
-import {getmemberClass} from '../../redux/action/home';
+import {colors, hp, Images, wp} from '../../constants';
+import {getmemberClass, getmemberData} from '../../redux/action/home';
 import * as Action from '../../redux/action-types/index';
-import {fetchCurrentUser} from '../../redux/service/request';
+import {fetchCurrentUser, uploadImage} from '../../redux/service/request';
 import {FlatList} from 'react-native-gesture-handler';
 import {heroku_url} from '../../constants/config';
+import Alert from '../../components/alert-box';
 
 function Profile(props) {
   const membersdata = useSelector(state => state.memberData.memberData);
@@ -52,7 +53,8 @@ function Profile(props) {
 
   const [fileUri, setfileUri] = useState(null);
   const [imageId, setImageId] = useState('');
-
+  const [showFailurealert, setFailureAlert] = useState(false);
+  const [successAlert, setSuccessAlert] = useState(false);
   const updateProfilePicture = id => {
     setImageId(id);
     // console.log('id', id);
@@ -95,25 +97,21 @@ function Profile(props) {
       fileName: 'image.jpg',
       type: imagePath.mime,
     });
-    // console.log('form data', imageData);
-    // console.log('get id ==>', imageId);
-    fetch(`${heroku_url}/members/${imageId}/image-upload`, {
-      method: 'POST',
-      headers: {
-        Accept: 'multipart/form-data',
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
-      },
-      body: imageData,
-    })
-      .then(response => {
-        let d = response.json();
-        console.log('upload image msg', d);
-        return d;
-      })
-      .catch(error => {
-        throw error;
-      });
+    const authData = {
+      userId: imageId,
+      token: token,
+    };
+    const getResp = await uploadImage(imageData, authData);
+    console.log('getResp==>', getResp);
+    if (getResp && getResp.message == 'Image Sucessfully uploaded.') {
+      // alert('Child Image Updated Successfully');
+      setSuccessAlert(true);
+      // membersdata
+      dispatch(getmemberData(token));
+    } else {
+      // alert('Something went wrong. Please Try Again');
+      setFailureAlert(true);
+    }
   };
   const takePhotoFromCamera = () => {
     ImagePicker.openCamera({
@@ -204,7 +202,7 @@ function Profile(props) {
               <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
                 <TouchableOpacity
                   onPress={() => updateProfilePicture(item._id)}>
-                  {console.log('image', item)}
+                  {console.log('all childs', item)}
                   {/* old code of image */}
                   {/* {fileUri === null ? (
                     <Image
@@ -221,7 +219,7 @@ function Profile(props) {
                     <Image
                       style={styles.image}
                       // source={{uri: item.imageUrl}}
-                      source={require('../../assets/images/children.jpg')}
+                      source={Images.Child}
                     />
                   ) : (
                     <Image style={styles.image} source={{uri: item.imageUrl}} />
@@ -300,6 +298,30 @@ function Profile(props) {
           </Pressable>
         </View>
       </RBSheet>
+      {/* Alert Box */}
+      {showFailurealert ? (
+        <Alert
+          visible={showFailurealert}
+          confirm={'Retry'}
+          success={() => {
+            setFailureAlert(false);
+          }}
+          image={'failure'}
+          message="Something went wrong. Please Try Again"
+        />
+      ) : null}
+
+      {successAlert ? (
+        <Alert
+          visible={successAlert}
+          confirm={'Done'}
+          success={() => {
+            setSuccessAlert(false);
+          }}
+          image={'success'}
+          message="Child Image Updated Successfully"
+        />
+      ) : null}
     </CustomLayout>
   );
 }

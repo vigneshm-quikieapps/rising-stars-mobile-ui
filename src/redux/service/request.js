@@ -471,22 +471,25 @@ export function fetchEvaluationById(payload) {
 }
 
 // profile
-// export function uploadImage(payload) {
-//   return fetch(`${heroku_url}/members/${imageId}/image-upload`, {
-//     method: 'POST',
-//     headers: {
-//       Accept: 'multipart/form-data',
-//       'Content-Type': 'multipart/form-data',
-//       Authorization: `Bearer ${token}`,
-//     },
-//     body: imageData,
-//   })
-//     .then(response => {
-//       let d = response.json();
-//       console.log('upload image msg', d);
-//       return d;
-//     })
-//     .catch(error => {
-//       throw error;
-//     });
-// }
+export function uploadImage(imageData, authData) {
+  console.log('check payload', imageData, authData.userId, authData.token);
+  return (
+    fetch(`${heroku_url}/members/${authData.userId}/image-upload`, {
+      method: 'POST',
+      headers: {
+        Accept: 'multipart/form-data',
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${authData.token}`,
+      },
+      body: imageData,
+    })
+      .then(response => response.json())
+      // let d = response.json();
+      // console.log('upload image msg', d);
+      // return d;
+      // })
+      .catch(error => {
+        throw error;
+      })
+  );
+}
