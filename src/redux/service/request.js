@@ -261,7 +261,7 @@ export function fetchMemberClassData(id) {
 }
 
 export function fetchClasses(token) {
-  return fetch(`${heroku_url}/classes/of-logged-in-user?limit=100`, {
+  return fetch(`${heroku_url}/classes/of-logged-in-user`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -269,7 +269,7 @@ export function fetchClasses(token) {
   })
     .then(response => {
       let d = response.json();
-      console.log('inside /classes/of-logged-in-user?limit=100 APi', d);
+      // console.log('inside /classes/of-logged-in-user?limit=100 APi', d);
       return d;
     })
     .catch(error => {
@@ -278,7 +278,7 @@ export function fetchClasses(token) {
 }
 
 export function fetchBillsOfMember(payload) {
-  return fetch(`${heroku_url}/bills/of-a-member-in-a-business`, {
+  return fetch(`${heroku_url}/bills/of-a-member-in-a-business?limit=100`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -287,7 +287,11 @@ export function fetchBillsOfMember(payload) {
     },
     body: JSON.stringify(payload),
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside fetching bills', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });

@@ -214,7 +214,7 @@ function Profile(props) {
               <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
                 <TouchableOpacity
                   onPress={() => updateProfilePicture(item._id)}>
-                  {console.log('image', item)}
+                  {/* {console.log('image', item)} */}
                   {/* old code of image */}
                   {/* {fileUri === null ? (
                     <Image

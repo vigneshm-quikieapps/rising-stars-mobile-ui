@@ -284,41 +284,40 @@ export default function EnrolledChild() {
   };
 
   const handlePayments = currentBills => {
-    currentBills &&
+    if (currentBills) {
       currentBills.sort(function (a, b) {
         // Turn your strings into dates, and then subtract them
         // to get a value that is either negative, positive, or zero.
         return new Date(a.dueDate) - new Date(b.dueDate);
       });
 
-    let paid =
-      currentBills &&
-      currentBills.filter(item => {
+      let paid = currentBills.filter(item => {
         return item.paid === true;
       });
-    // setCurrentPaidBills(paid);
-    let notPaid = currentBills.filter(item => {
-      return item.paid === false;
-    });
+      // setCurrentPaidBills(paid);
+      let notPaid = currentBills.filter(item => {
+        return item.paid === false;
+      });
 
-    let currDate = new Date();
-    let dues = notPaid.filter(item => {
-      let due = new Date(item.dueDate);
-      if (due.setHours(0, 0, 0, 0) < currDate.setHours(0, 0, 0, 0)) {
-        return item;
-      }
-    });
-    setCurrentDueBills(dues);
-    let upcoming = notPaid.filter(item => {
-      let due = new Date(item.dueDate);
-      if (due.setHours(0, 0, 0, 0) >= currDate.setHours(0, 0, 0, 0)) {
-        return item;
-      }
-    });
-    //console.log('upcoming', upcoming[0]);
-    setCurrentUpcomingBills(upcoming);
-    upcoming.shift();
-    setCurrentPaidBills([...paid, ...upcoming]);
+      let currDate = new Date();
+      let dues = notPaid.filter(item => {
+        let due = new Date(item.dueDate);
+        if (due.setHours(0, 0, 0, 0) < currDate.setHours(0, 0, 0, 0)) {
+          return item;
+        }
+      });
+      setCurrentDueBills(dues);
+      let upcoming = notPaid.filter(item => {
+        let due = new Date(item.dueDate);
+        if (due.setHours(0, 0, 0, 0) >= currDate.setHours(0, 0, 0, 0)) {
+          return item;
+        }
+      });
+      //console.log('upcoming', upcoming[0]);
+      setCurrentUpcomingBills(upcoming);
+      upcoming.shift();
+      setCurrentPaidBills([...paid, ...upcoming]);
+    }
   };
 
   const renderPaidAndUpcoming = ({item, index}) => {
@@ -391,7 +390,7 @@ export default function EnrolledChild() {
 
       <View style={styles.borderedContainer}>
         <View style={{paddingVertical: hp('1%')}}>
-          {memberClassData.length > 0 ? (
+          {businessList.length > 0 ? (
             <Carousel
               data={businessList}
               renderItem={renderItemClassCard}
@@ -412,6 +411,7 @@ export default function EnrolledChild() {
             </View>
           )}
         </View>
+
         <View
           style={{
             paddingVertical: hp('0.8%'),
