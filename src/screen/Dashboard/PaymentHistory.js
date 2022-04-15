@@ -313,7 +313,7 @@ export default function EnrolledChild() {
           return item;
         }
       });
-      //console.log('upcoming', upcoming[0]);
+      console.log('upcoming', dues, upcoming, paid);
       setCurrentUpcomingBills(upcoming);
       upcoming.shift();
       setCurrentPaidBills([...paid, ...upcoming]);

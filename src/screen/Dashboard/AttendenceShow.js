@@ -254,6 +254,7 @@ const AttendenceShow = () => {
       setAbsent(abs);
       setCurrentSessionAttendance(generteMnthWiseDates(datesArr));
     }
+    setLoadingFlag(true);
     // console.log(
     //   'inside generate Attendenece dates',
     //   generteMnthWiseDates(datesArr),
@@ -653,7 +654,9 @@ const AttendenceShow = () => {
       {loadingFlag ? (
         <FlatList
           data={
-            currentSessionAttendance && Object.keys(currentSessionAttendance)
+            currentSessionAttendance
+              ? Object.keys(currentSessionAttendance)
+              : []
           }
           keyExtractor={item => item}
           style={styles.container}
