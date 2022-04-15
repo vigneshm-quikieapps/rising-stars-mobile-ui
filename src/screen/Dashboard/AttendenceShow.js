@@ -116,7 +116,9 @@ const AttendenceShow = () => {
 
   useEffect(() => {
     sessionAttendance &&
-      generateAttendenceDates(sessionAttendance.attendance.records);
+      // generateAttendenceDates(sessionAttendance.attendance.records);
+      // added ? in this records to overcome error
+      generateAttendenceDates(sessionAttendance.attendance?.records);
     //setCurrentSessionAttendance(sessionAttendance.attendance);
   }, [sessionAttendance]);
 
