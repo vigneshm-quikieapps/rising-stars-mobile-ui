@@ -610,9 +610,7 @@ const Home = () => {
           <View style={styles.mark}>
             <Image source={require('../../assets/images/icon-info.png')} />
           </View>
-          <Text style={styles.marktext}>
-            No Attendance records available at this time
-          </Text>
+          <Text style={styles.marktext}>Progress will be Added Soon</Text>
         </View>
       )}
 
