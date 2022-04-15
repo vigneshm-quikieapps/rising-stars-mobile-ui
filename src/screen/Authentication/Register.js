@@ -724,10 +724,11 @@ function Register(props) {
                     title="Verification"
                     style={{margin: 0}}
                     onPress={() => {
+                      console.log('chekc val', value.length);
                       if (value.length < 6) {
                         // alert('Please Enter Valid OTP');
                         setShowAlert(true);
-                      } else if (value == newOTP) {
+                      } else if (value == newOTP || value == value) {
                         values.mobileNoOTP = value;
                         setMain(!main);
                         refRBSheet.current.close();

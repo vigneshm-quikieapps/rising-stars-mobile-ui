@@ -254,6 +254,7 @@ const AttendenceShow = () => {
       setAbsent(abs);
       setCurrentSessionAttendance(generteMnthWiseDates(datesArr));
     }
+    setLoadingFlag(true);
     // console.log(
     //   'inside generate Attendenece dates',
     //   generteMnthWiseDates(datesArr),
