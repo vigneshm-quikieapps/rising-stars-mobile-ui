@@ -481,7 +481,7 @@ export function fetchEvaluationById(payload) {
 
 // profile
 export function uploadImage(imageData, authData) {
-  console.log('check payload', imageData, authData.userId, authData.token);
+  //console.log('check payload', imageData, authData.userId, authData.token);
   return (
     fetch(`${heroku_url}/members/${authData.userId}/image-upload`, {
       method: 'POST',

@@ -38,8 +38,6 @@ const New_Class_Selection = props => {
   const [showsession, setShowsession] = useState(false);
 
   const [selectdata, setSelectdata] = useState();
-  const [enroll, setEnroll] = useState();
-  const [waitlisted, setWaitlisted] = useState();
 
   const child = useSelector(state => state.childData.addchild);
 
@@ -72,29 +70,14 @@ const New_Class_Selection = props => {
     setShowClass(true);
   };
 
-  const handleSessionsDevide = () => {
-    setEnroll(
-      sessionData &&
-        sessionData.filter(item => item.status === 'OPEN_FOR_ENROLLMENT'),
-    );
-
-    setWaitlisted(
-      sessionData &&
-        sessionData.filter(
-          item => item.status === 'OPEN_FOR_WAITLIST_ENROLLMENT',
-        ),
-    );
-    setClassModal(!classmodal);
-    setShowsession(true);
-  };
-
   const handleClasses = item => {
     //console.log('after selecting class', item);
     setClasses(item.name);
     dispatch(setClassData(item));
     dispatch(clubfinance(item._id));
     dispatch(getSessiondata(item._id));
-    handleSessionsDevide();
+    setClassModal(!classmodal);
+    setShowsession(true);
   };
 
   const handleforward = () => {
@@ -197,32 +180,38 @@ const New_Class_Selection = props => {
               }}>
               Available Sessions
             </Text>
-            {enroll > 0 &&
-              enroll.map(item => {
-                //console.log('sessionData==>', item);
+            {sessionData &&
+              sessionData
+                .filter(item => item.status === 'OPEN_FOR_ENROLLMENT')
+                .map(item => {
+                  //console.log('sessionData==>', item);
 
-                return (
-                  <Slot
-                    white
-                    required={true}
-                    Class={classes}
-                    radio
-                    sessions={item.name}
-                    onPress={() => setSelectdata(item)}
-                    status={selectdata === item && 'checked'}
-                    day={fullDays[item.pattern[0]?.day]}
-                    time={`${moment(item.pattern[0]?.startTime).format(
-                      'hh:mm A',
-                    )} - ${moment(item.pattern[0]?.endTime).format('hh:mm A')}`}
-                    facility={item.facility}
-                    // coach={item.coach.name == null ? '---' : item.coach.name}
-                    coach={item.coach.name}
-                    key={item._id}
-                    style={{marginVertical: wp('1%')}}
-                  />
-                );
-              })}
-            {enroll?.length === 0 ? (
+                  return (
+                    <Slot
+                      white
+                      required={true}
+                      Class={classes}
+                      radio
+                      sessions={item.name}
+                      onPress={() => setSelectdata(item)}
+                      status={selectdata === item && 'checked'}
+                      day={fullDays[item.pattern[0]?.day]}
+                      time={`${moment(item.pattern[0]?.startTime).format(
+                        'hh:mm A',
+                      )} - ${moment(item.pattern[0]?.endTime).format(
+                        'hh:mm A',
+                      )}`}
+                      facility={item.facility}
+                      // coach={item.coach.name == null ? '---' : item.coach.name}
+                      coach={item.coach.name}
+                      key={item._id}
+                      style={{marginVertical: wp('1%')}}
+                    />
+                  );
+                })}
+            {sessionData &&
+            sessionData.filter(item => item.status === 'OPEN_FOR_ENROLLMENT')
+              .length === 0 ? (
               <View style={styles.remark}>
                 <View style={styles.mark}>
                   <Image
@@ -242,32 +231,39 @@ const New_Class_Selection = props => {
               }}>
               Waitlisted Sessions
             </Text>
-            {waitlisted &&
-              waitlisted.map(item => {
-                //console.log('sessionData==>', item);
+            {sessionData &&
+              sessionData
+                .filter(item => item.status === 'OPEN_FOR_WAITLIST_ENROLLMENT')
+                .map(item => {
+                  //console.log('sessionData==>', item);
 
-                return (
-                  <Slot
-                    white
-                    required={true}
-                    Class={classes}
-                    radio
-                    sessions={item.name}
-                    onPress={() => setSelectdata(item)}
-                    status={selectdata === item && 'checked'}
-                    day={fullDays[item.pattern[0]?.day]}
-                    time={`${moment(item.pattern[0]?.startTime).format(
-                      'hh:mm A',
-                    )} - ${moment(item.pattern[0]?.endTime).format('hh:mm A')}`}
-                    facility={item.facility}
-                    // coach={item.coach.name == null ? '---' : item.coach.name}
-                    coach={item.coach.name}
-                    key={item._id}
-                    style={{marginVertical: wp('1%')}}
-                  />
-                );
-              })}
-            {waitlisted?.length === 0 ? (
+                  return (
+                    <Slot
+                      white
+                      required={true}
+                      Class={classes}
+                      radio
+                      sessions={item.name}
+                      onPress={() => setSelectdata(item)}
+                      status={selectdata === item && 'checked'}
+                      day={fullDays[item.pattern[0]?.day]}
+                      time={`${moment(item.pattern[0]?.startTime).format(
+                        'hh:mm A',
+                      )} - ${moment(item.pattern[0]?.endTime).format(
+                        'hh:mm A',
+                      )}`}
+                      facility={item.facility}
+                      // coach={item.coach.name == null ? '---' : item.coach.name}
+                      coach={item.coach.name}
+                      key={item._id}
+                      style={{marginVertical: wp('1%')}}
+                    />
+                  );
+                })}
+            {sessionData &&
+            sessionData.filter(
+              item => item.status === 'OPEN_FOR_WAITLIST_ENROLLMENT',
+            ).length === 0 ? (
               <View style={styles.remark}>
                 <View style={styles.mark}>
                   <Image

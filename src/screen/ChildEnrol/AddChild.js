@@ -178,7 +178,6 @@ const AddChild = props => {
           esname: '',
         }}
         onSubmit={values => {
-          setDisabled(true);
           var valuesForDispatch = {
             token: token,
             data: {
@@ -187,7 +186,7 @@ const AddChild = props => {
               dob: moment(values.dob).format('YYYY-MM-DD'),
               gender: values.gender,
               contacts:
-                values.esname.length != 0
+                values.esname.length !== 0
                   ? [
                       {
                         addressType: 'PRIMARY',
@@ -212,7 +211,7 @@ const AddChild = props => {
                     ],
             },
           };
-          // console.log('VAlues', values);
+          // console.table('VAlues', values);
           // if (
           //   moment(values.dob).format('DD-MM-YYYY') ===
           //   moment(new Date()).format('DD-MM-YYYY')
@@ -220,30 +219,32 @@ const AddChild = props => {
           if (values.dob === '') {
             setBirthError(true);
             // setDisabled(false);
-          } else if (values.gender === '') {
+          }
+          if (values.gender === '') {
             setGenderError(true);
             // setDisabled(false);
           }
           // if (new Date().getFullYear() - values.dob.getFullYear() <= 2) {
-          else if (new Date().getFullYear() - values.dob.getFullYear() <= 2) {
+          if (new Date().getFullYear() - values.dob.getFullYear() <= 2) {
             // alert('2 year children not allowed');
             setBirthError(true);
             // setDisabled(false);
           } else {
-            dispatch(
-              setChildData({
-                data: valuesForDispatch,
-                callback: () => {
-                  dispatch(
-                    getClubdata({
-                      callback: () => {
-                        props.navigation.navigate('AddPayment', {from: from});
-                      },
-                    }),
-                  );
-                },
-              }),
-            );
+            setDisabled(true);
+            // dispatch(
+            //   setChildData({
+            //     data: valuesForDispatch,
+            //     callback: () => {
+            //       dispatch(
+            //         getClubdata({
+            //           callback: () => {
+            //             props.navigation.navigate('AddPayment', {from: from});
+            //           },
+            //         }),
+            //       );
+            //     },
+            //   }),
+            // );
           }
         }}
         validationSchema={validationSchema}>
@@ -324,10 +325,11 @@ const AddChild = props => {
               }}
             /> */}
               {birtherror && (
-                <Text style={styles.errors}>
-                  {/* children less then 3 years of age are not allowed */}
-                  child must be 3 years old
-                </Text>
+                <ErrorMessage
+                  style={styles.errorMessage}
+                  error={'Child must be 3 years old.'}
+                  visible={birtherror}
+                />
                 // <Text style={styles.errors}>D.O.B. is a required</Text>
               )}
               {/* <ErrorMessage
@@ -428,6 +430,11 @@ const AddChild = props => {
                   />
                 </View> */}
               </RBSheet>
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.gender}
+                visible={touched.gender}
+              />
               {gendererror && (
                 <Text style={styles.errors}>Gender is a required</Text>
               )}
@@ -740,6 +747,7 @@ const AddChild = props => {
                 style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
                 title="Submit"
                 onPress={() => {
+                  console.log('pressed', errors);
                   handleSubmit();
                 }}
               />
