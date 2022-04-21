@@ -7,12 +7,15 @@ import {
   Slot,
   AppButton,
 } from '../../components';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 
 import {colors, Fontsize, hp, wp, Stepend, fullDays} from '../../constants';
 import Alert from '../../components/alert-box';
+import { getLocalData } from '../../utils/LocalStorage';
+import { getmemberData } from '../../redux/action/home';
 const Confirmation = props => {
+  const dispatch = useDispatch();
   const child = useSelector(state => state.childData.addchild);
   const club = useSelector(state => state.childData.clubdata);
   const slot = useSelector(state => state.childData.slotdata);
@@ -45,6 +48,17 @@ const Confirmation = props => {
     'November',
     'December',
   ];
+  const [token, setToken] = useState('');
+
+  const getuser = async () => {
+    // const userId = await getLocalData('usercred');
+    const accesstoken = await getLocalData('accessToken');
+    setToken(accesstoken);
+    // setUser(userId);
+  };
+  useEffect(() => {
+    getuser();
+  }, []);
   useEffect(() => {
     enrollment && enrollment?.message == 'enrolled successful'
       ? setShowAlert(true)
@@ -176,7 +190,8 @@ const Confirmation = props => {
           onPress={() => {
             from === 'homeTab'
               ? props.navigation.navigate('HomeTab')
-              : props.navigation.navigate('Profile');
+              : dispatch(getmemberData(token));
+            props.navigation.navigate('Profile');
           }}
         />
       </CustomLayout>
