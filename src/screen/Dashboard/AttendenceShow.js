@@ -656,7 +656,9 @@ const AttendenceShow = () => {
       {loadingFlag ? (
         <FlatList
           data={
-            currentSessionAttendance && Object.keys(currentSessionAttendance)
+            currentSessionAttendance
+              ? Object.keys(currentSessionAttendance)
+              : []
           }
           keyExtractor={item => item}
           style={styles.container}

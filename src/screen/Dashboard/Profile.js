@@ -93,7 +93,7 @@ function Profile(props) {
       cropping: true,
       compressImageQuality: 0.7,
     }).then(image => {
-      console.log('image path', image);
+      //console.log('image path', image);
       // setfileUri(image.path);
       imageUpload(image);
       refRBSheet.current.close();
@@ -112,7 +112,7 @@ function Profile(props) {
       token: token,
     };
     const getResp = await uploadImage(imageData, authData);
-    console.log('getResp==>', getResp);
+    //console.log('getResp==>', getResp, imageData);
     if (getResp && getResp.message == 'Image Sucessfully uploaded.') {
       // alert('Child Image Updated Successfully');
       setSuccessAlert(true);
@@ -193,7 +193,7 @@ function Profile(props) {
         <TouchableOpacity
           style={styles.addChild}
           onPress={() =>
-            props.navigation.navigate('AddChild', {from: 'profile'})
+            props.navigation.navigate('Addchildren', {from: 'profile'})
           }>
           <Entypo
             name="plus"
@@ -214,7 +214,7 @@ function Profile(props) {
               <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
                 <TouchableOpacity
                   onPress={() => updateProfilePicture(item._id)}>
-                  {console.log('all childs', item)}
+                  {/* {console.log('image', item)} */}
                   {/* old code of image */}
                   {/* {fileUri === null ? (
                     <Image
@@ -339,57 +339,6 @@ function Profile(props) {
 }
 
 export default Profile;
-
-{
-  /* <FlatList
-          data={membersdata}
-          key={item => item._id}
-          renderItem={item => (
-            <View style={styles.profileImageCard}>
-              <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
-                <TouchableOpacity onPress={updateProfilePicture}>
-                  {fileUri === null ? (
-                    <Image
-                      style={styles.image}
-                      source={require('../../assets/images/children.jpg')}
-                    />
-                  ) : (
-                    <Image style={styles.image} source={{uri: fileUri}} />
-                  )}
-                </TouchableOpacity>
-                <View style={{justifyContent: 'center'}}>
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      fontFamily: 'Nunito-SemiBold',
-                      marginBottom: wp('1%'),
-                    }}>
-                    {item.item.name}
-                  </Text>
-                </View>
-              </View>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => handleMembership(currentMember._id, item.item)}>
-                <Text style={styles.cardButton}>Memberships / Classes</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => {
-                  dispatch({
-                    type: Action.USER_GET_CURRENT_MEMBER_DATA,
-                    payload: item.item,
-                  });
-                  dispatch(getmemberClass(item.item._id));
-                  props.navigation.navigate('PaymentHistory');
-                }}>
-                <Text style={styles.cardButton}>Payment History</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        /> */
-}
 
 const styles = StyleSheet.create({
   container: {},
