@@ -12,8 +12,8 @@ import moment from 'moment';
 
 import {colors, Fontsize, hp, wp, Stepend, fullDays} from '../../constants';
 import Alert from '../../components/alert-box';
-import { getLocalData } from '../../utils/LocalStorage';
-import { getmemberData } from '../../redux/action/home';
+import {getLocalData} from '../../utils/LocalStorage';
+import {getmemberData} from '../../redux/action/home';
 const Confirmation = props => {
   const dispatch = useDispatch();
   const child = useSelector(state => state.childData.addchild);
@@ -188,10 +188,10 @@ const Confirmation = props => {
         <AppButton
           title={'Done'}
           onPress={() => {
+            dispatch(getmemberData(token));
             from === 'homeTab'
               ? props.navigation.navigate('HomeTab')
-              : dispatch(getmemberData(token));
-            props.navigation.navigate('Profile');
+              : props.navigation.navigate('Profile');
           }}
         />
       </CustomLayout>

@@ -231,20 +231,20 @@ const AddChild = props => {
             // setDisabled(false);
           } else {
             setDisabled(true);
-            // dispatch(
-            //   setChildData({
-            //     data: valuesForDispatch,
-            //     callback: () => {
-            //       dispatch(
-            //         getClubdata({
-            //           callback: () => {
-            //             props.navigation.navigate('AddPayment', {from: from});
-            //           },
-            //         }),
-            //       );
-            //     },
-            //   }),
-            // );
+            dispatch(
+              setChildData({
+                data: valuesForDispatch,
+                callback: () => {
+                  dispatch(
+                    getClubdata({
+                      callback: () => {
+                        props.navigation.navigate('AddPayment', {from: from});
+                      },
+                    }),
+                  );
+                },
+              }),
+            );
           }
         }}
         validationSchema={validationSchema}>
