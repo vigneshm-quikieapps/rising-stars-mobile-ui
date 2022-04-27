@@ -167,6 +167,7 @@ const Pay = props => {
               setShowStandingOrder(false);
             }}
             visible={showAtm}
+            amount={totalAmt}
           />
           <View style={styles.bottom}>
             <RadioButton color={colors.orange} />

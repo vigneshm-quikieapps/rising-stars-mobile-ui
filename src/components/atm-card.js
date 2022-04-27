@@ -1,10 +1,33 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useRef, useState} from 'react';
-import {Text, View, StyleSheet, TextInput} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import {hp, wp, colors, Fontsize} from '../constants';
 import {RadioButton} from 'react-native-paper';
 import Input from './input';
+const CURRENCY = 'USD';
+var CARD_TOKEN = null;
 
+/**
+ * The method imitates a request to our server.
+ *
+ * @param creditCardToken
+ * @return {Promise<Response>}
+ */
+function subscribeUser(creditCardToken) {
+  return new Promise(resolve => {
+    console.log('Credit card token\n', creditCardToken);
+    CARD_TOKEN = creditCardToken.id;
+    setTimeout(() => {
+      resolve({status: true});
+    }, 1000);
+  });
+}
 const AtmCard = props => {
   const yearRef = useRef();
   const monthRef = useRef();
@@ -13,7 +36,7 @@ const AtmCard = props => {
   const [cardNumber, setCardNumber] = useState('');
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
-
+  const [cvv, setCvv] = useState('');
   const handleCardNumber = text => {
     let formattedText = text.split(' ').join('');
 
@@ -24,13 +47,102 @@ const AtmCard = props => {
     setCardNumber(text.split(' ').join(''));
     return formattedText;
   };
+  function getCreditCardToken() {
+    // console.log('credit card input', creditCardData);
+    // alert()
+    const card = {
+      'card[number]': cardNumber,
+      'card[exp_month]': month,
+      'card[exp_year]': year,
+      'card[cvc]': cvv,
+    };
+    return fetch('https://api.stripe.com/v1/tokens', {
+      headers: {
+        // Use the correct MIME type for your server
+        Accept: 'application/json',
+        // Use the correct Content Type to send data to Stripe
+        'Content-Type': 'application/x-www-form-urlencoded',
+        // Use the Stripe publishable key as Bearer
+        //   Authorization: `Bearer ${STRIPE_PUBLISHABLE_KEY}`,
+        Authorization:
+          'Bearer pk_test_51Ksh15SAUwfPAgPBKluCWFDCFIOtcWwvWOEuxSEl1Td74iRMElq1xpFjFgwdVguEBLyK5rMY7RnKk5VU5B4Jt7p900jbGSgiiC',
+      },
+      // Use a proper HTTP method
+      method: 'post',
+      // Format the credit card data to a string of key-value pairs
+      // divided by &
+      body: Object.keys(card)
+        .map(key => key + '=' + card[key])
+        .join('&'),
+    })
+      .then(response => response.json())
+      .catch(error => console.log(error));
+  }
+  const onSubmit = async () => {
+    // console.log('clicked', cardNumber, month,year,cvv);
+    let creditCardToken;
+    try {
+      // Create a credit card token
+      creditCardToken = await getCreditCardToken();
+      // console.log("creditCardToken", creditCardToken)
+      if (creditCardToken.error) {
+        alert('creditCardToken error');
+        return;
+      }
+    } catch (e) {
+      console.log('e', e);
+      return;
+    }
+    // Send a request to your server with the received credit card token
+    const {error} = await subscribeUser(creditCardToken);
+    // Handle any errors from your server
+    if (error) {
+      alert(error);
+    } else {
+      let pament_data = await charges();
+      console.log('pament_data', pament_data);
+      if (pament_data.status == 'succeeded') {
+        alert('Payment Successfully');
+      } else {
+        alert('Payment failed');
+      }
+    }
+  };
+  // charges
+  const charges = async () => {
+    const card = {
+      amount: props.amount,
+      currency: CURRENCY,
+      source: CARD_TOKEN,
+      description: 'Developers Sin Subscription',
+    };
+
+    return fetch('https://api.stripe.com/v1/charges', {
+      headers: {
+        // Use the correct MIME type for your server
+        Accept: 'application/json',
+        // Use the correct Content Type to send data to Stripe
+        'Content-Type': 'application/x-www-form-urlencoded',
+        // Use the Stripe publishable key as Bearer
+        Authorization:
+          'Bearer sk_test_51Ksh15SAUwfPAgPBxKtj6tic99dEKqYlAKqTjLdEc2BGybztZDUlRLnJ79zQEm76lF3upHmu4QBxIIMT18PSKwYA00tPIqpN3q',
+      },
+      // Use a proper HTTP method
+      method: 'post',
+      // Format the credit card data to a string of key-value pairs
+      // divided by &
+      body: Object.keys(card)
+        .map(key => key + '=' + card[key])
+        .join('&'),
+    }).then(response => response.json());
+  };
 
   return (
     <View
       style={[
         styles.container,
         {
-          height: props.visible ? hp('31.5%') : hp('10%'),
+          height: props.visible ? hp('44.5%') : hp('10%'),
           borderColor: props.visible ? colors.orange : '#f2f2f2',
           backgroundColor: props.visible ? 'white' : '#f2f2f2',
         },
@@ -161,6 +273,9 @@ const AtmCard = props => {
               keyboardType="numeric"
               style={styles.textareaForCardDetails}
               ref={cvvRef}
+              onChangeText={text => {
+                setCvv(text);
+              }}
             />
             <View
               style={{
@@ -171,6 +286,9 @@ const AtmCard = props => {
             />
           </View>
         </View>
+        <TouchableOpacity onPress={onSubmit} style={styles.button}>
+          <Text style={styles.buttonText}>Pay Now</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -235,6 +353,22 @@ const styles = StyleSheet.create({
     width: wp('11%'),
     fontSize: Fontsize,
     color: colors.grey,
+  },
+  button: {
+    backgroundColor: 'orange',
+    width: 150,
+    height: 45,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    fontSize: 15,
+    color: '#f4f4f4',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
   },
 });
 
