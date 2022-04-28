@@ -41,7 +41,7 @@ export default function EnrolledChild(props) {
       memberClassData?.filter(
         item1 => item1.business._id === item.item.businessId,
       );
-    //console.log('insside render Item', temp);
+    // console.log('insside render Item', temp);
 
     return (
       <LinearGradient
@@ -85,7 +85,7 @@ export default function EnrolledChild(props) {
                 fontSize: Fontsize + wp('1%'),
                 //fontWeight: 'bold',
               }}>
-              {temp[0].business?.name}
+              {temp[0]?.business?.name}
             </Text>
           </View>
           <View>
@@ -98,7 +98,7 @@ export default function EnrolledChild(props) {
                 fontSize: Fontsize + wp('1%'),
                 //fontWeight: 'bold',
               }}>
-              {temp[0].clubMembershipId}
+              {temp[0]?.clubMembershipId}
             </Text>
           </View>
         </View>

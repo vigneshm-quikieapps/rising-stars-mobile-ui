@@ -146,6 +146,7 @@ const Home = () => {
   useEffect(() => {
     if (errorMemberData === 'jwt expired') {
       setSignOutFlag(true);
+      dispatch(getmemberData(''));
     }
   }, [errorMemberData]);
 
