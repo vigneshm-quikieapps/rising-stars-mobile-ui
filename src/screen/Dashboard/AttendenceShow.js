@@ -202,8 +202,8 @@ const AttendenceShow = () => {
           type: Action.USER_GET_CURRENT_MEMBER_ATTENDANCE,
           payload: attendance.attendance,
         });
-        attendance.attendance;
-        generateAttendenceDates(attendance.attendance.records);
+        attendance.attendance &&
+          generateAttendenceDates(attendance.attendance.records);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberClassData, activeDotIndex]);
