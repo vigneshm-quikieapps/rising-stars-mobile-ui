@@ -96,7 +96,8 @@ export default function EnrolledChild(props) {
               style={{
                 color: colors.white,
                 fontSize: Fontsize + wp('1%'),
-                //fontWeight: 'bold',
+
+                //[poihfontWeight: 'bold',
               }}>
               {temp[0]?.clubMembershipId}
             </Text>
