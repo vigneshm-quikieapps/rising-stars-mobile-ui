@@ -16,7 +16,14 @@ import {
 } from '../../components';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {useDispatch} from 'react-redux';
-import {colors, hp, wp, Stepend, Fontsize} from '../../constants';
+import {
+  colors,
+  hp,
+  wp,
+  Stepend,
+  Fontsize,
+  genderOfChild,
+} from '../../constants';
 import {setChildData, getClubdata} from '../../redux/action/enrol';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
@@ -36,7 +43,7 @@ import {WheelPicker} from 'react-native-wheel-picker-android';
 const AddChild = props => {
   const genderef = useRef();
   const relationref = useRef();
-  const relationre = useRef();
+  const pRelationref = useRef();
   const dispatch = useDispatch();
   const [user, setUser] = useState('');
   const [token, setToken] = useState('');
@@ -47,6 +54,8 @@ const AddChild = props => {
     setToken(accesstoken);
     setUser(userId);
   };
+
+  const {from} = props.route.params;
 
   const genders = ['MALE', 'FEMALE', 'OTHERS'];
   const relations = [
@@ -66,6 +75,24 @@ const AddChild = props => {
     'Other',
   ];
 
+  // const secRelations = [
+  //   'FRIEND',
+  //   'GRAND_PARENT',
+  //   'PARENT',
+  //   'UNCLE',
+  //   'AUNT',
+  //   'OTHER',
+  // ];
+
+  // const secRelationForDisplay = [
+  //   'Friend',
+  //   'Grand Parent',
+  //   'Parent',
+  //   'Uncle',
+  //   'Aunt',
+  //   'Other',
+  // ];
+
   useEffect(() => {
     getuser();
   }, []);
@@ -75,7 +102,9 @@ const AddChild = props => {
   const [birthModal, setBirthModal] = useState(false);
   const [birth, setBirth] = useState(new Date());
   const [birtherror, setBirthError] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
+  const [gendererror, setGenderError] = useState(false);
   // const [age, setAge] = useState('');
   // const [open, setOpen] = useState(false);
 
@@ -84,10 +113,9 @@ const AddChild = props => {
 
   // const [relationData, setRelationData] = useState('');
 
-  const [gender, setGender] = useState('MALE');
+  const [gender, setGender] = useState('BOY');
   const [relation, setRelation] = useState('PARENT');
-
-  const [gendererror, setGenderError] = useState(false);
+  const [relationSec, setRelationSec] = useState('OTHER');
 
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required().min(3).label('Full Name'),
@@ -129,6 +157,7 @@ const AddChild = props => {
       steps
       start={1}
       end={Stepend}
+      back
       header
       headerTextBigText={true}
       headertext={`Add Child and ${'\n'}Emergency${'\n'}Contact `}
@@ -157,7 +186,7 @@ const AddChild = props => {
               dob: moment(values.dob).format('YYYY-MM-DD'),
               gender: values.gender,
               contacts:
-                values.esname.length != 0
+                values.esname.length !== 0
                   ? [
                       {
                         addressType: 'PRIMARY',
@@ -182,13 +211,26 @@ const AddChild = props => {
                     ],
             },
           };
+          // console.table('VAlues', values);
+          // if (
+          //   moment(values.dob).format('DD-MM-YYYY') ===
+          //   moment(new Date()).format('DD-MM-YYYY')
+          // )
           if (values.dob === '') {
             setBirthError(true);
-          } else if (values.gender === '') {
+            // setDisabled(false);
+          }
+          if (values.gender === '') {
             setGenderError(true);
-          } else if (new Date().getFullYear() - values.dob.getFullYear() <= 2) {
-            alert('2 year children not allowed ');
+            // setDisabled(false);
+          }
+          // if (new Date().getFullYear() - values.dob.getFullYear() <= 2) {
+          if (new Date().getFullYear() - values.dob.getFullYear() <= 2) {
+            // alert('2 year children not allowed');
+            setBirthError(true);
+            // setDisabled(false);
           } else {
+            setDisabled(true);
             dispatch(
               setChildData({
                 data: valuesForDispatch,
@@ -196,7 +238,7 @@ const AddChild = props => {
                   dispatch(
                     getClubdata({
                       callback: () => {
-                        props.navigation.navigate('Class_Selection');
+                        props.navigation.navigate('AddPayment', {from: from});
                       },
                     }),
                   );
@@ -218,27 +260,30 @@ const AddChild = props => {
           return (
             <>
               <TextInputField
-                placeholder="Full Name"
+                placeholder="Full Name*"
                 onChangeText={handleChange('fullName')}
                 value={values.fullName}
                 onBlur={() => setFieldTouched('fullName')}
               />
-
               <ErrorMessage
                 style={styles.errorMessage}
                 error={errors.fullName}
                 visible={touched.fullName}
               />
-
               <PopUpCard
-                text={'Date of Birth'}
+                text={'Date of Birth*'}
                 textColor={colors.grey}
-                value={moment(values.dob).format('DD-MM-YYYY')}
+                value={
+                  moment(values.dob).format('DD-MM-YYYY') ===
+                  moment(new Date()).format('DD-MM-YYYY')
+                    ? 'Date of Birth*'
+                    : moment(values.dob).format('DD-MM-YYYY')
+                }
                 onPress={() => setBirthModal(!birthModal)}
                 onBlur={() => setBirthError(true)}
               />
               <WheelDropdown
-                title=" Date of Birth"
+                title=" Date of Birth*"
                 visible={birthModal}
                 setVisibility={setBirthModal}
                 confirmbutton={false}
@@ -280,18 +325,22 @@ const AddChild = props => {
               }}
             /> */}
               {birtherror && (
-                <Text style={styles.errors}>D.O.B. is a required</Text>
+                <ErrorMessage
+                  style={styles.errorMessage}
+                  error={'Child must be 3 years old.'}
+                  visible={birtherror}
+                />
+                // <Text style={styles.errors}>D.O.B. is a required</Text>
               )}
               {/* <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.dob}
-              visible={touched.dob}
-            /> */}
-
+                style={styles.errorMessage}
+                error={errors.dob}
+                visible={touched.dob}
+              /> */}
               <PopUpCard
-                text={'Gender'}
+                text={'Gender*'}
                 textColor={colors.grey}
-                value={values.gender}
+                value={genderOfChild[genders.indexOf(values.gender)]}
                 onBlur={() => setFieldTouched('gender')}
                 onPress={() => genderef.current.open()}
               />
@@ -307,12 +356,12 @@ const AddChild = props => {
                   },
                 }}>
                 <WheelPicker
-                  selectedItem={genders.indexOf(gender)}
-                  isCyclic={true}
-                  data={genders}
+                  selectedItem={genderOfChild.indexOf(gender)}
+                  isCyclic={false}
+                  data={genderOfChild}
                   onItemSelected={item => {
                     values.gender = genders[item];
-                    setGender(genders[item]);
+                    setGender(genderOfChild[item]);
                   }}
                   indicatorWidth={1}
                   //hideIndicator={true}
@@ -327,7 +376,7 @@ const AddChild = props => {
                   <TouchableOpacity
                     onPress={() => {
                       genderef.current.close();
-                      setGender('MALE');
+                      setGender('BOY');
                     }}>
                     <Text
                       style={{
@@ -381,16 +430,19 @@ const AddChild = props => {
                   />
                 </View> */}
               </RBSheet>
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.gender}
+                visible={touched.gender}
+              />
               {gendererror && (
                 <Text style={styles.errors}>Gender is a required</Text>
               )}
-
               {/* <ErrorMessage
               style={styles.errorMessage}
               error={errors.gender}
               visible={touched.gender}
             /> */}
-
               <Text style={styles.emergency}>Emergency Contact (Primary)</Text>
               <EmergencyCard
                 disabled={data.length === 1 ? true : false}
@@ -416,10 +468,10 @@ const AddChild = props => {
                 text="Relationship *"
                 onBlur={() => setFieldTouched('eprelation')}
                 value={relationForDisplay[relations.indexOf(values.eprelation)]}
-                onPress={() => relationref.current.open()}
+                onPress={() => pRelationref.current.open()}
               />
               <RBSheet
-                ref={relationref}
+                ref={pRelationref}
                 //closeOnDragDown={true}
                 //closeOnPressMask={false}
                 customStyles={{
@@ -432,7 +484,7 @@ const AddChild = props => {
                 }}>
                 <WheelPicker
                   selectedItem={relations.indexOf(relation)}
-                  isCyclic={true}
+                  isCyclic={false}
                   data={relationForDisplay}
                   onItemSelected={item => {
                     values.eprelation = relations[item];
@@ -449,7 +501,7 @@ const AddChild = props => {
                   }}>
                   <TouchableOpacity
                     onPress={() => {
-                      relationref.current.close();
+                      pRelationref.current.close();
                       setRelation('PARENT');
                     }}>
                     <Text
@@ -465,7 +517,7 @@ const AddChild = props => {
                   </TouchableOpacity>
                   <AppButton
                     title={'Confirm'}
-                    onPress={() => relationref.current.close()}
+                    onPress={() => pRelationref.current.close()}
                     style={{
                       width: wp('31%'),
                       marginBottom: hp('5%'),
@@ -513,9 +565,9 @@ const AddChild = props => {
                     onBlurContact={() => setFieldTouched('esNumber')}
                     errorContactNumber={errors.esNumber}
                     visibleContactNumber={touched.esNumber}
-                    onChangeRelation={relations =>
-                      setFieldValue('esrelation', relations)
-                    }
+                    onChangeRelation={relations => {
+                      return setFieldValue('esrelation', relations);
+                    }}
                     value={values.esrelation}
                     onBlur={() => setFieldTouched('gender')}
                   />
@@ -523,10 +575,78 @@ const AddChild = props => {
                     text="Relationship *"
                     onBlur={() => setFieldTouched('esrelation')}
                     value={
-                      relationForDisplay[relations.indexOf(values.esrelation)]
+                      // relationForDisplay[relations.indexOf(values.esrelation)]
+                      // secRelationForDisplay[
+                      //   secRelations.indexOf(values.esrelation)
+                      // ]
+                      relationSec
                     }
                     onPress={() => relationref.current.open()}
                   />
+                  {/* <RBSheet
+                    ref={relationref}
+                    //closeOnDragDown={true}
+                    //closeOnPressMask={false}
+                    customStyles={{
+                      container: {
+                        //height: '18%',
+                        alignItems: 'center',
+                        borderTopRightRadius: 16,
+                        borderTopLeftRadius: 16,
+                      },
+                    }}>
+                    <WheelPicker
+                      // selectedItem={relations.indexOf(relation)}
+                      selectedItem={secRelations.indexOf(relationSec)}
+                      isCyclic={true}
+                      data={secRelationForDisplay}
+                      onItemSelected={item => {
+                        values.esrelation = secRelations[item];
+                        setRelationSec(secRelations[item]);
+                      }}
+                      // onItemSelected={item => {
+                      //   values.esrelation = relations[item];
+                      //   setRelation(relations[item]);
+                      // }}
+                      indicatorWidth={1}
+                    />
+                    <View
+                      style={{
+                        width: wp('100%'),
+                        flexDirection: 'row',
+                        justifyContent: 'flex-end',
+                        alignItems: 'flex-end',
+                      }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          relationref.current.close();
+                          setRelation('UNCLE');
+                        }}>
+                        <Text
+                          style={{
+                            color: colors.orangeYellow,
+                            marginBottom: hp('7.5%'),
+                            marginRight: wp('12.5%'),
+                            fontSize: Fontsize + wp('0.7%'),
+                            fontWeight: 'bold',
+                          }}>
+                          Cancel
+                        </Text>
+                      </TouchableOpacity>
+                      <AppButton
+                        title={'Confirm'}
+                        onPress={() => relationref.current.close()}
+                        style={{
+                          width: wp('31%'),
+                          marginBottom: hp('5%'),
+                          marginRight: wp('5%'),
+                          //justifyContent: 'flex-end',
+                        }}
+                      />
+                    </View>
+                  </RBSheet> */}
+
+                  {/* old selector */}
                   <RBSheet
                     ref={relationref}
                     closeOnDragDown={true}
@@ -545,29 +665,32 @@ const AddChild = props => {
                         justifyContent: 'space-between',
                       }}>
                       <AppButton
-                        title="Parents"
+                        title="Parent"
                         style={{width: wp('28%')}}
                         onPress={() => {
-                          values.esrelation = 'Parents';
+                          values.esrelation = 'PARENT';
                           relationref.current.close();
-                          setFieldValue('');
+                          // setFieldValue('');
+                          setRelationSec('PARENT');
                         }}
                       />
                       <AppButton
-                        title="Guardian"
+                        title="Uncle"
                         style={{width: wp('30%')}}
                         onPress={() => {
-                          values.esrelation = 'Guardian';
-                          setFieldValue('');
+                          values.esrelation = 'UNCLE';
+                          // setFieldValue('');
+                          setRelationSec('UNCLE');
                           relationref.current.close();
                         }}
                       />
                       <AppButton
-                        title="Others"
+                        title="Other"
                         style={{width: wp('28%')}}
                         onPress={() => {
-                          values.esrelation = 'Others';
-                          setFieldValue('');
+                          values.esrelation = 'OTHER';
+                          // setFieldValue('');
+                          setRelationSec('OTHER');
                           relationref.current.close();
                         }}
                       />
@@ -620,9 +743,11 @@ const AddChild = props => {
                   );
                 })} */}
               <ForwardButton
+                // disabled={disabled}
                 style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
                 title="Submit"
                 onPress={() => {
+                  console.log('pressed', errors);
                   handleSubmit();
                 }}
               />

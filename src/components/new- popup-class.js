@@ -24,6 +24,7 @@ export default function NewPopUpClass(props) {
   var classData = [];
   var x = props.data;
   memberClassData &&
+    x &&
     x.forEach(item => {
       var flag = 0;
       memberClassData
@@ -182,6 +183,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightgrey,
     alignItems: 'center',
     borderRadius: wp('5%'),
+    paddingHorizontal: wp('2%'),
   },
   head: {
     fontFamily: 'Nunito-Regular',
@@ -216,7 +218,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   itemName: {
-    marginLeft: wp('5%'),
+    marginLeft: wp('3%'),
     fontSize: wp('4%'),
   },
 });

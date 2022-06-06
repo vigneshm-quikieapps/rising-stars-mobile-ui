@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {getLocalData} from '../../utils/LocalStorage';
+import {getLocalData, removeLocalData} from '../../utils/LocalStorage';
 import * as Action from '../../redux/action-types';
 import {
   View,
@@ -29,7 +29,12 @@ import {getmemberClass, getmemberData} from '../../redux/action/home';
 import {
   fetchAttendanceOfMemberInSession,
   fetchCurrentUser,
+  fetchSessionById,
 } from '../../redux/service/request';
+import {getClubdata} from '../../redux/action/enrol';
+import {useNavigation} from '@react-navigation/native';
+import NewTimelines from '../../components/newTimelines';
+import Alert from '../../components/alert-box';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -43,21 +48,34 @@ const Home = () => {
   const [currentSessionId, setCurrentSessionId] = useState('');
   const [currentSessionAttendance, setCurrentSessionAttendance] = useState('');
   const membersdata = useSelector(state => state.memberData.memberData);
+  const errorMemberData = useSelector(state => state.memberData.error);
   const memberClassData = useSelector(state => state.memberClassData.classData);
+  const [value, setValue] = useState(0);
+  const [classList, setClassList] = useState([]);
+  const [numberOfSession, setNumberOfSession] = useState('');
+  const [signOutFlag, setSignOutFlag] = useState(false);
+
   const sessionAttendance = useSelector(
     state => state.sessionlist.sessionAttendance,
   );
+  const memberActivityProgress = useSelector(
+    state => state.currentMemberActivity.activity,
+  );
+  const newDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
   const accessToken = async () => {
     const Token = await getLocalData('accessToken');
     setToken(Token);
   };
+  const navigation = useNavigation();
   const members = [];
   membersdata && membersdata.forEach((item, index) => (item.index = index));
   membersdata && membersdata.map(item => members.push(item.name));
   const parent = useSelector(state => state.LoginData.updatedUser);
 
   const [currentMember, setCurrentMember] = useState('');
-
+  var count = 0;
+  //var value;
   const getLocalUserData = useCallback(async () => {
     const userData = await getLocalData('user', true);
     setUser(userData);
@@ -73,7 +91,9 @@ const Home = () => {
         dotsLength={
           memberClassData && memberClassData
             ? memberClassData.filter(
-                item => item?.enrolledStatus === 'ENROLLED',
+                item =>
+                  item?.enrolledStatus === 'ENROLLED' ||
+                  item?.enrolledStatus === 'WAITLISTED',
               ).length
             : 1
         }
@@ -100,6 +120,7 @@ const Home = () => {
   };
 
   accessToken();
+
   useEffect(() => {
     getLocalUserData();
 
@@ -116,6 +137,18 @@ const Home = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
+  const SignOut = async () => {
+    await removeLocalData('refreshToken');
+    await removeLocalData('usercred');
+    await removeLocalData('accesstoken');
+    navigation.navigate('AuthStack');
+  };
+  useEffect(() => {
+    if (errorMemberData === 'jwt expired') {
+      setSignOutFlag(true);
+      dispatch(getmemberData(''));
+    }
+  }, [errorMemberData]);
 
   useEffect(() => {
     membersdata && setCurrentMember(membersdata[currentMemberIndex]);
@@ -124,21 +157,70 @@ const Home = () => {
 
   useEffect(() => {
     currentMember && dispatch(getmemberClass(currentMember._id));
-
     currentMember &&
       dispatch({
         type: Action.USER_GET_CURRENT_MEMBER_DATA,
         payload: currentMember,
       });
+
+    currentMember &&
+      dispatch({
+        type: Action.USER_GET_CURRENT_MEMBER_ACTIVITY,
+        payload: {id: currentMember._id},
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMember]);
+
   useEffect(() => {
-    memberClassData.length > 1 &&
+    memberClassData.length > 0 &&
       setCurrentSessionId(
-        memberClassData?.filter(item => item?.enrolledStatus === 'ENROLLED')[
-          activeDotIndex
-        ].session._id,
+        memberClassData?.filter(
+          item =>
+            item?.enrolledStatus === 'ENROLLED' ||
+            item?.enrolledStatus === 'WAITLISTED',
+        )[activeDotIndex]?.session._id,
       );
+
+    memberClassData.length > 0 &&
+      dispatch({
+        type: Action.USER_GET_SESSION_ATTENDANCE,
+        payload: {
+          token,
+          data: {
+            sessionId: memberClassData?.filter(
+              item =>
+                item?.enrolledStatus === 'ENROLLED' ||
+                item?.enrolledStatus === 'WAITLISTED',
+            )[activeDotIndex]?.session._id,
+            memberId: currentMember._id,
+          },
+        },
+      });
+
+    //console.log('checking session', classList[activeDotIndex]?.session);
+    if (classList[activeDotIndex]?.session) {
+      let upcomingDates = [];
+      let today = new Date();
+      let startDate = new Date(classList[activeDotIndex]?.session?.startDate);
+      let endDate = new Date(classList[activeDotIndex]?.session?.endDate);
+      let pattern = classList[activeDotIndex]?.session?.pattern.map(
+        item => item.day,
+      );
+
+      while (startDate <= endDate) {
+        // console.log('before includes', pattern, newDays[startDate.getDay()]);
+        if (pattern.includes(newDays[startDate.getDay()])) {
+          // console.log('includes', startDate, newDays[startDate.getDay()]);
+          if (startDate > today) {
+            upcomingDates.push(startDate.toString());
+          }
+        }
+        startDate.setDate(startDate.getDate() + 1);
+        //console.log('after set', upcomingDates);
+      }
+
+      setNumberOfSession(upcomingDates.length);
+    }
 
     // currentSessionId &&
     //   fetchAttendanceOfMemberInSession({
@@ -156,9 +238,19 @@ const Home = () => {
     //   });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memberClassData]);
 
+    memberClassData &&
+      setClassList(
+        memberClassData?.filter(
+          item =>
+            item?.enrolledStatus === 'ENROLLED' ||
+            item?.enrolledStatus === 'WAITLISTED',
+        ),
+      );
+  }, [memberClassData, activeDotIndex]);
+  //console.log('class list in home', classList);
   const renderItem = ({item, index}) => {
+    // console.log('inside class card', item.session);
     return (
       <ClassCard
         id={item.clubMembershipId}
@@ -166,32 +258,49 @@ const Home = () => {
         subtitle={item.business.name}
         day={item.session.pattern[0].day}
         time={`${moment(item.session.pattern[0].startTime).format(
-          'HH:SS',
-        )} -${moment(item.session.pattern[0].endTime).format('HH:SS')} `}
+          'hh:mm A',
+        )} - ${moment(item.session.pattern[0].endTime).format('hh:mm A')} `}
         facility={item.session.facility}
-        coach={'-- --'}
+        coach={item.session.coachId.name}
         style={{backgroundColor: 'white', borderRadius: 20}}
       />
     );
   };
 
   useEffect(() => {
+    // console.log('inside Attendence card', sessionAttendance);
     setCurrentSessionAttendance(sessionAttendance.attendance);
   }, [sessionAttendance]);
+  //console.log('memberClassData length', memberClassData);
   useEffect(() => {
     setCurrentSessionAttendance('');
-    dispatch({
-      type: Action.USER_GET_SESSION_ATTENDANCE,
-      payload: {
-        token,
-        data: {
-          sessionId: currentSessionId,
-          memberId: currentMember._id,
-        },
-      },
-    });
+
+    memberActivityProgress &&
+    memberActivityProgress.docs.length > 0 &&
+    memberActivityProgress.docs[activeDotIndex]
+      ? memberActivityProgress.docs[activeDotIndex].levels &&
+        memberActivityProgress.docs[activeDotIndex].levels.forEach(levels => {
+          // console.log('levels ', levels);
+          if (levels.status === 'AWARDED') {
+            count += 1;
+          } else if (levels.status === 'IN_PROGRESS') {
+            count += 0.5;
+          }
+        })
+      : null;
+    //console.log('count', count);
+    if (count > 0) {
+      // console.log(
+      //   'inside if ',
+      //   count / memberActivityProgress.docs[activeDotIndex].levelCount,
+      //   memberActivityProgress.docs[activeDotIndex].levelCount,
+      // );
+      setValue(count / memberActivityProgress.docs[activeDotIndex].levelCount);
+    } else {
+      setValue(count);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeDotIndex, currentMember]);
+  }, [activeDotIndex, currentMember, memberActivityProgress]);
   return (
     <ScrollView style={{backgroundColor: colors.white}}>
       <StatusBar backgroundColor="rgb(255,163,0)" />
@@ -199,19 +308,35 @@ const Home = () => {
         <LinearGradient
           colors={[colors.orangeYellow, colors.pumpkinOrange]}
           style={styles.linearGradient}>
-          <Text style={styles.welcome}>{`Hi ${parent.name}, your child`}</Text>
+          <Text style={styles.welcome}>{`Hi ${
+            parent ? parent.name : 'Parent'
+          }`}</Text>
           <View style={styles.containerMember}>
             <View style={{marginTop: hp('1%')}}>
-              <Image
-                style={{
-                  height: 57,
-                  width: 57,
-                  borderRadius: 20,
-                  borderWidth: 2,
-                  borderColor: 'white',
-                }}
-                source={Images.Child}
-              />
+              {currentMember && currentMember.imageUrl ? (
+                <Image
+                  style={{
+                    height: 57,
+                    width: 57,
+                    borderRadius: 20,
+                    borderWidth: 2,
+                    borderColor: 'white',
+                  }}
+                  // source={Images.Child}
+                  source={{uri: currentMember.imageUrl}}
+                />
+              ) : (
+                <Image
+                  style={{
+                    height: 57,
+                    width: 57,
+                    borderRadius: 20,
+                    borderWidth: 2,
+                    borderColor: 'white',
+                  }}
+                  source={Images.Child}
+                />
+              )}
             </View>
             <View style={{marginLeft: 10, justifyContent: 'center'}}>
               <Text style={styles.memberName}>{currentMember?.name}</Text>
@@ -240,6 +365,7 @@ const Home = () => {
           <WheelDropdown
             title="child"
             visible={memberModal}
+            isCyclic={false}
             setVisibility={modal => setMemberModal(modal)}
             cancel={() => setMemberModal(false)}
             confirm={() => {
@@ -263,7 +389,7 @@ const Home = () => {
               }}>
               <WheelPicker
                 data={members}
-                isCyclic={true}
+                isCyclic={false}
                 onItemSelected={wheelselected}
                 selectedItem={wheelitem}
                 selectedItemTextColor={'black'}
@@ -274,12 +400,14 @@ const Home = () => {
             </View>
           </WheelDropdown>
           <View style={styles.courosoul} />
-          {memberClassData.length > 0 ? (
+          {classList.length > 0 ? (
             <Carousel
               data={
                 memberClassData &&
                 memberClassData?.filter(
-                  item => item?.enrolledStatus === 'ENROLLED',
+                  item =>
+                    item?.enrolledStatus === 'ENROLLED' ||
+                    item?.enrolledStatus === 'WAITLISTED',
                 )
               }
               renderItem={renderItem}
@@ -290,7 +418,9 @@ const Home = () => {
                 setCurrentSessionId(
                   memberClassData &&
                     memberClassData?.filter(
-                      item => item?.enrolledStatus === 'ENROLLED',
+                      item =>
+                        item?.enrolledStatus === 'ENROLLED' ||
+                        item?.enrolledStatus === 'WAITLISTED',
                     )[index].session._id,
                 );
                 // const attendance =
@@ -306,7 +436,18 @@ const Home = () => {
               }}
             />
           ) : (
-            <View
+            // <View
+            //   style={{
+            //     backgroundColor: 'white',
+            //     borderRadius: 20,
+            //     alignContent: 'center',
+            //     justifyContent: 'center',
+            //     alignItems: 'center',
+            //     height: hp('15%'),
+            //     marginRight: wp('3%'),
+            //   }}>
+            <TouchableOpacity
+              // activeOpacity={3}
               style={{
                 backgroundColor: 'white',
                 borderRadius: 20,
@@ -315,13 +456,32 @@ const Home = () => {
                 alignItems: 'center',
                 height: hp('15%'),
                 marginRight: wp('3%'),
+              }}
+              onPress={() => {
+                dispatch({
+                  type: Action.USER_ADD_CHILD_SUCCEDED,
+                  payload: {member: currentMember},
+                });
+                dispatch(
+                  getClubdata({
+                    callback: () => {
+                      navigation.navigate('New_Class_Selection', {
+                        from: 'homeTab',
+                      });
+                    },
+                  }),
+                );
+                // dispatch({
+                //   type: Action.USER_GET_CURRENT_MEMBER_DATA,
+                //   payload: currentMember,
+                // });
+                // navigation.navigate('EnrolledChild' );
               }}>
-              <TouchableOpacity>
-                <Text style={{fontSize: wp('6%'), color: colors.orange}}>
-                  Please add a Class
-                </Text>
-              </TouchableOpacity>
-            </View>
+              <Text style={{fontSize: wp('6%'), color: colors.orange}}>
+                Please add a Class
+              </Text>
+            </TouchableOpacity>
+            // </View>
           )}
           <View
             style={{
@@ -333,6 +493,8 @@ const Home = () => {
           </View>
         </LinearGradient>
       </View>
+
+      {/* /////////////////////class Overview/////////// */}
       <View style={styles.attendance}>
         <View>
           <Image source={Images.calendarOrange} />
@@ -354,10 +516,7 @@ const Home = () => {
           <View>
             <AttendanceCard
               color={['rgb(255,163,0)', 'rgb(255,126,0)']}
-              class={(currentSessionAttendance?.totalCount
-                ? currentSessionAttendance.totalCount
-                : 0
-              ).toString()}
+              class={(numberOfSession ? numberOfSession : 0).toString()}
               value={'Total'}
               label={'Classes'}
               style={{backgroundColor: '#fff4e7'}}
@@ -413,21 +572,64 @@ const Home = () => {
           </View>
         </View>
       </View>
-
-      <View style={[styles.ProgressReports, styles.timeline]}>
-        <View style={{paddingRight: wp('4%'), paddingTop: wp('3%')}}>
-          <ProgressBarWithStar />
+      {memberActivityProgress &&
+      memberActivityProgress.docs.length > 0 &&
+      memberActivityProgress.docs[activeDotIndex] ? (
+        <View style={[styles.ProgressReports, styles.timeline]}>
+          <View style={{paddingRight: wp('4%'), paddingTop: wp('3%')}}>
+            <ProgressBarWithStar value={value} />
+          </View>
+          <View
+            style={{
+              height: hp('0.4%'),
+              width: '100%',
+              marginVertical: hp('1%'),
+              backgroundColor: colors.lightgrey,
+            }}
+          />
+          {/* <Timelines
+            data={
+              memberActivityProgress &&
+              memberActivityProgress.docs.length > 0 &&
+              memberActivityProgress.docs[activeDotIndex]
+                ? memberActivityProgress.docs[activeDotIndex]?.levels
+                : null
+            }
+          /> */}
+          <NewTimelines
+            data={
+              memberActivityProgress &&
+              memberActivityProgress.docs.length > 0 &&
+              memberActivityProgress.docs[activeDotIndex]
+                ? memberActivityProgress.docs[activeDotIndex]?.levels
+                : null
+            }
+          />
         </View>
-        <View
-          style={{
-            height: hp('0.4%'),
-            width: '100%',
-            marginVertical: hp('1%'),
-            backgroundColor: colors.lightgrey,
+      ) : (
+        <View style={styles.remark}>
+          <View style={styles.mark}>
+            <Image source={require('../../assets/images/icon-info.png')} />
+          </View>
+          <Text style={styles.marktext}>Progress will be Added Soon</Text>
+        </View>
+      )}
+
+      {signOutFlag ? (
+        <Alert
+          visible={signOutFlag}
+          confirm={'Sign In'}
+          success={() => {
+            setSignOutFlag(false);
+            SignOut();
           }}
+          image={'failure'}
+          message={'Session expired.'}
+          // success={() => props.navigation.navigate('Login')}
+          // image={'failure'}
+          // message={'Something Went Wrong'}
         />
-        <Timelines />
-      </View>
+      ) : null}
     </ScrollView>
   );
 };
@@ -512,6 +714,32 @@ const styles = StyleSheet.create({
     borderBottomWidth: wp('1%'),
     elevation: 10,
     shadowColor: '#52006A',
+  },
+  remark: {
+    borderRadius: 10,
+    height: hp('12%'),
+    marginHorizontal: wp('4%'),
+    marginVertical: hp('7%'),
+    paddingHorizontal: wp('1.8%'),
+    paddingTop: hp('.1%'),
+    flexDirection: 'row',
+    backgroundColor: '#fff2e6',
+    // marginVertical: hp('1%'),
+  },
+  mark: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: hp('3%'),
+    width: hp('3%'),
+    marginRight: wp('2%'),
+  },
+  marktext: {
+    color: '#d26800',
+    alignSelf: 'center',
+    flex: 1,
+    fontSize: Fontsize,
+    fontFamily: 'Nunito-Regular',
   },
 });
 

@@ -1,18 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
+import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import {useSelector} from 'react-redux';
-import {
-  CustomLayout,
-  StudentCard,
-  ClassCard,
-  Slot,
-  AppButton,
-} from '../../components';
+import {CustomLayout, ClassCard, Slot, AppButton} from '../../components';
 import Alert from '../../components/alert-box';
-import {hp, colors, wp, Fontsize} from '../../constants';
+import {hp, colors, wp, Fontsize, fullDays} from '../../constants';
 import {classTransfer} from '../../redux/service/request';
 import {getLocalData} from '../../utils/LocalStorage';
 
@@ -24,10 +20,13 @@ export default function ChangeClass(props) {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showFailureAlert, setShowFailureAlert] = useState(false);
   const [newSessionId, setNewSessionId] = useState('');
-  const [token, setToken] = useState('');
-  const currentClass = props.route.params.classes.item;
-  console.log('class: ', currentClass);
+  const [errorMsg, setErrorMsg] = useState('');
 
+  const [token, setToken] = useState('');
+  const currentClass = props.route.params.item;
+  console.log('class: ', currentClass);
+  const navigation = useNavigation();
+  //const getSession = sessions();
   const accessToken = async () => {
     const Token = await getLocalData('accessToken');
     setToken(Token);
@@ -55,7 +54,7 @@ export default function ChangeClass(props) {
         : end.getMinutes();
     return sHr + ':' + sMin + '-' + eHr + ':' + eMin;
   };
-  const sessions = () => {
+  const getSession = () => {
     var temp =
       sessionData &&
       sessionData.filter(session => currentClass.session._id !== session._id);
@@ -63,52 +62,77 @@ export default function ChangeClass(props) {
   };
   return (
     <CustomLayout
-      names={currentMember.name}
+      // names={currentMember.name}
+      names="Change Class"
+      back
+      backbutton={() => navigation.goBack()}
       Customchildren={
         <LinearGradient
           style={{
-            height: hp('25%'),
+            height: hp('20%'),
             borderRadius: 20,
             marginTop: hp('5%'),
           }}
           colors={['#ffa300', '#ff7e00']}>
-          <View style={{marginLeft: wp('2%'), marginTop: hp('2%')}}>
-            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
-              Student Name
-            </Text>
-            <Text
-              style={{
-                color: colors.white,
-                fontSize: Fontsize + wp('1%'),
-                //fontWeight: 'bold',
-              }}>
-              {currentMember.name}
-            </Text>
-            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
-              Club Name
-            </Text>
-            <Text
-              style={{
-                color: colors.white,
-                fontSize: Fontsize + wp('1%'),
-                //fontWeight: 'bold',
-              }}>
-              {currentClass.business.name}
-            </Text>
-            <Text style={{color: '#f7cf79', fontSize: Fontsize}}>Club Id</Text>
-            <Text
-              style={{
-                color: colors.white,
-                fontSize: Fontsize + wp('1%'),
-                //fontWeight: 'bold',
-              }}>
-              {currentClass.clubMembershipId}
-            </Text>
+          <View
+            style={{
+              marginHorizontal: wp('4%'),
+              marginTop: hp('2%'),
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingHorizontal: wp('5%'),
+            }}>
+            <View>
+              <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
+                Child Name
+              </Text>
+              <Text
+                style={{
+                  color: colors.white,
+                  fontSize: Fontsize + wp('1%'),
+                  //fontWeight: 'bold',
+                }}>
+                {currentMember.name}
+              </Text>
+              <Text
+                style={{
+                  color: '#f7cf79',
+                  fontSize: Fontsize,
+                  paddingTop: hp('1.5%'),
+                }}>
+                Club Name
+              </Text>
+              <Text
+                style={{
+                  color: colors.white,
+                  fontSize: Fontsize + wp('1%'),
+                  //fontWeight: 'bold',
+                }}>
+                {currentClass.business.name}
+              </Text>
+            </View>
+            <View>
+              <Text style={{color: '#f7cf79', fontSize: Fontsize}}>
+                Child's Club Id
+              </Text>
+              <Text
+                style={{
+                  color: colors.white,
+                  fontSize: Fontsize + wp('1%'),
+                  //fontWeight: 'bold',
+                }}>
+                {currentClass.clubMembershipId}
+              </Text>
+            </View>
           </View>
         </LinearGradient>
       }>
       <Text style={{fontFamily: 'Nunito-SemiBold'}}>Current Class/Session</Text>
       <ClassCard
+        style={{
+          elevation: 5,
+          shadowColor: '#bfafb2',
+        }}
         className={currentClass.class.name}
         // subtitle={"Childhood Joy Classes"}
         button
@@ -121,43 +145,51 @@ export default function ChangeClass(props) {
         }
         time={
           currentClass.session && currentClass.session.pattern.length > 0
-            ? time(
-                new Date(currentClass.session.pattern[0].startTime),
-                new Date(currentClass.session.pattern[0].endTime),
-              )
+            ? `${moment(currentClass.session.pattern[0].startTime).format(
+                'hh:mm A',
+              )} - ${moment(currentClass.session.pattern[0].endTime).format(
+                'hh:mm A',
+              )}`
             : null
         }
         facility={currentClass.session.facility}
-        coach={'Henry Itondo'}
+        coach={currentClass.session.coachId.name}
       />
       <Text style={{fontFamily: 'Nunito-SemiBold', marginVertical: hp('1%')}}>
         Available Session
       </Text>
-      {sessions() != null ? (
-        <FlatList
-          data={sessions()}
-          key={item => item._id}
-          renderItem={() => {
+      {getSession() != null ? (
+        <>
+          {getSession().map((session, index) => {
             return (
-              <>
+              <View key={index}>
+                {console.log('session', session)}
                 <Slot
                   radio={true}
                   onPress={() => {
-                    setNewSessionId(sessions._id);
+                    setNewSessionId(session._id);
                   }}
                   status={
-                    newSessionId === sessions._id ? 'checked' : 'unchecked'
+                    newSessionId === session._id ? 'checked' : 'unchecked'
                   }
-                  day={sessions.pattern[0].day}
-                  time="9:30 am - 11:30 am"
-                  facility={sessions.facility}
-                  coach={sessions.coach.name}
+                  day={fullDays[session.pattern[0].day]}
+                  time={
+                    session && session.pattern.length > 0
+                      ? `${moment(session.pattern[0].startTime).format(
+                          'hh:mm A',
+                        )} - ${moment(session.pattern[0].endTime).format(
+                          'hh:mm A',
+                        )}`
+                      : null
+                  }
+                  facility={session.facility}
+                  coach={session.coach.name}
                 />
                 <View style={{height: hp('1%')}} />
-              </>
+              </View>
             );
-          }}
-        />
+          })}
+        </>
       ) : (
         <View
           style={{
@@ -198,6 +230,7 @@ export default function ChangeClass(props) {
             if (response.message === 'Transfer successful') {
               setShowSuccessAlert(true);
             } else {
+              setErrorMsg(response.errors[0]['newSessionId']);
               setShowFailureAlert(true);
             }
           }}
@@ -222,7 +255,7 @@ export default function ChangeClass(props) {
           confirm={'Go Back'}
           success={() => props.navigation.navigate('Profile')}
           image={'failure'}
-          message={'OOPS!! Something Went Wrong!!'}
+          message={errorMsg}
         />
       ) : null}
       {/* <Slot

@@ -20,11 +20,67 @@ const Slot = props => {
           backgroundColor: selected ? 'white' : '#f2f2f2',
         },
       ]}>
+      {props.waitlisted ? (
+        <View style={styles.waitlistedContainer}>
+          <Text style={styles.waitlistedText}>Waitlisted Class</Text>
+        </View>
+      ) : // <View
+      //   style={{
+      //     position: 'absolute',
+      //     top: hp('3%'),
+      //     //left: -8,
+      //     backgroundColor: '#d56b6b',
+      //     width: wp('40%'),
+      //     height: hp('5%'),
+      //     // justifyContent: 'center',
+      //     //alignItems: 'center',
+      //     borderTopRightRadius: 15,
+      //     borderBottomRightRadius: 15,
+      //   }}>
+      //   <View
+      //     style={{
+      //       // backgroundColor: '#d56b6b',
+      //       //width: wp('40%'),
+      //       //height: hp('5%'),
+      //       justifyContent: 'center',
+      //       alignItems: 'center',
+      //       borderTopRightRadius: 15,
+      //       borderBottomRightRadius: 15,
+      //       // top: hp('3%'),
+      //       // left: 0,
+      //     }}>
+      //     <Text style={{color: '#FFF', fontWeight: 'bold'}}>
+      //       Waitlisted Class
+      //     </Text>
+      //   </View>
+      //   <View
+      //     style={{
+      //       position: 'absolute',
+      //       top: 0,
+      //       left: -22,
+      //       //width: wp('40%'),
+      //       height: hp('5%'),
+      //       backgroundColor: 'transparent',
+      //       borderStyle: 'solid',
+      //       borderRightWidth: 20,
+      //       borderTopWidth: 20,
+      //       borderRightColor: 'transparent',
+      //       borderTopColor: 'red',
+      //       transform: [{rotate: '90deg'}],
+      //       // borderBottomLeftRadius: -10,
+      //       borderBottomRightRadius: 10,
+      //     }}
+      //   />
+      // </View>
+      null}
       {props.radio ? (
         <RadioButton onPress={combinedOnpress} status={props.status} />
       ) : null}
 
-      <View style={styles.slotdetails}>
+      <View
+        style={
+          props.waitlisted ? styles.slotwithwaitlisted : styles.slotdetails
+        }>
         {props.required && (
           <View style={{marginBottom: hp('1%')}}>
             <Text style={(styles.day, {marginLeft: wp('0.5%')})}>
@@ -60,7 +116,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp('5%'),
   },
   slotdetails: {
-    marginLeft: wp('1%'),
+    marginLeft: wp('4%'),
+  },
+  slotwithwaitlisted: {
+    marginTop: hp('7%'),
+  },
+  waitlistedContainer: {
+    backgroundColor: '#d56b6b',
+    width: wp('40%'),
+    height: hp('5%'),
+    position: 'absolute',
+    top: hp('3%'),
+    left: 0,
+    borderTopRightRadius: 15,
+    borderBottomRightRadius: 15,
+    justifyContent: 'center',
+  },
+  waitlistedText: {
+    color: 'white',
+    paddingHorizontal: 20,
+    fontFamily: 'Nunito-Regular',
   },
   day: {
     fontFamily: 'Nunito-SemiBold',

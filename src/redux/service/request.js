@@ -92,6 +92,7 @@ export function updateUser(payload) {
 }
 
 export function fetchRegister(payload) {
+  console.log('in fetchregister', payload);
   return fetch(`${heroku_url}/sign-up`, {
     method: 'POST',
     headers: {
@@ -112,7 +113,11 @@ export function fetchRegister(payload) {
       country: 'United Kingdom',
     }),
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('registering', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
@@ -130,7 +135,11 @@ export function fetchLogin(payload) {
       password: payload.password,
     }),
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('login api', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
@@ -165,7 +174,11 @@ export function fetchSessionList(id) {
   return fetch(`${heroku_url}/classes/${id}/sessions`, {
     method: 'GET',
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside fetch session list', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
@@ -203,7 +216,11 @@ export function regularEnrollment(payload) {
     },
     body: JSON.stringify(payload.data),
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside enrolment api', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
@@ -212,13 +229,18 @@ export function regularEnrollment(payload) {
 // --------------------------------------------------------Home
 
 export function fetchMemberData(token) {
-  return fetch(`${heroku_url}/members/of-a-logged-in-parent`, {
+  return fetch(`${heroku_url}/members/of-a-logged-in-parent?limit=100`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
+      limit: 100,
     },
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside fecth member data', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
@@ -228,7 +250,11 @@ export function fetchMemberClassData(id) {
   return fetch(`${heroku_url}/members/${id}/enrolments`, {
     method: 'GET',
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside fetchMemberClassesData APi', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
@@ -241,14 +267,18 @@ export function fetchClasses(token) {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      // console.log('inside /classes/of-logged-in-user?limit=100 APi', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
 }
 
 export function fetchBillsOfMember(payload) {
-  return fetch(`${heroku_url}/bills/of-a-member-in-a-business`, {
+  return fetch(`${heroku_url}/bills/of-a-member-in-a-business?limit=100`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -256,6 +286,26 @@ export function fetchBillsOfMember(payload) {
       //Authorization: `Bearer ${payload.token}`,
     },
     body: JSON.stringify(payload),
+  })
+    .then(response => {
+      let d = response.json();
+      console.log('inside fetching bills', d);
+      return d;
+    })
+    .catch(error => {
+      throw error;
+    });
+}
+
+export function updateTransaction(payload) {
+  return fetch(`${heroku_url}/bills/update-bill-as-standing-order`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      //Authorization: `Bearer ${payload.token}`,
+    },
+    body: JSON.stringify({billId: payload}),
   })
     .then(response => response.json())
     .catch(error => {
@@ -273,7 +323,11 @@ export function addChild(payload) {
     },
     body: JSON.stringify(payload.data),
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside add child api', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
@@ -289,13 +343,18 @@ export function classTransfer(payload) {
     },
     body: JSON.stringify(payload.data),
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside change class', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
 }
 
 export function dropClass(payload) {
+  console.log('paylod in drop class', payload);
   return fetch(`${heroku_url}/enrolments/${payload.enrollmentId}/withdraw`, {
     method: 'POST',
     headers: {
@@ -304,13 +363,18 @@ export function dropClass(payload) {
       Authorization: `Bearer ${payload.token}`,
     },
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside drop class api', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
 }
 
 export function forgetPassword(payload) {
+  // console.log('checkpayload', payload);
   return fetch(`${heroku_url}/account/password/forgot/using-mobile-no`, {
     method: 'POST',
     headers: {
@@ -326,6 +390,7 @@ export function forgetPassword(payload) {
 }
 
 export function resetPassword(payload) {
+  // console.log('payload', payload);
   return fetch(`${heroku_url}/account/password/reset/using-mobile-no`, {
     method: 'POST',
     headers: {
@@ -335,7 +400,11 @@ export function resetPassword(payload) {
     },
     body: JSON.stringify(payload),
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('reset password response', d);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
@@ -350,10 +419,37 @@ export function fetchAttendanceOfMemberInSession(payload) {
     },
     body: JSON.stringify(payload.data),
   })
-    .then(response => response.json())
+    .then(response => {
+      let d = response.json();
+      console.log('inside fetching attendance', d, payload);
+      return d;
+    })
     .catch(error => {
       throw error;
     });
+}
+
+// fetch session by term id and class id for ATTENDANCE
+export async function fetchSessionById(payload) {
+  try {
+    const response = await fetch(
+      `${heroku_url}/sessions/in-a-class/of-a-particular-term`,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${payload.token}`,
+        },
+        body: JSON.stringify(payload.data),
+      },
+    );
+
+    //console.log('fetching sessions', payload);
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
 }
 
 export function fetchActivityOfMemberInSession(payload) {
@@ -381,4 +477,28 @@ export function fetchEvaluationById(payload) {
     .catch(error => {
       throw error;
     });
+}
+
+// profile
+export function uploadImage(imageData, authData) {
+  console.log('check payload', imageData, authData.userId, authData.token);
+  return (
+    fetch(`${heroku_url}/members/${authData.userId}/image-upload`, {
+      method: 'POST',
+      headers: {
+        Accept: 'multipart/form-data',
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${authData.token}`,
+      },
+      body: imageData,
+    })
+      .then(response => response.json())
+      // let d = response.json();
+      // console.log('upload image msg', d);
+      // return d;
+      // })
+      .catch(error => {
+        throw error;
+      })
+  );
 }

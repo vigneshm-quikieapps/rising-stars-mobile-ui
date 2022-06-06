@@ -13,10 +13,11 @@ const Tab = createBottomTabNavigator();
 function HomeTab() {
   return (
     <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: colors.orange,
-      }}
+      // tabBarOptions={{
+      //   activeTintColor: colors.orange,
+      // }}
       screenOptions={({route}) => ({
+        tabBarActiveTintColor: colors.orange,
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
 

@@ -21,6 +21,7 @@ export const colors = {
   veryLightPink: 'rgba(255,244,231,1)',
   veryLightGreen: 'rgba(192,248,232,1)',
   veryLightRed: 'rgba(255,229,229,1)',
+  lightRed: '#D56B6B',
   titleOrange: '#FCDD8C',
   orangeYellow: 'rgba(255,163,0,1)',
   pumpkinOrange: 'rgba(255,126,0,1)',
@@ -32,6 +33,7 @@ export const colors = {
   buttonBorder: 'rgb (227 ,227 ,227)',
   modalBackgroundColor: 'rgba( 0, 0, 0, 0.8)',
   cancelMembership: 'rgb( 204, 66, 66)',
+  limeGreen: 'rgb(221,255,236)',
 };
 
 export const Fontsize = wp('4%');
@@ -43,11 +45,13 @@ export const Term_Condition =
   " Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting , remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
 export const Stepend = '6';
 
-export const gender = [
-  {id: 1, title: 'Boy'},
-  {id: 2, title: 'Girl'},
-  {id: 3, title: 'other'},
-];
+// export const genderOfChild = [
+//   {id: 1, title: 'Boy'},
+//   {id: 2, title: 'Girl'},
+//   {id: 3, title: 'other'},
+// ];
+
+export const genderOfChild = ['Boy', 'Girl'];
 
 export const EnrollData = [
   {id: 1, title: 'Step 1', description: 'Add Child and Emergency Contact'},
@@ -69,5 +73,16 @@ export const Images = {
   completed: require('../assets/images/icon-check-line.png'),
   completed_white: require('../assets/images/checkmark.png'),
   dropDown_white: require('../assets/images/dropDown.png'),
+  dropDown_black: require('../assets/images/dropDown_black.png'),
 };
 export {wp, hp};
+
+export const fullDays = {
+  mon: 'Monday',
+  tue: 'Tuesday',
+  wed: 'Wednesday',
+  thu: 'Thursday',
+  fri: 'Friday',
+  sat: 'Saturday',
+  sun: 'Sunday',
+};

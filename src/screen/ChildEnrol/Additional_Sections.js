@@ -28,6 +28,9 @@ const Additional_Sections = props => {
   const [sms, setSms] = useState(false);
   const fullName = useSelector(state => state.childData.fullName);
   const age = useSelector(state => state.childData.age);
+  const {from} = props.route.params;
+
+  //console.log('Additional sec', from);
   const handleSubmit = () => {
     var det = {
       email: email,
@@ -35,27 +38,40 @@ const Additional_Sections = props => {
       sms: sms,
     };
     dispatch(setAdditionDetails(det));
-    props.navigation.navigate('Pay');
+    props.navigation.navigate('Pay', {from: from});
   };
   const selectaddition = way => {
     way === 'email' ? setEmail(!email) : null;
     way === 'telephone' ? setTelephone(!telephone) : null;
     way === 'sms' ? setSms(!sms) : null;
   };
+
+  const clubRulesText =
+    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standarddummy text ever since. Lorem Ipsum is simply dummy text of theprinting and typesetting industry. Lorem Ipsum has been theindustry's standard dummy text ever since.Lorem Ipsum is simplydummy text of the printing and typesetting industry. Lorem Ipsum hasbeen the industry's standard dummy text ever since. Lorem Ipsum issimply dummy text of the printing and typesetting industry. LoremIpsum has been the industry's standard dummy text ever since. LoremIpsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text eversince.Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standarddummy text ever since. Lorem Ipsum is simply dummy text of theprinting and typesetting industry. Lorem Ipsum has been theindustry's standard dummy text ever since. Lorem Ipsum is simplydummy text of the printing and typesetting industry. Lorem Ipsum hasbeen the industry's standard dummy text ever since. Lorem Ipsum issimply dummy text of the printing and typesetting industry. LoremIpsum has been the industry's standard dummy text ever since.";
+
+  const clubRulesPopUPHeigth = text => {
+    let lines = text.split(' ').length / 10;
+    return lines * 5 < 75 ? `${lines * 5}%` : '75%';
+  };
+
   return (
     <CustomLayout
       Customchildren={
         <StudentCard
           name={child.member.name}
-          id={age}
-          activityrequired
-          activity={club.name}
-          subactivity={'Childhood Joy Classes'}
+          age={
+            new Date().getFullYear() - parseInt(child.member.dob.slice(0, 4))
+          }
+          // id={age}
+          // activityrequired
+          // activity={club.name}
+          // subactivity={'Childhood Joy Classes'}
         />
       }
       steps
       start={5}
       end={7}
+      back
       header
       headertext={`Additional ${'\n'}Sections`}
       headertextStyle={{
@@ -73,7 +89,7 @@ const Additional_Sections = props => {
             backgroundColor: colors.blackOpacity,
           },
           container: {
-            height: '25%',
+            height: clubRulesPopUPHeigth(clubRulesText),
             borderTopRightRadius: 16,
             borderTopLeftRadius: 16,
           },
@@ -86,7 +102,7 @@ const Additional_Sections = props => {
                 fontSize: Fontsize,
                 color: '#ff7e00',
               }}>
-              Club Rule
+              Club Rules
             </Text>
             <TouchableOpacity onPress={() => termref.current.close()}>
               <LinearGradient
@@ -99,13 +115,11 @@ const Additional_Sections = props => {
           <Text
             style={{
               fontFamily: 'Nunito-Regular',
-              marginTop: hp('1.5%'),
+              marginVertical: hp('1.5%'),
               fontSize: Fontsize,
               alignSelf: 'center',
             }}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since.
+            {clubRulesText}
           </Text>
         </View>
       </RBSheet>
@@ -129,6 +143,7 @@ const Additional_Sections = props => {
       </Text>
       <View style={styles.container}>
         <RadioButton
+          color={colors.orange}
           onPress={() => selectaddition('email')}
           status={email ? 'checked' : 'unchecked'}
         />
@@ -136,6 +151,7 @@ const Additional_Sections = props => {
       </View>
       <View style={styles.container}>
         <RadioButton
+          color={colors.orange}
           onPress={() => selectaddition('telephone')}
           status={telephone ? 'checked' : 'unchecked'}
         />
@@ -143,6 +159,7 @@ const Additional_Sections = props => {
       </View>
       <View style={styles.container}>
         <RadioButton
+          color={colors.orange}
           onPress={() => selectaddition('sms')}
           status={sms ? 'checked' : 'unchecked'}
         />
@@ -155,10 +172,9 @@ const Additional_Sections = props => {
           marginTop: hp('1.5%'),
           fontSize: Fontsize,
           paddingRight: wp('4%'),
-        }}>
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since.
+        }}
+        numberOfLines={3}>
+        {clubRulesText}
       </Text>
       <TouchableOpacity onPress={() => termref.current.open()}>
         <Text style={styles.bottom}>Read more about Club Rule</Text>

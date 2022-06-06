@@ -71,24 +71,27 @@ export const EnrollStack = props => {
 };
 
 export const Addchildren = props => {
+  //console.log('addChildren', props.route);
   return (
     <Stack>
       <StackScreen.Screen
         name="AddChild"
         component={AddChild}
         options={{headerShown: false}}
+        initialParams={{from: props.route.params.from}}
       />
     </Stack>
   );
 };
 
-export const AddPayment = () => {
+export const AddPayment = props => {
   return (
     <Stack>
       <StackScreen.Screen
         name="Class_Selection"
         component={Class_Selection}
         options={{headerShown: false}}
+        initialParams={{from: props.route.params.from}}
       />
       <StackScreen.Screen
         name="Fees_Overview"

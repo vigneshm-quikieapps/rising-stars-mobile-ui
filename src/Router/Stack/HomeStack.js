@@ -15,6 +15,13 @@ import PaymentHistory from '../../screen/Dashboard/PaymentHistory';
 import {getLocalData} from '../../utils/LocalStorage';
 import {getmemberData} from '../../redux/action/home';
 import EditProfile from '../../screen/Dashboard/EditProfile';
+import EnrollingFlow from '../../screen/ChildEnrol/EnrollingFlow';
+import New_Class_Selection from '../../screen/ChildEnrol/newClassSelection';
+import Pay from '../../screen/ChildEnrol/Pay';
+import Confirmation from '../../screen/ChildEnrol/Confirmation';
+import Provide_Consent from '../../screen/ChildEnrol/Provide_Consent';
+import Fees_Overview from '../../screen/ChildEnrol/Fees_Overview';
+import Additional_Sections from '../../screen/ChildEnrol/Additional_Sections';
 
 const HomeNavigation = props => {
   const [token, setToken] = useState('');
@@ -62,8 +69,43 @@ const HomeNavigation = props => {
           options={{headerShown: false}}
         />
         <StackScreen.Screen
+          name="EnrollingFlow"
+          component={EnrollingFlow}
+          options={{headerShown: false}}
+        />
+        <StackScreen.Screen
           name="EnrollStack"
           component={EnrollStack}
+          options={{headerShown: false}}
+        />
+        <StackScreen.Screen
+          name="New_Class_Selection"
+          component={New_Class_Selection}
+          options={{headerShown: false}}
+        />
+        <StackScreen.Screen
+          name="Fees_Overview"
+          component={Fees_Overview}
+          options={{headerShown: false}}
+        />
+        <StackScreen.Screen
+          name="Provide_Consent"
+          component={Provide_Consent}
+          options={{headerShown: false}}
+        />
+        <StackScreen.Screen
+          name="Additional_Sections"
+          component={Additional_Sections}
+          options={{headerShown: false}}
+        />
+        <StackScreen.Screen
+          name="Pay"
+          component={Pay}
+          options={{headerShown: false}}
+        />
+        <StackScreen.Screen
+          name="Confirmation"
+          component={Confirmation}
           options={{headerShown: false}}
         />
         <StackScreen.Screen

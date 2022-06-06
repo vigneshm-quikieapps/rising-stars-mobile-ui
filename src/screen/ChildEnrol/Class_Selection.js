@@ -15,7 +15,7 @@ import {
   Slot,
   PopUpCard,
 } from '../../components';
-import {colors, Fontsize, hp, wp, Stepend} from '../../constants';
+import {colors, Fontsize, hp, wp, Stepend, fullDays} from '../../constants';
 import {
   getClassdata,
   getSessiondata,
@@ -51,6 +51,8 @@ const Class_Selection = props => {
 
   const dispatch = useDispatch();
 
+  const {from} = props.route.params;
+
   const handleBusiness = async item => {
     setBusiness(item.name);
     setClubModal(!clubmodal);
@@ -77,7 +79,7 @@ const Class_Selection = props => {
 
   const handleforward = () => {
     dispatch(setSlotData(selectdata));
-    props.navigation.navigate('Fees_Overview');
+    props.navigation.navigate('Fees_Overview', {from: from});
   };
   return (
     <CustomLayout
@@ -95,6 +97,7 @@ const Class_Selection = props => {
       header
       headerTextBigText={true}
       headertext={'Class Selection'}
+      back
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={2} />}>
       <PopUpCard
@@ -212,10 +215,10 @@ const Class_Selection = props => {
                   sessions={item.name}
                   onPress={() => setSelectdata(item)}
                   status={selectdata === item && 'checked'}
-                  day={item.pattern[0].day}
+                  day={fullDays[item.pattern[0]?.day]}
                   time={`${moment(item.pattern[0].startTime).format(
-                    'HH:mm',
-                  )} - ${moment(item.pattern[0].endTime).format('HH:mm')}`}
+                    'hh:mm A',
+                  )} - ${moment(item.pattern[0].endTime).format('hh:mm A')}`}
                   facility={item.name}
                   coach={item.coach.name}
                   key={item._id}

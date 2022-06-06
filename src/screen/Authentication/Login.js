@@ -21,7 +21,7 @@ import {getLocalData} from '../../utils/LocalStorage';
 import Alert from '../../components/alert-box';
 
 const validationSchema = Yup.object().shape({
-  mobileNumber: Yup.number().required().min(10).label('Mobile Number'),
+  mobileNumber: Yup.string().required().min(10).label('Mobile Number'),
   password: Yup.string().required().min(6).label('Password'),
 });
 
@@ -33,6 +33,7 @@ const Login = props => {
   const isLoading = useSelector(state => state.LoginData.isloading);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+
   const gotoRegister = () => {
     props.navigation.navigate('Register');
   };
@@ -48,16 +49,20 @@ const Login = props => {
 
   const getToken = useCallback(async () => {
     const refreshToken = await getLocalData('refreshToken');
-    setIsLoggedIn(refreshToken);
+    setIsLoggedIn(refreshToken === undefined ? false : true);
   }, []);
 
   useEffect(() => {
-    isLoggedIn && navigation.navigate('HomeTab');
+    if (isLoggedIn) {
+      setIsLoggedIn(false);
+      navigation.navigate('HomeTab');
+    }
   }, [navigation, isLoggedIn, message]);
 
   useEffect(() => {
     message && setShowAlert(true);
   }, [message]);
+
   return (
     <ScrollView style={styles.container}>
       <Text
@@ -80,7 +85,12 @@ const Login = props => {
       <Formik
         initialValues={{mobileNumber: '', password: ''}}
         onSubmit={values => {
-          dispatch(loginUserData(values));
+          if (values.mobileNumber.length < 10) {
+            //console.log('inside formik', values);
+            alert('mobile number is too short');
+          } else {
+            dispatch(loginUserData(values));
+          }
         }}
         validationSchema={validationSchema}>
         {({handleChange, handleSubmit, errors, setFieldTouched, touched}) => (
@@ -95,6 +105,7 @@ const Login = props => {
               autoCorrect={false}
               onBlur={() => setFieldTouched('mobileNumber')}
             />
+
             <ErrorMessage
               style={styles.errorMessage}
               error={errors.mobileNumber}
@@ -125,6 +136,7 @@ const Login = props => {
               <AppButton
                 title="Login"
                 onPress={handleSubmit}
+                disabled={errors.password || errors.mobileNumber}
                 style={{
                   fontFamily: 'Nunito-SemiBold',
                   marginTop: touched.password === true ? hp('1%') : hp('3%'),

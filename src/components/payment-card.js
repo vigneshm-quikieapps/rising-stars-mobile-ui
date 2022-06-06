@@ -3,8 +3,9 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import AppButton from './app-button';
 import {hp, colors, wp} from '../constants';
-
+let border;
 export const PaymentCard = props => {
+  border = props.border ? true : false;
   return (
     <View style={styles.container}>
       <Text style={{marginVertical: hp('1%')}}>Payment History</Text>
@@ -20,14 +21,16 @@ export const Card = props => {
         <Text style={{fontSize: hp('2%'), fontFamily: 'Nunito-SemiBold'}}>
           £{props.amount}
         </Text>
-        <View style={[styles.notify, props.style]}>
+        <View style={[styles.notify, props.batchstyle]}>
           <Text style={{color: colors.white, fontFamily: 'Nunito-SemiBold'}}>
             {props.notify}
           </Text>
         </View>
       </View>
       <Text style={{fontFamily: 'Nunito-SemiBold'}}>{props.body}</Text>
-      <Text style={{fontFamily: 'Nunito-SemiBold'}}>{props.date}</Text>
+      <Text style={[{fontFamily: 'Nunito-SemiBold'}, props.dueDateStyle]}>
+        {props.date}
+      </Text>
       {props.button ? (
         <AppButton
           title={props.title}
@@ -36,7 +39,9 @@ export const Card = props => {
         />
       ) : null}
       {props.paid ? (
-        <Text style={{fontFamily: 'Nunito-SemiBold'}}>{props.paidtext}</Text>
+        <Text style={[{fontFamily: 'Nunito-SemiBold'}, props.paidOnStyle]}>
+          {props.paidtext}
+        </Text>
       ) : null}
     </View>
   );
@@ -45,13 +50,13 @@ export const Card = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    elevation: 1,
+    // elevation: 1,
     shadowColor: colors.lightgrey,
     shadowOffset: {width: 1, height: 1},
     shadowOpacity: 0.4,
     overflow: 'hidden',
     shadowRadius: 5,
-    borderRadius: 5,
+    borderRadius: border ? 5 : 0,
     padding: wp('5%'),
   },
   subContainer: {
@@ -59,6 +64,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: hp('2%'),
     marginBottom: hp('1%'),
+    borderWidth: 1,
   },
   notify: {
     fontFamily: 'Nunito-SemiBold',

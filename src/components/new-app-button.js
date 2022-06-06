@@ -3,12 +3,18 @@ import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
 import {hp, colors, wp, Fontsize} from '../constants';
 import LinearGradient from 'react-native-linear-gradient';
 
-function NewAppButton({title, onPress, style, color, size}) {
+function NewAppButton({title, onPress, style, color, size,selected}) {
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={[styles.container, style]}>
+      <View style={[
+        styles.container, 
+        style,
+        {  
+          backgroundColor:selected? colors.orange:colors.white,
+          borderWidth: selected? 0:2
+          }]}>
         <TouchableOpacity onPress={onPress}>
-          <Text style={styles.button} onPress={onPress}>
+          <Text style={[styles.button,{color: !selected? colors.orange:colors.white,}]} onPress={onPress}>
             {title}
           </Text>
         </TouchableOpacity>
@@ -27,11 +33,11 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     marginTop: hp('3%'),
     backgroundColor: colors.white,
-    borderWidth: 2,
+   
     borderColor: colors.orange,
   },
   button: {
-    color: colors.orange,
+    //color: colors.orange,
     fontSize: Fontsize,
     fontFamily: 'Nunito-SemiBold',
   },

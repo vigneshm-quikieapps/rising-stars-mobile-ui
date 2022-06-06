@@ -14,6 +14,10 @@ import {
 import {colors, Fontsize, hp, wp} from '../../constants';
 import {useNavigation} from '@react-navigation/core';
 import {resetPasswordData} from '../../redux/action/auth';
+import {ScrollView} from 'react-native-gesture-handler';
+import Alert from '../../components/alert-box';
+import {useRoute} from '@react-navigation/native';
+import {resetPassword} from '../../redux/service/request';
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -28,96 +32,151 @@ const validationSchema = Yup.object().shape({
 
 function SetPassword(props) {
   const navigation = useNavigation();
+  const [showFailurealert, setFailureAlert] = useState(false);
   const dispatch = useDispatch();
   const otp = useSelector(state => state.ForgetPasswordData.otp);
   const email = useSelector(state => state.ForgetPasswordData.email);
   const mobileNo = useSelector(state => state.ForgetPasswordData.mobileNo);
-
+  const route = useRoute();
+  console.log('get data from InputOTP screen', route.params);
+  // console.log('email',email);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   return (
     <CustomLayout
-      style={{height: '100%'}}
+      // style={{height: '100%'}}
+      back
+      backbutton={() => props.navigation.goBack()}
       header
       headertext={'Set password'}
       headertextStyle={{
         width: wp('90%'),
-        fontSize: wp('10%'),
+        fontSize: wp('8%'),
       }}
       subheader
       subheadertext={'Setup your password'}
       subheadertextstyle={{fontSize: wp('5.3%'), opacity: 0.5}}>
-      <SuccessModal
-        title="Password changed successfully"
-        isVisible={successModalVisible}
-        onDone={() => {
-          setSuccessModalVisible(false);
-          navigation.navigate('Login');
-        }}
-      />
-      <Formik
-        initialValues={{
-          password: '',
-          passwordConfirmation: '',
-        }}
-        onSubmit={values => {}}
-        validationSchema={validationSchema}>
-        {({
-          handleChange,
-          handleSubmit,
-          errors,
-          setFieldTouched,
-          touched,
-          values,
-          initialValues,
-        }) => (
-          <View style={{height: '100%'}}>
-            <TextInputField
-              placeholder="New Password"
-              autoCapitalize="none"
-              autoCorrect={false}
-              onChangeText={handleChange('password')}
-              onBlur={() => setFieldTouched('password')}
-            />
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.password}
-              visible={touched.password}
-            />
-            <TextInputField
-              placeholder="Confirm Password"
-              autoCapitalize="none"
-              autoCorrect={false}
-              onChangeText={handleChange('passwordConfirmation')}
-              onBlur={() => setFieldTouched('passwordConfirmation')}
-            />
-            <ErrorMessage
-              style={styles.errorMessage}
-              error={errors.passwordConfirmation}
-              visible={touched.passwordConfirmation}
-            />
-
-            <AppButton
-              title="Confirm Password"
-              style={{marginTop: hp('40%')}}
-              onPress={() => {
-                dispatch(
-                  resetPasswordData({
-                    mobileNo: mobileNo,
-                    otp: otp,
-                    password: values.password,
-                    email: email,
-                  }),
-                );
+      <ScrollView>
+        {/* <SuccessModal
+          title="Password changed successfully"
+          isVisible={successModalVisible}
+          onDone={() => {
+            setSuccessModalVisible(false);
+            navigation.navigate('Login');
+          }}
+        /> */}
+        <Alert
+          visible={successModalVisible}
+          confirm={'Done'}
+          success={() => props.navigation.navigate('Login')}
+          image={'success'}
+          message={`Profile Changed ${'\n'} Successfully`}
+        />
+        <Formik
+          initialValues={{
+            password: '',
+            passwordConfirmation: '',
+          }}
+          // onSubmit={values => {
+          // console.log('values', values);
+          onSubmit={async values => {
+            console.log(values);
+            let body = {
+              mobileNo: route.params.mobileNo,
+              email: route.params.email,
+              password: values.password,
+              otp: route.params.otp,
+            };
+            // console.log('body', body);
+            const reset = async () => {
+              const getResp = await resetPassword(body);
+              console.log('getResp==>', getResp);
+              if (getResp.errors) {
+                // alert('OTP has been expired. Please try again');
+                setFailureAlert(true);
+              } else {
+                // alert('password changed successfully');
                 setSuccessModalVisible(true);
-                setTimeout(() => {
-                  setSuccessModalVisible(false);
-                  navigation.navigate('Login');
-                }, 3000);
-              }}
-            />
-          </View>
-        )}
-      </Formik>
+                //   setTimeout(() => {
+                //     setSuccessModalVisible(false);
+                //     navigation.navigate('Login');
+                //   }, 3000);
+              }
+            };
+            reset();
+          }}
+          validationSchema={validationSchema}>
+          {({
+            handleChange,
+            handleSubmit,
+            errors,
+            setFieldTouched,
+            touched,
+            values,
+            initialValues,
+          }) => (
+            // <View style={{height: '100%'}}>
+            <View style={{paddingTop: hp('3%')}}>
+              <TextInputField
+                placeholder="New Password"
+                autoCapitalize="none"
+                autoCorrect={false}
+                onChangeText={handleChange('password')}
+                onBlur={() => setFieldTouched('password')}
+              />
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.password}
+                visible={touched.password}
+              />
+              <TextInputField
+                placeholder="Confirm Password"
+                autoCapitalize="none"
+                autoCorrect={false}
+                onChangeText={handleChange('passwordConfirmation')}
+                onBlur={() => setFieldTouched('passwordConfirmation')}
+              />
+              <ErrorMessage
+                style={styles.errorMessage}
+                error={errors.passwordConfirmation}
+                visible={touched.passwordConfirmation}
+              />
+              <View style={{height: hp('38%')}} />
+              <AppButton
+                title="Confirm Password"
+                // style={{marginTop: hp('40%')}}
+                onPress={handleSubmit}
+                //   () => {
+                //   dispatch(
+                //     resetPasswordData({
+                //       mobileNo: mobileNo,
+                //       otp: otp,
+                //       password: values.password,
+                //       email: email,
+                //     }),
+                //   );
+                //   setSuccessModalVisible(true);
+                //   setTimeout(() => {
+                //     setSuccessModalVisible(false);
+                //     navigation.navigate('Login');
+                //   }, 3000);
+                // }
+                // }
+              />
+            </View>
+          )}
+        </Formik>
+        {showFailurealert ? (
+          <Alert
+            visible={showFailurealert}
+            confirm={'Retry'}
+            success={() => {
+              setFailureAlert(false);
+            }}
+            image={'failure'}
+            message="OTP has been expired. Please try again"
+          />
+        ) : null}
+      </ScrollView>
     </CustomLayout>
   );
 }

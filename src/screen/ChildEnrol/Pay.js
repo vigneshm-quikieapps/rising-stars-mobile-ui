@@ -11,7 +11,7 @@ import {
 import * as Action from '../../redux/action-types';
 
 import {colors, Fontsize, hp, Stepend, wp} from '../../constants';
-import {RadioButton} from 'react-native-paper';
+import {ActivityIndicator, RadioButton} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {enrollChildData} from '../../redux/action/enrol';
 import {getLocalData} from '../../utils/LocalStorage';
@@ -30,6 +30,10 @@ const Pay = props => {
   const consent = useSelector(state => state.addProvidedata);
   const [showAtm, setShowAtm] = useState(false);
   const [showStandingOrder, setShowStandingOrder] = useState(false);
+  const [standingOrderValue, setStandingOrderValue] = useState(0);
+  const {from} = props.route.params;
+
+  // console.log('pay', from);
   const [totalAmt, setTotalAmt] = useState(0);
 
   useEffect(() => {
@@ -45,6 +49,16 @@ const Pay = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classes]);
   const dispatch = useDispatch();
+
+  const isStandingOrderHandler = value => {
+    // if (value === 1) {
+    //   setStandingOrderValue(false);
+    // } else if (value === 2) {
+    //   setStandingOrderValue(true);
+    // }
+    setStandingOrderValue(value);
+  };
+
   const handleforward = async () => {
     console.log(
       'Details: ',
@@ -60,6 +74,12 @@ const Pay = props => {
         telephone: addData.telephone,
         sms: addData.sms,
       },
+      isStandingOrder:
+        standingOrderValue === 1
+          ? true
+          : standingOrderValue === 2
+          ? false
+          : null,
       consent: {},
     };
     consent.allergie !== '' ? (data.consent.allergie = consent.allergie) : null;
@@ -79,18 +99,20 @@ const Pay = props => {
         token: await getLocalData('accessToken'),
       }),
     );
-    props.navigation.navigate('Confirmation');
+    props.navigation.navigate('Confirmation', {from: from});
   };
   return (
     <CustomLayout
       Customchildren={
         <StudentCard
           name={child.member.name}
-          id={child.member._id}
-          activityrequired
-          activity={club.name}
-          subactivity={'Childhood Joy Classes'}
-          // classname={'Childhood Joy Classes'}
+          age={
+            new Date().getFullYear() - parseInt(child.member.dob.slice(0, 4))
+          }
+          // id={child.member._id}
+          // activityrequired
+          // activity={club.name}
+          // subactivity={'Childhood Joy Classes'}
         />
       }
       steps
@@ -99,24 +121,23 @@ const Pay = props => {
       header
       headerTextBigText={true}
       headertext={'Pay'}
+      back
       backbutton={() => props.navigation.goBack()}
       Customchildren2={<ProgressTracker percent={6} />}>
-      <FlatList
-        data={classes && classes.charges.length > 0 ? classes.charges : null}
-        keyExtractor={item => item.id}
-        renderItem={item => (
-          <>
-            <Amount
-              head={item.item.name}
-              body={item.item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
-              currency={item.item.amount}
-            />
-            {/* <View
-              style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}}
-            /> */}
-          </>
-        )}
-      />
+      {classes && classes.charges.length > 0
+        ? classes.charges.map((item, index) => {
+            return (
+              //  console.log('item==>', item);
+              <>
+                <Amount
+                  head={item.name}
+                  body={item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
+                  currency={item.amount}
+                />
+              </>
+            );
+          })
+        : null}
       <Amount
         head={'Total Payable'}
         stylehead={{fontSize: wp('5%')}}
@@ -125,12 +146,16 @@ const Pay = props => {
       />
       <View style={styles.breaks} />
       <Text style={styles.optional}>Payment Options</Text>
+      {!clubfinance ? (
+        <ActivityIndicator size="small" color={colors.orange} />
+      ) : null}
       {clubfinance && clubfinance.paymentChannels.manual === true ? (
         <StandingOrder
           onPress={() => {
             setShowAtm(false);
             setShowStandingOrder(!showStandingOrder);
           }}
+          isStandingOrderHandler={isStandingOrderHandler}
           visible={showStandingOrder}
         />
       ) : null}
@@ -142,33 +167,38 @@ const Pay = props => {
               setShowStandingOrder(false);
             }}
             visible={showAtm}
+            amount={totalAmt}
           />
           <View style={styles.bottom}>
-            <RadioButton />
+            <RadioButton color={colors.orange} />
             <Text
               style={{
                 fontFamily: 'Nunito-SemiBold',
                 fontSize: wp('5%'),
+                marginLeft: wp('4%'),
               }}>
               Net Banking
             </Text>
           </View>
           <View style={styles.bottom}>
-            <RadioButton />
+            <RadioButton color={colors.orange} />
             <Text
               style={{
                 fontFamily: 'Nunito-SemiBold',
                 fontSize: wp('5%'),
+                marginLeft: wp('4%'),
               }}>
               Wallets
             </Text>
           </View>
         </>
       ) : null}
-      <ForwardButton
-        style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
-        onPress={() => handleforward()}
-      />
+      {showStandingOrder && standingOrderValue !== 0 && (
+        <ForwardButton
+          style={{alignSelf: 'flex-end', marginTop: hp('2%')}}
+          onPress={() => handleforward()}
+        />
+      )}
     </CustomLayout>
   );
 };
@@ -234,7 +264,24 @@ const styles = StyleSheet.create({
     padding: wp('2%'),
     marginTop: hp('2%'),
     backgroundColor: '#f2f2f2',
+    paddingLeft: wp('4%'),
   },
 });
 
+{
+  /* old code in place of map
+  <FlatList
+data={classes && classes.charges.length > 0 ? classes.charges : null}
+keyExtractor={item => item.id}
+renderItem={item => (
+  <>
+    <Amount
+      head={item.item.name}
+      body={item.item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
+      currency={item.item.amount}
+    />
+  </>
+)}
+/> */
+}
 export default Pay;

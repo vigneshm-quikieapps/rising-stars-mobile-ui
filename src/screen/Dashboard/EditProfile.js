@@ -1,13 +1,20 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Text, ActivityIndicator} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {useSelector, useDispatch} from 'react-redux';
 import * as Action from '../../redux/action-types/index';
 import {TextInput} from 'react-native-paper';
+import EntIcon from 'react-native-vector-icons/Entypo';
 import {
   ErrorMessage,
   TextInputField,
@@ -21,6 +28,9 @@ import PostComponent from '../Authentication/components/Postcode';
 import {fetchUser, updateUser} from '../../redux/service/request';
 import Alert from '../../components/alert-box';
 import {getLocalData} from '../../utils/LocalStorage';
+import {ScrollView} from 'react-native-gesture-handler';
+import LinearGradient from 'react-native-linear-gradient';
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -54,9 +64,10 @@ function EditProfile(props) {
   const [ValidationErrorMsg, setValidationErrorMsg] = useState(
     'Something Went Wrong!!',
   );
+  const [invalidPostcodeAlert, setInvalidPostcodeAlert] = useState(false);
   const [seconds, setSeconds] = React.useState(10);
   const [cred, setCred] = useState('');
-
+  const termref = useRef();
   const callPopUp = () => setTerm(!term);
 
   const timeout = () => {
@@ -92,6 +103,14 @@ function EditProfile(props) {
     user && token && api();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, token]);
+
+  const clubRulesText =
+    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since. Lorem Ipsum is simply dummy text of the printing and typesetting indust printing andtypesetting industry. Lorem Ipsum has been the industry's standarddummy text ever since. Lorem Ipsum is simply dummy text of theprinting and typesetting industry. Lorem Ipsum has been theindustry's standard dummy text ever since. Lorem Ipsum is simplydummy text of the printing and typesetting industry. Lorem Ipsum hasbeen the industry's standard dummy text ever since. Lorem Ipsum issimply dummy text of the printing and typesetting industry. LoremIpsum has been the industry's standard dummy text ever since.";
+
+  const clubRulesPopUPHeigth = text => {
+    let lines = text.split(' ').length / 10;
+    return lines * 5 < 75 ? `${lines * 5}%` : '75%';
+  };
   return (
     <CustomLayout
       header
@@ -129,7 +148,9 @@ function EditProfile(props) {
               body: values,
             })
               .then(response => {
-                if (response.message === 'updated successfully') {
+                // console.log('response', response);
+                // if (response.message === 'updated successfully') {
+                if (response.message === 'User updated successfully.') {
                   dispatch({
                     type: Action.USER_UPDATE_SUCCESS,
                     payload: response.user,
@@ -234,7 +255,8 @@ function EditProfile(props) {
                     )}
                     onPress={() => {
                       if (values.postcode.length <= 6) {
-                        alert('Please Enter a Valid PostCode');
+                        // alert('Please Enter a Valid PostCode');
+                        setInvalidPostcodeAlert(true);
                       } else {
                         const data = {};
                         setPostCodeshow(!postcodeshow);
@@ -245,11 +267,71 @@ function EditProfile(props) {
                   />
                 }
               />
-
+              <RBSheet
+                ref={termref}
+                closeOnDragDown={true}
+                closeOnPressMask={false}
+                customStyles={{
+                  wrapper: {
+                    backgroundColor: colors.blackOpacity,
+                  },
+                  container: {
+                    paddingBottom: hp('10%'),
+                    height: clubRulesPopUPHeigth(clubRulesText),
+                    borderTopRightRadius: 16,
+                    borderTopLeftRadius: 16,
+                  },
+                }}>
+                <View style={{paddingHorizontal: wp('5%')}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Text
+                      style={{
+                        fontFamily: 'Nunito-Regular',
+                        fontSize: Fontsize,
+                        color: '#ff7e00',
+                      }}>
+                      Terms and Conditions
+                    </Text>
+                    <TouchableOpacity onPress={() => termref.current.close()}>
+                      <LinearGradient
+                        style={styles.closePopUp}
+                        colors={['#ffa300', '#ff7e00']}>
+                        <EntIcon name="cross" size={15} color="white" />
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </View>
+                  <ScrollView>
+                    <Text
+                      style={{
+                        fontFamily: 'Nunito-Regular',
+                        marginVertical: hp('1.5%'),
+                        fontSize: Fontsize,
+                        alignSelf: 'center',
+                      }}>
+                      {clubRulesText}
+                    </Text>
+                  </ScrollView>
+                </View>
+              </RBSheet>
+              {invalidPostcodeAlert ? (
+                <Alert
+                  visible={invalidPostcodeAlert}
+                  confirm={'Retry'}
+                  success={() => {
+                    setInvalidPostcodeAlert(false);
+                  }}
+                  image={'failure'}
+                  message={'Please Enter a Valid PostCode'}
+                />
+              ) : null}
               <PostComponent
                 data={postcodeData}
                 visible={postcodeshow}
-                title={values.postCode}
+                title={values.postcode}
                 ClosePopUp={a => setPostCodeshow(!postcodeshow)}
                 ManuallyButton={() => {
                   setPostCodeshow(!postcodeshow);
@@ -384,7 +466,9 @@ function EditProfile(props) {
                     color: '#7f7f7f',
                   }}>
                   By registering you are agreed to our{' '}
-                  <Text style={{color: colors.orange}} onPress={callPopUp}>
+                  <Text
+                    style={{color: colors.orange}}
+                    onPress={() => termref.current.open()}>
                     Terms and Conditions
                   </Text>
                 </Text>
@@ -419,6 +503,17 @@ function EditProfile(props) {
             </>
           )}
         </Formik>
+      ) : null}
+      {cred == '' ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 120,
+          }}>
+          <ActivityIndicator size="large" color={colors.orange} />
+        </View>
       ) : null}
     </CustomLayout>
   );
@@ -573,5 +668,14 @@ const styles = StyleSheet.create({
     fontSize: Fontsize + wp('1.5%'),
     alignSelf: 'center',
     textDecorationLine: 'underline',
+  },
+  closePopUp: {
+    height: hp('3%'),
+    width: hp('3%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 50,
+    alignSelf: 'flex-end',
+    marginTop: -hp('1%'),
   },
 });

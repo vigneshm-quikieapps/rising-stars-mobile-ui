@@ -1,10 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {colors, Fontsize, hp, wp} from '../constants';
+import {colors, Fontsize, fullDays, hp, wp} from '../constants';
 import AppButton from './app-button';
+let border = true;
 
 export default function ClassCard(props) {
+  //border = props.border ? true : false;
   return (
     <View style={[styles.container, props.style]}>
       {props.subtitle && <Text style={styles.subtitle}>{props.subtitle}</Text>}
@@ -19,7 +21,7 @@ export default function ClassCard(props) {
 
       <Data
         calendar
-        head={props.day}
+        head={fullDays[props.day]}
         body={props.time}
         stylebody={{color: colors.grey}}
       />
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
     padding: wp('5%'),
   },
   className: {
-    fontFamily: 'Nunito-Regular',
+    fontFamily: 'Nunito-SemiBold',
     fontSize: hp('3%'),
     color: '#ff7e00',
   },
@@ -89,7 +91,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Regular',
     fontSize: Fontsize - wp('0.4%'),
     marginBottom: hp('1%'),
-    marginLeft: wp('1%'),
+    // marginLeft: wp('1%'),
   },
   smallContainer: {
     flex: 1,

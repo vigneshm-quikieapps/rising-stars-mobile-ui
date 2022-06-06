@@ -20,15 +20,15 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 const Timelines = props => {
   const [expand, setExpand] = useState(0);
-  console.log('data: ', props.data);
+  // console.log('data: ', props.data);
   return (
     <ScrollView style={{height: hp('70%')}}>
       <FlatList
         data={props.data}
         keyExtractor={item => item.id}
         renderItem={item => {
-          console.log('item: ', item);
-          console.log('expand:', props.data.length);
+          // console.log('item: ', item);
+          // console.log('expand:', props.data.length);
           return (
             <View style={styles.container}>
               <View>
@@ -73,7 +73,7 @@ const Timelines = props => {
                         item.index !== props.data.length - 1
                           ? expand === item.index + 1
                             ? hp('30%')
-                            : hp('20%')
+                            : hp('12%')
                           : 0,
                     },
                   ]}
@@ -85,8 +85,9 @@ const Timelines = props => {
                   styles.subContainer,
                   {
                     // marginTop: hp('1%'),
-                    height: expand === item.index + 1 ? hp('30%') : hp('20%'),
-                    marginTop: item.index !== 0 ? -hp('7%') : 0,
+                    // height: expand === item.index + 1 ? hp('30%') : hp('20%'),
+                    height: expand === item.index + 1 ? hp('30%') : hp('12%'),
+                    marginTop: item.index !== 0 ? -hp('4%') : hp('4%'),
                   },
                   props.subcontainer,
                 ]}
@@ -134,17 +135,69 @@ const Timelines = props => {
                               borderRadius: 10,
                             },
                           ]}>
-                          Step {item.index + 1}
+                          Level {item.index + 1}
                         </Text>
+                        {/* <Text>Hello</Text> */}
+                        <View
+                          style={{
+                            marginLeft: wp('24%'),
+                          }}>
+                          {/* {item.item.status !== 'NOT_STARTED' ? ( */}
+                          <TouchableOpacity
+                            onPress={() => {
+                              setExpand(expand === 0 ? item.index + 1 : 0);
+                              //console.log('123');
+                            }}>
+                            <LinearGradient
+                              colors={[
+                                'rgba(255, 255, 255, 0.3)',
+                                'rgba(255, 255, 255, 0.3)',
+                              ]}
+                              style={{
+                                // marginRight: 50,
+                                marginTop: 20,
+                                height: 32,
+                                width: 32,
+                                borderRadius: 8,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor:
+                                  item.item.skills[0].status === 'NOT_STARTED'
+                                    ? '#dbdbdb'
+                                    : null,
+                              }}>
+                              {item.item.skills[0].status === 'NOT_STARTED' ? (
+                                <Image
+                                  style={{
+                                    height: 14,
+                                    width: 18,
+                                  }}
+                                  source={Images.dropDown_black}
+                                />
+                              ) : (
+                                <Image
+                                  style={{height: 14, width: 18}}
+                                  source={Images.dropDown_white}
+                                />
+                              )}
+                            </LinearGradient>
+                          </TouchableOpacity>
+                          {/* ) : null} */}
+                        </View>
+                        {/* End of btn */}
                       </View>
                       {item.item.skills.length > 0 ? (
-                        <View style={{flexDirection: 'row'}}>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}>
                           {item.item.status !== 'NOT_STARTED' ? (
                             <FlatList
                               data={item.item.skills}
                               keyExtractor={arg => arg.id}
                               renderItem={arg => {
-                                console.log(arg);
+                                // console.log(arg);
                                 return (
                                   <View
                                     style={{
@@ -198,8 +251,10 @@ const Timelines = props => {
                                             //fontWeight: 'bold',
                                           },
                                         ]}>
+                                        {/* skill 1 */}
                                         {arg.item.name}
                                       </Text>
+
                                       <Text
                                         style={[
                                           styles.insideText,
@@ -227,117 +282,182 @@ const Timelines = props => {
                               }}
                             />
                           ) : (
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                marginTop: hp('3.5%'),
-                                marginLeft:
-                                  item.item.skills[0].status === 'AWARDED'
-                                    ? wp('2%')
-                                    : wp('8%'),
-                              }}>
-                              {item.item.skills[0].status === 'AWARDED' ? (
-                                <View
-                                  style={{
-                                    borderColor: colors.white,
-                                    borderWidth: 2,
-                                    borderRadius: 20,
-                                    height: 22,
-                                    width: 22,
-                                  }}>
-                                  <Image
-                                    source={require('../assets/images/checkmark.png')}
-                                    style={[
-                                      styles.tick,
-                                      {
-                                        height: 10,
-                                        width: 10,
-                                        paddingTop: 17,
-                                        paddingLeft: 17,
-                                      },
-                                    ]}
-                                  />
-                                </View>
-                              ) : null}
-                              <View>
-                                <Text
-                                  style={[
-                                    styles.insideText,
-                                    {
-                                      color:
-                                        item.item.status === 'AWARDED'
-                                          ? 'white'
-                                          : item.item.status === 'IN_PROGRESS'
-                                          ? 'white'
-                                          : 'black',
-                                    },
-                                    {
-                                      marginTop: -hp('1%'),
-                                      marginLeft: wp('5%'),
-                                      fontSize: Fontsize + 6,
-                                      //fontWeight: 'bold',
-                                    },
-                                  ]}>
-                                  {item.item.skills[0].name}
-                                </Text>
-                                <Text
-                                  style={[
-                                    styles.insideText,
-                                    {
-                                      color:
-                                        item.item.status === 'AWARDED'
-                                          ? 'white'
-                                          : item.item.status === 'IN_PROGRESS'
-                                          ? 'white'
-                                          : colors.grey,
-                                    },
-                                    {
-                                      marginLeft: wp('5%'),
-                                      fontSize: Fontsize,
-                                    },
-                                  ]}>
-                                  {item.item.skills[0].status === 'AWARDED'
-                                    ? 'Attained'
-                                    : item.item.skills[0].status ===
-                                      'IN_PROGRESS'
-                                    ? 'In progress'
-                                    : 'Upcoming'}
-                                </Text>
-                              </View>
-                            </View>
+                            // upcoming
+                            <FlatList
+                              data={item.item.skills}
+                              keyExtractor={arg => arg.id}
+                              renderItem={arg => {
+                                return (
+                                  <View
+                                    style={{
+                                      flexDirection: 'row',
+                                      marginTop: hp('3.5%'),
+                                      marginLeft:
+                                        arg.item.status === 'AWARDED'
+                                          ? wp('2%')
+                                          : wp('8%'),
+                                    }}>
+                                    {arg.item.status === 'AWARDED' ? (
+                                      <View
+                                        style={{
+                                          borderColor: colors.white,
+                                          borderWidth: 2,
+                                          borderRadius: 20,
+                                          height: 22,
+                                          width: 22,
+                                        }}>
+                                        <Image
+                                          source={require('../assets/images/checkmark.png')}
+                                          style={[
+                                            styles.tick,
+                                            {
+                                              height: 10,
+                                              width: 10,
+                                              paddingTop: 17,
+                                              paddingLeft: 17,
+                                            },
+                                          ]}
+                                        />
+                                      </View>
+                                    ) : null}
+                                    <View>
+                                      <Text
+                                        style={[
+                                          styles.insideText,
+                                          {
+                                            color:
+                                              item.item.status === 'AWARDED'
+                                                ? 'white'
+                                                : item.item.status ===
+                                                  'IN_PROGRESS'
+                                                ? 'white'
+                                                : 'black',
+                                          },
+                                          {
+                                            marginTop: -hp('1%'),
+                                            marginLeft: wp('5%'),
+                                            fontSize: Fontsize + 6,
+                                            //fontWeight: 'bold',
+                                          },
+                                        ]}>
+                                        {/*Upcoming skill name */}
+                                        {arg.item.name}
+                                      </Text>
+
+                                      <Text
+                                        style={[
+                                          styles.insideText,
+                                          {
+                                            color: item.item.status
+                                              ? colors.grey
+                                              : item.item.status2
+                                              ? colors.grey
+                                              : colors.grey,
+                                          },
+                                          {
+                                            marginLeft: wp('5%'),
+                                            fontSize: Fontsize,
+                                          },
+                                        ]}>
+                                        {arg.item.status === 'AWARDED'
+                                          ? 'Attained'
+                                          : arg.item.status === 'IN_PROGRESS'
+                                          ? 'In progress'
+                                          : 'Upcoming'}
+                                      </Text>
+                                    </View>
+                                  </View>
+                                  // <View
+                                  //   style={{
+                                  //     flexDirection: 'row',
+                                  //     marginTop: hp('3.5%'),
+                                  //     marginLeft:
+                                  //       item.item.skills[0].status === 'AWARDED'
+                                  //         ? wp('2%')
+                                  //         : wp('8%'),
+                                  //   }}>
+                                  //   {item.item.skills[0].status ===
+                                  //   'AWARDED' ? (
+                                  //     <View
+                                  //       style={{
+                                  //         borderColor: colors.white,
+                                  //         borderWidth: 2,
+                                  //         borderRadius: 20,
+                                  //         height: 22,
+                                  //         width: 22,
+                                  //       }}>
+                                  //       <Image
+                                  //         source={require('../assets/images/checkmark.png')}
+                                  //         style={[
+                                  //           styles.tick,
+                                  //           {
+                                  //             height: 10,
+                                  //             width: 10,
+                                  //             paddingTop: 17,
+                                  //             paddingLeft: 17,
+                                  //           },
+                                  //         ]}
+                                  //       />
+                                  //     </View>
+                                  //   ) : null}
+                                  //   <View>
+                                  //     <Text
+                                  //       style={[
+                                  //         styles.insideText,
+                                  //         {
+                                  //           color:
+                                  //             item.item.status === 'AWARDED'
+                                  //               ? 'white'
+                                  //               : item.item.status ===
+                                  //                 'IN_PROGRESS'
+                                  //               ? 'white'
+                                  //               : 'black',
+                                  //         },
+                                  //         {
+                                  //           // marginTop: -hp('1%'),
+                                  //           marginLeft: wp('5%'),
+                                  //           fontSize: Fontsize + 6,
+                                  //           //fontWeight: 'bold',
+                                  //         },
+                                  //       ]}>
+                                  //       {/* {item.item.skills[0].name} */}
+                                  //       {arg.item.name}
+                                  //       {/* {console.log(
+                                  //         '{arg.item.name}',
+                                  //         arg.item.name,
+                                  //       )} */}
+                                  //     </Text>
+                                  //     <Text
+                                  //       style={[
+                                  //         styles.insideText,
+                                  //         {
+                                  //           color:
+                                  //             item.item.status === 'AWARDED'
+                                  //               ? 'white'
+                                  //               : item.item.status ===
+                                  //                 'IN_PROGRESS'
+                                  //               ? 'white'
+                                  //               : colors.grey,
+                                  //         },
+                                  //         {
+                                  //           marginLeft: wp('5%'),
+                                  //           fontSize: Fontsize,
+                                  //         },
+                                  //       ]}>
+                                  //       {item.item.skills[0].status ===
+                                  //       'AWARDED'
+                                  //         ? 'Attained'
+                                  //         : item.item.skills[0].status ===
+                                  //           'IN_PROGRESS'
+                                  //         ? 'In progress'
+                                  //         : 'Upcoming'}
+                                  //     </Text>
+                                  //   </View>
+                                  // </View>
+                                );
+                              }}
+                            />
                           )}
-                          <View
-                            style={{
-                              marginLeft: wp('30%'),
-                            }}>
-                            {item.item.status !== 'NOT_STARTED' ? (
-                              <TouchableOpacity
-                                onPress={() => {
-                                  setExpand(expand === 0 ? item.index + 1 : 0);
-                                  console.log('123');
-                                }}>
-                                <LinearGradient
-                                  colors={[
-                                    'rgba(255, 255, 255, 0.3)',
-                                    'rgba(255, 255, 255, 0.3)',
-                                  ]}
-                                  style={{
-                                    marginRight: 20,
-                                    marginTop: 20,
-                                    height: 32,
-                                    width: 32,
-                                    borderRadius: 8,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                  }}>
-                                  <Image
-                                    style={{height: 14, width: 18}}
-                                    source={Images.dropDown_white}
-                                  />
-                                </LinearGradient>
-                              </TouchableOpacity>
-                            ) : null}
-                          </View>
                         </View>
                       ) : null}
                     </>

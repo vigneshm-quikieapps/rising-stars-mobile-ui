@@ -19,6 +19,7 @@ import {ProgressBarWithStar, Timelines, WheelDropdown} from '../../components';
 import {useDispatch, useSelector} from 'react-redux';
 import * as Action from '../../redux/action-types';
 import {getLocalData} from '../../utils/LocalStorage';
+import NewTimelines from '../../components/newTimelines';
 const ActivityProgress = () => {
   const itemWidth = Dimensions.get('window').width;
   const membersdata = useSelector(state => state.memberData.memberData);
@@ -39,7 +40,8 @@ const ActivityProgress = () => {
   const [currentEvaluation, setEvaluation] = useState('');
   const [activedotIndex, setactivedotIndex] = useState(0);
   const [token, setToken] = useState(0);
-  var value;
+  const [value, setValue] = useState(0);
+
   var member = [];
   var count = 0;
 
@@ -67,8 +69,8 @@ const ActivityProgress = () => {
         })
       : null;
     progress && progress.docs.length > 0
-      ? progress.docs.levels &&
-        progress.docs.levels.forEach(levels => {
+      ? progress.docs[activedotIndex].levels &&
+        progress.docs[activedotIndex].levels.forEach(levels => {
           if (levels.status === 'AWARDED') {
             count += 1;
           } else if (levels.status === 'IN_PROGRESS') {
@@ -77,7 +79,9 @@ const ActivityProgress = () => {
         })
       : null;
     if (count > 0) {
-      value = (count / progress.docs[activedotIndex].levelCount) * 10;
+      setValue(count / progress.docs[activedotIndex].levelCount);
+    } else {
+      setValue(count);
     }
   }, [progress, activedotIndex]);
   useEffect(() => {
@@ -164,7 +168,7 @@ const ActivityProgress = () => {
     );
   };
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={{marginTop: 30}}>
         <Text style={{fontSize: 34, fontFamily: 'Nunito-SemiBold'}}>
           Progress
@@ -176,24 +180,26 @@ const ActivityProgress = () => {
           {currentMember.name}
         </Text>
 
-        <TouchableOpacity onPress={() => setShowModal(true)}>
-          <View
-            style={{
-              backgroundColor: '#ffe49c',
-              marginLeft: 6,
-              marginRight: 20,
-              height: 32,
-              width: 32,
-              borderRadius: 10,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Image
-              style={{height: 14, width: 18}}
-              source={require('../../assets/images/icon-forward2-line-black.png')}
-            />
-          </View>
-        </TouchableOpacity>
+        {membersdata && membersdata.length > 1 ? (
+          <TouchableOpacity onPress={() => setShowModal(true)}>
+            <View
+              style={{
+                backgroundColor: '#ffe49c',
+                marginLeft: 6,
+                marginRight: 20,
+                height: 32,
+                width: 32,
+                borderRadius: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Image
+                style={{height: 14, width: 18}}
+                source={require('../../assets/images/icon-forward2-line-black.png')}
+              />
+            </View>
+          </TouchableOpacity>
+        ) : null}
       </View>
       <WheelDropdown
         title="child"
@@ -217,7 +223,7 @@ const ActivityProgress = () => {
           }}>
           <WheelPicker
             data={member}
-            isCyclic={true}
+            isCyclic={false}
             onItemSelected={item => setItem(item)}
             selectedItemTextColor={'black'}
             selectedItemTextSize={Fontsize}
@@ -284,7 +290,14 @@ const ActivityProgress = () => {
       </View>
 
       <View style={{marginTop: 10, paddingVertical: 20}}>
-        <Timelines
+        {/* <Timelines
+          data={
+            progress && progress.docs.length > 0
+              ? progress.docs[activedotIndex].levels
+              : null
+          }
+        /> */}
+        <NewTimelines
           data={
             progress && progress.docs.length > 0
               ? progress.docs[activedotIndex].levels

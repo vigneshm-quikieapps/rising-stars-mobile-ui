@@ -19,7 +19,9 @@ const Fees_Overview = props => {
   const child = useSelector(state => state.childData.addchild);
   const club = useSelector(state => state.childData.clubdata);
   const classes = useSelector(state => state.childData.classdata);
-  console.log('classes', classes);
+  const {from} = props.route.params;
+
+  //console.log('classes', from);
   //const clubfinance = useSelector(state => state.clubfinance.financedata);
 
   return (
@@ -30,12 +32,16 @@ const Fees_Overview = props => {
           id={child.member._id}
           activityrequired
           activity={club.name}
+          age={
+            new Date().getFullYear() - parseInt(child.member.dob.slice(0, 4))
+          }
           // subactivity={'Childhood Joy Classes'}
         />
       }
       steps
       start={3}
       end={Stepend}
+      back
       header
       headerTextBigText={true}
       headertext={'Fees Overview'}
@@ -44,22 +50,28 @@ const Fees_Overview = props => {
       <Text style={{fontFamily: 'Nunito-SemiBold', fontSize: wp('6%')}}>
         Fee Breakdown
       </Text>
-      <FlatList
-        data={classes && classes.charges.length > 0 ? classes.charges : null}
-        keyExtractor={item => item.id}
-        renderItem={item => (
-          <>
-            <Amount
-              head={item.item.name}
-              body={item.item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
-              currency={item.item.amount}
-            />
-            <View
-              style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}}
-            />
-          </>
-        )}
-      />
+      {classes && classes.charges.length > 0
+        ? classes.charges.map((item, index) => {
+            return (
+              //  console.log('item==>', item);
+              <>
+                <Amount
+                  head={item.name}
+                  body={item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
+                  currency={item.amount}
+                />
+                <View
+                  style={{
+                    flex: 1,
+                    borderWidth: 1,
+                    borderColor: colors.lightgrey,
+                  }}
+                />
+              </>
+            );
+          })
+        : null}
+
       {/* <Amount
         head={classes.charges[0].name}
         body={
@@ -85,8 +97,10 @@ const Fees_Overview = props => {
       />
       <View style={{marginVertical: hp('1.8%')}} /> */}
       <ForwardButton
-        style={{alignSelf: 'flex-end', marginTop: hp('-1.7%')}}
-        onPress={() => props.navigation.navigate('Provide_Consent')}
+        style={{alignSelf: 'flex-end', marginTop: hp('1.7%')}}
+        onPress={() =>
+          props.navigation.navigate('Provide_Consent', {from: from})
+        }
       />
     </CustomLayout>
   );
@@ -134,3 +148,22 @@ const styles = StyleSheet.create({
 });
 
 export default Fees_Overview;
+// old code with flatlist
+{
+  /* <FlatList
+        data={classes && classes.charges.length > 0 ? classes.charges : null}
+        keyExtractor={item => item.id}
+        renderItem={item => (
+          <>
+            <Amount
+              head={item.item.name}
+              body={item.item.payFrequency === 'MONTHLY' ? 'Monthly' : 'Annual'}
+              currency={item.item.amount}
+            />
+            <View
+              style={{flex: 1, borderWidth: 1, borderColor: colors.lightgrey}}
+            />
+          </>
+        )}
+      /> */
+}

@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {hp, wp, colors} from '../constants';
 import {RadioButton} from 'react-native-paper';
-import {AppButton} from '.';
 import NewAppButton from './new-app-button';
 
 const StandingOrder = props => {
+  const [selected, setSelected] = useState(0);
   return (
     <View
       style={[
@@ -19,6 +19,7 @@ const StandingOrder = props => {
       ]}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <RadioButton
+          color={colors.orange}
           onPress={props.onPress}
           status={props.visible ? 'checked' : 'unchecked'}
         />
@@ -33,17 +34,21 @@ const StandingOrder = props => {
         </View>
       </View>
       <View style={{display: props.visible ? 'flex' : 'none'}}>
-        <AppButton
+        <NewAppButton
           title={"I've setup Standing Order"}
+          selected={selected === 1 ? true : false}
           onPress={() => {
-            //
+            setSelected(1);
+            props.isStandingOrderHandler(1);
           }}
           style={{width: wp('83%')}}
         />
         <NewAppButton
-          title={"I'll setup Standing Order late"}
+          title={"I'll setup Standing Order later"}
+          selected={selected === 2 ? true : false}
           onPress={() => {
-            //
+            setSelected(2);
+            props.isStandingOrderHandler(2);
           }}
           style={{width: wp('83%')}}
           emptyContainer={true}

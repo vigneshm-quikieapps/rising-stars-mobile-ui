@@ -10,6 +10,7 @@ import {
   fetchClubFinanc,
   regularEnrollment,
   fetchAttendanceOfMemberInSession,
+  fetchSessionById,
 } from '../service/request';
 
 function* handleGetClub(params) {
@@ -76,8 +77,8 @@ function* handleSessionAttendance(action) {
       fetchAttendanceOfMemberInSession,
       action.payload,
     );
-    console.log('action:', action);
-    console.log('resp: ', finance);
+    //console.log('action: handleSessionAttendance', action);
+    //console.log('resp: handleSessionAttendance ', finance);
     yield put({
       type: Action.USER_GET_SESSION_ATTENDANCE_SUCCESS,
       payload: finance,
@@ -85,7 +86,25 @@ function* handleSessionAttendance(action) {
     //yield call(action.callback);
   } catch (error) {
     yield put({
-      type: Action.USER_GET_SESSION_ATTENDANCE_FAILED,
+      type: Action.USER_GET_SESSION_ATTENDANCE_FAILURE,
+      error: error.message,
+    });
+  }
+}
+
+function* handleSessionUpcomingAttendance(action) {
+  try {
+    const finance = yield call(fetchSessionById, action.payload);
+    // console.log('action: handleSessionAttendance', action.payload);
+    //console.log('resp: handleSessionAttendance ', finance);
+    yield put({
+      type: Action.USER_GET_SESSION_UPCOMING_ATTENDANCE_SUCCESS,
+      payload: finance,
+    });
+    //yield call(action.callback);
+  } catch (error) {
+    yield put({
+      type: Action.USER_GET_SESSION_UPCOMING_ATTENDANCE_FAILURE,
       error: error.message,
     });
   }
@@ -95,12 +114,21 @@ export function* watcherSessionAttendance() {
   yield takeEvery(Action.USER_GET_SESSION_ATTENDANCE, handleSessionAttendance);
 }
 
+export function* watcherSessionUpcomingAttendance() {
+  yield takeEvery(
+    Action.USER_GET_SESSION_UPCOMING_ATTENDANCE,
+    handleSessionUpcomingAttendance,
+  );
+}
+
 function* handleAddChild(action) {
   try {
     const child = yield call(addChild, action.payload.data);
+    console.log('enroll', child, action.payload);
     yield put({type: Action.USER_ADD_CHILD_SUCCEDED, payload: child});
     yield call(action.payload.callback);
   } catch (error) {
+    console.log('inside enroll saga', error);
     yield put({
       type: Action.USER_ADD_CHILD_FAILED,
       error: error.message,
@@ -115,7 +143,7 @@ export function* watcherAddChild() {
 function* handleEnrollChild(action) {
   try {
     const enrolledChild = yield call(regularEnrollment, action.payload);
-    console.log('enroll', enrolledChild);
+    // console.log('enroll', enrolledChild, action.payload);
     yield put({
       type: Action.USER_ENROLL_CHILD_SUCCEDED,
       payload: enrolledChild,

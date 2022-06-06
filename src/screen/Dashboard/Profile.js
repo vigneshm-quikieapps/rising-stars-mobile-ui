@@ -17,11 +17,13 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 
 import {removeLocalData} from '../../utils/LocalStorage';
 import {CustomLayout} from '../../components';
-import {colors, hp, wp} from '../../constants';
-import {getmemberClass} from '../../redux/action/home';
+import {colors, hp, Images, wp} from '../../constants';
+import {getmemberClass, getmemberData} from '../../redux/action/home';
 import * as Action from '../../redux/action-types/index';
-import {fetchCurrentUser} from '../../redux/service/request';
+import {fetchCurrentUser, uploadImage} from '../../redux/service/request';
 import {FlatList} from 'react-native-gesture-handler';
+import {heroku_url} from '../../constants/config';
+import Alert from '../../components/alert-box';
 
 function Profile(props) {
   const membersdata = useSelector(state => state.memberData.memberData);
@@ -39,6 +41,8 @@ function Profile(props) {
 
   const getLocalUserData = useCallback(async () => {
     const userData = await getLocalData('user', true);
+    const gettoken = await getLocalData('accessToken');
+    setToken(gettoken);
     setUser(userData);
   }, []);
 
@@ -48,9 +52,13 @@ function Profile(props) {
   // };
 
   const [fileUri, setfileUri] = useState(null);
-
-  const updateProfilePicture = () => {
-    refRBSheet.current.open();
+  const [imageId, setImageId] = useState('');
+  const [showFailurealert, setFailureAlert] = useState(false);
+  const [successAlert, setSuccessAlert] = useState(false);
+  const updateProfilePicture = id => {
+    setImageId(id);
+    // console.log('id', id);
+    refRBSheet.current.open(id);
   };
 
   const SignOut = async () => {
@@ -59,13 +67,23 @@ function Profile(props) {
     await removeLocalData('accesstoken');
     props.navigation.navigate('AuthStack');
   };
-  const handleMembership = async (id, item) => {
-    dispatch(getmemberClass(id));
+  const handleMembership = async item => {
+    dispatch(getmemberClass(item._id));
     dispatch({
       type: Action.USER_GET_CURRENT_MEMBER_DATA,
       payload: item,
     });
-    props.navigation.navigate('EnrolledChild');
+    props.navigation.navigate('EnrolledChild', {from: 'profile'});
+
+    // dispatch => {
+    //   dispatch(getmemberClass(id)).then(() => {
+    //     dispatch({
+    //       type: Action.USER_GET_CURRENT_MEMBER_DATA,
+    //       payload: item,
+    //     });
+    //   });
+    // };
+    // props.navigation.navigate('EnrolledChild', {from: 'profile'});
   };
 
   const choosePhotoFromLibrary = () => {
@@ -75,9 +93,35 @@ function Profile(props) {
       cropping: true,
       compressImageQuality: 0.7,
     }).then(image => {
-      setfileUri(image.path);
+      //console.log('image path', image);
+      // setfileUri(image.path);
+      imageUpload(image);
       refRBSheet.current.close();
     });
+  };
+  const imageUpload = async imagePath => {
+    const imageData = new FormData();
+    imageData.append('image', {
+      uri: imagePath.path,
+      name: 'image.name',
+      fileName: 'image.jpg',
+      type: imagePath.mime,
+    });
+    const authData = {
+      userId: imageId,
+      token: token,
+    };
+    const getResp = await uploadImage(imageData, authData);
+    //console.log('getResp==>', getResp, imageData);
+    if (getResp && getResp.message == 'Image Sucessfully uploaded.') {
+      // alert('Child Image Updated Successfully');
+      setSuccessAlert(true);
+      // membersdata
+      dispatch(getmemberData(token));
+    } else {
+      // alert('Something went wrong. Please Try Again');
+      setFailureAlert(true);
+    }
   };
   const takePhotoFromCamera = () => {
     ImagePicker.openCamera({
@@ -85,7 +129,9 @@ function Profile(props) {
       compressImageMaxWidth: 60,
       cropping: true,
     }).then(image => {
-      setfileUri(image.path);
+      // console.log('camera image', image);
+      // setfileUri(image.path);
+      imageUpload(image);
       refRBSheet.current.close();
     });
   };
@@ -100,7 +146,7 @@ function Profile(props) {
       fetchCurrentUser({
         token: token,
       }).then(response => {
-        console.log(response.user);
+        console.log('fetch current user', response.user);
         dispatch({
           type: Action.USER_UPDATE_SUCCESS,
           payload: response.user,
@@ -113,6 +159,7 @@ function Profile(props) {
     currentMember && dispatch(getmemberClass(currentMember._id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  //console.log('inside profile', membersdata);
 
   return (
     <CustomLayout
@@ -145,7 +192,9 @@ function Profile(props) {
         <Text style={styles.yourChild}>Your children</Text>
         <TouchableOpacity
           style={styles.addChild}
-          onPress={() => props.navigation.navigate('Addchildren')}>
+          onPress={() =>
+            props.navigation.navigate('Addchildren', {from: 'profile'})
+          }>
           <Entypo
             name="plus"
             size={15}
@@ -158,21 +207,34 @@ function Profile(props) {
 
       {/* children card starts here */}
 
-      {membersdata && (
-        <FlatList
-          data={membersdata}
-          key={item => item._id}
-          renderItem={item => (
-            <View style={styles.profileImageCard}>
+      {membersdata &&
+        membersdata.map((item, index) => {
+          return (
+            <View key={index} style={styles.profileImageCard}>
               <View style={{flexDirection: 'row', marginTop: hp('3%')}}>
-                <TouchableOpacity onPress={updateProfilePicture}>
-                  {fileUri === null ? (
+                <TouchableOpacity
+                  onPress={() => updateProfilePicture(item._id)}>
+                  {/* {console.log('image', item)} */}
+                  {/* old code of image */}
+                  {/* {fileUri === null ? (
                     <Image
                       style={styles.image}
                       source={require('../../assets/images/children.jpg')}
                     />
                   ) : (
                     <Image style={styles.image} source={{uri: fileUri}} />
+                  )} */}
+
+                  {/* new code of image */}
+
+                  {item.imageUrl === undefined ? (
+                    <Image
+                      style={styles.image}
+                      // source={{uri: item.imageUrl}}
+                      source={Images.Child}
+                    />
+                  ) : (
+                    <Image style={styles.image} source={{uri: item.imageUrl}} />
                   )}
                 </TouchableOpacity>
                 <View style={{justifyContent: 'center'}}>
@@ -182,13 +244,13 @@ function Profile(props) {
                       fontFamily: 'Nunito-SemiBold',
                       marginBottom: wp('1%'),
                     }}>
-                    {item.item.name}
+                    {item.name}
                   </Text>
                 </View>
               </View>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleMembership(currentMember._id, item.item)}>
+                onPress={() => handleMembership(item)}>
                 <Text style={styles.cardButton}>Memberships / Classes</Text>
               </TouchableOpacity>
 
@@ -197,17 +259,16 @@ function Profile(props) {
                 onPress={() => {
                   dispatch({
                     type: Action.USER_GET_CURRENT_MEMBER_DATA,
-                    payload: item.item,
+                    payload: item,
                   });
-                  dispatch(getmemberClass(item.item._id));
+                  dispatch(getmemberClass(item._id));
                   props.navigation.navigate('PaymentHistory');
                 }}>
                 <Text style={styles.cardButton}>Payment History</Text>
               </TouchableOpacity>
             </View>
-          )}
-        />
-      )}
+          );
+        })}
 
       {/* children card ends here */}
 
@@ -249,6 +310,30 @@ function Profile(props) {
           </Pressable>
         </View>
       </RBSheet>
+      {/* Alert Box */}
+      {showFailurealert ? (
+        <Alert
+          visible={showFailurealert}
+          confirm={'Retry'}
+          success={() => {
+            setFailureAlert(false);
+          }}
+          image={'failure'}
+          message="Something went wrong. Please Try Again"
+        />
+      ) : null}
+
+      {successAlert ? (
+        <Alert
+          visible={successAlert}
+          confirm={'Done'}
+          success={() => {
+            setSuccessAlert(false);
+          }}
+          image={'success'}
+          message="Child Image Updated Successfully"
+        />
+      ) : null}
     </CustomLayout>
   );
 }

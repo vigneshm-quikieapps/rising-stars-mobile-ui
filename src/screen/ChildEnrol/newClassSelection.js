@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
-import {Text, StyleSheet, ActivityIndicator} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Text, StyleSheet, ActivityIndicator, View, Image} from 'react-native';
 import moment from 'moment';
 
 import {
@@ -12,7 +12,7 @@ import {
   Slot,
   PopUpCard,
 } from '../../components';
-import {colors, Fontsize, hp, wp, Stepend} from '../../constants';
+import {colors, Fontsize, hp, wp, Stepend, fullDays} from '../../constants';
 import {
   getClassdata,
   getSessiondata,
@@ -50,8 +50,9 @@ const New_Class_Selection = props => {
   const memberClassData = useSelector(state => state.memberClassData.classData);
 
   const dispatch = useDispatch();
-  console.log('abc', selectdata);
-  console.log('def', child);
+  //console.log('abc', selectdata);
+  //console.log('def', child);
+  const {from} = props.route.params;
 
   const handleBusiness = async item => {
     setBusiness(item.name);
@@ -68,7 +69,9 @@ const New_Class_Selection = props => {
     );
     setShowClass(true);
   };
+
   const handleClasses = item => {
+    //console.log('after selecting class', item);
     setClasses(item.name);
     dispatch(setClassData(item));
     dispatch(clubfinance(item._id));
@@ -79,39 +82,32 @@ const New_Class_Selection = props => {
 
   const handleforward = () => {
     dispatch(setSlotData(selectdata));
-    props.navigation.navigate('Fees_Overview');
+    props.navigation.navigate('Fees_Overview', {from: from});
   };
 
-  // useEffect(() => {
-  //   checkEnroll();
-  // }, []);
+  useEffect(() => {
+    checkEnroll();
+  }, [memberClassData]);
 
   function checkEnroll() {
-    console.log('qwerty');
-    for (
-      var i = 0;
-      i < memberClassData &&
-      memberClassData.filter(item => item.enrolledStatus === 'ENROLLED').length;
-      i++
-    ) {
-      if (
-        classData.includes(
-          memberClassData.filter(item => item.enrolledStatus === 'ENROLLED')[i],
-        )
-      ) {
-        console.log(
-          memberClassData.filter(item => item.enrolledStatus === 'ENROLLED')[i],
-        );
-        classData.splice(
-          classData.indexOf(
-            memberClassData.filter(item => item.enrolledStatus === 'ENROLLED')[
-              i
-            ],
-          ),
-        );
+    let classesOfChild = memberClassData.filter(
+      item =>
+        item.enrolledStatus === 'ENROLLED' ||
+        item.enrolledStatus === 'WAITLISTED',
+    );
+    classesOfChild = classesOfChild.map(item => item.class._id);
+    let currentClassData = [...classData];
+    let extraClasses = [];
+    //console.log('qwerty', memberClassData, classesOfChild, currentClassData);
+
+    for (var i = 0; i < currentClassData.length; i++) {
+      if (classesOfChild.includes(currentClassData[i]._id)) {
+        //console.log('includes', currentClassData[i]);
+      } else {
+        extraClasses.push(currentClassData[i]);
       }
     }
-    return classData;
+    return extraClasses;
   }
 
   return (
@@ -127,6 +123,7 @@ const New_Class_Selection = props => {
       steps
       start={2}
       end={Stepend}
+      back
       header
       headerTextBigText={true}
       headertext={'Class Selection'}
@@ -183,27 +180,102 @@ const New_Class_Selection = props => {
               }}>
               Available Sessions
             </Text>
-            {sessionData.map(item => {
-              return (
-                <Slot
-                  white
-                  required={true}
-                  Class={classes}
-                  radio
-                  sessions={item.name}
-                  onPress={() => setSelectdata(item)}
-                  status={selectdata === item && 'checked'}
-                  day={item.pattern[0].day}
-                  time={`${moment(item.pattern[0].startTime).format(
-                    'HH:mm',
-                  )} - ${moment(item.pattern[0].endTime).format('HH:mm')}`}
-                  facility={item.name}
-                  coach={item.coach.name}
-                  key={item._id}
-                  style={{marginVertical: wp('1%')}}
-                />
-              );
-            })}
+            {sessionData &&
+              sessionData
+                .filter(item => item.status === 'OPEN_FOR_ENROLLMENT')
+                .map(item => {
+                  //console.log('sessionData==>', item);
+
+                  return (
+                    <Slot
+                      white
+                      required={true}
+                      Class={classes}
+                      radio
+                      sessions={item.name}
+                      onPress={() => setSelectdata(item)}
+                      status={selectdata === item && 'checked'}
+                      day={fullDays[item.pattern[0]?.day]}
+                      time={`${moment(item.pattern[0]?.startTime).format(
+                        'hh:mm A',
+                      )} - ${moment(item.pattern[0]?.endTime).format(
+                        'hh:mm A',
+                      )}`}
+                      facility={item.facility}
+                      // coach={item.coach.name == null ? '---' : item.coach.name}
+                      coach={item.coach.name}
+                      key={item._id}
+                      style={{marginVertical: wp('1%')}}
+                    />
+                  );
+                })}
+            {sessionData &&
+            sessionData.filter(item => item.status === 'OPEN_FOR_ENROLLMENT')
+              .length === 0 ? (
+              <View style={styles.remark}>
+                <View style={styles.mark}>
+                  <Image
+                    style={styles.tick}
+                    source={require('../../assets/images/icon-info.png')}
+                  />
+                </View>
+                <Text style={styles.marktext}>No Session Available</Text>
+              </View>
+            ) : null}
+
+            <Text
+              style={{
+                fontFamily: 'Nunito-Regular',
+                marginVertical: hp('1%'),
+                fontSize: Fontsize,
+              }}>
+              Waitlisted Sessions
+            </Text>
+            {sessionData &&
+              sessionData
+                .filter(item => item.status === 'OPEN_FOR_WAITLIST_ENROLLMENT')
+                .map(item => {
+                  //console.log('sessionData==>', item);
+
+                  return (
+                    <Slot
+                      white
+                      required={true}
+                      Class={classes}
+                      radio
+                      sessions={item.name}
+                      onPress={() => setSelectdata(item)}
+                      status={selectdata === item && 'checked'}
+                      day={fullDays[item.pattern[0]?.day]}
+                      time={`${moment(item.pattern[0]?.startTime).format(
+                        'hh:mm A',
+                      )} - ${moment(item.pattern[0]?.endTime).format(
+                        'hh:mm A',
+                      )}`}
+                      facility={item.facility}
+                      // coach={item.coach.name == null ? '---' : item.coach.name}
+                      coach={item.coach.name}
+                      key={item._id}
+                      style={{marginVertical: wp('1%')}}
+                    />
+                  );
+                })}
+            {sessionData &&
+            sessionData.filter(
+              item => item.status === 'OPEN_FOR_WAITLIST_ENROLLMENT',
+            ).length === 0 ? (
+              <View style={styles.remark}>
+                <View style={styles.mark}>
+                  <Image
+                    style={styles.tick}
+                    source={require('../../assets/images/icon-info.png')}
+                  />
+                </View>
+                <Text style={styles.marktext}>
+                  No Waitlisted Session Available
+                </Text>
+              </View>
+            ) : null}
           </>
         ) : (
           <ActivityIndicator size="large" color={colors.orange} />
@@ -265,5 +337,36 @@ const styles = StyleSheet.create({
     // shadowRadius: 4,
     // elevation: 5
   },
+  remark: {
+    borderRadius: 10,
+    height: hp('12%'),
+    // marginHorizontal: wp('4%'),
+    marginVertical: hp('2%'),
+    paddingHorizontal: wp('1.8%'),
+    paddingTop: hp('.1%'),
+    flexDirection: 'row',
+    backgroundColor: '#fff2e6',
+    // marginVertical: hp('1%'),
+  },
+  tick: {
+    height: hp('3%'),
+    width: hp('3%'),
+  },
+  mark: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: hp('4%'),
+    width: hp('4%'),
+    marginRight: wp('2%'),
+  },
+  marktext: {
+    color: '#d26800',
+    alignSelf: 'center',
+    flex: 1,
+    fontSize: Fontsize,
+    fontFamily: 'Nunito-Regular',
+  },
 });
+
 export default New_Class_Selection;

@@ -14,43 +14,68 @@ function EnrollingFlow(props) {
         fontSize: wp('8%'),
       }}>
       <View style={{height: hp('3%')}} />
-      <FlatList
-        data={EnrollData}
-        keyExtractor={item => item.id}
-        renderItem={item => {
-          return (
-            <View style={styles.container}>
-              <View>
-                <LinearGradient
-                  colors={['#ffa300', '#ff7e00']}
-                  style={styles.circle}>
-                  <Text style={styles.circlecontainer}>{item.item.id}</Text>
-                </LinearGradient>
-                {item.item.id < 6 ? <View style={styles.line} /> : null}
-              </View>
-              <View style={{marginLeft: wp('2%')}}>
-                <Text
-                  style={{color: colors.grey, fontFamily: 'Nunito-Regular'}}>
-                  {item.item.title}
-                </Text>
-                <Text
-                  style={{fontFamily: 'Nunito-SemiBold', fontSize: Fontsize}}>
-                  {item.item.description}
-                </Text>
-              </View>
+      {EnrollData.map((item, index) => {
+        return (
+          <View style={styles.container}>
+            <View>
+              <LinearGradient
+                colors={['#ffa300', '#ff7e00']}
+                style={styles.circle}>
+                <Text style={styles.circlecontainer}>{item.id}</Text>
+              </LinearGradient>
+              {item.id < 6 ? <View style={styles.line} /> : null}
             </View>
-          );
-        }}
-      />
+            <View style={{marginLeft: wp('2%')}}>
+              <Text style={{color: colors.grey, fontFamily: 'Nunito-Regular'}}>
+                {item.title}
+              </Text>
+              <Text style={{fontFamily: 'Nunito-SemiBold', fontSize: Fontsize}}>
+                {item.description}
+              </Text>
+            </View>
+          </View>
+        );
+      })}
       <AppButton
         title="Let's Start"
-        onPress={() => props.navigation.navigate('AddChild')}
+        onPress={() =>
+          props.navigation.navigate('Addchildren', {from: 'homeTab'})
+        }
         style={{fontFamily: 'Nunito-SemiBold', marginTop: hp('6%')}}
       />
     </CustomLayout>
   );
 }
 export default EnrollingFlow;
+
+// <FlatList
+// data={EnrollData}
+// keyExtractor={item => item.id}
+// renderItem={item => {
+//   return (
+//     <View style={styles.container}>
+//       <View>
+//         <LinearGradient
+//           colors={['#ffa300', '#ff7e00']}
+//           style={styles.circle}>
+//           <Text style={styles.circlecontainer}>{item.item.id}</Text>
+//         </LinearGradient>
+//         {item.item.id < 6 ? <View style={styles.line} /> : null}
+//       </View>
+//       <View style={{marginLeft: wp('2%')}}>
+//         <Text
+//           style={{color: colors.grey, fontFamily: 'Nunito-Regular'}}>
+//           {item.item.title}
+//         </Text>
+//         <Text
+//           style={{fontFamily: 'Nunito-SemiBold', fontSize: Fontsize}}>
+//           {item.item.description}
+//         </Text>
+//       </View>
+//     </View>
+//   );
+// }}
+// />
 
 const styles = StyleSheet.create({
   container: {
